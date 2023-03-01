@@ -1,0 +1,28 @@
+server:
+  port: 8080
+  servlet:
+    #    context-path: /api
+    session:
+      timeout: 10m
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/the_survey_dev
+    username: the_survey_dev
+    password: the_survey_dev
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        jdbc:
+          lob:
+            non_contextual_creation: true
+    open-in-view: false
+
+logging:
+  level:
+    org.hibernate.sql: debug
+    org.hibernate.type.descriptor.sql: trace
