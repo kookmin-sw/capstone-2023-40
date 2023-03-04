@@ -11,6 +11,7 @@ import SurveyLoginReqPage from './routes/SurveyPages/SurveyLoginReqPage';
 import ProfilePage from './routes/MyPages/ProfilePage';
 import AuthListPage from './routes/MyPages/AuthListPage';
 import SurveyResPage from './routes/MyPages/SurveyResPage';
+import NotFound from './routes/NotFound';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route path="/mypage/:id" element={<ProfilePage />} />
         <Route path="/mypage/auth-list" element={<AuthListPage />} />
         <Route path="/mypage/survey-result/:id" element={<SurveyResPage />} />
+        <Route path="/*" element={<NotFound />} />
       </Routes>
     </div>
   );
