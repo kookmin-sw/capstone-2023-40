@@ -1,11 +1,11 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
-export default function SurveyResPage() {
+export default function SurveyResultPage() {
   const { id } = useParams();
   return (
     <div>
-      <h1>{`SurveyResPage : ${id}`}</h1>
+      <h1>{`SurveyResultPage : ${id}`}</h1>
     </div>
   );
 }

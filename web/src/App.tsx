@@ -7,10 +7,10 @@ import RegisterPage from './routes/RegisterPage';
 import SurveyListPage from './routes/SurveyPages/SurveyListPage';
 import SurveyPage from './routes/SurveyPages/SurveyPage';
 import SurveyFormPage from './routes/SurveyPages/SurveyFormPage';
-import SurveyLoginReqPage from './routes/SurveyPages/SurveyLoginReqPage';
+import SurveyLoginRequiredPage from './routes/SurveyPages/SurveyLoginRequiredPage';
 import ProfilePage from './routes/MyPages/ProfilePage';
 import AuthListPage from './routes/MyPages/AuthListPage';
-import SurveyResPage from './routes/MyPages/SurveyResPage';
+import SurveyResultPage from './routes/MyPages/SurveyResultPage';
 import NotFound from './routes/NotFound';
 
 function App() {
@@ -23,10 +23,10 @@ function App() {
         <Route path="/survey" element={<SurveyListPage />} />
         <Route path="/survey/:id" element={<SurveyPage />} />
         <Route path="/survey/form" element={<SurveyFormPage />} />
-        <Route path="/survey/login-required" element={<SurveyLoginReqPage />} />
+        <Route path="/survey/login-required" element={<SurveyLoginRequiredPage />} />
         <Route path="/mypage" element={<ProfilePage />} />
         <Route path="/mypage/auth-list" element={<AuthListPage />} />
-        <Route path="/mypage/survey-result/:id" element={<SurveyResPage />} />
+        <Route path="/mypage/survey-result/:id" element={<SurveyResultPage />} />
         <Route path="/*" element={<NotFound />} />
       </Routes>
     </div>
