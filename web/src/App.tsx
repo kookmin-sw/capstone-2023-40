@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { Routes, Route } from 'react-router-dom';
 
 import LoginPage from './routes/LoginPage';
@@ -8,15 +7,16 @@ import AuthListPage from './routes/MyPages/AuthListPage';
 import ProfilePage from './routes/MyPages/ProfilePage';
 import SurveyResultPage from './routes/MyPages/SurveyResultPage';
 import NotFound from './routes/NotFound';
-import RegisterPage from './routes/RegisterPage';
-import SurveyFormPage from './routes/SurveyPages/SurveyFormPage';
-import SurveyListPage from './routes/SurveyPages/SurveyListPage';
-import SurveyLoginRequiredPage from './routes/SurveyPages/SurveyLoginRequiredPage';
-import SurveyPage from './routes/SurveyPages/SurveyPage';
+import { ThemeProvider } from 'styled-components';
+import GlobalStyle from './components/GlobalStyle';
+import { useTheme } from './hooks/useTheme';
 
 function App() {
+  const [theme] = useTheme();
+
   return (
-    <div className="App">
+    <ThemeProvider theme={theme}>
+      <GlobalStyle />
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/login" element={<LoginPage />} />
@@ -30,7 +30,7 @@ function App() {
         <Route path="/mypage/survey-result/:id" element={<SurveyResultPage />} />
         <Route path="/*" element={<NotFound />} />
       </Routes>
-    </div>
+    </ThemeProvider>
   );
 }
 
