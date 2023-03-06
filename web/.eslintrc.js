@@ -19,6 +19,31 @@ module.exports = {
     },
     rules: {
       'prettier/prettier': 0,
+      'import/prefer-default-export': 'off',
+      'global-require': 'off',
+      '@typescript-eslint/no-var-requires': 'off',
+      '@typescript-eslint/no-unused-expressions': 'warn',
+      '@typescript-eslint/naming-convention': 'warn',
+      'react/require-default-props': 'warn',
+      "import/order": [
+        "error",
+        {
+          "groups": ["builtin", "external", "internal"],
+          "pathGroups": [
+            {
+              "pattern": "react",
+              "group": "external",
+              "position": "before"
+            }
+          ],
+          "pathGroupsExcludedImportTypes": ["react"],
+          "newlines-between": "always",
+          "alphabetize": {
+            "order": "asc",
+            "caseInsensitive": true
+          }
+        }
+      ],
     },
     settings: {
       'import/resolver': {
