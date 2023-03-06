@@ -11,10 +11,16 @@ import ProfilePage from './routes/MyPages/ProfilePage';
 import AuthListPage from './routes/MyPages/AuthListPage';
 import SurveyResultPage from './routes/MyPages/SurveyResultPage';
 import NotFound from './routes/NotFound';
+import { ThemeProvider } from 'styled-components';
+import GlobalStyle from './components/GlobalStyle';
+import { useTheme } from './hooks/useTheme';
 
 function App() {
+  const [theme] = useTheme();
+
   return (
-    <div className="App">
+    <ThemeProvider theme={theme}>
+      <GlobalStyle />
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/login" element={<LoginPage />} />
@@ -28,7 +34,7 @@ function App() {
         <Route path="/mypage/survey-result/:id" element={<SurveyResultPage />} />
         <Route path="/*" element={<NotFound />} />
       </Routes>
-    </div>
+    </ThemeProvider>
   );
 }
 

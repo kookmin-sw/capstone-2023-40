@@ -2,6 +2,7 @@ import { DefaultTheme } from 'styled-components';
 
 export const lightTheme: DefaultTheme = {
   borderRadius: '4vh',
+  padding: '2vh',
 
   colors: {
     default: '#000000',

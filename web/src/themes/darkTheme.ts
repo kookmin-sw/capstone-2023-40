@@ -2,6 +2,7 @@ import { DefaultTheme } from 'styled-components';
 
 export const darkTheme: DefaultTheme = {
   borderRadius: '4vh',
+  padding: '2vh',
 
   colors: {
     default: '#FFFFFF',
