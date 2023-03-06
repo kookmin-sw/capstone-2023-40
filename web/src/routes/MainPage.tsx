@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import BackgroundImage from '../assets/main-page.webp';
@@ -47,10 +48,12 @@ const Button = styled.button`
   font-weight: 700;
   color: white;
   background-color: ${(props) => props.theme.colors.primary};
+  cursor: pointer;
 `;
 
 export default function MainPage() {
   const [theme, toggleTheme] = useTheme();
+  const navigate = useNavigate();
 
   return (
     <Container>
@@ -62,7 +65,9 @@ export default function MainPage() {
           <AppTitle>더 서베이</AppTitle>
           에서 쉽고 간편하게
         </Description>
-        <Button theme={theme}>바로 설문하기</Button>
+        <Button onClick={() => navigate('/survey')} theme={theme}>
+          바로 설문하기
+        </Button>
       </Introduction>
     </Container>
   );

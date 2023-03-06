@@ -1,6 +1,7 @@
 import { DefaultTheme } from 'styled-components';
 
 export const lightTheme: DefaultTheme = {
+  alt: 'light',
   borderRadius: '16px',
   padding: '2vh',
 

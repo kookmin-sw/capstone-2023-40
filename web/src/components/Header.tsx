@@ -1,27 +1,36 @@
-import React, { ReactNode } from 'react';
+import React, { useState, ReactNode } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
 
-const HeaderContainer = styled.header`
+import { ReactComponent as LogoDark } from '../assets/logo-dark.svg';
+import { ReactComponent as LogoLight } from '../assets/logo-light.svg';
+
+const HeaderContainer = styled.header<{ isTransitionEnabled: boolean }>`
   position: sticky;
   top: 0;
   width: 100vw;
   display: flex;
   flex-direction: row;
   background-color: ${(props) => props.theme.colors.background};
-  transition: background-color 300ms linear;
-  -webkit-transition: background-color 300ms linear;
-  -ms-transition: background-color 300ms linear;
-  -o-transition: background-color 300ms linear;
-  -ms-transition: background-color 300ms linear;
+  transition: ${(props) => (props.isTransitionEnabled ? 'background-color 300ms linear' : 'none')};
+  -webkit-transition: ${(props) => (props.isTransitionEnabled ? 'background-color 300ms linear' : 'none')};
+  -ms-transition: ${(props) => (props.isTransitionEnabled ? 'background-color 300ms linear' : 'none')};
+  -o-transition: ${(props) => (props.isTransitionEnabled ? 'background-color 300ms linear' : 'none')};
+  -ms-transition: ${(props) => (props.isTransitionEnabled ? 'background-color 300ms linear' : 'none')};
 `;
 
-// FIXME: To relative value. Would `img` tag be fine?
-const Logo = styled.img`
+const LogoLightContainer = styled(LogoLight)`
   margin-left: 2vw;
   width: 150px;
-  src: ${(props) => props.src};
+  height: fit-content;
+  cursor: pointer;
+`;
+
+const LogoDarkContainer = styled(LogoDark)`
+  margin-left: 2vw;
+  width: 150px;
+  height: fit-content;
   cursor: pointer;
 `;
 
@@ -71,17 +80,27 @@ interface HeaderProps {
 
 export default function Header({ button, theme, toggleTheme }: HeaderProps) {
   const navigate = useNavigate();
+  const [isTransitionEnabled, setIsTransitionEnabled] = useState<boolean>(false);
+
+  const handleClick = () => {
+    setIsTransitionEnabled(true);
+    toggleTheme();
+  };
 
   return (
-    <HeaderContainer theme={theme}>
-      <Logo src={require('../assets/logo.svg').default} alt="logo" onClick={() => navigate('/')} />
+    <HeaderContainer theme={theme} isTransitionEnabled={isTransitionEnabled}>
+      {theme.alt === 'light' ? (
+        <LogoLightContainer onClick={() => navigate('/')} title="logo" />
+      ) : (
+        <LogoDarkContainer onClick={() => navigate('/')} title="logo" />
+      )}
       <NavigatorContainer theme={theme}>
         <Navigator onClick={() => navigate('/survey')}>설문</Navigator>
         <Navigator onClick={() => navigate('/report')}>리포트</Navigator>
       </NavigatorContainer>
       <ButtonContainer>
         {/* FIXME: Modify this to icon */}
-        <ToggleButton type="button" theme={theme} onClick={toggleTheme}>
+        <ToggleButton type="button" theme={theme} onClick={handleClick}>
           button
         </ToggleButton>
       </ButtonContainer>

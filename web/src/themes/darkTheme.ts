@@ -1,6 +1,7 @@
 import { DefaultTheme } from 'styled-components';
 
 export const darkTheme: DefaultTheme = {
+  alt: 'dark',
   borderRadius: '16px',
   padding: '2vh',
 

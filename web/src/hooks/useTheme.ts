@@ -6,7 +6,8 @@ import { lightTheme, darkTheme } from '../themes';
 
 /**
  * Custom hook for detecting local theme mode.
- * Detects system default color scheme and stores it in the local storage when mode changed.
+ * Detects system default color scheme and stores it in the local storage.
+ * Stored value is updated when mode changed.
  *
  * @returns Current mode in `DefaultTheme` and a function that can change its state.
  */

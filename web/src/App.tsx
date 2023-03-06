@@ -1,15 +1,21 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
 
+import { Routes, Route } from 'react-router-dom';
+import { ThemeProvider } from 'styled-components';
+
+import GlobalStyle from './components/GlobalStyle';
+import { useTheme } from './hooks/useTheme';
 import LoginPage from './routes/LoginPage';
 import MainPage from './routes/MainPage';
 import AuthListPage from './routes/MyPages/AuthListPage';
 import ProfilePage from './routes/MyPages/ProfilePage';
 import SurveyResultPage from './routes/MyPages/SurveyResultPage';
 import NotFound from './routes/NotFound';
-import { ThemeProvider } from 'styled-components';
-import GlobalStyle from './components/GlobalStyle';
-import { useTheme } from './hooks/useTheme';
+import RegisterPage from './routes/RegisterPage';
+import SurveyFormPage from './routes/SurveyPages/SurveyFormPage';
+import SurveyListPage from './routes/SurveyPages/SurveyListPage';
+import SurveyLoginRequiredPage from './routes/SurveyPages/SurveyLoginRequiredPage';
+import SurveyPage from './routes/SurveyPages/SurveyPage';
 
 function App() {
   const [theme] = useTheme();
