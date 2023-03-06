@@ -1,5 +1,4 @@
 import React from 'react';
-import './App.css';
 import { Routes, Route } from 'react-router-dom';
 import MainPage from './routes/MainPage';
 import LoginPage from './routes/LoginPage';
