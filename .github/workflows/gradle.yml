@@ -36,6 +36,7 @@ jobs:
         working-directory: ${{ env.working-directory }}
       - name: Build without test
         run: ./gradlew build --exclude-task test
+        working-directory: ${{ env.working-directory }}
 #      - name: Build with Gradle
 #        run: ./gradlew build
 #        working-directory: ${{ env.working-directory }}
