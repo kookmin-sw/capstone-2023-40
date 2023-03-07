@@ -1,7 +1,10 @@
 import React from 'react';
 
 import { Routes, Route } from 'react-router-dom';
+import { ThemeProvider } from 'styled-components';
 
+import GlobalStyle from './components/GlobalStyle';
+import { useTheme } from './hooks/useTheme';
 import LoginPage from './routes/LoginPage';
 import MainPage from './routes/MainPage';
 import AuthListPage from './routes/MyPages/AuthListPage';
@@ -15,8 +18,11 @@ import SurveyLoginRequiredPage from './routes/SurveyPages/SurveyLoginRequiredPag
 import SurveyPage from './routes/SurveyPages/SurveyPage';
 
 function App() {
+  const [theme] = useTheme();
+
   return (
-    <div className="App">
+    <ThemeProvider theme={theme}>
+      <GlobalStyle />
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/login" element={<LoginPage />} />
@@ -30,7 +36,7 @@ function App() {
         <Route path="/mypage/survey-result/:id" element={<SurveyResultPage />} />
         <Route path="/*" element={<NotFound />} />
       </Routes>
-    </div>
+    </ThemeProvider>
   );
 }
 
