@@ -28,11 +28,7 @@ jobs:
         with:
           java-version: '11'
           distribution: 'temurin'
-      - name: Setup Gradle
+      - name: Setup and execute Gradle 'test' task
         uses: gradle/gradle-build-action@v2
         with:
           gradle-version: release-candidate # The current release candidate if any, otherwise fallback to current
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-      - name: Execute Gradle build
-        run: ./gradlew clean build
