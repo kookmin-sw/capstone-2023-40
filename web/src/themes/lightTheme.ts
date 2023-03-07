@@ -8,6 +8,7 @@ export const lightTheme: DefaultTheme = {
   colors: {
     default: '#000000',
     primary: '#FF8A00',
+    container: '#FFFFFF',
     text: '#7B87A0',
     button: '#EBEFF7',
     background: '#F8F8F8',

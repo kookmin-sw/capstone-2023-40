@@ -8,6 +8,7 @@ export const darkTheme: DefaultTheme = {
   colors: {
     default: '#FFFFFF',
     primary: '#FF8A00',
+    container: '#363739',
     text: '#EBEFF7',
     button: '#7B87A0',
     background: '#202123',
