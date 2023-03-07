@@ -11,8 +11,10 @@ import { useTheme } from '../hooks/useTheme';
 // 2. <FontText>의 font-color가 바뀌지 않음.
 // 3. Register컨테이너의 최소폭을 설정하고 싶은데 모름.
 // 4. <ContainerBox>의 폭을 항상 <RegistContainer>와 맞추고 싶은데 안됨.
-// 5. 비밀번호 입력창에 체크박스 생성방법 모름.
 // 6. Input type이 number일 경우 박스 오른쪽에 Count버튼 생기는데 다른 유형을 찾지 못함.
+// 핸드폰 번호 + 인증코드 제약 걸기
+// 이메일 regex
+
 
 const Container = styled.div`
   width: 100vw;
@@ -23,23 +25,21 @@ const Container = styled.div`
   background-size: cover;
 `;
 
-const RegistContainer = styled.div`  
+const RegistContainer = styled.div` 
   padding : 9vw;
   margin-left : 20vw;
   margin-right : 20vw;
-  -weight : 50vh;
-  
-  height: 150vh;
+  height: 70vh;
   background-color : #FFFFFF;
   box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
+  min-width : 40vw;
 `;
 
-const ContainerBox = styled.div`
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-  justify-content: center;
+const ContainerBox = styled.form`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center; 
 `;
 
 const Form = styled.form`
@@ -48,14 +48,17 @@ const Form = styled.form`
 `;
 
 const Input = styled.input`
-  padding: 10px;
+  padding: 1.7vh;
   margin-top : 10px;
   margin-bottom: 10px;
-  border: none;
-  border-radius: 5px;
+  border: 3px solid #EBEFF7;
+  border-radius: 16px;
   font-size : 1.5vh;
   font-weight : 600;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  flex : 1;
+  &:focus {
+    outline : none;
+  }
 `;
 
 const RegisterTitle = styled.span`
@@ -69,13 +72,14 @@ const FontText = styled.span`
   text-align : left;
   font-size : 1.3vh;
   font-weight : 600;
-  font-color : #EBEFF7;
 `;
 
 const PhoneNumberBox = styled.button`
-  padding: 1vh;
+  border: 3px solid #EBEFF7;
+  padding: 1.7vh;
   font-size : 1.5vh;
   font-weight : 700;
+  margin-right : 1vh;
   color : gray;
   background-color : white;
   border-radius: ${(props) => props.theme.borderRadius};
@@ -97,7 +101,11 @@ const Button = styled.button`
 
 const CertifyButton = styled.button`
   border: none;
-  padding: 1vh;
+  min-width : 20px;
+  width : 10vw;
+  height: 100%;
+  padding : 1.9vh;
+  margin-left : 1vh;
   font-size : 1.3vh;
   font-weight : 700;
   color : gray;
@@ -149,7 +157,8 @@ export default function MainPage() {
         <ContainerBox>
           <PhoneNumberBox> +82 </PhoneNumberBox>
           <Input
-            type="number"
+            type="tel"
+            pattern="[0-9]{11}"
             placeholder=" - 빼고 입력해주세요."
           />
           <CertifyButton type = "submit">
@@ -160,7 +169,7 @@ export default function MainPage() {
         <FontText> 인증코드 </FontText>
         <ContainerBox>
           <Input
-            type="number"
+            type="tel"
             placeholder="인증코드를 입력해주세요."
           />
           <CertifyButton type = "submit">

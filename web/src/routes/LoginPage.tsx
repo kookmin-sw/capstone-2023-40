@@ -3,6 +3,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
+import BackgroundImage from '../assets/main-page.webp';
 import Header from '../components/Header';
 import { useTheme } from '../hooks/useTheme';
 
@@ -14,16 +15,20 @@ import { useTheme } from '../hooks/useTheme';
 // 4. 로그인컨테이너의 최소폭을 설정하고 싶은데 모름.
 
 const Container = styled.div`
+  filter: blur(5px);
+  -webkit-filter: blur(5px);
+  z-index: -1;
+  position: absolute;
   width: 100vw;
   height: 100vh;
-  border : 
+  background: url(${BackgroundImage}) no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
 `;
 
-const LoginContainer = styled.div`  
+const LoginContainer = styled.div`
   padding : 9vw;
   margin-left : 20vw;
   margin-right : 20vw;
@@ -39,14 +44,17 @@ const Form = styled.form`
 `;
 
 const Input = styled.input`
-  padding: 10px;
+  padding: 1.7vh;
   margin-top : 10px;
   margin-bottom: 10px;
-  border: none;
-  border-radius: 5px;
+  border: 3px solid #EBEFF7;
+  border-radius: 16px;
   font-size : 1.5vh;
   font-weight : 600;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  flex : 1;
+  &:focus {
+    outline : none;
+  }
 `;
 
 const LoginTitle = styled.h1`
@@ -62,6 +70,7 @@ const FontText = styled.span`
   font-weight : 600;
   font-color : #EBEFF7;
 `;
+
 
 const Button = styled.button`
   margin-top: 1vh;
@@ -82,9 +91,10 @@ export default function MainPage() {
   const navigate = useNavigate();
 
   return (
-    <Container>
+    <div style={{ zIndex: 1, position: 'relative' }}>
+      <Container style={{backgroundColor:"rgba(0, 0, 0, 0.5)"}}>
       <Header theme={theme} toggleTheme={toggleTheme} />
-      <LoginContainer>
+      <LoginContainer style={{ zIndex: 1, position: 'relative' }}>
       <Form>
         <LoginTitle> 로그인 </LoginTitle>
         <FontText> 이메일 </FontText>
@@ -100,12 +110,15 @@ export default function MainPage() {
         <Button onClick={() => navigate('/survey')} theme={theme}>
           로그인
         </Button>
-        <FontText> ---------- or ----------</FontText>
+        <FontText style={{display: 'flex', flexDirection: 'row' }}> 
+        <hr/> or <hr/> 
+        </FontText>
         <Button onClick={() => navigate('/register')} theme={theme}>
           회원가입
         </Button>
       </Form>
       </LoginContainer>
     </Container>
+    </div>
   );
 }
