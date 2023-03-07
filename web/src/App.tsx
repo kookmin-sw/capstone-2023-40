@@ -1,17 +1,18 @@
 import React from 'react';
-import './App.css';
+
 import { Routes, Route } from 'react-router-dom';
-import MainPage from './routes/MainPage';
+
 import LoginPage from './routes/LoginPage';
-import RegisterPage from './routes/RegisterPage';
-import SurveyListPage from './routes/SurveyPages/SurveyListPage';
-import SurveyPage from './routes/SurveyPages/SurveyPage';
-import SurveyFormPage from './routes/SurveyPages/SurveyFormPage';
-import SurveyLoginRequiredPage from './routes/SurveyPages/SurveyLoginRequiredPage';
-import ProfilePage from './routes/MyPages/ProfilePage';
+import MainPage from './routes/MainPage';
 import AuthListPage from './routes/MyPages/AuthListPage';
+import ProfilePage from './routes/MyPages/ProfilePage';
 import SurveyResultPage from './routes/MyPages/SurveyResultPage';
 import NotFound from './routes/NotFound';
+import RegisterPage from './routes/RegisterPage';
+import SurveyFormPage from './routes/SurveyPages/SurveyFormPage';
+import SurveyListPage from './routes/SurveyPages/SurveyListPage';
+import SurveyLoginRequiredPage from './routes/SurveyPages/SurveyLoginRequiredPage';
+import SurveyPage from './routes/SurveyPages/SurveyPage';
 
 function App() {
   return (
