@@ -9,9 +9,9 @@ name: The survey Java CI with Gradle
 
 on:
   push:
-    branches: [ "develop" ]
+    branches: [ "feat/springboot-workflow" ]
   pull_request:
-    branches: [ "develop" ]
+    branches: [ "feat/springboot-workflow" ]
 
 permissions:
   contents: read
