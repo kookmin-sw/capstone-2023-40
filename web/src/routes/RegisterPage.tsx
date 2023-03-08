@@ -90,7 +90,7 @@ const PhoneNumberBox = styled.div`
   border-radius: ${(props) => props.theme.borderRadius};
 `;
 
-const Button = styled.button`
+const CompleteButton = styled.button`
   margin-top: 1vh;
   border: none;
   padding: 2vh;
