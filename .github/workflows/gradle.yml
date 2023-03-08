@@ -1,6 +1,5 @@
 name: SpringBoot CI with Gradle
 
-# Event trigger
 on:
   push:
     branches: [ "develop" ]
@@ -12,14 +11,12 @@ permissions:
 
 jobs:
   build:
-    # Set running environment.
     runs-on: ubuntu-latest
     env:
       working-directory: ./api
     defaults:
       run:
         working-directory: ${{ env.working-directory }}
-    # Indicate Task sequence.
     steps:
       - uses: actions/checkout@v3
 
@@ -29,7 +26,7 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
 
-      - name: Gradle Caching
+      - name: Cache gradle
         uses: actions/cache@v3
         with:
           path: |
