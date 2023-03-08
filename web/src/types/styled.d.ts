@@ -15,6 +15,7 @@ declare module 'styled-components' {
       text: string;
       button: string;
       background: string;
+      opposite: string;
     };
   }
 }

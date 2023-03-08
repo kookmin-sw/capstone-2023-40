@@ -12,5 +12,6 @@ export const darkTheme: DefaultTheme = {
     text: '#EBEFF7',
     button: '#7B87A0',
     background: '#202123',
+    opposite: '#000000',
   },
 };

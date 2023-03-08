@@ -28,7 +28,7 @@ const LoginContainer = styled.div`
   padding: 9vw;
   margin-left: 20vw;
   margin-right: 20vw;
-  weight: 50vh;
+  min-width : 20vh;
   height: 50vh;
   background-color: ${(props) => props.theme.colors.container};
   box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
@@ -37,6 +37,7 @@ const LoginContainer = styled.div`
 const Form = styled.form`
   display: flex;
   flex-direction: column;
+
 `;
 
 const Input = styled.input`
@@ -93,9 +94,9 @@ export default function MainPage() {
         <Form>
           <LoginTitle theme={theme}>로그인</LoginTitle>
           <FontText theme={theme}>이메일</FontText>
-          <Input type="email" placeholder="이메일을 입력하세요." />
+          <Input type="email" theme={theme} placeholder="이메일을 입력하세요." />
           <FontText theme={theme}>비밀번호</FontText>
-          <Input type="password" placeholder="비밀번호를 입력하세요." />
+          <Input type="password" theme={theme} placeholder="비밀번호를 입력하세요." />
           <Button onClick={() => navigate('/survey')} theme={theme}>
             로그인
           </Button>

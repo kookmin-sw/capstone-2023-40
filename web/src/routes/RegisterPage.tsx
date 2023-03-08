@@ -3,6 +3,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
+import BackgroundImage from '../assets/main-page.webp';
 import Header from '../components/Header';
 import { useTheme } from '../hooks/useTheme';
 
@@ -18,6 +19,8 @@ import { useTheme } from '../hooks/useTheme';
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url(${BackgroundImage}) no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -25,13 +28,13 @@ const Container = styled.div`
 `;
 
 const RegistContainer = styled.div`
-  padding: 9vw;
-  margin-left: 20vw;
-  margin-right: 20vw;
-  height: 70vh;
-  background-color: #ffffff;
-  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
-  min-width: 40vw;
+padding: 9vw;
+margin-left: 20vw;
+margin-right: 20vw;
+min-width : 20vh;
+height: 70vh;
+background-color: ${(props) => props.theme.colors.container};
+box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
 `;
 
 const ContainerBox = styled.form`
@@ -71,8 +74,9 @@ const Input = styled.input`
 
 const RegisterTitle = styled.span`
   text-align: left;
-  font-size: 2.3vh;
-  font-weight: 900;
+  font-size: 3vh;
+  font-weight: 1000;
+  color: ${(props) => props.theme.colors.default};
 `;
 
 const FontText = styled.span`
@@ -80,6 +84,7 @@ const FontText = styled.span`
   text-align: left;
   font-size: 1.3vh;
   font-weight: 600;
+  color: ${(props) => props.theme.colors.default};
 `;
 
 const PhoneNumberBox = styled.button`
@@ -102,7 +107,7 @@ const Button = styled.button`
   border-radius: ${(props) => props.theme.borderRadius};
   font-size: 2vh;
   font-weight: 700;
-  color: white;
+  color: ${(props) => props.theme.colors.opposite};
   background-color: ${(props) => props.theme.colors.primary};
   cursor: pointer;
 `;
@@ -128,36 +133,42 @@ export default function MainPage() {
   return (
     <Container>
       <Header theme={theme} toggleTheme={toggleTheme} />
-      <RegistContainer>
+      <RegistContainer theme={theme}>
         <Form>
-          <RegisterTitle>회원가입</RegisterTitle>
+          <RegisterTitle theme={theme}>회원가입</RegisterTitle>
 
-          <FontText>이메일</FontText>
+          <FontText theme={theme}>이메일</FontText>
           <ContainerBox>
-            <Input type="email" placeholder="이메일을 입력해주세요." />
-            <CertifyButton type="submit">인증요청</CertifyButton>
+            <Input type="email" theme={theme} placeholder="이메일을 입력해주세요." />
+            <CertifyButton type="submit" theme={theme}>
+              인증요청
+            </CertifyButton>
           </ContainerBox>
 
-          <FontText>비밀번호</FontText>
-          <Input type="password" placeholder="비밀번호를 입력해주세요." />
+          <FontText theme={theme}>비밀번호</FontText>
+          <Input type="password" theme={theme} placeholder="비밀번호를 입력해주세요." />
 
-          <FontText>비밀번호 확인</FontText>
-          <Input type="password" placeholder="비밀번호를 한번더 입력해주세요." />
+          <FontText theme={theme}>비밀번호 확인</FontText>
+          <Input type="password" theme={theme} placeholder="비밀번호를 한번더 입력해주세요." />
 
-          <FontText>이름</FontText>
-          <Input type="text" placeholder="이름을 입력해주세요." />
+          <FontText theme={theme}>이름</FontText>
+          <Input type="text" theme={theme} placeholder="이름을 입력해주세요." />
 
-          <FontText>휴대폰 번호</FontText>
+          <FontText theme={theme}>휴대폰 번호</FontText>
           <ContainerBox>
-            <PhoneNumberBox>+82</PhoneNumberBox>
-            <Input type="tel" pattern="[0-9]{11}" placeholder=" - 빼고 입력해주세요." />
-            <CertifyButton type="submit">인증요청</CertifyButton>
+            <PhoneNumberBox theme={theme}>+82</PhoneNumberBox>
+            <Input type="tel" theme={theme} pattern="[0-9]{11}" placeholder=" - 빼고 입력해주세요." />
+            <CertifyButton type="submit" theme={theme}>
+              인증요청
+            </CertifyButton>
           </ContainerBox>
 
-          <FontText>인증코드</FontText>
+          <FontText theme={theme}>인증코드</FontText>
           <ContainerBox>
-            <Input type="tel" placeholder="인증코드를 입력해주세요." />
-            <CertifyButton type="submit">인증하기</CertifyButton>
+            <Input type="tel" theme={theme} placeholder="인증코드를 입력해주세요." />
+            <CertifyButton type="submit" theme={theme}>
+              인증하기
+            </CertifyButton>
           </ContainerBox>
 
           <Button onClick={() => navigate('/login')} theme={theme}>

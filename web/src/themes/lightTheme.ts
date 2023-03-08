@@ -12,5 +12,6 @@ export const lightTheme: DefaultTheme = {
     text: '#7B87A0',
     button: '#EBEFF7',
     background: '#F8F8F8',
+    opposite: '#FFFFFF',
   },
 };
