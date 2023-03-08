@@ -10,9 +10,9 @@ name: SpringBoot CI with Gradle
 # Event trigger
 on:
   push:
-    branches: [ "feat/springboot-workflow" ]
+    branches: [ "develop" ]
   pull_request:
-    branches: [ "feat/springboot-workflow" ]
+    branches: [ "develop" ]
 
 permissions:
   contents: read
