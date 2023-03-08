@@ -110,6 +110,10 @@ const Button = styled.button`
   color: ${(props) => props.theme.colors.opposite};
   background-color: ${(props) => props.theme.colors.primary};
   cursor: pointer;
+
+  &:hover{  
+    color : ${(props) => props.theme.colors.default};
+  }
 `;
 
 const CertifyButton = styled.button`
@@ -124,6 +128,11 @@ const CertifyButton = styled.button`
   color: ${(props) => props.theme.colors.text};
   background-color: ${(props) => props.theme.colors.button};
   border-radius: ${(props) => props.theme.borderRadius};
+
+  &:hover{  
+    background-color : ${(props) => props.theme.colors.opposite};
+    color : ${(props) => props.theme.colors.default};
+  }
 `;
 
 export default function MainPage() {
@@ -140,7 +149,7 @@ export default function MainPage() {
           <FontText theme={theme}>이메일</FontText>
           <ContainerBox>
             <Input type="email" theme={theme} placeholder="이메일을 입력해주세요." />
-            <CertifyButton type="submit" theme={theme}>
+            <CertifyButton onClick={() => alert("클릭됨")} type="submit" theme={theme}>
               인증요청
             </CertifyButton>
           </ContainerBox>
@@ -158,7 +167,7 @@ export default function MainPage() {
           <ContainerBox>
             <PhoneNumberBox theme={theme}>+82</PhoneNumberBox>
             <Input type="tel" theme={theme} pattern="[0-9]{11}" placeholder=" - 빼고 입력해주세요." />
-            <CertifyButton type="submit" theme={theme}>
+            <CertifyButton onClick={() => alert("클릭됨")} type="submit" theme={theme}>
               인증요청
             </CertifyButton>
           </ContainerBox>
@@ -166,7 +175,7 @@ export default function MainPage() {
           <FontText theme={theme}>인증코드</FontText>
           <ContainerBox>
             <Input type="tel" theme={theme} placeholder="인증코드를 입력해주세요." />
-            <CertifyButton type="submit" theme={theme}>
+            <CertifyButton onClick={() => alert("클릭됨")} type="submit" theme={theme}>
               인증하기
             </CertifyButton>
           </ContainerBox>
