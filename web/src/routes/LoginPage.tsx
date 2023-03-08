@@ -52,6 +52,13 @@ const Input = styled.input`
   &:focus {
     outline: none;
   }
+  ::placeholder,
+  ::-webkit-input-placeholder {
+    opacity: 0.4;
+  }
+  :-ms-input-placeholder {
+    opacity: 0.4;
+  }
 `;
 
 const LoginTitle = styled.span`

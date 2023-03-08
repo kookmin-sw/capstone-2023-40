@@ -28,11 +28,11 @@ const Container = styled.div`
 `;
 
 const RegistContainer = styled.div`
-padding: 9vw;
-margin-left: 20vw;
-margin-right: 20vw;
-min-width : 20vh;
-height: 70vh;
+padding: 7vw;
+margin-left: calc(20vw - 5vmin);
+margin-right: calc(20vw - 5vmin);
+min-width : 30vh;
+height: 80vh;
 background-color: ${(props) => props.theme.colors.container};
 box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
 `;
@@ -50,6 +50,7 @@ const Form = styled.form`
 `;
 
 const Input = styled.input`
+  min-width : 5vh;
   padding: 1.7vh;
   margin-top: 10px;
   margin-bottom: 10px;
@@ -62,7 +63,7 @@ const Input = styled.input`
   &:focus {
     outline: none;
   }
-
+  
   ::placeholder,
   ::-webkit-input-placeholder {
     opacity: 0.4;
@@ -118,7 +119,7 @@ const Button = styled.button`
 
 const CertifyButton = styled.button`
   border: none;
-  min-width: 20px;
+  min-width: 70px;
   width: 10vw;
   height: 100%;
   padding: 1.9vh;
