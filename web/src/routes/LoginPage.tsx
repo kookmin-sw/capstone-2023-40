@@ -113,9 +113,9 @@ export default function MainPage() {
             로그인
           </Button>
           <FontText style={{ display: 'flex', flexDirection: 'row' }}>
-            <hr style={{ color: `${theme.colors.default}` }} />
-            <span style={{ color: `${theme.colors.default}` }}>or</span>
-            <hr />
+            <hr style={{ border: `${theme.colors.default}` }} />
+            <FontText theme={theme}>or</FontText>
+            <hr style={{ border: `${theme.colors.default}` }} />
           </FontText>
           <Button onClick={() => navigate('/register')} theme={theme}>
             회원가입

@@ -7,12 +7,6 @@ import BackgroundImage from '../assets/main-page.webp';
 import Header from '../components/Header';
 import { useTheme } from '../hooks/useTheme';
 
-// 회원가입 페이지 모르는 점
-// 1. 회원가입 제목이 더 굵게 안됨.
-// 2. <FontText>의 font-color가 바뀌지 않음.
-// 3. Register컨테이너의 최소폭을 설정하고 싶은데 모름.
-// 4. <ContainerBox>의 폭을 항상 <RegistContainer>와 맞추고 싶은데 안됨.
-// 6. Input type이 number일 경우 박스 오른쪽에 Count버튼 생기는데 다른 유형을 찾지 못함.
 // 핸드폰 번호 + 인증코드 제약 걸기
 // 이메일 regex
 
@@ -77,6 +71,7 @@ const RegisterTitle = styled.span`
   text-align: left;
   font-size: 3vh;
   font-weight: 1000;
+  margin-bottom : 2vh;
   color: ${(props) => props.theme.colors.default};
 `;
 
@@ -167,7 +162,8 @@ export default function MainPage() {
           <FontText theme={theme}>휴대폰 번호</FontText>
           <ContainerBox>
             <PhoneNumberBox theme={theme}>+82</PhoneNumberBox>
-            <Input type="tel" theme={theme} pattern="[0-9]{11}" placeholder=" - 빼고 입력해주세요." />
+            <Input type="tel" theme={theme} pattern="[0-9]{11}" 
+            maxLength = {11} placeholder=" - 빼고 입력해주세요." />
             <CertifyButton onClick={() => alert("클릭됨")} type="submit" theme={theme}>
               인증요청
             </CertifyButton>
@@ -175,7 +171,8 @@ export default function MainPage() {
 
           <FontText theme={theme}>인증코드</FontText>
           <ContainerBox>
-            <Input type="tel" theme={theme} placeholder="인증코드를 입력해주세요." />
+            <Input type="tel" theme={theme} 
+            maxLength = {4} placeholder="인증코드를 입력해주세요." />
             <CertifyButton onClick={() => alert("클릭됨")} type="submit" theme={theme}>
               인증하기
             </CertifyButton>
