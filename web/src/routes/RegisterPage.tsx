@@ -172,9 +172,9 @@ export default function MainPage() {
             </RequestButton>
           </ContainerBox>
 
-          <Button onClick={() => navigate('/login')} theme={theme}>
+          <CompleteButton onClick={() => navigate('/login')} theme={theme}>
             회원가입 완료하기
-          </Button>
+          </CompleteButton>
         </Form>
       </RegistContainer>
     </Container>
