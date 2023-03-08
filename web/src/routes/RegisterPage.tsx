@@ -7,14 +7,10 @@ import BackgroundImage from '../assets/main-page.webp';
 import Header from '../components/Header';
 import { useTheme } from '../hooks/useTheme';
 
-// 핸드폰 번호 + 인증코드 제약 걸기
-// 이메일 regex
-
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
-  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url(${BackgroundImage}) no-repeat center center fixed;
+  background-color : ${(props) => props.theme.colors.opposite}
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -22,13 +18,13 @@ const Container = styled.div`
 `;
 
 const RegistContainer = styled.div`
-padding: 7vw;
-margin-left: calc(20vw - 5vmin);
-margin-right: calc(20vw - 5vmin);
-min-width : 30vh;
-height: 80vh;
-background-color: ${(props) => props.theme.colors.container};
-box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
+  padding: 7vw;
+  margin-left: calc(20vw - 5vmin);
+  margin-right: calc(20vw - 5vmin);
+  min-width: 30vh;
+  height: 80vh;
+  background-color: ${(props) => props.theme.colors.container};
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
 `;
 
 const ContainerBox = styled.form`
@@ -44,7 +40,7 @@ const Form = styled.form`
 `;
 
 const Input = styled.input`
-  min-width : 5vh;
+  min-width: 5vh;
   padding: 1.7vh;
   margin-top: 10px;
   margin-bottom: 10px;
@@ -57,7 +53,7 @@ const Input = styled.input`
   &:focus {
     outline: none;
   }
-  
+
   ::placeholder,
   ::-webkit-input-placeholder {
     opacity: 0.4;
@@ -71,7 +67,7 @@ const RegisterTitle = styled.span`
   text-align: left;
   font-size: 3vh;
   font-weight: 1000;
-  margin-bottom : 2vh;
+  margin-bottom: 2vh;
   color: ${(props) => props.theme.colors.default};
 `;
 
@@ -83,14 +79,14 @@ const FontText = styled.span`
   color: ${(props) => props.theme.colors.default};
 `;
 
-const PhoneNumberBox = styled.button`
-  border: 3px solid #ebeff7;
+const PhoneNumberBox = styled.div`
   padding: 1.7vh;
   font-size: 1.5vh;
   font-weight: 700;
   margin-right: 1vh;
-  color: ${(props) => props.theme.colors.text};
   background-color: white;
+  border: 1vh;
+  border-color: ${(props) => props.theme.borderRadius};
   border-radius: ${(props) => props.theme.borderRadius};
 `;
 
@@ -107,12 +103,12 @@ const Button = styled.button`
   background-color: ${(props) => props.theme.colors.primary};
   cursor: pointer;
 
-  &:hover{  
-    color : ${(props) => props.theme.colors.default};
+  &:hover {
+    color: ${(props) => props.theme.colors.default};
   }
 `;
 
-const CertifyButton = styled.button`
+const RequestButton = styled.button`
   border: none;
   min-width: 70px;
   width: 10vw;
@@ -125,9 +121,9 @@ const CertifyButton = styled.button`
   background-color: ${(props) => props.theme.colors.button};
   border-radius: ${(props) => props.theme.borderRadius};
 
-  &:hover{  
-    background-color : ${(props) => props.theme.colors.opposite};
-    color : ${(props) => props.theme.colors.default};
+  &:hover {
+    background-color: ${(props) => props.theme.colors.opposite};
+    color: ${(props) => props.theme.colors.default};
   }
 `;
 
@@ -145,16 +141,16 @@ export default function MainPage() {
           <FontText theme={theme}>이메일</FontText>
           <ContainerBox>
             <Input type="email" theme={theme} placeholder="이메일을 입력해주세요." />
-            <CertifyButton onClick={() => alert("클릭됨")} type="submit" theme={theme}>
+            <RequestButton onClick={() => alert('클릭됨')} type="submit" theme={theme}>
               인증요청
-            </CertifyButton>
+            </RequestButton>
           </ContainerBox>
 
           <FontText theme={theme}>비밀번호</FontText>
           <Input type="password" theme={theme} placeholder="비밀번호를 입력해주세요." />
 
           <FontText theme={theme}>비밀번호 확인</FontText>
-          <Input type="password" theme={theme} placeholder="비밀번호를 한번더 입력해주세요." />
+          <Input type="password" theme={theme} placeholder="비밀번호를 한번 더 입력해주세요." />
 
           <FontText theme={theme}>이름</FontText>
           <Input type="text" theme={theme} placeholder="이름을 입력해주세요." />
@@ -162,20 +158,18 @@ export default function MainPage() {
           <FontText theme={theme}>휴대폰 번호</FontText>
           <ContainerBox>
             <PhoneNumberBox theme={theme}>+82</PhoneNumberBox>
-            <Input type="tel" theme={theme} pattern="[0-9]{11}" 
-            maxLength = {11} placeholder=" - 빼고 입력해주세요." />
-            <CertifyButton onClick={() => alert("클릭됨")} type="submit" theme={theme}>
+            <Input type="tel" theme={theme} pattern="[0-9]{11}" maxLength={11} placeholder=" - 빼고 입력해주세요." />
+            <RequestButton onClick={() => alert('클릭됨')} type="submit" theme={theme}>
               인증요청
-            </CertifyButton>
+            </RequestButton>
           </ContainerBox>
 
           <FontText theme={theme}>인증코드</FontText>
           <ContainerBox>
-            <Input type="tel" theme={theme} 
-            maxLength = {4} placeholder="인증코드를 입력해주세요." />
-            <CertifyButton onClick={() => alert("클릭됨")} type="submit" theme={theme}>
+            <Input type="tel" theme={theme} maxLength={4} placeholder="인증코드를 입력해주세요." />
+            <RequestButton onClick={() => alert('클릭됨')} type="submit" theme={theme}>
               인증하기
-            </CertifyButton>
+            </RequestButton>
           </ContainerBox>
 
           <Button onClick={() => navigate('/login')} theme={theme}>
