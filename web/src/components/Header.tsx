@@ -3,8 +3,9 @@ import React, { useState, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
 
-import { ReactComponent as LogoDark } from '../assets/logo-dark.svg';
-import { ReactComponent as LogoLight } from '../assets/logo-light.svg';
+import { ReactComponent as LogoDark } from '../assets/svg/logo-dark.svg';
+import { ReactComponent as LogoLight } from '../assets/svg/logo-light.svg';
+import ThemeToggle from './ThemeToggle';
 
 const HeaderContainer = styled.header<{ isTransitionEnabled: boolean }>`
   position: sticky;
@@ -100,9 +101,7 @@ export default function Header({ button, theme, toggleTheme }: HeaderProps) {
       </NavigatorContainer>
       <ButtonContainer>
         {/* FIXME: Modify this to icon */}
-        <ToggleButton type="button" theme={theme} onClick={handleClick}>
-          button
-        </ToggleButton>
+        <ThemeToggle />
       </ButtonContainer>
     </HeaderContainer>
   );

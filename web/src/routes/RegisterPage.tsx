@@ -8,7 +8,7 @@ import { useTheme } from '../hooks/useTheme';
 
 const Container = styled.div`
   width: 100vw;
-  height: 100vh;
+  height: 130vh;
   background-color: ${(props) => props.theme.colors.background};
 `;
 
@@ -16,6 +16,7 @@ const RegistContainer = styled.div`
   padding: 7vw;
   margin-left: calc(20vw - 5vmin);
   margin-right: calc(20vw - 5vmin);
+  margin-top: 10vw;
   min-width: 30vh;
   height: 80vh;
   background-color: ${(props) => props.theme.colors.container};
