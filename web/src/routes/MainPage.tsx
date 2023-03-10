@@ -49,6 +49,10 @@ const Button = styled.button`
   color: white;
   background-color: ${(props) => props.theme.colors.primary};
   cursor: pointer;
+
+  &:hover {
+    background-color: ${(props) => props.theme.colors.prhover};
+  }
 `;
 
 export default function MainPage() {

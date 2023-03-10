@@ -12,7 +12,7 @@ const HeaderContainer = styled.header<{ isTransitionEnabled: boolean }>`
   width: 100vw;
   display: flex;
   flex-direction: row;
-  background-color: ${(props) => props.theme.colors.background};
+  background-color: ${(props) => props.theme.colors.header};
   transition: ${(props) => (props.isTransitionEnabled ? 'background-color 300ms linear' : 'none')};
   -webkit-transition: ${(props) => (props.isTransitionEnabled ? 'background-color 300ms linear' : 'none')};
   -ms-transition: ${(props) => (props.isTransitionEnabled ? 'background-color 300ms linear' : 'none')};

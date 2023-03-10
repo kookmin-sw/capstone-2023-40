@@ -11,11 +11,14 @@ declare module 'styled-components' {
     colors: {
       default: string;
       primary: string;
+      prhover: string;
       container: string;
       text: string;
       button: string;
-      background: string;
+      btnhover: string;
+      header: string;
       opposite: string;
+      background: string;
     };
   }
 }

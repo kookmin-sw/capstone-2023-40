@@ -3,18 +3,13 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import BackgroundImage from '../assets/main-page.webp';
 import Header from '../components/Header';
 import { useTheme } from '../hooks/useTheme';
 
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
-  background-color : ${(props) => props.theme.colors.opposite}
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
+  background-color: ${(props) => props.theme.colors.background};
 `;
 
 const RegistContainer = styled.div`
@@ -44,7 +39,7 @@ const Input = styled.input`
   padding: 1.7vh;
   margin-top: 10px;
   margin-bottom: 10px;
-  border: 3px solid #ebeff7;
+  border: ${(props) => props.theme.border};
   border-radius: 16px;
   font-size: 1.5vh;
   font-weight: 600;
@@ -85,7 +80,7 @@ const PhoneNumberBox = styled.div`
   font-weight: 700;
   margin-right: 1vh;
   background-color: white;
-  border: 1vh;
+  border: ${(props) => props.theme.border};
   border-color: ${(props) => props.theme.borderRadius};
   border-radius: ${(props) => props.theme.borderRadius};
 `;
@@ -99,12 +94,12 @@ const CompleteButton = styled.button`
   border-radius: ${(props) => props.theme.borderRadius};
   font-size: 2vh;
   font-weight: 700;
-  color: ${(props) => props.theme.colors.opposite};
+  color: white;
   background-color: ${(props) => props.theme.colors.primary};
   cursor: pointer;
 
   &:hover {
-    color: ${(props) => props.theme.colors.default};
+    background-color: ${(props) => props.theme.colors.prhover};
   }
 `;
 
@@ -122,8 +117,7 @@ const RequestButton = styled.button`
   border-radius: ${(props) => props.theme.borderRadius};
 
   &:hover {
-    background-color: ${(props) => props.theme.colors.opposite};
-    color: ${(props) => props.theme.colors.default};
+    background-color: ${(props) => props.theme.colors.btnhover};
   }
 `;
 

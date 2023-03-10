@@ -37,12 +37,12 @@ const Input = styled.input`
   padding: 1.7vh;
   margin-top: 10px;
   margin-bottom: 10px;
-  border: 3px solid #ebeff7;
+  border: ${(props) => props.theme.border};
   border-radius: 16px;
   font-size: 1.5vh;
   font-weight: 600;
   flex: 1;
-  
+
   &:focus {
     outline: none;
   }
@@ -84,8 +84,7 @@ const Button = styled.button`
   cursor: pointer;
 
   &:hover {
-    background-color: skyblue;
-    color: blue;
+    background-color: ${(props) => props.theme.colors.btnhover};
   }
 `;
 
