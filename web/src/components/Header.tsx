@@ -100,8 +100,9 @@ export default function Header({ button, theme, toggleTheme }: HeaderProps) {
         <Navigator onClick={() => navigate('/report')}>리포트</Navigator>
       </NavigatorContainer>
       <ButtonContainer>
-        {/* FIXME: Modify this to icon */}
-        <ThemeToggle />
+        <ToggleButton type="button" theme={theme} onClick={handleClick}>
+          button
+        </ToggleButton>
       </ButtonContainer>
     </HeaderContainer>
   );
