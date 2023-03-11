@@ -1,5 +1,6 @@
 import React from 'react';
 
+import 'pace-js/themes/red/pace-theme-minimal.css';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 
