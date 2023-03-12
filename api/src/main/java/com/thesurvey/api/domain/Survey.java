@@ -1,6 +1,5 @@
 package com.thesurvey.api.domain;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,22 +11,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "users")
+@Table(name = "survey")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User {
+public class Survey {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "name", nullable = false)
-    private String name;
+    private String title;
 
     @Builder
-    public User(Long id, String name) {
+    public Survey(Long id, String name) {
         this.id = id;
-        this.name = name;
+        this.title = title;
     }
-
 
 }
