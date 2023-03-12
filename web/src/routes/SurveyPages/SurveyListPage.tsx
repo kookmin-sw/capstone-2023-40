@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
+import { AxiosResponse } from 'axios';
 import styled from 'styled-components';
 
 import axios from '../../api/axios';
@@ -17,12 +18,22 @@ const Container = styled.div`
   background-size: cover;
 `;
 
+interface Survey {
+  author_id: number;
+  title: string;
+  created_at: string;
+  started_at: string;
+  ended_at: string;
+  must_auth_list: Array<string>;
+  survey_id: number;
+}
+
 export default function SurveyListPage() {
   const [theme, toggleTheme] = useTheme();
-  const [surveys, setSurveys] = useState([]);
+  const [surveys, setSurveys] = useState<Survey[]>([]);
 
-  const fetchSurveyData = async () => {
-    const request = await axios.get(requests.fetchSurveyList);
+  const fetchSurveyData = async (): Promise<AxiosResponse<Survey[]>> => {
+    const request: AxiosResponse<Survey[]> = await axios.get<Survey[]>(requests.fetchSurveyList);
     setSurveys(request.data);
     return request;
   };
@@ -34,6 +45,13 @@ export default function SurveyListPage() {
   return (
     <Container>
       <Header theme={theme} toggleTheme={toggleTheme} />
+      <ul>
+        {surveys.map((survey) => (
+          <li key={survey.survey_id}>
+            {survey.title} ({survey.must_auth_list})
+          </li>
+        ))}
+      </ul>
     </Container>
   );
 }
