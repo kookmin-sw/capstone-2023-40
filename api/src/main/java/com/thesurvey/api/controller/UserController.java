@@ -20,9 +20,9 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> join(@RequestBody UserDto userDto) {
-        User savedUser = userService.save(userDto);
-        return ResponseEntity.ok(savedUser);
+    public ResponseEntity<User> join(@RequestBody User user) {
+        userService.join(user);
+        return ResponseEntity.ok(user);
     }
 
 

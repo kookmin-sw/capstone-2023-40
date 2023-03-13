@@ -1,6 +1,7 @@
 package com.thesurvey.api.service;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import com.thesurvey.api.domain.User;
 import com.thesurvey.api.dto.UserDto;
 import com.thesurvey.api.repository.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -21,11 +22,10 @@ public class UserServiceTest {
     void join() {
         String name = "JinMyeong";
 
-        UserDto userDto = new UserDto();
-        userDto.setName(name);
-        userService.save(userDto);
+        User user = new User(name);
+        userService.join(user);
 
-        String result = userService.findByName(userDto.getName()).getName();
+        String result = userService.findByName(user.getName()).getName();
         assertThat(result).isEqualTo(name);
     }
 }

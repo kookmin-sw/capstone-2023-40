@@ -20,9 +20,7 @@ public class UserService {
         return targetUser.get();
     }
 
-    public User save(UserDto userDto) {
-        return userRepository.save(User.builder().
-            name(userDto.getName()).
-            build());
+    public User join(User user) {
+        return userRepository.save(user);
     }
 }

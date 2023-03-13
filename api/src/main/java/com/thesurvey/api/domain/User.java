@@ -25,8 +25,7 @@ public class User {
     private String name;
 
     @Builder
-    public User(Long userId, String name) {
-        this.userId = userId;
+    public User(String name) {
         this.name = name;
     }
 
