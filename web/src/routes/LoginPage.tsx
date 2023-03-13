@@ -22,9 +22,10 @@ const LoginContainer = styled.div`
   padding: 9vw;
   margin-left: 20vw;
   margin-right: 20vw;
-  margin-top: 10vw;
+  margin-top: calc(5vw - 1vmin);
   min-width: 20vh;
   height: 50vh;
+  border-radius: 20px;
   background-color: ${(props) => props.theme.colors.container};
   box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
 `;

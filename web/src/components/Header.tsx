@@ -5,7 +5,6 @@ import styled, { DefaultTheme } from 'styled-components';
 
 import { ReactComponent as LogoDark } from '../assets/svg/logo-dark.svg';
 import { ReactComponent as LogoLight } from '../assets/svg/logo-light.svg';
-import ThemeToggle from './ThemeToggle';
 
 const HeaderContainer = styled.header<{ isTransitionEnabled: boolean }>`
   position: sticky;

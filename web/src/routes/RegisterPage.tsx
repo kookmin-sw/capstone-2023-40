@@ -16,9 +16,10 @@ const RegistContainer = styled.div`
   padding: 7vw;
   margin-left: calc(20vw - 5vmin);
   margin-right: calc(20vw - 5vmin);
-  margin-top: 10vw;
+  margin-top: calc(7vw - 2vmin);
   min-width: 30vh;
   height: 80vh;
+  border-radius: 20px;
   background-color: ${(props) => props.theme.colors.container};
   box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
 `;
@@ -127,7 +128,7 @@ export default function MainPage() {
   const navigate = useNavigate();
 
   return (
-    <Container>
+    <Container theme={theme}>
       <Header theme={theme} toggleTheme={toggleTheme} />
       <RegistContainer theme={theme}>
         <Form>

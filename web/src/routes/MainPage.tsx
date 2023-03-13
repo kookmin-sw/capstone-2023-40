@@ -58,6 +58,7 @@ const Button = styled.button`
 export default function MainPage() {
   const [theme, toggleTheme] = useTheme();
   const navigate = useNavigate();
+  const loginCheck = false;
 
   return (
     <Container>
@@ -69,9 +70,15 @@ export default function MainPage() {
           <AppTitle>더 서베이</AppTitle>
           에서 쉽고 간편하게
         </Description>
-        <Button onClick={() => navigate('/survey')} theme={theme}>
-          바로 설문하기
-        </Button>
+        {loginCheck === false ? (
+          <Button onClick={() => navigate('/login')} theme={theme}>
+            바로 설문하기
+          </Button>
+        ) : (
+          <Button onClick={() => navigate('/survey')} theme={theme}>
+            바로 설문하기
+          </Button>
+        )}
       </Introduction>
     </Container>
   );
