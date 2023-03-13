@@ -22,6 +22,7 @@ const LoginContainer = styled.div`
   padding: 9vw;
   margin-left: 20vw;
   margin-right: 20vw;
+  margin-top: 10vw;
   min-width: 20vh;
   height: 50vh;
   background-color: ${(props) => props.theme.colors.container};
