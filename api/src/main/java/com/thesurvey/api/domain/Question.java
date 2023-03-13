@@ -23,15 +23,15 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "question_id")
     private Long questionId;
-    @Column(name = "title", nullable = true)
-    private String title;
+    @Column(name = "content", nullable = true)
+    private String content;
+
     @ManyToOne
     @JoinColumn(name = "survey_id")
     private Survey survey;
     @Builder
-    public Question(Long questionId, String title) {
-        this.questionId = questionId;
-        this.title = title;
+    public Question(String content) {
+        this.content = content;
     }
 
 }
