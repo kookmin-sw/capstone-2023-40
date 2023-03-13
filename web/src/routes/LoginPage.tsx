@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Navigate, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -22,6 +22,10 @@ const LoginContainer = styled.div`
   padding: 9vw;
   margin-left: 20vw;
   margin-right: 20vw;
+<<<<<<< Updated upstream
+=======
+  margin-top: calc(3vw + 3vmin);
+>>>>>>> Stashed changes
   min-width: 20vh;
   height: 50vh;
   background-color: ${(props) => props.theme.colors.container};
@@ -88,7 +92,31 @@ const Button = styled.button`
   }
 `;
 
-export default function MainPage() {
+// const CheckLogin = () => {
+//   const [showModal, setShowModal] = useState(false);
+//   const [email, setEmail] = useState('');
+//   const [password, setPassword] = useState('');
+//   const [isLoginError, setIsLoginError] = useState(false);
+
+//   const handleLogin = () => {
+//     // 예시를 위해 간단한 로그인 에러 판단 구현
+//     if (email === '' || password === '') {
+//       setIsLoginError(true);
+//     } else if (isLoginError) {
+//       // 로그인 요청 보내고 에러 응답을 받았을 경우
+//       setIsLoginError(true);
+//     } else {
+//       setIsLoginError(false);
+//     }
+//   };
+
+//   const handleModalClose = () => {
+//     setIsLoginError(false);
+//     setShowModal(false);
+//   };
+// };
+
+export default function LoginPage() {
   const [theme, toggleTheme] = useTheme();
   const navigate = useNavigate();
 

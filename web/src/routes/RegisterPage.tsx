@@ -121,7 +121,7 @@ const RequestButton = styled.button`
   }
 `;
 
-export default function MainPage() {
+export default function RegisterPage() {
   const [theme, toggleTheme] = useTheme();
   const navigate = useNavigate();
 

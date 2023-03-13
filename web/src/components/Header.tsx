@@ -3,8 +3,15 @@ import React, { useState, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
 
+<<<<<<< Updated upstream
 import { ReactComponent as LogoDark } from '../assets/logo-dark.svg';
 import { ReactComponent as LogoLight } from '../assets/logo-light.svg';
+=======
+import { ReactComponent as MoonIcon } from '../assets/svg/darkmodeoff.svg';
+import { ReactComponent as SunIcon } from '../assets/svg/darkmodeon.svg';
+import { ReactComponent as LogoDark } from '../assets/svg/logo-dark.svg';
+import { ReactComponent as LogoLight } from '../assets/svg/logo-light.svg';
+>>>>>>> Stashed changes
 
 const HeaderContainer = styled.header<{ isTransitionEnabled: boolean }>`
   position: sticky;
@@ -32,6 +39,24 @@ const LogoDarkContainer = styled(LogoDark)`
   width: 150px;
   height: fit-content;
   cursor: pointer;
+`;
+
+const LightMode = styled(SunIcon)`
+  margin-right: 2vw;
+  margin-top: 1vh;
+  width: fit-content;
+  height: 50px;
+  cursor: pointer;
+  background-color: white;
+`;
+
+const DarkMode = styled(MoonIcon)`
+  margin-right: 2vw;
+  margin-top: 1vh;
+  width: fit-content;
+  height: 50px;
+  cursor: pointer;
+  background-color: white;
 `;
 
 const ButtonContainer = styled.div`
@@ -64,7 +89,7 @@ const Navigator = styled.li`
   }
 `;
 
-const ToggleButton = styled.button`
+const ToogleIcon = styled.button`
   text-decoration: none;
   margin-right: 2vw;
   border: none;
@@ -99,10 +124,14 @@ export default function Header({ button, theme, toggleTheme }: HeaderProps) {
         <Navigator onClick={() => navigate('/report')}>리포트</Navigator>
       </NavigatorContainer>
       <ButtonContainer>
+<<<<<<< Updated upstream
         {/* FIXME: Modify this to icon */}
         <ToggleButton type="button" theme={theme} onClick={handleClick}>
           button
         </ToggleButton>
+=======
+        {theme.alt === 'light' ? <LightMode onClick={handleClick} /> : <DarkMode onClick={handleClick} />}
+>>>>>>> Stashed changes
       </ButtonContainer>
     </HeaderContainer>
   );
