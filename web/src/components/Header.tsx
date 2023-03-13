@@ -3,6 +3,8 @@ import React, { useState, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
 
+import { ReactComponent as SunMode } from '../assets/svg/darkmodeoff.svg';
+import { ReactComponent as MoonMode } from '../assets/svg/darkmodeon.svg';
 import { ReactComponent as LogoDark } from '../assets/svg/logo-dark.svg';
 import { ReactComponent as LogoLight } from '../assets/svg/logo-light.svg';
 
@@ -32,6 +34,21 @@ const LogoDarkContainer = styled(LogoDark)`
   width: 150px;
   height: fit-content;
   cursor: pointer;
+`;
+
+const LightMode = styled(SunMode)`
+  margin-right: 2vw;
+  width: fit-content;
+  height: 40px;
+  cursor: pointer;
+`;
+
+const DarkMode = styled(MoonMode)`
+  margin-right: 2vw;
+  width: fit-content;
+  height: 40px;
+  cursor: pointer;
+  background-color: white;
 `;
 
 const ButtonContainer = styled.div`
@@ -99,9 +116,7 @@ export default function Header({ button, theme, toggleTheme }: HeaderProps) {
         <Navigator onClick={() => navigate('/report')}>리포트</Navigator>
       </NavigatorContainer>
       <ButtonContainer>
-        <ToggleButton type="button" theme={theme} onClick={handleClick}>
-          button
-        </ToggleButton>
+        {theme.alt === 'light' ? <LightMode onClick={handleClick} /> : <DarkMode onClick={handleClick} />}
       </ButtonContainer>
     </HeaderContainer>
   );
