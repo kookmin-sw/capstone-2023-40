@@ -37,14 +37,14 @@ const LogoDarkContainer = styled(LogoDark)`
 `;
 
 const LightMode = styled(SunMode)`
-  margin-right: 2vw;
+  margin-top: 1.5vh;
   width: fit-content;
   height: 40px;
   cursor: pointer;
 `;
 
 const DarkMode = styled(MoonMode)`
-  margin-right: 2vw;
+  margin-top: 1.5vh;
   width: fit-content;
   height: 40px;
   cursor: pointer;
@@ -70,7 +70,7 @@ const NavigatorContainer = styled.ul`
 `;
 
 const Navigator = styled.li`
-  font-size: 2vh;
+  font-size: calc(1.5vh + 0.5vmin);
   font-weight: 600;
   cursor: pointer;
   padding: 1vw;
@@ -81,21 +81,32 @@ const Navigator = styled.li`
   }
 `;
 
-const ToggleButton = styled.button`
-  text-decoration: none;
-  margin-right: 2vw;
+const LoginInformation = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(1.5vh + 0.5vmin);
+  font-weight: 800;
+  color: ${(props) => props.theme.colors.text};
+  margin: 10px;
   border: none;
-  padding: ${(props) => props.theme.padding};
+  border-radius: ${(props) => props.theme.borderRadius};
+  padding: 1vw;
+  cursor: pointer;
   background-color: ${(props) => props.theme.colors.button};
+
+  &:hover {
+    background-color: ${(props) => props.theme.colors.btnhover};
+  }
 `;
 
 interface HeaderProps {
-  button?: HTMLButtonElement | ReactNode;
+  // button?: HTMLButtonElement | ReactNode;
   theme: DefaultTheme;
   toggleTheme: () => void;
 }
 
-export default function Header({ button, theme, toggleTheme }: HeaderProps) {
+export default function Header({ theme, toggleTheme }: HeaderProps) {
   const navigate = useNavigate();
   const [isTransitionEnabled, setIsTransitionEnabled] = useState<boolean>(false);
 
@@ -116,7 +127,14 @@ export default function Header({ button, theme, toggleTheme }: HeaderProps) {
         <Navigator onClick={() => navigate('/report')}>리포트</Navigator>
       </NavigatorContainer>
       <ButtonContainer>
-        {theme.alt === 'light' ? <LightMode onClick={handleClick} /> : <DarkMode onClick={handleClick} />}
+        {theme.alt === 'light' ? (
+          <LightMode onClick={handleClick} title="Darkmode On" />
+        ) : (
+          <DarkMode onClick={handleClick} title="Darkmode Off" />
+        )}
+        <LoginInformation onClick={() => navigate('/login')} theme={theme}>
+          로그인/회원가입{' '}
+        </LoginInformation>
       </ButtonContainer>
     </HeaderContainer>
   );
