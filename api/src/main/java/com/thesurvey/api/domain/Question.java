@@ -9,22 +9,29 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "survey_item")
+@Table(name = "question")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class SurveyItem {
+public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long itemNo;
+    @Column(name = "question_id")
+    private Long questionId;
     @Column(name = "title", nullable = true)
     private String title;
     @ManyToOne
-    @JoinColumn(name = "surveyId", referencedColumnName = "id")
+    @JoinColumn(name = "survey_id")
     private Survey survey;
+    @Builder
+    public Question(Long questionId, String title) {
+        this.questionId = questionId;
+        this.title = title;
+    }
 
 }
