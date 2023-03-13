@@ -1,6 +1,5 @@
 package com.thesurvey.api.domain;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,16 +21,17 @@ public class Survey {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "survey_id")
+    private Long surveyId;
     @Column(name = "title", nullable = false)
     private String title;
     @OneToMany(mappedBy = "survey")
 //    @JsonManagedReference
-    private List<SurveyItem> surveyItem;
+    private List<Question> question;
 
     @Builder
-    public Survey(Long id, String title) {
-        this.id = id;
+    public Survey(Long surveyId, String title) {
+        this.surveyId = surveyId;
         this.title = title;
     }
 

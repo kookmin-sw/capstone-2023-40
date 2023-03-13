@@ -19,13 +19,14 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "user_id")
+    private Long userId;
     @Column(name = "name", nullable = false)
     private String name;
 
     @Builder
-    public User(Long id, String name) {
-        this.id = id;
+    public User(Long userId, String name) {
+        this.userId = userId;
         this.name = name;
     }
 

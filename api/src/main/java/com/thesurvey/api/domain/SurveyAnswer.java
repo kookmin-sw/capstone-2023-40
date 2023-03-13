@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,10 +23,16 @@ public class SurveyAnswer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Column(name = "submittedDate", nullable = false)
+    @Column(name = "survey_answer_id")
+    private Long surveyAnswerId;
+    @Column(name = "submitted_date", nullable = false)
     private Timestamp submittedDate;
     @ManyToOne
-    @JoinColumn(name = "surveyId")
+    @JoinColumn(name = "survey_id")
     private Survey survey;
+    @Builder
+    public SurveyAnswer(Long surveyAnswerId, Timestamp submittedDate) {
+        this.surveyAnswerId = surveyAnswerId;
+        this.submittedDate = submittedDate;
+    }
 }

@@ -1,5 +1,6 @@
 package com.thesurvey.api.domain;
 
+import java.sql.Time;
 import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,13 +24,19 @@ public class Participation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Column(name = "participateDate", nullable = false)
-    private Timestamp ParticipateDate;
+    @Column(name = "participation_id")
+    private Long participationId;
+    @Column(name = "participate_date", nullable = false)
+    private Timestamp participateDate;
     @ManyToOne
-    @JoinColumn(name = "surveyId")
+    @JoinColumn(name = "survey_id")
     private Survey survey;
     @ManyToOne
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "user_id")
     private User user;
+    @Builder
+    public Participation(Long participationId, Timestamp participateDate) {
+        this.participationId = participationId;
+        this.participateDate = participateDate;
+    }
 }
