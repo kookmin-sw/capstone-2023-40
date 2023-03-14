@@ -31,9 +31,9 @@ public class Survey {
     private List<Question> questions;
 
     @Builder
-    public Survey(String title) {
-        this.surveyId = surveyId;
+    public Survey(String title, List<Question> questions) {
         this.title = title;
+        this.questions = questions;
     }
 
 }
