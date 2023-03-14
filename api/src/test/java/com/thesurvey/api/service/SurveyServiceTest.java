@@ -33,10 +33,10 @@ public class SurveyServiceTest {
         List<Question> questions = Arrays.asList(question1, question2);
 
         Survey survey = new Survey(title, questions);
-        surveyService.createSurvey(survey);
+        Survey newSurvey = surveyService.createSurvey(survey);
         questionService.addQuestion(survey.getQuestions());
 
-        Optional<Survey> savedSurvey = surveyService.getSurveyById(survey.getSurveyId());
+        Optional<Survey> savedSurvey = surveyService.getSurveyById(newSurvey.getSurveyId());
         assertNotNull(savedSurvey);
         assertEquals(title, savedSurvey.get().getTitle());
         assertEquals(questions.size(), savedSurvey.get().getQuestions().size());
