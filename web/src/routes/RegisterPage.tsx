@@ -214,8 +214,10 @@ export default function RegisterPage() {
       ShowModal_isEmpty('중복 확인할 비밀번호');
     } else if (password !== checkPassword) {
       alert('비밀번호가 서로 다릅니다.');
+    } else {
+      checked_Overlap_Password = true;
+      alert('비밀번호가 일치합니다!');
     }
-    checked_Overlap_Password = true;
   };
 
   // Get a phone number and request an authentication number.
@@ -234,6 +236,10 @@ export default function RegisterPage() {
     checked_AuthNumber = true;
   };
 
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+  };
+
   // Clicked Complete UserRegist Button. so We need to do the last check required for registration.
   const handleClick = () => {
     // 애자일 패턴에대한 고찰 필요!
@@ -249,10 +255,6 @@ export default function RegisterPage() {
       alert('회원가입이 완료되었습니다.');
       navigate('../login');
     }
-  };
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
   };
 
   return (
