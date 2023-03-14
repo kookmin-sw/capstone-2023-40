@@ -89,6 +89,7 @@ const LoginInformation = styled.div`
   font-weight: 800;
   color: ${(props) => props.theme.colors.text};
   margin: 10px;
+  margin-right: 2vw;
   border: none;
   border-radius: ${(props) => props.theme.borderRadius};
   padding: 1vw;
@@ -128,9 +129,9 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
       </NavigatorContainer>
       <ButtonContainer>
         {theme.alt === 'light' ? (
-          <LightMode onClick={handleClick} title="Darkmode On" />
+          <LightMode onClick={handleClick} title="다시설정하기" />
         ) : (
-          <DarkMode onClick={handleClick} title="Darkmode Off" />
+          <DarkMode onClick={handleClick} title="다시설정하기" />
         )}
         <LoginInformation onClick={() => navigate('/login')} theme={theme}>
           로그인/회원가입{' '}
