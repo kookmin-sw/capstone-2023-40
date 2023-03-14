@@ -24,7 +24,7 @@ const RegistContainer = styled.div`
   box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
 `;
 
-const ContainerBox = styled.form`
+const ContainerBox = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -149,8 +149,8 @@ const isNameEmpty = (name: string) => {
 };
 
 // If PhoneNumber input data is Empty
-const isPhoneNumberEmpty = (phoneNumber: number) => {
-  if (phoneNumber === null) return true;
+const isPhoneNumberEmpty = (phoneNumber: string) => {
+  if (phoneNumber === '') return true;
   return false;
 };
 
@@ -190,6 +190,7 @@ export default function RegisterPage() {
   let checked_AuthEmail = false;
   let checked_Overlap_Password = false;
   let checked_AuthNumber = false;
+  console.log('checked_AuthEmail 여부: ', checked_AuthEmail);
 
   // It will have to Add connect User DataBase - Email
   const AuthEmail = (email: string) => {
@@ -210,9 +211,9 @@ export default function RegisterPage() {
       ShowModal_isEmpty('비밀번호');
     } else if (!PasswordRegex.test(password)) {
       ShowModal_Check('비밀번호');
-    } else if (checkPassword === '') {
+    } else if (checkpassword === '') {
       ShowModal_isEmpty('중복 확인할 비밀번호');
-    } else if (password !== checkPassword) {
+    } else if (password !== checkpassword) {
       alert('비밀번호가 서로 다릅니다.');
     } else {
       checked_Overlap_Password = true;
@@ -221,8 +222,11 @@ export default function RegisterPage() {
   };
 
   // Get a phone number and request an authentication number.
-  const PassingNumber = (phoneNum: number) => {
-    if (isPhoneNumberEmpty(Number(phoneNum))) {
+  const PassingNumber = (phoneNum: string) => {
+    // if(checked_AuthEmail || checked_Overlap_Password){
+    //   ShowModal_Check('')
+    // }
+    if (isPhoneNumberEmpty(phoneNum)) {
       ShowModal_isEmpty('전화번호');
     }
   };
@@ -242,14 +246,13 @@ export default function RegisterPage() {
 
   // Clicked Complete UserRegist Button. so We need to do the last check required for registration.
   const handleClick = () => {
-    // 애자일 패턴에대한 고찰 필요!
     if (!checked_AuthEmail) {
       ShowModal_Btn('이메일 인증요청');
     } else if (!checked_Overlap_Password) {
       ShowModal_Btn('중복 비밀번호 확인');
     } else if (isNameEmpty(inputName)) {
       ShowModal_isEmpty('이름');
-    } else if (checked_AuthNumber) {
+    } else if (!checked_AuthNumber) {
       ShowModal_Btn('인증번호로 인증');
     } else {
       alert('회원가입이 완료되었습니다.');
@@ -320,9 +323,9 @@ export default function RegisterPage() {
               onChange={(e) => setPhoneNumber(e.target.value)}
               pattern="[0-9]{11}"
               maxLength={11}
-              placeholder="-빼고 입력해주세요."
+              placeholder="- 빼고 입력하세요."
             />
-            <RequestButton onClick={() => PassingNumber(Number(phoneNumber))} type="submit" theme={theme}>
+            <RequestButton onClick={() => PassingNumber(phoneNumber)} type="submit" theme={theme}>
               인증요청
             </RequestButton>
           </ContainerBox>
@@ -334,9 +337,9 @@ export default function RegisterPage() {
               value={authkey}
               theme={theme}
               onChange={(e) => setAuthKey(e.target.value)}
-              pattern="[0-9]{6}"
+              pattern="[0-9]{4}"
               maxLength={6}
-              placeholder="인증코드를 입력해주세요.(1234)"
+              placeholder="인증코드 4 자리를 입력하세요.(1234)"
             />
             <RequestButton onClick={CorrespondNumber} type="submit" theme={theme}>
               인증하기
