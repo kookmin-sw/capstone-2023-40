@@ -7,8 +7,6 @@ import BackgroundImage from '../assets/main-page.webp';
 import Header from '../components/Header';
 import { useTheme } from '../hooks/useTheme';
 
-// import Modal from './ModalPage';
-
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
@@ -114,11 +112,16 @@ export default function LoginPage() {
     // setShowModal(true);
   };
 
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+  };
+
   // It will have to Add connect User DataBase - Email & Password
   const CheckLogin = (email: string, password: string) => {
     if (isEmailEmpty(email) || isPasswordEmpty(password)) {
       handleClick();
     } else {
+      alert('로그인에 성공했습니다.');
       navigate('./survey');
     }
   };
@@ -127,7 +130,7 @@ export default function LoginPage() {
     <Container>
       <Header theme={theme} toggleTheme={toggleTheme} />
       <LoginContainer theme={theme}>
-        <Form>
+        <Form onSubmit={handleSubmit}>
           <LoginTitle theme={theme}>로그인</LoginTitle>
           <FontText theme={theme}>이메일</FontText>
           <Input

@@ -87,24 +87,6 @@ const PhoneNumberBox = styled.div`
   border-radius: ${(props) => props.theme.borderRadius};
 `;
 
-const CompleteButton = styled.button`
-  margin-top: 1vh;
-  border: none;
-  padding: 2vh;
-  padding-left: 8vw;
-  padding-right: 8vw;
-  border-radius: ${(props) => props.theme.borderRadius};
-  font-size: 2vh;
-  font-weight: 700;
-  color: white;
-  background-color: ${(props) => props.theme.colors.primary};
-  cursor: pointer;
-
-  &:hover {
-    background-color: ${(props) => props.theme.colors.prhover};
-  }
-`;
-
 const RequestButton = styled.button`
   border: none;
   min-width: 70px;
@@ -117,9 +99,28 @@ const RequestButton = styled.button`
   color: ${(props) => props.theme.colors.text};
   background-color: ${(props) => props.theme.colors.button};
   border-radius: ${(props) => props.theme.borderRadius};
+  cursor: pointer;
 
   &:hover {
     background-color: ${(props) => props.theme.colors.btnhover};
+  }
+`;
+
+const CompleteButton = styled.button`
+  margin-top: 1vh;
+  padding: 2vh;
+  padding-left: 8vw;
+  padding-right: 8vw;
+  font-size: 2vh;
+  font-weight: 700;
+  color: white;
+  background-color: ${(props) => props.theme.colors.primary};
+  border: none;
+  border-radius: ${(props) => props.theme.borderRadius};
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${(props) => props.theme.colors.prhover};
   }
 `;
 
@@ -207,22 +208,14 @@ export default function RegisterPage() {
     const PasswordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
     if (isPasswordEmpty(inputPassword)) {
       ShowModal_isEmpty('비밀번호');
-      return false;
-    }
-    if (!PasswordRegex.test(password)) {
+    } else if (!PasswordRegex.test(password)) {
       ShowModal_Check('비밀번호');
-      return false;
-    }
-    if (checkPassword === '') {
+    } else if (checkPassword === '') {
       ShowModal_isEmpty('중복 확인할 비밀번호');
-      return false;
-    }
-    if (password !== checkPassword) {
+    } else if (password !== checkPassword) {
       alert('비밀번호가 서로 다릅니다.');
-      return false;
     }
     checked_Overlap_Password = true;
-    return true;
   };
 
   // Get a phone number and request an authentication number.
@@ -258,11 +251,15 @@ export default function RegisterPage() {
     }
   };
 
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+  };
+
   return (
     <Container theme={theme}>
       <Header theme={theme} toggleTheme={toggleTheme} />
       <RegistContainer theme={theme}>
-        <Form>
+        <Form onSubmit={handleSubmit}>
           <RegisterTitle theme={theme}>회원가입</RegisterTitle>
 
           <FontText theme={theme}>이메일</FontText>
@@ -344,7 +341,7 @@ export default function RegisterPage() {
             </RequestButton>
           </ContainerBox>
 
-          <CompleteButton onClick={handleClick} theme={theme}>
+          <CompleteButton onClick={handleClick} type="submit" theme={theme}>
             회원가입 완료하기
           </CompleteButton>
         </Form>
