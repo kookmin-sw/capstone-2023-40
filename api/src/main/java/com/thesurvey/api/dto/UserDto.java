@@ -9,13 +9,15 @@ import lombok.Setter;
 public class UserDto {
 
     public String name;
+    public String email;
 
     public UserDto(User user) {
         this.name = user.getName();
+        this.email = user.getEmail();
     }
 
     @Builder
     public User toEntity() {
-        return User.builder().name(name).build();
+        return User.builder().name(name).email(email).build();
     }
 }

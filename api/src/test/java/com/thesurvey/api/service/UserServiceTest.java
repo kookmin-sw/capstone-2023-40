@@ -21,8 +21,9 @@ public class UserServiceTest {
     @Test
     void join() {
         String name = "JinMyeong";
+        String email = "kjmdkdlel@google.com";
 
-        User user = new User(name);
+        User user = User.builder().name(name).email(email).build();
         userService.join(user);
 
         String result = userService.findByName(user.getName()).getName();
