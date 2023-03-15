@@ -16,6 +16,12 @@ export const isPasswordEmpty = (password: string) => {
   return false;
 };
 
+// If Password input data meets the Password regular expression
+export const CheckPassword = (password: string) => {
+  const PasswordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
+  return PasswordRegex.test(password);
+};
+
 // If Name input data is Empty
 export const isNameEmpty = (name: string) => {
   if (name === '') return true;
@@ -26,6 +32,12 @@ export const isNameEmpty = (name: string) => {
 export const isPhoneNumberEmpty = (phoneNumber: string) => {
   if (phoneNumber === '') return true;
   return false;
+};
+
+// If PhoneNumber input data meets the PhoneNumber regular expression
+export const CheckPhNumber = (phnumber: string) => {
+  const PhoneRegex = /^01(?:0|1|[6-9])(?:\d{3}|\d{4})\d{4}$/;
+  return PhoneRegex.test(phnumber);
 };
 
 // Showing ModalPage because [inputType] is Empty

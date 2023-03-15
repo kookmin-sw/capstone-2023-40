@@ -13,6 +13,8 @@ import {
   ShowModal_Check,
   ShowModal_isEmpty,
   CheckEmail,
+  CheckPassword,
+  CheckPhNumber,
 } from '../components/RegistCheck';
 import { useTheme } from '../hooks/useTheme';
 
@@ -261,12 +263,11 @@ export default function RegisterPage() {
 
   // Checking Password - isEmpty, Regex, Correction
   const Password_Checked = (password: string, checkpassword: string) => {
-    const PasswordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
     if (isPasswordEmpty(password)) {
       ShowModal_isEmpty('비밀번호');
-    } else if (!PasswordRegex.test(password)) {
+    } else if (!CheckPassword(password)) {
       ShowModal_Check('비밀번호');
-    } else if (checkpassword === '') {
+    } else if (isPasswordEmpty(checkpassword)) {
       ShowModal_isEmpty('중복 확인할 비밀번호');
     } else if (password !== checkpassword) {
       alert('비밀번호가 서로 다릅니다.');
@@ -284,6 +285,8 @@ export default function RegisterPage() {
       ShowModal_isEmpty('이메일 또는 비밀번호');
     } else if (isNameEmpty(state.Name)) {
       ShowModal_isEmpty('이름');
+    } else if (!CheckPhNumber(phoneNum)) {
+      ShowModal_Check('전화번호');
     } else {
       dispatch({ type: 'REQUEST_KEY', payload: true });
       alert('해당 번호에 인증번호를 보냈습니다! (1234)');
