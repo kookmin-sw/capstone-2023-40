@@ -5,6 +5,7 @@ import styled from 'styled-components';
 
 import BackgroundImage from '../assets/main-page.webp';
 import Header from '../components/Header';
+import { isEmailEmpty, isPasswordEmpty } from '../components/RegistCheck';
 import { useTheme } from '../hooks/useTheme';
 
 const Container = styled.div`
@@ -89,16 +90,6 @@ const Button = styled.button`
     background-color: ${(props) => props.theme.colors.btnhover};
   }
 `;
-
-const isEmailEmpty = (email: string) => {
-  if (email === '') return true;
-  return false;
-};
-
-const isPasswordEmpty = (password: string) => {
-  if (password === '') return true;
-  return false;
-};
 
 export default function LoginPage() {
   const [theme, toggleTheme] = useTheme();
