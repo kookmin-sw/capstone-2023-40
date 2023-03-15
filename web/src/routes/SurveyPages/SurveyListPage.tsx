@@ -17,10 +17,10 @@ const Container = styled.div`
 
 const ListContainer = styled.div`
   width: 90vw;
-  height: 100vh;
+  height: 94vh;
   display: flex;
   flex-direction: column;
-  padding: 5vw;
+  padding: 3vh 5vw 3vh 5vw;
   background-color: ${(props) => props.theme.colors.container};
 `;
 
@@ -32,7 +32,7 @@ const ListColumn = styled.div`
 
 const Item = styled.div`
   margin: 2px;
-  padding: 19px;
+  padding: 2vh;
   font-size: 17px;
   font-weight: bold;
   border-radius: 5px;
@@ -57,9 +57,9 @@ const Title = styled(Item)`
   }
 `;
 
-const Auth = styled(Item)`
+const Authlist = styled(Item)`
   min-width: 70px;
-  width: 17vw;
+  width: 20vw;
 `;
 
 const EndDate = styled(Item)`
@@ -83,14 +83,47 @@ const HeadEndDate = styled(HeadItem)`
   width: 13vw;
 `;
 
+const Auth = styled.label`
+  font-size: 13px;
+  color: black;
+  padding: 5px;
+  border-radius: 7px;
+  margin: 3px;
+`;
+
+const Kakao = styled(Auth)`
+  background-color: #f7e600;
+`;
+const Google = styled(Auth)`
+  background-color: #ea4335;
+`;
+const Webmail = styled(Auth)`
+  background-color: #f3943e;
+`;
+const Id = styled(Auth)`
+  background-color: #edd8d3;
+`;
+const MobilePhone = styled(Auth)`
+  background-color: #a1daf7;
+`;
+const DriverLicense = styled(Auth)`
+  background-color: #34a853;
+`;
+const AuthNone = styled(Auth)`
+  background-color: #b3b2b2;
+`;
+
+const AuthSummary = styled.span`
+  font-size: 13px;
+`;
 interface Survey {
-  author_id: string;
+  survey_id: string;
+  author: number;
   title: string;
-  created_at: string;
-  started_at: string;
-  ended_at: string;
-  must_auth_list: Array<string>;
-  survey_id: number;
+  description: string;
+  created_date: string;
+  ended_date: string;
+  required_authentications: Array<string>;
 }
 
 export default function SurveyListPage() {
@@ -99,11 +132,29 @@ export default function SurveyListPage() {
   const navigate = useNavigate();
 
   const fetchSurveyData = async (): Promise<AxiosResponse<Survey[]>> => {
-    const request: AxiosResponse<Survey[]> = await axios.get<Survey[]>(requests.fetchSurveyList);
+    const request: AxiosResponse<Survey[]> = await axios.get<Survey[]>(requests.fetchSurveyListPage + 1);
     setSurveys(request.data);
     return request;
   };
 
+  const makeAuthLabel = (auth: string) => {
+    switch (auth) {
+      case 'KAKAO':
+        return <Kakao>카카오계정</Kakao>;
+      case 'GOOGLE':
+        return <Google>구글계정</Google>;
+      case 'WEBMAIL':
+        return <Webmail>학교인증</Webmail>;
+      case 'ID':
+        return <Id>신분증</Id>;
+      case 'MOBILE_PHONE':
+        return <MobilePhone>휴대폰인증</MobilePhone>;
+      case 'DRIVER_LICENSE':
+        return <DriverLicense>운전면허</DriverLicense>;
+      default:
+        return <AuthNone>Undefined</AuthNone>;
+    }
+  };
   useEffect(() => {
     fetchSurveyData();
   }, []);
@@ -123,8 +174,17 @@ export default function SurveyListPage() {
             <Title onClick={() => navigate(`/survey/${survey.survey_id}`)} theme={theme}>
               {survey.title}
             </Title>
-            <Auth theme={theme}>{survey.must_auth_list}</Auth>
-            <EndDate theme={theme}>{survey.ended_at}</EndDate>
+            <Authlist theme={theme}>
+              {survey.required_authentications.length === 0 ? (
+                <AuthNone>제한없음</AuthNone>
+              ) : (
+                survey.required_authentications.slice(0, 3).map((auth) => makeAuthLabel(auth))
+              )}
+              {survey.required_authentications.length > 3 ? (
+                <AuthSummary>{` ... +${survey.required_authentications.length - 3}`}</AuthSummary>
+              ) : null}
+            </Authlist>
+            <EndDate theme={theme}>{survey.ended_date.substring(0, 10)}</EndDate>
           </ListColumn>
         ))}
       </ListContainer>
