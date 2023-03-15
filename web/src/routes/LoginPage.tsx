@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import BackgroundImage from '../assets/main-page.webp';
 import Header from '../components/Header';
-import { isEmailEmpty, isPasswordEmpty } from '../components/RegistCheck';
+import { isEmailEmpty, isPasswordEmpty, ShowModal_isEmpty } from '../components/RegistCheck';
 import { useTheme } from '../hooks/useTheme';
 
 const Container = styled.div`
@@ -94,14 +94,8 @@ const Button = styled.button`
 export default function LoginPage() {
   const [theme, toggleTheme] = useTheme();
   const navigate = useNavigate();
-  // const [showModal, setShowModal] = useState(false);
   const [inputEmail, setInputEmail] = useState('');
   const [inputPassword, setInputPassword] = useState('');
-
-  const handleClick = () => {
-    alert('아이디 또는 비밀번호를 입력해주세요');
-    // setShowModal(true);
-  };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -110,7 +104,7 @@ export default function LoginPage() {
   // It will have to Add connect User DataBase - Email & Password
   const CheckLogin = (email: string, password: string) => {
     if (isEmailEmpty(email) || isPasswordEmpty(password)) {
-      handleClick();
+      ShowModal_isEmpty('아이디 또는 비밀번호');
     } else {
       alert('로그인에 성공했습니다.');
       navigate('./survey');
