@@ -235,7 +235,6 @@ export default function RegisterPage() {
         break;
     }
   };
-  // // const [showModal, setShowModal] = useState(false);
 
   // Test AuthKey production(인증번호) = 1234
   const testNumber = 1234;
@@ -271,11 +270,12 @@ export default function RegisterPage() {
 
   // Get a phone number and request an authentication number.
   const PassingNumber = (phoneNum: string) => {
-    // if(checked_AuthEmail || checked_Overlap_Password){
-    //   ShowModal_Check('')
-    // }
     if (isPhoneNumberEmpty(phoneNum)) {
       ShowModal_isEmpty('전화번호');
+    } else if (!state.Email_Auth || !state.Password_Overlap) {
+      ShowModal_isEmpty('이메일 또는 비밀번호');
+    } else if (isNameEmpty(state.Name)) {
+      ShowModal_isEmpty('이름');
     } else {
       alert('해당 번호에 인증번호를 보냈습니다! (1234)');
     }
