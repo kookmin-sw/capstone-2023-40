@@ -148,19 +148,19 @@ export default function SurveyListPage() {
   const makeAuthLabel = (auth: string) => {
     switch (auth) {
       case 'KAKAO':
-        return <Kakao>카카오계정</Kakao>;
+        return <Kakao key={auth}>카카오계정</Kakao>;
       case 'GOOGLE':
-        return <Google>구글계정</Google>;
+        return <Google key={auth}>구글계정</Google>;
       case 'WEBMAIL':
-        return <Webmail>학교인증</Webmail>;
+        return <Webmail key={auth}>학교인증</Webmail>;
       case 'ID':
-        return <Id>신분증</Id>;
+        return <Id key={auth}>신분증</Id>;
       case 'MOBILE_PHONE':
-        return <MobilePhone>휴대폰인증</MobilePhone>;
+        return <MobilePhone key={auth}>휴대폰인증</MobilePhone>;
       case 'DRIVER_LICENSE':
-        return <DriverLicense>운전면허</DriverLicense>;
+        return <DriverLicense key={auth}>운전면허</DriverLicense>;
       default:
-        return <AuthNone>Undefined</AuthNone>;
+        return <AuthNone key={auth}>Undefined</AuthNone>;
     }
   };
   useEffect(() => {
