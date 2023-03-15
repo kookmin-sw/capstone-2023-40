@@ -51,6 +51,52 @@ const DarkMode = styled(MoonMode)`
   background-color: white;
 `;
 
+const CheckBoxWrapper = styled.div`
+  position: relative;
+`;
+const CheckBoxLabel = styled.label`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 42px;
+  height: 26px;
+  margin-top: 2vh;
+  border-radius: 15px;
+  background: #ebeff7;
+  cursor: pointer;
+  &::after {
+    content: 'On';
+    display: block;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    margin: 3px;
+    background: #ffffff;
+    box-shadow: 1px 3px 3px 1px rgba(0, 0, 0, 0.2);
+    transition: 0.2s;
+  }
+`;
+const CheckBox = styled.input`
+  opacity: 0;
+  z-index: 1;
+  border-radius: 15px;
+  width: 42px;
+  height: 26px;
+  border-color: #f8f8f8;
+  &:checked + ${CheckBoxLabel} {
+    background: #7b87a0;
+    &::after {
+      content: 'Off';
+      display: block;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      margin-left: 21px;
+      transition: 0.2s;
+    }
+  }
+`;
+
 const ButtonContainer = styled.div`
   margin-left: auto;
   display: flex;
@@ -128,11 +174,15 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
         <Navigator onClick={() => navigate('/report')}>리포트</Navigator>
       </NavigatorContainer>
       <ButtonContainer>
-        {theme.alt === 'light' ? (
+        {/* {theme.alt === 'light' ? (
           <LightMode onClick={handleClick} title="다시설정하기" />
         ) : (
           <DarkMode onClick={handleClick} title="다시설정하기" />
-        )}
+        )} */}
+        <CheckBoxWrapper>
+          <CheckBox id="checkbox" type="checkbox" onClick={handleClick} />
+          <CheckBoxLabel htmlFor="checkbox" />
+        </CheckBoxWrapper>
         <LoginInformation onClick={() => navigate('/login')} theme={theme}>
           로그인/회원가입{' '}
         </LoginInformation>
