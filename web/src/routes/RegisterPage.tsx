@@ -143,6 +143,7 @@ type State = {
   Key: string;
   Email_Auth: boolean;
   Password_Overlap: boolean;
+  Key_Request: boolean;
   Key_Auth: boolean;
 };
 
@@ -155,6 +156,7 @@ type Action =
   | { type: 'SET_AUTH_KEY'; payload: string }
   | { type: 'AUTH_EMAIL'; payload: boolean }
   | { type: 'OVERLAP_PASSWORD'; payload: boolean }
+  | { type: 'REQUEST_KEY'; payload: boolean }
   | { type: 'AUTH_KEY'; payload: boolean };
 
 const initalState = {
@@ -166,6 +168,7 @@ const initalState = {
   Key: '',
   Email_Auth: false,
   Password_Overlap: false,
+  Key_Request: false,
   Key_Auth: false,
 };
 
@@ -192,6 +195,11 @@ const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         Password_Overlap: action.payload,
+      };
+    case 'REQUEST_KEY':
+      return {
+        ...state,
+        Key_Request: action.payload,
       };
     case 'AUTH_KEY':
       return {
@@ -277,6 +285,7 @@ export default function RegisterPage() {
     } else if (isNameEmpty(state.Name)) {
       ShowModal_isEmpty('이름');
     } else {
+      dispatch({ type: 'REQUEST_KEY', payload: true });
       alert('해당 번호에 인증번호를 보냈습니다! (1234)');
     }
   };
@@ -284,7 +293,9 @@ export default function RegisterPage() {
   // Check Authentication number matches Requested authentication number
   const CorrespondNumber = () => {
     // Request AuthKey & Compared inputNumber
-    if (Number(state.Key) !== testNumber) {
+    if (!state.Key_Request) {
+      alert('인증번호를 먼저 보내세요');
+    } else if (Number(state.Key) !== testNumber) {
       ShowModal_Check('인증번호');
     } else {
       dispatch({ type: 'AUTH_KEY', payload: true });
@@ -301,6 +312,7 @@ export default function RegisterPage() {
     console.log('이메일 인증 여부: ', state.Email_Auth);
     console.log('중복 비밀번호 확인 여부 : ', state.Password_Overlap);
     console.log('이름 빈칸 확인여부 : ', !isNameEmpty(state.Name));
+    console.log('인증번호 요청여부 확인 : ', state.Key_Request);
     console.log('인증번호 인증여부 : ', state.Key_Auth);
     if (!state.Email_Auth) {
       ShowModal_Btn('이메일 인증요청');
