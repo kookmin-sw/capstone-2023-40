@@ -12,7 +12,7 @@ import { useTheme } from '../../hooks/useTheme';
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
-  ${(props) => props.theme.colors.container};
+  background-color: ${(props) => props.theme.colors.container};
 `;
 
 const ListContainer = styled.div`
@@ -33,7 +33,7 @@ const ListColumn = styled.div`
 const Item = styled.div`
   margin: 2px;
   padding: 2vh;
-  font-size: 17px;
+  font-size: 1.7vh;
   font-weight: bold;
   border-radius: 5px;
   color: ${(props) => props.theme.colors.default};
@@ -42,9 +42,9 @@ const Item = styled.div`
 
 const HeadItem = styled.div`
   margin: 2px;
-  padding: 19px;
-  font-size: 17px;
-  font-weight: bolder;
+  padding: 2vh;
+  font-size: 2vh;
+  font-weight: bold;
   text-align: center;
   color: ${(props) => props.theme.colors.default};
 `;
@@ -58,14 +58,18 @@ const Title = styled(Item)`
 `;
 
 const Authlist = styled(Item)`
-  min-width: 70px;
+  min-width: 160px;
   width: 20vw;
 `;
 
 const EndDate = styled(Item)`
-  min-width: 70px;
+  min-width: 150px;
   width: 13vw;
   text-align: center;
+  @media screen and (max-width: 900px) {
+    display: none;
+    }
+  } 
 `;
 
 const HeadTitle = styled(HeadItem)`
@@ -73,18 +77,22 @@ const HeadTitle = styled(HeadItem)`
   flex: 1;
 `;
 
-const HeadAuth = styled(HeadItem)`
-  min-width: 70px;
-  width: 17vw;
+const HeadAuthList = styled(HeadItem)`
+  min-width: 160px;
+  width: 20vw;
 `;
 
 const HeadEndDate = styled(HeadItem)`
-  min-width: 70px;
+  min-width: 150px;
   width: 13vw;
+  @media screen and (max-width: 900px) {
+    display: none;
+    }
+  } 
 `;
 
 const Auth = styled.label`
-  font-size: 13px;
+  font-size: 11px;
   color: black;
   padding: 5px;
   border-radius: 7px;
@@ -165,11 +173,11 @@ export default function SurveyListPage() {
       <ListContainer theme={theme}>
         <ListColumn>
           <HeadTitle theme={theme}>설문 제목</HeadTitle>
-          <HeadAuth theme={theme}>필수인증</HeadAuth>
+          <HeadAuthList theme={theme}>필수인증</HeadAuthList>
           <HeadEndDate theme={theme}>설문 종료일</HeadEndDate>
         </ListColumn>
 
-        {surveys.map((survey) => (
+        {surveys.slice(0, 8).map((survey) => (
           <ListColumn key={survey.survey_id} theme={theme}>
             <Title onClick={() => navigate(`/survey/${survey.survey_id}`)} theme={theme}>
               {survey.title}
@@ -178,10 +186,10 @@ export default function SurveyListPage() {
               {survey.required_authentications.length === 0 ? (
                 <AuthNone>제한없음</AuthNone>
               ) : (
-                survey.required_authentications.slice(0, 3).map((auth) => makeAuthLabel(auth))
+                survey.required_authentications.slice(0, 2).map((auth) => makeAuthLabel(auth))
               )}
-              {survey.required_authentications.length > 3 ? (
-                <AuthSummary>{` ... +${survey.required_authentications.length - 3}`}</AuthSummary>
+              {survey.required_authentications.length > 2 ? (
+                <AuthSummary>{` ... +${survey.required_authentications.length - 2}`}</AuthSummary>
               ) : null}
             </Authlist>
             <EndDate theme={theme}>{survey.ended_date.substring(0, 10)}</EndDate>
