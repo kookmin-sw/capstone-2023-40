@@ -1,3 +1,8 @@
+// Checking console.log
+export const logConsole = (text1: string, bool?: boolean) => {
+  console.log(text1, bool);
+};
+
 // If Email input data is Empty
 export const isEmailEmpty = (email: string) => {
   if (email === '') return true;
@@ -56,4 +61,10 @@ export const ShowModal_Check = (inputType: string) => {
 export const ShowModal_Btn = (inputType: string) => {
   // Delete alret & setShowModal
   alert(inputType + '을 해주세요'.toString());
+};
+
+// Showing All semister because [inputType] is requested
+export const ShowModal_All = (inputType: string) => {
+  // Delete alret & setShowModal
+  alert(inputType);
 };

@@ -5,6 +5,7 @@ import styled from 'styled-components';
 
 import Header from '../components/Header';
 import {
+  logConsole,
   isEmailEmpty,
   isNameEmpty,
   isPasswordEmpty,
@@ -15,6 +16,7 @@ import {
   CheckEmail,
   CheckPassword,
   CheckPhNumber,
+  ShowModal_All,
 } from '../components/RegistCheck';
 import { useTheme } from '../hooks/useTheme';
 
@@ -257,7 +259,7 @@ export default function RegisterPage() {
       ShowModal_Check('이메일');
     } else {
       dispatch({ type: 'AUTH_EMAIL', payload: true });
-      alert('해당 이메일에 인증요청을 보냈습니다(test).');
+      ShowModal_All('해당 이메일에 인증요청을 보냈습니다(test).');
     }
   };
 
@@ -270,10 +272,10 @@ export default function RegisterPage() {
     } else if (isPasswordEmpty(checkpassword)) {
       ShowModal_isEmpty('중복 확인할 비밀번호');
     } else if (password !== checkpassword) {
-      alert('비밀번호가 서로 다릅니다.');
+      ShowModal_All('비밀번호가 서로 다릅니다.');
     } else {
       dispatch({ type: 'OVERLAP_PASSWORD', payload: true });
-      alert('비밀번호가 일치합니다!');
+      ShowModal_All('비밀번호가 일치합니다!');
     }
   };
 
@@ -289,7 +291,7 @@ export default function RegisterPage() {
       ShowModal_Check('전화번호');
     } else {
       dispatch({ type: 'REQUEST_KEY', payload: true });
-      alert('해당 번호에 인증번호를 보냈습니다! (1234)');
+      ShowModal_All('해당 번호에 인증번호를 보냈습니다! (1234)');
     }
   };
 
@@ -297,12 +299,12 @@ export default function RegisterPage() {
   const CorrespondNumber = () => {
     // Request AuthKey & Compared inputNumber
     if (!state.Key_Request) {
-      alert('인증번호를 먼저 보내세요');
+      ShowModal_All('인증번호를 먼저 보내세요');
     } else if (Number(state.Key) !== testNumber) {
       ShowModal_Check('인증번호');
     } else {
       dispatch({ type: 'AUTH_KEY', payload: true });
-      alert('인증되었습니다!');
+      ShowModal_All('인증되었습니다!');
     }
   };
 
@@ -312,11 +314,11 @@ export default function RegisterPage() {
 
   // Clicked Complete UserRegist Button. so We need to do the last check required for registration.
   const handleClick = () => {
-    console.log('이메일 인증 여부: ', state.Email_Auth);
-    console.log('중복 비밀번호 확인 여부 : ', state.Password_Overlap);
-    console.log('이름 빈칸 확인여부 : ', !isNameEmpty(state.Name));
-    console.log('인증번호 요청여부 확인 : ', state.Key_Request);
-    console.log('인증번호 인증여부 : ', state.Key_Auth);
+    logConsole('이메일 인증 여부: ', state.Email_Auth);
+    logConsole('중복 비밀번호 확인 여부 : ', state.Password_Overlap);
+    logConsole('이름 빈칸 확인여부 : ', !isNameEmpty(state.Name));
+    logConsole('인증번호 요청여부 확인 : ', state.Key_Request);
+    logConsole('인증번호 인증여부 : ', state.Key_Auth);
     if (!state.Email_Auth) {
       ShowModal_Btn('이메일 인증요청');
     } else if (!state.Password_Overlap) {
@@ -326,7 +328,7 @@ export default function RegisterPage() {
     } else if (!state.Key_Auth) {
       ShowModal_Btn('인증번호로 인증');
     } else {
-      alert('회원가입이 완료되었습니다.');
+      ShowModal_All('회원가입이 완료되었습니다.');
       navigate('../login');
     }
   };
