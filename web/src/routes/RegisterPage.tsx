@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useReducer } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -124,6 +124,75 @@ const CompleteButton = styled.button`
   }
 `;
 
+type State = {
+  Email: string;
+  Password: string;
+  Password2: string;
+  Name: string;
+  PhNumber: string;
+  Key: string;
+  Email_Auth: boolean;
+  Password_Overlap: boolean;
+  Key_Auth: boolean;
+};
+
+type Action =
+  | { type: 'SET_EMAIL'; payload: string }
+  | { type: 'SET_PASSWORD'; payload: string }
+  | { type: 'SET_CONFIRM_PASSWORD'; payload: string }
+  | { type: 'SET_NAME'; payload: string }
+  | { type: 'SET_PHONE_NUMBER'; payload: string }
+  | { type: 'SET_AUTH_KEY'; payload: string }
+  | { type: 'AUTH_EMAIL'; payload: boolean }
+  | { type: 'OVERLAP_PASSWORD'; payload: boolean }
+  | { type: 'AUTH_KEY'; payload: boolean };
+
+const initalState = {
+  Email: '',
+  Password: '',
+  Password2: '',
+  Name: '',
+  PhNumber: '',
+  Key: '',
+  Email_Auth: false,
+  Password_Overlap: false,
+  Key_Auth: false,
+};
+
+const reducer = (state: State, action: Action): State => {
+  switch (action.type) {
+    case 'SET_EMAIL':
+      return { ...state, Email: action.payload };
+    case 'SET_PASSWORD':
+      return { ...state, Password: action.payload };
+    case 'SET_CONFIRM_PASSWORD':
+      return { ...state, Password2: action.payload };
+    case 'SET_NAME':
+      return { ...state, Name: action.payload };
+    case 'SET_PHONE_NUMBER':
+      return { ...state, PhNumber: action.payload };
+    case 'SET_AUTH_KEY':
+      return { ...state, Key: action.payload };
+    case 'AUTH_EMAIL':
+      return {
+        ...state,
+        Email_Auth: action.payload,
+      };
+    case 'OVERLAP_PASSWORD':
+      return {
+        ...state,
+        Password_Overlap: action.payload,
+      };
+    case 'AUTH_KEY':
+      return {
+        ...state,
+        Key_Auth: action.payload,
+      };
+    default:
+      return state;
+  }
+};
+
 // If Email input data is Empty
 const isEmailEmpty = (email: string) => {
   if (email === '') return true;
@@ -176,38 +245,55 @@ export default function RegisterPage() {
   const [theme, toggleTheme] = useTheme();
   const navigate = useNavigate();
 
+  const [state, dispatch] = useReducer(reducer, initalState);
+
   // Input Data list
-  const [inputEmail, setInputEmail] = useState('');
-  const [inputPassword, setInputPassword] = useState('');
-  const [checkPassword, setCheckPassword] = useState('');
-  const [inputName, setInputName] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [authkey, setAuthKey] = useState('');
-  // const [showModal, setShowModal] = useState(false);
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    switch (name) {
+      case 'Email':
+        dispatch({ type: 'SET_EMAIL', payload: value });
+        break;
+      case 'Password':
+        dispatch({ type: 'SET_PASSWORD', payload: value });
+        break;
+      case 'Password2':
+        dispatch({ type: 'SET_CONFIRM_PASSWORD', payload: value });
+        break;
+      case 'Name':
+        dispatch({ type: 'SET_NAME', payload: value });
+        break;
+      case 'PhNumber':
+        dispatch({ type: 'SET_PHONE_NUMBER', payload: value });
+        break;
+      case 'Key':
+        dispatch({ type: 'SET_AUTH_KEY', payload: value });
+        break;
+      default:
+        break;
+    }
+  };
+  // // const [showModal, setShowModal] = useState(false);
 
   // Test AuthKey production(인증번호) = 1234
   const testNumber = 1234;
-  let checked_AuthEmail = false;
-  let checked_Overlap_Password = false;
-  let checked_AuthNumber = false;
-  console.log('checked_AuthEmail 여부: ', checked_AuthEmail);
 
   // It will have to Add connect User DataBase - Email
-  const AuthEmail = (email: string) => {
+  const Email_Auth = (email: string) => {
     if (isEmailEmpty(email)) {
       ShowModal_isEmpty('이메일');
     } else if (!CheckEmail(email)) {
       ShowModal_Check('이메일');
     } else {
-      checked_AuthEmail = true;
+      dispatch({ type: 'AUTH_EMAIL', payload: true });
       alert('해당 이메일에 인증요청을 보냈습니다(test).');
     }
   };
 
   // Checking Password - isEmpty, Regex, Correction
-  const CheckPassword = (password: string, checkpassword: string) => {
+  const Password_Checked = (password: string, checkpassword: string) => {
     const PasswordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
-    if (isPasswordEmpty(inputPassword)) {
+    if (isPasswordEmpty(password)) {
       ShowModal_isEmpty('비밀번호');
     } else if (!PasswordRegex.test(password)) {
       ShowModal_Check('비밀번호');
@@ -216,7 +302,7 @@ export default function RegisterPage() {
     } else if (password !== checkpassword) {
       alert('비밀번호가 서로 다릅니다.');
     } else {
-      checked_Overlap_Password = true;
+      dispatch({ type: 'OVERLAP_PASSWORD', payload: true });
       alert('비밀번호가 일치합니다!');
     }
   };
@@ -228,16 +314,20 @@ export default function RegisterPage() {
     // }
     if (isPhoneNumberEmpty(phoneNum)) {
       ShowModal_isEmpty('전화번호');
+    } else {
+      alert('해당 번호에 인증번호를 보냈습니다! (1234)');
     }
   };
 
   // Check Authentication number matches Requested authentication number
   const CorrespondNumber = () => {
     // Request AuthKey & Compared inputNumber
-    if (Number(authkey) !== testNumber) {
+    if (Number(state.Key) !== testNumber) {
       ShowModal_Check('인증번호');
+    } else {
+      dispatch({ type: 'AUTH_KEY', payload: true });
+      alert('인증되었습니다!');
     }
-    checked_AuthNumber = true;
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -246,13 +336,17 @@ export default function RegisterPage() {
 
   // Clicked Complete UserRegist Button. so We need to do the last check required for registration.
   const handleClick = () => {
-    if (!checked_AuthEmail) {
+    console.log('이메일 인증 여부: ', state.Email_Auth);
+    console.log('중복 비밀번호 확인 여부 : ', state.Password_Overlap);
+    console.log('이름 빈칸 확인여부 : ', !isNameEmpty(state.Name));
+    console.log('인증번호 인증여부 : ', state.Key_Auth);
+    if (!state.Email_Auth) {
       ShowModal_Btn('이메일 인증요청');
-    } else if (!checked_Overlap_Password) {
+    } else if (!state.Password_Overlap) {
       ShowModal_Btn('중복 비밀번호 확인');
-    } else if (isNameEmpty(inputName)) {
+    } else if (isNameEmpty(state.Name)) {
       ShowModal_isEmpty('이름');
-    } else if (!checked_AuthNumber) {
+    } else if (!state.Key_Auth) {
       ShowModal_Btn('인증번호로 인증');
     } else {
       alert('회원가입이 완료되었습니다.');
@@ -271,12 +365,13 @@ export default function RegisterPage() {
           <ContainerBox>
             <Input
               type="email"
-              value={inputEmail}
-              onChange={(e) => setInputEmail(e.target.value)}
+              name="Email"
+              value={state.Email}
+              onChange={handleInputChange}
               theme={theme}
               placeholder="이메일을 입력하세요."
             />
-            <RequestButton onClick={() => AuthEmail(inputEmail)} type="submit" theme={theme}>
+            <RequestButton onClick={() => Email_Auth(state.Email)} type="submit" theme={theme}>
               인증요청
             </RequestButton>
           </ContainerBox>
@@ -284,8 +379,9 @@ export default function RegisterPage() {
           <FontText theme={theme}>비밀번호</FontText>
           <Input
             type="password"
-            value={inputPassword}
-            onChange={(e) => setInputPassword(e.target.value)}
+            name="Password"
+            value={state.Password}
+            onChange={handleInputChange}
             theme={theme}
             placeholder="비밀번호를 입력하세요."
           />
@@ -294,12 +390,17 @@ export default function RegisterPage() {
           <ContainerBox>
             <Input
               type="password"
-              value={checkPassword}
-              onChange={(e) => setCheckPassword(e.target.value)}
+              name="Password2"
+              value={state.Password2}
+              onChange={handleInputChange}
               theme={theme}
               placeholder="비밀번호를 한번 더 입력하세요."
             />
-            <RequestButton onClick={() => CheckPassword(inputPassword, checkPassword)} type="submit" theme={theme}>
+            <RequestButton
+              onClick={() => Password_Checked(state.Password, state.Password2)}
+              type="submit"
+              theme={theme}
+            >
               중복확인
             </RequestButton>
           </ContainerBox>
@@ -307,8 +408,9 @@ export default function RegisterPage() {
           <FontText theme={theme}>이름</FontText>
           <Input
             type="text"
-            value={inputName}
-            onChange={(e) => setInputName(e.target.value)}
+            name="Name"
+            value={state.Name}
+            onChange={handleInputChange}
             theme={theme}
             placeholder="이름을 입력하세요."
           />
@@ -318,14 +420,15 @@ export default function RegisterPage() {
             <PhoneNumberBox theme={theme}>+82</PhoneNumberBox>
             <Input
               type="tel"
-              value={phoneNumber}
+              name="PhNumber"
+              value={state.PhNumber}
               theme={theme}
-              onChange={(e) => setPhoneNumber(e.target.value)}
+              onChange={handleInputChange}
               pattern="[0-9]{11}"
               maxLength={11}
               placeholder="- 빼고 입력하세요."
             />
-            <RequestButton onClick={() => PassingNumber(phoneNumber)} type="submit" theme={theme}>
+            <RequestButton onClick={() => PassingNumber(state.PhNumber)} type="submit" theme={theme}>
               인증요청
             </RequestButton>
           </ContainerBox>
@@ -334,11 +437,12 @@ export default function RegisterPage() {
           <ContainerBox>
             <Input
               type="tel"
-              value={authkey}
+              name="Key"
+              value={state.Key}
               theme={theme}
-              onChange={(e) => setAuthKey(e.target.value)}
+              onChange={handleInputChange}
               pattern="[0-9]{4}"
-              maxLength={6}
+              maxLength={4}
               placeholder="인증코드 4 자리를 입력하세요.(1234)"
             />
             <RequestButton onClick={CorrespondNumber} type="submit" theme={theme}>
