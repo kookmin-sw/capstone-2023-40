@@ -49,6 +49,7 @@ const AgreeBox = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  margin-bottom: 1vh;
 `;
 
 const Form = styled.form`
@@ -485,6 +486,8 @@ export default function RegisterPage() {
             />
             <FontText theme={theme}>[필수] 개인정보 수집동의</FontText>
           </AgreeBox>
+          <FontText theme={theme}>※ 서비스 이용약관 및 개인정보 수집에 동의해주세요.</FontText>
+
           <CompleteButton
             onClick={handleClick}
             type="submit"
