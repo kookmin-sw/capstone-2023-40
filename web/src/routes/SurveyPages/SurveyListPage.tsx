@@ -52,6 +52,7 @@ const HeadItem = styled.div`
 const Title = styled(Item)`
   min-width: 15vh;
   flex: 1;
+
   &:hover {
     background-color: ${(props) => props.theme.colors.btnhover};
   }
@@ -124,6 +125,7 @@ const AuthNone = styled(Auth)`
 const AuthSummary = styled.span`
   font-size: 13px;
 `;
+
 interface Survey {
   survey_id: string;
   author: number;
@@ -139,10 +141,9 @@ export default function SurveyListPage() {
   const [surveys, setSurveys] = useState<Survey[]>([]);
   const navigate = useNavigate();
 
-  const fetchSurveyData = async (): Promise<AxiosResponse<Survey[]>> => {
+  const fetchSurveyData = async (): Promise<void> => {
     const request: AxiosResponse<Survey[]> = await axios.get<Survey[]>(requests.fetchSurveyListPage + 1);
     setSurveys(request.data);
-    return request;
   };
 
   const makeAuthLabel = (auth: string) => {
@@ -160,9 +161,10 @@ export default function SurveyListPage() {
       case 'DRIVER_LICENSE':
         return <DriverLicense key={auth}>운전면허</DriverLicense>;
       default:
-        return <AuthNone key={auth}>Undefined</AuthNone>;
+        return <AuthNone key={auth}>제한없음</AuthNone>;
     }
   };
+
   useEffect(() => {
     fetchSurveyData();
   }, []);
@@ -183,11 +185,9 @@ export default function SurveyListPage() {
               {survey.title}
             </Title>
             <Authlist theme={theme}>
-              {survey.required_authentications.length === 0 ? (
-                <AuthNone>제한없음</AuthNone>
-              ) : (
-                survey.required_authentications.slice(0, 2).map((auth) => makeAuthLabel(auth))
-              )}
+              {survey.required_authentications.length === 0
+                ? makeAuthLabel('')
+                : survey.required_authentications.slice(0, 2).map((auth) => makeAuthLabel(auth))}
               {survey.required_authentications.length > 2 ? (
                 <AuthSummary>{` ... +${survey.required_authentications.length - 2}`}</AuthSummary>
               ) : null}

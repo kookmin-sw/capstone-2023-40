@@ -4,6 +4,7 @@ interface ApiRequests {
   fetchSurvey: string;
   fetchSurveyListPage: string;
 }
+
 const requests: ApiRequests = {
   healthCheck: '/',
   fetchSurveyListAll: '/api/survey/all',
