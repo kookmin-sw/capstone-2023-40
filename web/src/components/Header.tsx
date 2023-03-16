@@ -59,7 +59,7 @@ const CheckBoxLabel = styled.label`
   height: 26px;
   margin-top: 2.5vh;
   border-radius: 15px;
-  background: #f8f8f8;
+  background: #ebeff7;
   cursor: pointer;
   &::after {
     content: '';
@@ -69,9 +69,6 @@ const CheckBoxLabel = styled.label`
     height: 18px;
     margin: 3px;
     background-color: ${(props) => props.theme.colors.opposite};
-    background-image: url(${LightMode});
-    background-repeat: no-repeat;
-    background-size: 100%;
     box-shadow: 1px 3px 3px 1px rgba(0, 0, 0, 0.2);
     transition: 0.2s;
   }
@@ -84,7 +81,7 @@ const CheckBox = styled.input`
   height: 26px;
   border-color: #f8f8f8;
   &:checked + ${CheckBoxLabel} {
-    background: #ebeff7;
+    background: #f8f8f8;
     &::after {
       content: '';
       display: block;
@@ -93,9 +90,6 @@ const CheckBox = styled.input`
       height: 18px;
       margin-left: 21px;
       transition: 0.2s;
-      background-image: url(${DarkMode});
-      background-repeat: no-repeat;
-      background-size: 100%;
       cursor: pointer;
     }
   }
