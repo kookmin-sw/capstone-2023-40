@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import axios from '../../api/axios';
 import requests from '../../api/request';
 import Header from '../../components/Header';
+import Pagination from '../../components/Pagination';
 import { useTheme } from '../../hooks/useTheme';
 
 const Container = styled.div`
@@ -143,10 +144,11 @@ interface Survey {
 export default function SurveyListPage() {
   const [theme, toggleTheme] = useTheme();
   const [surveys, setSurveys] = useState<Survey[]>([]);
+  const [page, setPage] = useState<number>(1);
   const navigate = useNavigate();
 
   const fetchSurveyData = async (): Promise<void> => {
-    const request: AxiosResponse<Survey[]> = await axios.get<Survey[]>(requests.fetchSurveyListPage + 1);
+    const request: AxiosResponse<Survey[]> = await axios.get<Survey[]>(requests.fetchSurveyListPage + page);
     setSurveys(request.data);
   };
 
@@ -171,7 +173,7 @@ export default function SurveyListPage() {
 
   useEffect(() => {
     fetchSurveyData();
-  }, []);
+  }, [page]);
 
   return (
     <Container theme={theme}>
@@ -186,7 +188,7 @@ export default function SurveyListPage() {
         </ListHead>
 
         <ListBody>
-          {surveys.slice(0, 8).map((survey) => (
+          {surveys.map((survey) => (
             <ListRow key={survey.survey_id} theme={theme}>
               <Title onClick={() => navigate(`/survey/${survey.survey_id}`)} theme={theme}>
                 {survey.title}
@@ -203,7 +205,9 @@ export default function SurveyListPage() {
             </ListRow>
           ))}
         </ListBody>
+        {/* TODO: Show something when no data */}
       </ListTable>
+      <Pagination currentPage={page} totalPage={13} setPage={setPage} />
     </Container>
   );
 }
