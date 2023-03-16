@@ -60,9 +60,9 @@ const CheckBoxLabel = styled.label`
   left: 0;
   width: 42px;
   height: 26px;
-  margin-top: 2vh;
+  margin-top: 2.5vh;
   border-radius: 15px;
-  background: #ebeff7;
+  background: #7b87a0;
   cursor: pointer;
   &::after {
     content: 'On';
@@ -84,7 +84,7 @@ const CheckBox = styled.input`
   height: 26px;
   border-color: #f8f8f8;
   &:checked + ${CheckBoxLabel} {
-    background: #7b87a0;
+    background: #ebeff7;
     &::after {
       content: 'Off';
       display: block;

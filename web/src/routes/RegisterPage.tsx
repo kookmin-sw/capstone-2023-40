@@ -45,6 +45,12 @@ const ContainerBox = styled.div`
   justify-content: center;
 `;
 
+const AgreeBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+
 const Form = styled.form`
   display: flex;
   flex-direction: column;
@@ -83,7 +89,6 @@ const RegisterTitle = styled.span`
 `;
 
 const FontText = styled.span`
-  margin-top: 5px;
   text-align: left;
   font-size: 1.3vh;
   font-weight: 600;
@@ -120,6 +125,23 @@ const RequestButton = styled.button`
   }
 `;
 
+const UserAgree = styled.input`
+appearance: none;
+border: 1.5px solid gainsboro;
+border-radius: 0.35rem;
+width: 1.5rem;
+height: 1.5rem;
+cursor: pointer;
+
+&:checked {
+  border-color: transparent;
+  background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M5.707 7.293a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.414 0l4-4a1 1 0 0 0-1.414-1.414L7 8.586 5.707 7.293z'/%3e%3c/svg%3e");
+  background-size: 100% 100%;
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-color: limegreen;
+`;
+
 const CompleteButton = styled.button`
   margin-top: 1vh;
   padding: 2vh;
@@ -128,10 +150,10 @@ const CompleteButton = styled.button`
   font-size: 2vh;
   font-weight: 700;
   color: white;
-  background-color: ${(props) => props.theme.colors.primary};
+  background-color: ${(props) => (props.disabled ? props.theme.colors.prhover : props.theme.colors.primary)};
   border: none;
   border-radius: ${(props) => props.theme.borderRadius};
-  cursor: pointer;
+  cursor: ${(props) => (props.disabled ? 'auto' : 'pointer')};
 
   &:hover {
     background-color: ${(props) => props.theme.colors.prhover};
@@ -149,6 +171,8 @@ type State = {
   Password_Overlap: boolean;
   Key_Request: boolean;
   Key_Auth: boolean;
+  AgreeService: boolean;
+  AgreeInfor: boolean;
 };
 
 type Action =
@@ -161,7 +185,9 @@ type Action =
   | { type: 'AUTH_EMAIL'; payload: boolean }
   | { type: 'OVERLAP_PASSWORD'; payload: boolean }
   | { type: 'REQUEST_KEY'; payload: boolean }
-  | { type: 'AUTH_KEY'; payload: boolean };
+  | { type: 'AUTH_KEY'; payload: boolean }
+  | { type: 'AGREE_SERVICE'; payload: boolean }
+  | { type: 'AGREE_INFORMATION'; payload: boolean };
 
 const initalState = {
   Email: '',
@@ -174,6 +200,8 @@ const initalState = {
   Password_Overlap: false,
   Key_Request: false,
   Key_Auth: false,
+  AgreeService: false,
+  AgreeInfor: false,
 };
 
 const reducer = (state: State, action: Action): State => {
@@ -209,6 +237,16 @@ const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         Key_Auth: action.payload,
+      };
+    case 'AGREE_SERVICE':
+      return {
+        ...state,
+        AgreeService: action.payload,
+      };
+    case 'AGREE_INFORMATION':
+      return {
+        ...state,
+        AgreeInfor: action.payload,
       };
     default:
       return state;
@@ -319,6 +357,8 @@ export default function RegisterPage() {
     logConsole('이름 빈칸 확인여부 : ', !isNameEmpty(state.Name));
     logConsole('인증번호 요청여부 확인 : ', state.Key_Request);
     logConsole('인증번호 인증여부 : ', state.Key_Auth);
+    logConsole('서비스 이용약관여부 : ', state.AgreeService);
+    logConsole('개인정보 수집동의 여부 : ', state.AgreeInfor);
     if (!state.Email_Auth) {
       ShowModal_Btn('이메일 인증요청');
     } else if (!state.Password_Overlap) {
@@ -403,7 +443,7 @@ export default function RegisterPage() {
               value={state.PhNumber}
               theme={theme}
               onChange={handleInputChange}
-              pattern="[0-9]{11}"
+              pattern="[0-9]"
               maxLength={11}
               placeholder="- 빼고 입력하세요."
             />
@@ -429,7 +469,28 @@ export default function RegisterPage() {
             </RequestButton>
           </ContainerBox>
 
-          <CompleteButton onClick={handleClick} type="submit" theme={theme}>
+          <AgreeBox>
+            <UserAgree
+              type="checkbox"
+              name="AgreeServ"
+              onChange={() => dispatch({ type: 'AGREE_SERVICE', payload: !state.AgreeService })}
+            />
+            <FontText theme={theme}>[필수] 서비스 이용약관 </FontText>
+          </AgreeBox>
+          <AgreeBox>
+            <UserAgree
+              type="checkbox"
+              name="AgreeInfor"
+              onChange={() => dispatch({ type: 'AGREE_INFORMATION', payload: !state.AgreeInfor })}
+            />
+            <FontText theme={theme}>[필수] 개인정보 수집동의</FontText>
+          </AgreeBox>
+          <CompleteButton
+            onClick={handleClick}
+            type="submit"
+            theme={theme}
+            disabled={!(state.AgreeService && state.AgreeInfor)}
+          >
             회원가입 완료하기
           </CompleteButton>
         </Form>
