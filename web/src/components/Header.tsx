@@ -37,18 +37,15 @@ const LogoDarkContainer = styled(LogoDark)`
 `;
 
 const LightMode = styled(SunMode)`
-  margin-top: 1.5vh;
   width: fit-content;
-  height: 40px;
+  height: 10px;
   cursor: pointer;
 `;
 
 const DarkMode = styled(MoonMode)`
-  margin-top: 1.5vh;
   width: fit-content;
-  height: 40px;
+  height: 10px;
   cursor: pointer;
-  background-color: white;
 `;
 
 const CheckBoxWrapper = styled.div`
@@ -62,16 +59,19 @@ const CheckBoxLabel = styled.label`
   height: 26px;
   margin-top: 2.5vh;
   border-radius: 15px;
-  background: #7b87a0;
+  background: #f8f8f8;
   cursor: pointer;
   &::after {
-    content: 'On';
+    content: '';
     display: block;
     border-radius: 50%;
     width: 18px;
     height: 18px;
     margin: 3px;
-    background: #ffffff;
+    background-color: ${(props) => props.theme.colors.opposite};
+    background-image: url(${LightMode});
+    background-repeat: no-repeat;
+    background-size: 100%;
     box-shadow: 1px 3px 3px 1px rgba(0, 0, 0, 0.2);
     transition: 0.2s;
   }
@@ -86,13 +86,17 @@ const CheckBox = styled.input`
   &:checked + ${CheckBoxLabel} {
     background: #ebeff7;
     &::after {
-      content: 'Off';
+      content: '';
       display: block;
       border-radius: 50%;
       width: 18px;
       height: 18px;
       margin-left: 21px;
       transition: 0.2s;
+      background-image: url(${DarkMode});
+      background-repeat: no-repeat;
+      background-size: 100%;
+      cursor: pointer;
     }
   }
 `;
@@ -148,7 +152,6 @@ const LoginInformation = styled.div`
 `;
 
 interface HeaderProps {
-  // button?: HTMLButtonElement | ReactNode;
   theme: DefaultTheme;
   toggleTheme: () => void;
 }
@@ -174,14 +177,9 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
         <Navigator onClick={() => navigate('/report')}>리포트</Navigator>
       </NavigatorContainer>
       <ButtonContainer>
-        {/* {theme.alt === 'light' ? (
-          <LightMode onClick={handleClick} title="다시설정하기" />
-        ) : (
-          <DarkMode onClick={handleClick} title="다시설정하기" />
-        )} */}
         <CheckBoxWrapper>
-          <CheckBox id="checkbox" type="checkbox" onClick={handleClick} />
-          <CheckBoxLabel htmlFor="checkbox" />
+          <CheckBox id="checkbox" type="checkbox" theme={theme} onClick={handleClick} />
+          <CheckBoxLabel htmlFor="checkbox" theme={theme} />
         </CheckBoxWrapper>
         <LoginInformation onClick={() => navigate('/login')} theme={theme}>
           로그인/회원가입{' '}
