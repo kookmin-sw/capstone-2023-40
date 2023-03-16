@@ -15,22 +15,24 @@ const Container = styled.div`
   background-color: ${(props) => props.theme.colors.container};
 `;
 
-const ListContainer = styled.div`
-  width: 90vw;
-  height: 94vh;
+const ListTable = styled.table`
   display: flex;
   flex-direction: column;
   padding: 3vh 5vw 3vh 5vw;
   background-color: ${(props) => props.theme.colors.container};
 `;
 
-const ListColumn = styled.div`
+const ListHead = styled.thead``;
+
+const ListBody = styled.tbody``;
+
+const ListRow = styled.tr`
   display: flex;
   flex-direction: row;
   justify-content: center;
 `;
 
-const Item = styled.div`
+const Item = styled.td`
   margin: 2px;
   padding: 2vh;
   font-size: 1.7vh;
@@ -40,7 +42,7 @@ const Item = styled.div`
   background-color: ${(props) => props.theme.colors.header};
 `;
 
-const HeadItem = styled.div`
+const HeadItem = styled.th`
   margin: 2px;
   padding: 2vh;
   font-size: 2vh;
@@ -67,6 +69,7 @@ const EndDate = styled(Item)`
   min-width: 150px;
   width: 13vw;
   text-align: center;
+
   @media screen and (max-width: 900px) {
     display: none;
     }
@@ -86,6 +89,7 @@ const HeadAuthList = styled(HeadItem)`
 const HeadEndDate = styled(HeadItem)`
   min-width: 150px;
   width: 13vw;
+  
   @media screen and (max-width: 900px) {
     display: none;
     }
@@ -172,30 +176,34 @@ export default function SurveyListPage() {
   return (
     <Container theme={theme}>
       <Header theme={theme} toggleTheme={toggleTheme} />
-      <ListContainer theme={theme}>
-        <ListColumn>
-          <HeadTitle theme={theme}>설문 제목</HeadTitle>
-          <HeadAuthList theme={theme}>필수인증</HeadAuthList>
-          <HeadEndDate theme={theme}>설문 종료일</HeadEndDate>
-        </ListColumn>
+      <ListTable theme={theme}>
+        <ListHead>
+          <ListRow>
+            <HeadTitle theme={theme}>설문 제목</HeadTitle>
+            <HeadAuthList theme={theme}>필수인증</HeadAuthList>
+            <HeadEndDate theme={theme}>설문 종료일</HeadEndDate>
+          </ListRow>
+        </ListHead>
 
-        {surveys.slice(0, 8).map((survey) => (
-          <ListColumn key={survey.survey_id} theme={theme}>
-            <Title onClick={() => navigate(`/survey/${survey.survey_id}`)} theme={theme}>
-              {survey.title}
-            </Title>
-            <Authlist theme={theme}>
-              {survey.required_authentications.length === 0
-                ? makeAuthLabel('')
-                : survey.required_authentications.slice(0, 2).map((auth) => makeAuthLabel(auth))}
-              {survey.required_authentications.length > 2 ? (
-                <AuthSummary>{` ... +${survey.required_authentications.length - 2}`}</AuthSummary>
-              ) : null}
-            </Authlist>
-            <EndDate theme={theme}>{survey.ended_date.substring(0, 10)}</EndDate>
-          </ListColumn>
-        ))}
-      </ListContainer>
+        <ListBody>
+          {surveys.slice(0, 8).map((survey) => (
+            <ListRow key={survey.survey_id} theme={theme}>
+              <Title onClick={() => navigate(`/survey/${survey.survey_id}`)} theme={theme}>
+                {survey.title}
+              </Title>
+              <Authlist theme={theme}>
+                {survey.required_authentications.length === 0
+                  ? makeAuthLabel('')
+                  : survey.required_authentications.slice(0, 2).map((auth) => makeAuthLabel(auth))}
+                {survey.required_authentications.length > 2 ? (
+                  <AuthSummary>{` ... +${survey.required_authentications.length - 2}`}</AuthSummary>
+                ) : null}
+              </Authlist>
+              <EndDate theme={theme}>{survey.ended_date.substring(0, 10)}</EndDate>
+            </ListRow>
+          ))}
+        </ListBody>
+      </ListTable>
     </Container>
   );
 }
