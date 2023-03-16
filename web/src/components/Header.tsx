@@ -3,8 +3,6 @@ import React, { useState, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
 
-import { ReactComponent as SunMode } from '../assets/svg/darkmodeoff.svg';
-import { ReactComponent as MoonMode } from '../assets/svg/darkmodeon.svg';
 import { ReactComponent as LogoDark } from '../assets/svg/logo-dark.svg';
 import { ReactComponent as LogoLight } from '../assets/svg/logo-light.svg';
 
@@ -36,21 +34,10 @@ const LogoDarkContainer = styled(LogoDark)`
   cursor: pointer;
 `;
 
-const LightMode = styled(SunMode)`
-  width: fit-content;
-  height: 10px;
-  cursor: pointer;
-`;
-
-const DarkMode = styled(MoonMode)`
-  width: fit-content;
-  height: 10px;
-  cursor: pointer;
-`;
-
 const CheckBoxWrapper = styled.div`
   position: relative;
 `;
+
 const CheckBoxLabel = styled.label`
   position: absolute;
   top: 0;
@@ -59,7 +46,7 @@ const CheckBoxLabel = styled.label`
   height: 26px;
   margin-top: 2.5vh;
   border-radius: 15px;
-  background: #ebeff7;
+  background: #f8f8f8;
   cursor: pointer;
   &::after {
     content: '';
@@ -73,15 +60,15 @@ const CheckBoxLabel = styled.label`
     transition: 0.2s;
   }
 `;
+
 const CheckBox = styled.input`
   opacity: 0;
   z-index: 1;
   border-radius: 15px;
   width: 42px;
   height: 26px;
-  border-color: #f8f8f8;
   &:checked + ${CheckBoxLabel} {
-    background: #f8f8f8;
+    background: #ebeff7;
     &::after {
       content: '';
       display: block;

@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Header from '../../components/Header';
-import { logConsole } from '../../components/RegistCheck';
 import { useTheme } from '../../hooks/useTheme';
 
 const Container = styled.div`
@@ -97,41 +96,6 @@ const ChangeButton = styled.button`
 
   &:hover {
     background-color: ${(props) => props.theme.colors.btnhover};
-  }
-`;
-
-const UserAgree = styled.input`
-appearance: none;
-border: 1.5px solid gainsboro;
-border-radius: 0.35rem;
-width: 1.5rem;
-height: 1.5rem;
-cursor: pointer;
-
-&:checked {
-  border-color: transparent;
-  background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M5.707 7.293a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.414 0l4-4a1 1 0 0 0-1.414-1.414L7 8.586 5.707 7.293z'/%3e%3c/svg%3e");
-  background-size: 100% 100%;
-  background-position: 50%;
-  background-repeat: no-repeat;
-  background-color: limegreen;
-`;
-
-const CompleteButton = styled.button`
-  margin-top: 1vh;
-  padding: 2vh;
-  padding-left: 8vw;
-  padding-right: 8vw;
-  font-size: 2vh;
-  font-weight: 700;
-  color: white;
-  background-color: ${(props) => (props.disabled ? props.theme.colors.prhover : props.theme.colors.primary)};
-  border: none;
-  border-radius: ${(props) => props.theme.borderRadius};
-  cursor: ${(props) => (props.disabled ? 'auto' : 'pointer')};
-
-  &:hover {
-    background-color: ${(props) => props.theme.colors.prhover};
   }
 `;
 
@@ -266,14 +230,6 @@ export default function MyPage() {
   };
 
   // Clicked Complete UserRegist Button. so We need to do the last check required for registration.
-  const handleClick = () => {
-    logConsole('이메일 인증 여부: ', state.Email_Auth);
-    logConsole('중복 비밀번호 확인 여부 : ', state.Password_Overlap);
-    logConsole('인증번호 요청여부 확인 : ', state.Key_Request);
-    logConsole('인증번호 인증여부 : ', state.Key_Auth);
-    logConsole('서비스 이용약관여부 : ', state.AgreeService);
-    logConsole('개인정보 수집동의 여부 : ', state.AgreeInfor);
-  };
 
   return (
     <Container theme={theme}>
@@ -282,33 +238,20 @@ export default function MyPage() {
         <Form onSubmit={handleSubmit}>
           <MyPageTitle theme={theme}>마이페이지</MyPageTitle>
 
-          <FontText theme={theme}>이메일</FontText>
           <ContainerBox>
-            <Input
-              type="email"
-              name="Email"
-              value={state.Email}
-              onChange={handleInputChange}
-              theme={theme}
-              placeholder="이메일을 입력하세요."
-            />
-            <ChangeButton type="submit" theme={theme}>
-              인증요청
-            </ChangeButton>
+            <FontText theme={theme}>이메일</FontText>
+            <Input type="email" name="Email" value={state.Email} onChange={handleInputChange} theme={theme} />
+            <ChangeButton type="submit" theme={theme} />
           </ContainerBox>
 
-          <FontText theme={theme}>비밀번호</FontText>
-          <Input
-            type="password"
-            name="Password"
-            value={state.Password}
-            onChange={handleInputChange}
-            theme={theme}
-            placeholder="비밀번호를 입력하세요."
-          />
-
-          <FontText theme={theme}>인증코드</FontText>
           <ContainerBox>
+            <FontText theme={theme}>비밀번호</FontText>
+            <Input type="password" name="Password" value={state.Password} onChange={handleInputChange} theme={theme} />
+            <ChangeButton type="submit" theme={theme} />
+          </ContainerBox>
+
+          <ContainerBox>
+            <FontText theme={theme}>인증코드</FontText>
             <Input
               type="tel"
               name="Key"
@@ -317,29 +260,9 @@ export default function MyPage() {
               onChange={handleInputChange}
               pattern="[0-9]{4}"
               maxLength={4}
-              placeholder="인증코드 4 자리를 입력하세요.(1234)"
             />
-            <ChangeButton type="submit" theme={theme}>
-              인증하기
-            </ChangeButton>
+            <ChangeButton type="submit" theme={theme} />
           </ContainerBox>
-
-          <AgreeBox>
-            <UserAgree
-              type="checkbox"
-              name="AgreeServ"
-              onChange={() => dispatch({ type: 'AGREE_SERVICE', payload: !state.AgreeService })}
-            />
-            <FontText theme={theme}>[필수] 서비스 이용약관 </FontText>
-          </AgreeBox>
-          <AgreeBox>
-            <UserAgree
-              type="checkbox"
-              name="AgreeInfor"
-              onChange={() => dispatch({ type: 'AGREE_INFORMATION', payload: !state.AgreeInfor })}
-            />
-            <FontText theme={theme}>[필수] 개인정보 수집동의</FontText>
-          </AgreeBox>
         </Form>
       </MypageContainer>
     </Container>
