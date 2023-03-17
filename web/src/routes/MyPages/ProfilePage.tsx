@@ -100,10 +100,10 @@ type State = {
 };
 
 type Action =
-  | { type: 'SET_EMAIL'; payload: string }
-  | { type: 'SET_PASSWORD'; payload: string }
-  | { type: 'SET_NAME'; payload: string }
-  | { type: 'SET_PHONE_NUMBER'; payload: string };
+  | { type: 'CHANGE_EMAIL'; payload: string }
+  | { type: 'CHANGE_PASSWORD'; payload: string }
+  | { type: 'CHANGE_NAME'; payload: string }
+  | { type: 'CHANGE_PHONE_NUMBER'; payload: string };
 
 const initalState = {
   email: '',
@@ -114,13 +114,13 @@ const initalState = {
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
-    case 'SET_EMAIL':
+    case 'CHANGE_EMAIL':
       return { ...state, email: action.payload };
-    case 'SET_PASSWORD':
+    case 'CHANGE_PASSWORD':
       return { ...state, password: action.payload };
-    case 'SET_NAME':
+    case 'CHANGE_NAME':
       return { ...state, name: action.payload };
-    case 'SET_PHONE_NUMBER':
+    case 'CHANGE_PHONE_NUMBER':
       return { ...state, phoneNumber: action.payload };
     default:
       return state;
@@ -138,16 +138,16 @@ export default function MyPage() {
     const { name, value } = e.target;
     switch (name) {
       case 'email':
-        dispatch({ type: 'SET_EMAIL', payload: value });
+        dispatch({ type: 'CHANGE_EMAIL', payload: value });
         break;
       case 'password':
-        dispatch({ type: 'SET_PASSWORD', payload: value });
+        dispatch({ type: 'CHANGE_PASSWORD', payload: value });
         break;
       case 'name':
-        dispatch({ type: 'SET_NAME', payload: value });
+        dispatch({ type: 'CHANGE_NAME', payload: value });
         break;
       case 'phoneNumber':
-        dispatch({ type: 'SET_PHONE_NUMBER', payload: value });
+        dispatch({ type: 'CHANGE_PHONE_NUMBER', payload: value });
         break;
       default:
         break;
