@@ -3,8 +3,8 @@ import React, { useState, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
 
-import { ReactComponent as LogoDark } from '../assets/logo-dark.svg';
-import { ReactComponent as LogoLight } from '../assets/logo-light.svg';
+import { ReactComponent as LogoDark } from '../assets/svg/logo-dark.svg';
+import { ReactComponent as LogoLight } from '../assets/svg/logo-light.svg';
 
 const HeaderContainer = styled.header<{ isTransitionEnabled: boolean }>`
   position: sticky;
@@ -34,6 +34,54 @@ const LogoDarkContainer = styled(LogoDark)`
   cursor: pointer;
 `;
 
+const CheckBoxWrapper = styled.div`
+  position: relative;
+`;
+
+const CheckBoxLabel = styled.label`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 42px;
+  height: 26px;
+  margin-top: 2.5vh;
+  border-radius: 15px;
+  background: #f8f8f8;
+  cursor: pointer;
+  &::after {
+    content: '';
+    display: block;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    margin: 3px;
+    background-color: ${(props) => props.theme.colors.opposite};
+    box-shadow: 1px 3px 3px 1px rgba(0, 0, 0, 0.2);
+    transition: 0.2s;
+  }
+`;
+
+const CheckBox = styled.input`
+  opacity: 0;
+  z-index: 1;
+  border-radius: 15px;
+  width: 42px;
+  height: 26px;
+  &:checked + ${CheckBoxLabel} {
+    background: #ebeff7;
+    &::after {
+      content: '';
+      display: block;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      margin-left: 21px;
+      transition: 0.2s;
+      cursor: pointer;
+    }
+  }
+`;
+
 const ButtonContainer = styled.div`
   margin-left: auto;
   display: flex;
@@ -53,7 +101,7 @@ const NavigatorContainer = styled.ul`
 `;
 
 const Navigator = styled.li`
-  font-size: 2vh;
+  font-size: calc(1.5vh + 0.5vmin);
   font-weight: 600;
   cursor: pointer;
   padding: 1vw;
@@ -64,21 +112,32 @@ const Navigator = styled.li`
   }
 `;
 
-const ToggleButton = styled.button`
-  text-decoration: none;
+const LoginInformation = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(1.5vh + 0.5vmin);
+  font-weight: 800;
+  color: ${(props) => props.theme.colors.text};
+  margin: 10px;
   margin-right: 2vw;
   border: none;
-  padding: ${(props) => props.theme.padding};
+  border-radius: ${(props) => props.theme.borderRadius};
+  padding: 1vw;
+  cursor: pointer;
   background-color: ${(props) => props.theme.colors.button};
+
+  &:hover {
+    background-color: ${(props) => props.theme.colors.btnhover};
+  }
 `;
 
 interface HeaderProps {
-  button?: HTMLButtonElement | ReactNode;
   theme: DefaultTheme;
   toggleTheme: () => void;
 }
 
-export default function Header({ button, theme, toggleTheme }: HeaderProps) {
+export default function Header({ theme, toggleTheme }: HeaderProps) {
   const navigate = useNavigate();
   const [isTransitionEnabled, setIsTransitionEnabled] = useState<boolean>(false);
 
@@ -99,10 +158,13 @@ export default function Header({ button, theme, toggleTheme }: HeaderProps) {
         <Navigator onClick={() => navigate('/report')}>리포트</Navigator>
       </NavigatorContainer>
       <ButtonContainer>
-        {/* FIXME: Modify this to icon */}
-        <ToggleButton type="button" theme={theme} onClick={handleClick}>
-          button
-        </ToggleButton>
+        <CheckBoxWrapper>
+          <CheckBox id="checkbox" type="checkbox" theme={theme} onClick={handleClick} />
+          <CheckBoxLabel htmlFor="checkbox" theme={theme} />
+        </CheckBoxWrapper>
+        <LoginInformation onClick={() => navigate('/login')} theme={theme}>
+          로그인/회원가입{' '}
+        </LoginInformation>
       </ButtonContainer>
     </HeaderContainer>
   );

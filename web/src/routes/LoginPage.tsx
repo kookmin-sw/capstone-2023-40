@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Navigate, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import BackgroundImage from '../assets/main-page.webp';
 import Header from '../components/Header';
+import { isEmptyString, modalIsEmpty } from '../components/RegistCheck';
 import { useTheme } from '../hooks/useTheme';
 
 const Container = styled.div`
@@ -22,8 +23,10 @@ const LoginContainer = styled.div`
   padding: 9vw;
   margin-left: 20vw;
   margin-right: 20vw;
+  margin-top: calc(5vw - 1vmin);
   min-width: 20vh;
   height: 50vh;
+  border-radius: 20px;
   background-color: ${(props) => props.theme.colors.container};
   box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
 `;
@@ -88,23 +91,53 @@ const Button = styled.button`
   }
 `;
 
-export default function MainPage() {
+export default function LoginPage() {
   const [theme, toggleTheme] = useTheme();
   const navigate = useNavigate();
+  const [inputEmail, setInputEmail] = useState('');
+  const [inputPassword, setInputPassword] = useState('');
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+  };
+
+  // It will have to Add connect User DataBase - Email & Password
+  const checkLogin = (email: string, password: string) => {
+    if (isEmptyString(email) || isEmptyString(password)) {
+      modalIsEmpty('아이디 또는 비밀번호');
+    } else {
+      alert('로그인에 성공했습니다.');
+      navigate('./survey');
+    }
+  };
 
   return (
     <Container>
       <Header theme={theme} toggleTheme={toggleTheme} />
       <LoginContainer theme={theme}>
-        <Form>
+        <Form onSubmit={handleSubmit}>
           <LoginTitle theme={theme}>로그인</LoginTitle>
           <FontText theme={theme}>이메일</FontText>
-          <Input type="email" theme={theme} placeholder="이메일을 입력하세요." />
+          <Input
+            type="email"
+            value={inputEmail}
+            onChange={(e) => setInputEmail(e.target.value)}
+            theme={theme}
+            placeholder="이메일을 입력하세요."
+          />
           <FontText theme={theme}>비밀번호</FontText>
-          <Input type="password" theme={theme} placeholder="비밀번호를 입력하세요." />
-          <Button onClick={() => navigate('/survey')} theme={theme}>
+
+          <Input
+            type="password"
+            value={inputPassword}
+            onChange={(e) => setInputPassword(e.target.value)}
+            theme={theme}
+            placeholder="비밀번호를 입력하세요."
+          />
+          <Button onClick={() => checkLogin(inputEmail, inputPassword)} theme={theme}>
             로그인
           </Button>
+
           <FontText style={{ display: 'flex', flexDirection: 'row' }}>
             <hr style={{ border: `${theme.colors.default}` }} />
             <FontText theme={theme}>or</FontText>
