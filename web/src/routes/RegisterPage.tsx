@@ -164,12 +164,12 @@ type State = {
   name: string;
   phoneNumber: string;
   key: string;
-  email_Auth: boolean;
-  password_Overlap: boolean;
-  key_Request: boolean;
-  key_Auth: boolean;
-  agree_Service: boolean;
-  agree_Information: boolean;
+  emailAuth: boolean;
+  passwordOverlap: boolean;
+  keyRequest: boolean;
+  keyAuth: boolean;
+  agreeService: boolean;
+  agreeInformation: boolean;
 };
 
 type Action =
@@ -193,12 +193,12 @@ const initalState = {
   name: '',
   phoneNumber: '',
   key: '',
-  email_Auth: false,
-  password_Overlap: false,
-  key_Request: false,
-  key_Auth: false,
-  agree_Service: false,
-  agree_Information: false,
+  emailAuth: false,
+  passwordOverlap: false,
+  keyRequest: false,
+  keyAuth: false,
+  agreeService: false,
+  agreeInformation: false,
 };
 
 const reducer = (state: State, action: Action): State => {
@@ -218,32 +218,32 @@ const reducer = (state: State, action: Action): State => {
     case 'AUTH_EMAIL':
       return {
         ...state,
-        email_Auth: action.payload,
+        emailAuth: action.payload,
       };
     case 'OVERLAP_PASSWORD':
       return {
         ...state,
-        password_Overlap: action.payload,
+        passwordOverlap: action.payload,
       };
     case 'REQUEST_KEY':
       return {
         ...state,
-        key_Request: action.payload,
+        keyRequest: action.payload,
       };
     case 'AUTH_KEY':
       return {
         ...state,
-        key_Auth: action.payload,
+        keyAuth: action.payload,
       };
     case 'AGREE_SERVICE':
       return {
         ...state,
-        agree_Service: action.payload,
+        agreeService: action.payload,
       };
     case 'AGREE_INFORMATION':
       return {
         ...state,
-        agree_Information: action.payload,
+        agreeInformation: action.payload,
       };
     default:
       return state;
@@ -318,7 +318,7 @@ export default function RegisterPage() {
   const passingNumber = (phoneNum: string) => {
     if (isEmptyString(phoneNum)) {
       modalIsEmpty('전화번호');
-    } else if (!state.email_Auth || !state.password_Overlap) {
+    } else if (!state.emailAuth || !state.passwordOverlap) {
       modalIsEmpty('이메일 또는 비밀번호');
     } else if (isEmptyString(state.name)) {
       modalIsEmpty('이름');
@@ -333,7 +333,7 @@ export default function RegisterPage() {
   // Check Authentication number matches Requested authentication number
   const correspondNumber = () => {
     // Request AuthKey & Compared inputNumber
-    if (!state.key_Request) {
+    if (!state.keyRequest) {
       modalAll('인증번호를 먼저 보내세요');
     } else if (Number(state.key) !== testNumber) {
       modalCheck('인증번호');
@@ -349,13 +349,13 @@ export default function RegisterPage() {
 
   // Last Checking Web flow for Complete UserRegist.
   const handleClick = () => {
-    if (!state.email_Auth) {
+    if (!state.emailAuth) {
       modalReuest('이메일 인증요청');
-    } else if (!state.password_Overlap) {
+    } else if (!state.passwordOverlap) {
       modalReuest('중복 비밀번호 확인');
     } else if (isEmptyString(state.name)) {
       modalIsEmpty('이름');
-    } else if (!state.key_Auth) {
+    } else if (!state.keyAuth) {
       modalReuest('인증번호로 인증');
     } else if (isEmptyString(state.phoneNumber)) {
       modalIsEmpty('휴대폰번호');
@@ -464,7 +464,7 @@ export default function RegisterPage() {
             <UserAgree
               type="checkbox"
               name="agree_Service"
-              onChange={() => dispatch({ type: 'AGREE_SERVICE', payload: !state.agree_Service })}
+              onChange={() => dispatch({ type: 'AGREE_SERVICE', payload: !state.agreeService })}
             />
             <FontText theme={theme}>[필수] 서비스 이용약관 </FontText>
           </AgreeBox>
@@ -472,7 +472,7 @@ export default function RegisterPage() {
             <UserAgree
               type="checkbox"
               name="agree_Information"
-              onChange={() => dispatch({ type: 'AGREE_INFORMATION', payload: !state.agree_Information })}
+              onChange={() => dispatch({ type: 'AGREE_INFORMATION', payload: !state.agreeInformation })}
             />
             <FontText theme={theme}>[필수] 개인정보 수집동의</FontText>
           </AgreeBox>
@@ -482,7 +482,7 @@ export default function RegisterPage() {
             onClick={handleClick}
             type="submit"
             theme={theme}
-            disabled={!(state.agree_Service && state.agree_Information)}
+            disabled={!(state.agreeService && state.agreeInformation)}
           >
             회원가입 완료하기
           </CompleteButton>
