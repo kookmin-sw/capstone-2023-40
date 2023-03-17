@@ -17,5 +17,7 @@ export const lightTheme: DefaultTheme = {
     header: '#F8F8F8',
     opposite: '#FFFFFF',
     background: '#D0D0D0',
+    inputBackground: '#F8F8F8',
+    placeHolder: '#808080',
   },
 };

@@ -43,6 +43,7 @@ const Input = styled.input`
   border-radius: 16px;
   font-size: 1.5vh;
   font-weight: 600;
+  background-color: ${(props) => props.theme.colors.background};
   flex: 1;
 
   &:focus {
@@ -70,6 +71,7 @@ const FontText = styled.span`
   text-align: left;
   font-size: 2vh;
   font-weight: 700;
+  width: 20vw;
   color: ${(props) => props.theme.colors.default};
 `;
 
@@ -157,8 +159,6 @@ export default function MyPage() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
   };
-
-  // Clicked Complete UserRegist Button. so We need to do the last check required for registration.
 
   return (
     <Container theme={theme}>

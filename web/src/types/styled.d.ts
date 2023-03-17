@@ -19,6 +19,8 @@ declare module 'styled-components' {
       header: string;
       opposite: string;
       background: string;
+      inputBackground: string;
+      placeHolder: string;
     };
   }
 }

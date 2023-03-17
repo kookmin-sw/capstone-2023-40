@@ -17,5 +17,7 @@ export const darkTheme: DefaultTheme = {
     header: '#202123',
     opposite: '#000000',
     background: '#808080',
+    inputBackground: '#020715',
+    placeHolder: '#EBEFF7',
   },
 };

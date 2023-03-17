@@ -60,6 +60,8 @@ const Input = styled.input`
   margin-bottom: 10px;
   border: ${(props) => props.theme.border};
   border-radius: 16px;
+  color: ${(props) => props.theme.colors.default};
+  background-color: ${(props) => props.theme.colors.inputBackground};
   font-size: 1.5vh;
   font-weight: 600;
   flex: 1;
@@ -97,7 +99,8 @@ const PhoneNumberBox = styled.div`
   font-size: 1.5vh;
   font-weight: 700;
   margin-right: 1vh;
-  background-color: white;
+  color: ${(props) => props.theme.colors.default};
+  background-color: ${(props) => props.theme.colors.inputBackground};
   border: ${(props) => props.theme.border};
   border-color: ${(props) => props.theme.borderRadius};
   border-radius: ${(props) => props.theme.borderRadius};
