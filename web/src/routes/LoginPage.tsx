@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import BackgroundImage from '../assets/main-page.webp';
 import Header from '../components/Header';
-import { isEmailEmpty, isPasswordEmpty, ShowModal_isEmpty } from '../components/RegistCheck';
+import { isEmptyString, modalIsEmpty } from '../components/RegistCheck';
 import { useTheme } from '../hooks/useTheme';
 
 const Container = styled.div`
@@ -102,9 +102,9 @@ export default function LoginPage() {
   };
 
   // It will have to Add connect User DataBase - Email & Password
-  const CheckLogin = (email: string, password: string) => {
-    if (isEmailEmpty(email) || isPasswordEmpty(password)) {
-      ShowModal_isEmpty('아이디 또는 비밀번호');
+  const checkLogin = (email: string, password: string) => {
+    if (isEmptyString(email) || isEmptyString(password)) {
+      modalIsEmpty('아이디 또는 비밀번호');
     } else {
       alert('로그인에 성공했습니다.');
       navigate('./survey');
@@ -134,7 +134,7 @@ export default function LoginPage() {
             theme={theme}
             placeholder="비밀번호를 입력하세요."
           />
-          <Button onClick={() => CheckLogin(inputEmail, inputPassword)} theme={theme}>
+          <Button onClick={() => checkLogin(inputEmail, inputPassword)} theme={theme}>
             로그인
           </Button>
 

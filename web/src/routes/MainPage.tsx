@@ -70,7 +70,7 @@ export default function MainPage() {
           <AppTitle>더 서베이</AppTitle>
           에서 쉽고 간편하게
         </Description>
-        {loginCheck === false ? (
+        {!loginCheck ? (
           <Button onClick={() => navigate('/login')} theme={theme}>
             바로 설문하기
           </Button>
