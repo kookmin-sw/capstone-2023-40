@@ -56,9 +56,9 @@ interface PaginationProps {
 }
 
 export default function Pagination({ currentPage, numOfTotalPage, numOfPageToShow, setPage, theme }: PaginationProps) {
-  const [pageListIndex, setPageListIndex] = useState(0);
+  const [pageListIndex, setPageListIndex] = useState<number>(Math.floor((currentPage - 1) / numOfPageToShow));
+  const pageListLength = Math.floor(numOfTotalPage / numOfPageToShow);
   const pageIndex = [];
-  const numOfPageList = numOfTotalPage / numOfPageToShow;
 
   for (let i = 1; i <= numOfTotalPage; i += 1) {
     pageIndex.push(i);
@@ -71,7 +71,7 @@ export default function Pagination({ currentPage, numOfTotalPage, numOfPageToSho
   };
 
   const rightButtonClicked = () => {
-    if (pageListIndex < numOfPageList - 1) {
+    if (pageListIndex < pageListLength) {
       setPageListIndex(pageListIndex + 1);
     }
   };
