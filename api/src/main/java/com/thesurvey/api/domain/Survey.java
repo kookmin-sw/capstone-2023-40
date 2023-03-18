@@ -1,9 +1,11 @@
 package com.thesurvey.api.domain;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,9 +28,12 @@ public class Survey {
     private Long surveyId;
     @Column(name = "title", nullable = false)
     private String title;
-    @OneToMany(mappedBy = "survey")
+    @OneToMany(mappedBy = "survey", fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<Question> questions;
+
+    @OneToMany(mappedBy = "survey", fetch = FetchType.LAZY)
+    private List<Participation> participations = new ArrayList<>();
 
     @Builder
     public Survey(String title, List<Question> questions) {

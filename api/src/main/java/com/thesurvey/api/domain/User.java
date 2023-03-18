@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,8 +30,10 @@ public class User {
     private String email;
     @Column(name = "name", nullable = false)
     private String name;
-    @OneToMany(mappedBy = "survey")
+    @OneToMany(mappedBy = "survey", fetch = FetchType.LAZY)
     private List<Participation> participations = new ArrayList<>();
+    @OneToMany(mappedBy = "answered_question", fetch = FetchType.EAGER)
+    private List<AnsweredQuestion> answeredQuestions = new ArrayList<>();
 
     @Builder
     public User(String email, String name) {
