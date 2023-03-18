@@ -2,27 +2,33 @@ import React, { useState } from 'react';
 
 import styled, { DefaultTheme } from 'styled-components';
 
-const PaginationContainer = styled.div`
+const PaginationContainer = styled.nav`
   text-align: center;
 `;
 
-const Button = styled.button`
-  align-items: center;
-  border-radius: 10px;
-  border-style: none;
-  box-sizing: border-box;
-  cursor: pointer;
+const ButtonList = styled.ul`
+  text-align: center;
+  padding: 1px;
+`;
+
+const Button = styled.li`
   display: inline-flex;
   font-family: 'Google Sans', Roboto, Arial, sans-serif;
   font-size: 13px;
   font-weight: 700;
+  align-items: center;
+  border-radius: 10px;
+  border-style: none;
+  box-sizing: border-box;
   height: 25px;
   padding: 2px 18px;
+  margin: 5px;
   transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1), opacity 15ms linear 30ms,
     transform 270ms cubic-bezier(0, 0, 0.2, 1) 0ms;
-  margin: 5px;
   color: ${(props) => props.theme.colors.default};
+  cursor: pointer;
 `;
+
 const PageButton = styled(Button)`
   background-color: ${(props) => props.theme.colors.button};
 
@@ -39,7 +45,7 @@ const SelectedPageButton = styled(Button)`
   }
 `;
 
-const NavButton = styled(Button)`
+const ArrowButton = styled(Button)`
   background-color: ${(props) => props.theme.colors.container};
 
   &:hover {
@@ -78,25 +84,27 @@ export default function Pagination({ currentPage, numOfTotalPage, numOfPageToSho
 
   return (
     <PaginationContainer>
-      <NavButton theme={theme} onClick={() => leftButtonClicked()}>
-        &lt;
-      </NavButton>
-      {pageIndex
-        .slice(pageListIndex * numOfPageToShow, pageListIndex * numOfPageToShow + numOfPageToShow)
-        .map((index: number) =>
-          index === currentPage ? (
-            <SelectedPageButton theme={theme} key={index} onClick={() => setPage(index)}>
-              {index}
-            </SelectedPageButton>
-          ) : (
-            <PageButton theme={theme} key={index} onClick={() => setPage(index)}>
-              {index}
-            </PageButton>
-          )
-        )}
-      <NavButton theme={theme} onClick={() => rightButtonClicked()}>
-        &gt;
-      </NavButton>
+      <ButtonList>
+        <ArrowButton theme={theme} onClick={() => leftButtonClicked()}>
+          &lt;
+        </ArrowButton>
+        {pageIndex
+          .slice(pageListIndex * numOfPageToShow, pageListIndex * numOfPageToShow + numOfPageToShow)
+          .map((index: number) =>
+            index === currentPage ? (
+              <SelectedPageButton theme={theme} key={index}>
+                {index}
+              </SelectedPageButton>
+            ) : (
+              <PageButton theme={theme} key={index} onClick={() => setPage(index)}>
+                {index}
+              </PageButton>
+            )
+          )}
+        <ArrowButton theme={theme} onClick={() => rightButtonClicked()}>
+          &gt;
+        </ArrowButton>
+      </ButtonList>
     </PaginationContainer>
   );
 }
