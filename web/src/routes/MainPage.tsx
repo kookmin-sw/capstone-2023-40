@@ -58,7 +58,7 @@ const Button = styled.button`
 export default function MainPage() {
   const [theme, toggleTheme] = useTheme();
   const navigate = useNavigate();
-  const loginCheck = false;
+  const loginCheck = true;
 
   return (
     <Container>

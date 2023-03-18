@@ -39,7 +39,6 @@ const ArrowImage = styled(Arrow).attrs({
   width: 25px;
   height: 100%;
   padding: 1.5vh;
-  margin-left: 1vh;
   border-radius: 30px;
   cursor: pointer;
 
@@ -122,6 +121,28 @@ const ReplacePagetext = styled.span`
   width: 170px;
   color: ${(props) => props.theme.colors.default};
   cursor: pointer;
+`;
+
+const CompleteButton = styled.button`
+  margin-left: auto;
+  display: flex;
+  padding: 1.5vh;
+  font-size: 1.8vh;
+  font-weight: 700;
+  color: white;
+  background-color: ${(props) => props.theme.colors.primary};
+  border: none;
+  border-radius: ${(props) => props.theme.borderRadius};
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  &:hover {
+    background-color: ${(props) => props.theme.colors.prhover};
+  }
 `;
 
 type State = {
@@ -244,6 +265,7 @@ export default function MyPage() {
           <ContainerBox style={{ marginTop: '20px' }}>
             <ReplacePagetext theme={theme}>설문 결과 조회</ReplacePagetext>
             <ArrowImage theme={theme} onClick={() => navigate('../mypage/survey-result/:id')} />
+            <CompleteButton onClick={() => navigate('../')}>개인정보 저장하기</CompleteButton>
           </ContainerBox>
         </Form>
       </MypageContainer>

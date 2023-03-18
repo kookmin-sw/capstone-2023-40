@@ -4,48 +4,40 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { ReactComponent as Arrow } from '../../assets/svg/arrow.svg';
-import { ReactComponent as Pencil } from '../../assets/svg/pencil.svg';
+import { ReactComponent as Kakao } from '../../assets/svg/KakaoTalk_logo.svg';
 import Header from '../../components/Header';
 import { useTheme } from '../../hooks/useTheme';
 
-const PencilImage = styled(Pencil).attrs({
-  width: 24,
-  height: 24,
+const KakaoTalk = styled(Kakao).attrs({
+  width: 30,
+  height: 30,
 })`
   display: flex;
   align-items: center;
   justify-content: center;
   border: none;
-  width: 25px;
-  height: 100%;
-  padding: 1.5vh;
-  margin-left: 1vh;
-  border-radius: 18px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: ${(props) => props.theme.colors.inputBackground};
-  }
-`;
-
-const ArrowImage = styled(Arrow).attrs({
-  width: 24,
-  height: 24,
-})`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  width: 25px;
+  width: 30px;
   height: 100%;
   padding: 1.5vh;
   margin-left: 1vh;
   border-radius: 30px;
   cursor: pointer;
+`;
 
-  &:hover {
-    background-color: ${(props) => props.theme.colors.inputBackground};
-  }
+const ArrowImage = styled(Arrow).attrs({
+  width: 30,
+  height: 30,
+})`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  width: 30px;
+  height: 100%;
+  padding: 1.5vh;
+  margin-left: 1vh;
+  border-radius: 30px;
+  cursor: pointer;
 `;
 
 const Container = styled.div`
@@ -54,7 +46,7 @@ const Container = styled.div`
   background-color: ${(props) => props.theme.colors.container};
 `;
 
-const MypageContainer = styled.div`
+const AuthListContainer = styled.div`
   padding: 5vw;
   margin-left: calc(10vh - 5vmin);
   margin-right: calc(10vh - 5vmin);
@@ -68,6 +60,13 @@ const ContainerBox = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: left;
+  width: fit-content;
+  margin-bottom: 1vh;
+  border-radius: 30px;
+  &:hover {
+    background-color: ${(props) => props.theme.colors.background};
+  }
 `;
 
 const Form = styled.form`
@@ -75,27 +74,7 @@ const Form = styled.form`
   flex-direction: column;
 `;
 
-const Input = styled.input`
-  flex: 1;
-  min-width: 10vw;
-  max-width: 30vw;
-  width: 150px;
-  padding: 1.3vh;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  border: none;
-  border-radius: 10px;
-  font-size: 1.6vh;
-  font-weight: 700;
-  color: ${(props) => props.theme.colors.default};
-  background-color: ${(props) => props.theme.colors.inputBackground};
-  cursor: text;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-
-const MyPageTitle = styled.span`
+const AuthListTitle = styled.span`
   text-align: left;
   font-size: calc(2vh + 2vmin);
   font-weight: 900;
@@ -107,58 +86,52 @@ const FontText = styled.span`
   text-align: left;
   font-size: calc(1vh + 1.4vmin);
   font-weight: 900;
-  margin-right: 3vw;
   min-width: 80px;
-  max-width: 20vw;
-  width: 140px;
+  max-width: 40vw;
+  width: fit-content;
   color: ${(props) => props.theme.colors.default};
-`;
-
-const ReplacePagetext = styled.span`
-  border: none;
-  text-align: left;
-  font-size: 2.5vh;
-  font-weight: 900;
-  width: 170px;
-  color: ${(props) => props.theme.colors.default};
-  cursor: pointer;
 `;
 
 type State = {
-  email: string;
-  password: string;
-  name: string;
-  phoneNumber: string;
-  address: string;
+  kakao: boolean;
+  naver: boolean;
+  google: boolean;
+  identityCard: boolean;
+  driverCard: boolean;
+  schoolMail: boolean;
 };
 
 type Action =
-  | { type: 'CHANGE_EMAIL'; payload: string }
-  | { type: 'CHANGE_PASSWORD'; payload: string }
-  | { type: 'CHANGE_NAME'; payload: string }
-  | { type: 'CHANGE_PHONE_NUMBER'; payload: string }
-  | { type: 'CHANGE_ADDRESS'; payload: string };
+  | { type: 'AUTH_KAKAO'; payload: boolean }
+  | { type: 'AUTH_NAVER'; payload: boolean }
+  | { type: 'AUTH_GOOGLE'; payload: boolean }
+  | { type: 'AUTH_IDENTITY'; payload: boolean }
+  | { type: 'AUTH_DRIVER'; payload: boolean }
+  | { type: 'AUTH_SCHOOLMAIL'; payload: boolean };
 
 const initalState = {
-  email: '',
-  password: '',
-  name: '',
-  phoneNumber: '',
-  address: '',
+  kakao: false,
+  naver: false,
+  google: false,
+  identityCard: false,
+  driverCard: false,
+  schoolMail: false,
 };
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
-    case 'CHANGE_EMAIL':
-      return { ...state, email: action.payload };
-    case 'CHANGE_PASSWORD':
-      return { ...state, password: action.payload };
-    case 'CHANGE_NAME':
-      return { ...state, name: action.payload };
-    case 'CHANGE_PHONE_NUMBER':
-      return { ...state, phoneNumber: action.payload };
-    case 'CHANGE_ADDRESS':
-      return { ...state, address: action.payload };
+    case 'AUTH_KAKAO':
+      return { ...state, kakao: action.payload };
+    case 'AUTH_NAVER':
+      return { ...state, naver: action.payload };
+    case 'AUTH_GOOGLE':
+      return { ...state, google: action.payload };
+    case 'AUTH_IDENTITY':
+      return { ...state, identityCard: action.payload };
+    case 'AUTH_DRIVER':
+      return { ...state, driverCard: action.payload };
+    case 'AUTH_SCHOOLMAIL':
+      return { ...state, schoolMail: action.payload };
     default:
       return state;
   }
@@ -171,28 +144,6 @@ export default function MyPage() {
   const [state, dispatch] = useReducer(reducer, initalState);
 
   // Input Data list
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    switch (name) {
-      case 'email':
-        dispatch({ type: 'CHANGE_EMAIL', payload: value });
-        break;
-      case 'password':
-        dispatch({ type: 'CHANGE_PASSWORD', payload: value });
-        break;
-      case 'name':
-        dispatch({ type: 'CHANGE_NAME', payload: value });
-        break;
-      case 'phoneNumber':
-        dispatch({ type: 'CHANGE_PHONE_NUMBER', payload: value });
-        break;
-      case 'address':
-        dispatch({ type: 'CHANGE_ADDRESS', payload: value });
-        break;
-      default:
-        break;
-    }
-  };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -201,11 +152,46 @@ export default function MyPage() {
   return (
     <Container theme={theme}>
       <Header theme={theme} toggleTheme={toggleTheme} />
-      <MypageContainer theme={theme}>
+      <AuthListContainer theme={theme}>
         <Form onSubmit={handleSubmit}>
-          <MyPageTitle theme={theme}>마이페이지 &gt; 인증정보 목록 </MyPageTitle>
+          <AuthListTitle theme={theme}>마이페이지 &gt; 인증정보 목록 </AuthListTitle>
+          <ContainerBox onClick={() => navigate('../mypage/auth-list')}>
+            <KakaoTalk type="submit" theme={theme} />
+            <FontText theme={theme}>카카오 본인인증 바로가기</FontText>
+            <ArrowImage theme={theme} />
+          </ContainerBox>
+
+          <ContainerBox onClick={() => navigate('../mypage/auth-list')}>
+            <KakaoTalk type="submit" theme={theme} />
+            <FontText theme={theme}>네이버 본인인증 바로가기</FontText>
+            <ArrowImage theme={theme} />
+          </ContainerBox>
+
+          <ContainerBox onClick={() => navigate('../mypage/auth-list')}>
+            <KakaoTalk type="submit" theme={theme} />
+            <FontText theme={theme}>구글 본인인증 바로가기</FontText>
+            <ArrowImage theme={theme} />
+          </ContainerBox>
+
+          <ContainerBox onClick={() => navigate('../mypage/auth-list')}>
+            <KakaoTalk type="submit" theme={theme} />
+            <FontText theme={theme}>신분증 본인인증 바로가기</FontText>
+            <ArrowImage theme={theme} />
+          </ContainerBox>
+
+          <ContainerBox onClick={() => navigate('../mypage/auth-list')}>
+            <KakaoTalk type="submit" theme={theme} />
+            <FontText theme={theme}>운전면허 본인인증 바로가기</FontText>
+            <ArrowImage theme={theme} />
+          </ContainerBox>
+
+          <ContainerBox onClick={() => navigate('../mypage/auth-list')}>
+            <KakaoTalk type="submit" theme={theme} />
+            <FontText theme={theme}>학교 웹메일 본인인증 바로가기</FontText>
+            <ArrowImage theme={theme} />
+          </ContainerBox>
         </Form>
-      </MypageContainer>
+      </AuthListContainer>
     </Container>
   );
 }
