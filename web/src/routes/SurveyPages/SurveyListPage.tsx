@@ -8,6 +8,7 @@ import axios from '../../api/axios';
 import requests from '../../api/request';
 import Header from '../../components/Header';
 import Pagination from '../../components/Pagination';
+import SurveyListSkeleton from '../../components/Skeleton/SurveyListSkeleton';
 import { useTheme } from '../../hooks/useTheme';
 
 const Container = styled.div`
@@ -34,6 +35,7 @@ const ListRow = styled.tr`
 `;
 
 const Item = styled.td`
+  height: 22px;
   margin: 2px;
   padding: 2vh;
   font-size: 1.7vh;
@@ -191,7 +193,7 @@ interface Survey {
 export default function SurveyListPage() {
   const [theme, toggleTheme] = useTheme();
   const [surveys, setSurveys] = useState<Survey[]>([]);
-  const [page, setPage] = useState<number>(15);
+  const [page, setPage] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isFetch, setIsFetch] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -232,14 +234,6 @@ export default function SurveyListPage() {
     fetchSurveyData();
     setIsFetch(true);
   }, [page]);
-
-  useEffect(() => {
-    console.log(`loading : ${isLoading ? 'true' : 'false'}`);
-  }, [isLoading]);
-
-  useEffect(() => {
-    console.log(`fetching : ${isFetch ? 'true' : 'false'}`);
-  }, [isFetch]);
 
   // After get data from api server
   if (!isLoading && isFetch) {
@@ -292,5 +286,11 @@ export default function SurveyListPage() {
     );
   }
   // Before get data from api server
-  return <div>a</div>;
+  return (
+    <Container theme={theme}>
+      <Header theme={theme} toggleTheme={toggleTheme} />
+      <SurveyListSkeleton theme={theme} />
+      <Pagination currentPage={page} numOfTotalPage={13} numOfPageToShow={4} setPage={setPage} theme={theme} />
+    </Container>
+  );
 }
