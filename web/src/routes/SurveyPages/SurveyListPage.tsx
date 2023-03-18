@@ -19,7 +19,7 @@ const Container = styled.div`
 const ListTable = styled.table`
   display: flex;
   flex-direction: column;
-  padding: 3vh 5vw 3vh 5vw;
+  padding: 3vh 5vw 1vh 5vw;
   background-color: ${(props) => props.theme.colors.container};
 `;
 
@@ -55,6 +55,9 @@ const HeadItem = styled.th`
 const Title = styled(Item)`
   min-width: 15vh;
   flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   &:hover {
     background-color: ${(props) => props.theme.colors.btnhover};
@@ -207,7 +210,7 @@ export default function SurveyListPage() {
         </ListBody>
         {/* TODO: Show something when no data */}
       </ListTable>
-      <Pagination currentPage={page} totalPage={13} setPage={setPage} />
+      <Pagination currentPage={page} numOfTotalPage={13} numOfPageToShow={4} setPage={setPage} theme={theme} />
     </Container>
   );
 }

@@ -10,7 +10,6 @@ const Button = styled.button`
   align-items: center;
   border-radius: 10px;
   border-style: none;
-  box-shadow: rgba(213, 217, 217, 0.5) 0 2px 5px 0;
   box-sizing: border-box;
   cursor: pointer;
   display: inline-flex;
@@ -18,39 +17,50 @@ const Button = styled.button`
   font-size: 13px;
   font-weight: 700;
   height: 25px;
-  padding: 2px 24px;
+  padding: 2px 18px;
   transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1), opacity 15ms linear 30ms,
     transform 270ms cubic-bezier(0, 0, 0.2, 1) 0ms;
   margin: 5px;
   color: ${(props) => props.theme.colors.default};
+`;
+const PageButton = styled(Button)`
   background-color: ${(props) => props.theme.colors.button};
 
   &:hover {
     background-color: ${(props) => props.theme.colors.btnhover};
   }
 `;
-const PageButton = styled(Button)``;
 
 const SelectedPageButton = styled(Button)`
-  background-color: ${(props) => props.theme.colors.opposite};
+  background-color: ${(props) => props.theme.colors.header};
+
+  &:hover {
+    background-color: ${(props) => props.theme.colors.header};
+  }
 `;
 
-const NavButton = styled(Button)``;
+const NavButton = styled(Button)`
+  background-color: ${(props) => props.theme.colors.container};
+
+  &:hover {
+    background-color: ${(props) => props.theme.colors.header};
+  }
+`;
 
 interface PaginationProps {
   currentPage: number;
-  numOfPage: number;
+  numOfTotalPage: number;
   numOfPageToShow: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
   theme: DefaultTheme;
 }
 
-export default function Pagination({ currentPage, numOfPage, numOfPageToShow, setPage, theme }: PaginationProps) {
+export default function Pagination({ currentPage, numOfTotalPage, numOfPageToShow, setPage, theme }: PaginationProps) {
   const [pageListIndex, setPageListIndex] = useState(0);
   const pageIndex = [];
-  const numOfPageList = numOfPage / numOfPageToShow;
+  const numOfPageList = numOfTotalPage / numOfPageToShow;
 
-  for (let i = 1; i <= numOfPage; i += 1) {
+  for (let i = 1; i <= numOfTotalPage; i += 1) {
     pageIndex.push(i);
   }
 
