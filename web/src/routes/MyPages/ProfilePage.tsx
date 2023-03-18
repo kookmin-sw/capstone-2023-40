@@ -3,8 +3,50 @@ import React, { useReducer } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { ReactComponent as Arrow } from '../../assets/svg/arrow.svg';
+import { ReactComponent as Pencil } from '../../assets/svg/pencil.svg';
 import Header from '../../components/Header';
 import { useTheme } from '../../hooks/useTheme';
+
+const PencilImage = styled(Pencil).attrs({
+  width: 24,
+  height: 24,
+})`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  width: 25px;
+  height: 100%;
+  padding: 1.5vh;
+  margin-left: 1vh;
+  border-radius: 18px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${(props) => props.theme.colors.inputBackground};
+  }
+`;
+
+const ArrowImage = styled(Arrow).attrs({
+  width: 24,
+  height: 24,
+})`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  width: 25px;
+  height: 100%;
+  padding: 1.5vh;
+  margin-left: 1vh;
+  border-radius: 30px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${(props) => props.theme.colors.inputBackground};
+  }
+`;
 
 const Container = styled.div`
   width: 100vw;
@@ -16,7 +58,7 @@ const MypageContainer = styled.div`
   padding: 5vw;
   margin-left: calc(10vh - 5vmin);
   margin-right: calc(10vh - 5vmin);
-  margin-top: calc(7vw - 2vmin);
+  margin-top: calc(3vw - 2vmin);
   min-width: 40vh;
   height: 80vh;
   background-color: ${(props) => props.theme.colors.container};
@@ -26,7 +68,6 @@ const ContainerBox = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
 `;
 
 const Form = styled.form`
@@ -35,33 +76,23 @@ const Form = styled.form`
 `;
 
 const Input = styled.input`
-  min-width: 5vh;
-  padding: 1.7vh;
+  min-width: 10vw;
+  max-width: 30vw;
+  padding: 1.3vh;
   margin-top: 10px;
   margin-bottom: 10px;
-  border: ${(props) => props.theme.border};
-  border-radius: 16px;
-  font-size: 1.5vh;
-  font-weight: 600;
-  background-color: ${(props) => props.theme.colors.background};
+  border: none;
+  border-radius: 10px;
+  font-size: 1.6vh;
+  font-weight: 700;
+  background-color: ${(props) => props.theme.colors.inputBackground};
   flex: 1;
-
-  &:focus {
-    outline: none;
-  }
-
-  ::placeholder,
-  ::-webkit-input-placeholder {
-    opacity: 0.4;
-  }
-  :-ms-input-placeholder {
-    opacity: 0.4;
-  }
+  cursor: text;
 `;
 
 const MyPageTitle = styled.span`
   text-align: left;
-  font-size: 3vh;
+  font-size: calc(2vh + 2vmin);
   font-weight: 900;
   margin-bottom: 2vh;
   color: ${(props) => props.theme.colors.default};
@@ -69,29 +100,23 @@ const MyPageTitle = styled.span`
 
 const FontText = styled.span`
   text-align: left;
-  font-size: 2vh;
-  font-weight: 700;
-  width: 20vw;
+  font-size: calc(1vh + 1.4vmin);
+  font-weight: 900;
+  margin-right: 3vw;
+  min-width: 80px;
+  max-width: 20vw;
+  width: 140px;
   color: ${(props) => props.theme.colors.default};
 `;
 
-const ChangeButton = styled.button`
+const ReplacePagetext = styled.span`
   border: none;
-  min-width: 70px;
-  width: 10vw;
-  height: 100%;
-  padding: 1.9vh;
-  margin-left: 1vh;
-  font-size: 1.4vh;
-  font-weight: 700;
-  color: ${(props) => props.theme.colors.text};
-  background-color: ${(props) => props.theme.colors.button};
-  border-radius: ${(props) => props.theme.borderRadius};
+  text-align: left;
+  font-size: 2.5vh;
+  font-weight: 900;
+  width: 170px;
+  color: ${(props) => props.theme.colors.default};
   cursor: pointer;
-
-  &:hover {
-    background-color: ${(props) => props.theme.colors.btnhover};
-  }
 `;
 
 type State = {
@@ -99,19 +124,22 @@ type State = {
   password: string;
   name: string;
   phoneNumber: string;
+  address: string;
 };
 
 type Action =
   | { type: 'CHANGE_EMAIL'; payload: string }
   | { type: 'CHANGE_PASSWORD'; payload: string }
   | { type: 'CHANGE_NAME'; payload: string }
-  | { type: 'CHANGE_PHONE_NUMBER'; payload: string };
+  | { type: 'CHANGE_PHONE_NUMBER'; payload: string }
+  | { type: 'CHANGE_ADDRESS'; payload: string };
 
 const initalState = {
   email: '',
   password: '',
   name: '',
   phoneNumber: '',
+  address: '',
 };
 
 const reducer = (state: State, action: Action): State => {
@@ -124,6 +152,8 @@ const reducer = (state: State, action: Action): State => {
       return { ...state, name: action.payload };
     case 'CHANGE_PHONE_NUMBER':
       return { ...state, phoneNumber: action.payload };
+    case 'CHANGE_ADDRESS':
+      return { ...state, address: action.payload };
     default:
       return state;
   }
@@ -151,6 +181,9 @@ export default function MyPage() {
       case 'phoneNumber':
         dispatch({ type: 'CHANGE_PHONE_NUMBER', payload: value });
         break;
+      case 'address':
+        dispatch({ type: 'CHANGE_ADDRESS', payload: value });
+        break;
       default:
         break;
     }
@@ -166,23 +199,46 @@ export default function MyPage() {
       <MypageContainer theme={theme}>
         <Form onSubmit={handleSubmit}>
           <MyPageTitle theme={theme}>마이페이지</MyPageTitle>
-
           <ContainerBox>
             <FontText theme={theme}>이메일</FontText>
             <Input type="email" name="email" value={state.email} onChange={handleInputChange} theme={theme} />
-            <ChangeButton type="submit" theme={theme} />
+            <PencilImage type="submit" theme={theme} />
           </ContainerBox>
-
-          <ContainerBox>
-            <FontText theme={theme}>비밀번호</FontText>
-            <Input type="password" name="password" value={state.password} onChange={handleInputChange} theme={theme} />
-            <ChangeButton type="submit" theme={theme} />
-          </ContainerBox>
-
           <ContainerBox>
             <FontText theme={theme}>이름</FontText>
-            <Input type="text" name="name" value={state.name} theme={theme} />
-            <ChangeButton type="submit" theme={theme} />
+            <Input type="text" name="name" value={state.name} onChange={handleInputChange} theme={theme} />
+            <PencilImage type="submit" theme={theme} />
+          </ContainerBox>
+          <ContainerBox>
+            <FontText theme={theme}>비밀번호</FontText>
+            <Input type="text" name="password" value={state.password} onChange={handleInputChange} theme={theme} />
+            <PencilImage type="submit" theme={theme} />
+          </ContainerBox>
+          <ContainerBox>
+            <FontText theme={theme}>휴대폰 번호</FontText>
+            <Input
+              type="text"
+              name="phoneNumber"
+              value={state.phoneNumber}
+              onChange={handleInputChange}
+              maxLength={11}
+              theme={theme}
+            />
+            <PencilImage type="submit" theme={theme} />
+          </ContainerBox>
+          <ContainerBox>
+            <FontText theme={theme}>주소</FontText>
+            <Input type="text" name="address" value={state.address} onChange={handleInputChange} theme={theme} />
+            <PencilImage type="submit" theme={theme} />
+          </ContainerBox>
+          <ContainerBox style={{ marginTop: '10vh' }}>
+            <ReplacePagetext theme={theme}>인증번호 목록</ReplacePagetext>
+            <ArrowImage theme={theme} />
+          </ContainerBox>
+
+          <ContainerBox style={{ marginTop: '20px' }}>
+            <ReplacePagetext theme={theme}>설문 결과 조회</ReplacePagetext>
+            <ArrowImage theme={theme} />
           </ContainerBox>
         </Form>
       </MypageContainer>

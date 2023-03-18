@@ -46,6 +46,7 @@ const CheckBoxLabel = styled.label`
   height: 26px;
   margin-top: 2.5vh;
   border-radius: 15px;
+  border: ${(props) => props.theme.themeToggle};
   background: #f8f8f8;
   cursor: pointer;
   &::after {

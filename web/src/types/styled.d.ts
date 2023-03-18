@@ -7,6 +7,7 @@ declare module 'styled-components' {
     padding?: string | number;
     border?: string;
     borderRadius?: string | number;
+    themeToggle?: string | number;
 
     colors: {
       default: string;

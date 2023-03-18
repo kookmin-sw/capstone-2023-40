@@ -42,6 +42,8 @@ const Input = styled.input`
   margin-bottom: 10px;
   border: ${(props) => props.theme.border};
   border-radius: 16px;
+  color: ${(props) => props.theme.colors.text};
+  background-color: ${(props) => props.theme.colors.container};
   font-size: 1.5vh;
   font-weight: 600;
   flex: 1;

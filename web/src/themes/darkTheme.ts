@@ -5,6 +5,7 @@ export const darkTheme: DefaultTheme = {
   borderRadius: '16px',
   padding: '2vh',
   border: '3px solid #ebeff7',
+  themeToggle: '2px solid #FFFFFF',
 
   colors: {
     default: '#FFFFFF',
@@ -17,7 +18,7 @@ export const darkTheme: DefaultTheme = {
     header: '#202123',
     opposite: '#000000',
     background: '#808080',
-    inputBackground: '#020715',
+    inputBackground: '#808080',
     placeHolder: '#EBEFF7',
   },
 };

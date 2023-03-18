@@ -5,6 +5,7 @@ export const lightTheme: DefaultTheme = {
   borderRadius: '16px',
   padding: '2vh',
   border: '3px solid #ebeff7',
+  themeToggle: '2px solid #ebeff7',
 
   colors: {
     default: '#000000',
@@ -17,7 +18,7 @@ export const lightTheme: DefaultTheme = {
     header: '#F8F8F8',
     opposite: '#FFFFFF',
     background: '#D0D0D0',
-    inputBackground: '#F8F8F8',
+    inputBackground: '#f0f0f0',
     placeHolder: '#808080',
   },
 };
