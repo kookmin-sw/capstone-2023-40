@@ -76,8 +76,10 @@ const Form = styled.form`
 `;
 
 const Input = styled.input`
+  flex: 1;
   min-width: 10vw;
   max-width: 30vw;
+  width: 150px;
   padding: 1.3vh;
   margin-top: 10px;
   margin-bottom: 10px;
@@ -85,9 +87,12 @@ const Input = styled.input`
   border-radius: 10px;
   font-size: 1.6vh;
   font-weight: 700;
+  color: ${(props) => props.theme.colors.default};
   background-color: ${(props) => props.theme.colors.inputBackground};
-  flex: 1;
   cursor: text;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const MyPageTitle = styled.span`
@@ -232,13 +237,13 @@ export default function MyPage() {
             <PencilImage type="submit" theme={theme} />
           </ContainerBox>
           <ContainerBox style={{ marginTop: '10vh' }}>
-            <ReplacePagetext theme={theme}>인증번호 목록</ReplacePagetext>
-            <ArrowImage theme={theme} />
+            <ReplacePagetext theme={theme}>인증정보 목록</ReplacePagetext>
+            <ArrowImage theme={theme} onClick={() => navigate('../mypage/auth-list')} />
           </ContainerBox>
 
           <ContainerBox style={{ marginTop: '20px' }}>
             <ReplacePagetext theme={theme}>설문 결과 조회</ReplacePagetext>
-            <ArrowImage theme={theme} />
+            <ArrowImage theme={theme} onClick={() => navigate('../mypage/survey-result/:id')} />
           </ContainerBox>
         </Form>
       </MypageContainer>
