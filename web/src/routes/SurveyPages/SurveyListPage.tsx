@@ -58,6 +58,7 @@ const Title = styled(Item)`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  cursor: pointer;
 
   &:hover {
     background-color: ${(props) => props.theme.colors.btnhover};
@@ -134,6 +135,49 @@ const AuthSummary = styled.span`
   font-size: 13px;
 `;
 
+const Notification = styled.div`
+  text-align: center;
+  margin-top: 35vh;
+  padding: 10px;
+`;
+
+const Label = styled.label`
+  font-size: 50px;
+  font-weight: 700;
+  color: ${(props) => props.theme.colors.default};
+  text-align: center;
+
+  @media screen and (max-width: 700px) {
+    font-size: 30px;
+    }
+  } 
+`;
+
+const Button = styled.button`
+  display: inline-flex;
+  font-size: 20px;
+  font-weight: 700;
+  align-items: center;
+  border-radius: 10px;
+  border-style: none;
+  height: 50px;
+  padding: 20px;
+  margin: 10px;
+  transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1), opacity 15ms linear 30ms,
+    transform 270ms cubic-bezier(0, 0, 0.2, 1) 0ms;
+  cursor: pointer;
+  color: ${(props) => props.theme.colors.default};
+  background-color: ${(props) => props.theme.colors.primary};
+
+  &:hover {
+    background-color: ${(props) => props.theme.colors.prhover};
+  }
+  @media screen and (max-width: 700px) {
+    font-size: 18px;
+    }
+  } 
+`;
+
 interface Survey {
   survey_id: string;
   author: number;
@@ -147,12 +191,21 @@ interface Survey {
 export default function SurveyListPage() {
   const [theme, toggleTheme] = useTheme();
   const [surveys, setSurveys] = useState<Survey[]>([]);
-  const [page, setPage] = useState<number>(1);
+  const [page, setPage] = useState<number>(15);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isFetch, setIsFetch] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const fetchSurveyData = async (): Promise<void> => {
-    const request: AxiosResponse<Survey[]> = await axios.get<Survey[]>(requests.fetchSurveyListPage + page);
-    setSurveys(request.data);
+    setIsLoading(true);
+    // TODO: More detailed error handling is needed.
+    try {
+      const request: AxiosResponse<Survey[]> = await axios.get<Survey[]>(requests.fetchSurveyListPage + page);
+      setSurveys(request.data);
+    } catch {
+      setSurveys([]);
+    }
+    setIsLoading(false);
   };
 
   const makeAuthLabel = (auth: string) => {
@@ -175,42 +228,69 @@ export default function SurveyListPage() {
   };
 
   useEffect(() => {
+    setIsFetch(false);
     fetchSurveyData();
+    setIsFetch(true);
   }, [page]);
 
-  return (
-    <Container theme={theme}>
-      <Header theme={theme} toggleTheme={toggleTheme} />
-      <ListTable theme={theme}>
-        <ListHead>
-          <ListRow>
-            <HeadTitle theme={theme}>설문 제목</HeadTitle>
-            <HeadAuthList theme={theme}>필수인증</HeadAuthList>
-            <HeadEndDate theme={theme}>설문 종료일</HeadEndDate>
-          </ListRow>
-        </ListHead>
+  useEffect(() => {
+    console.log(`loading : ${isLoading ? 'true' : 'false'}`);
+  }, [isLoading]);
 
-        <ListBody>
-          {surveys.map((survey) => (
-            <ListRow key={survey.survey_id} theme={theme}>
-              <Title onClick={() => navigate(`/survey/${survey.survey_id}`)} theme={theme}>
-                {survey.title}
-              </Title>
-              <Authlist theme={theme}>
-                {survey.required_authentications.length === 0
-                  ? makeAuthLabel('')
-                  : survey.required_authentications.slice(0, 2).map((auth) => makeAuthLabel(auth))}
-                {survey.required_authentications.length > 2 ? (
-                  <AuthSummary>{` ... +${survey.required_authentications.length - 2}`}</AuthSummary>
-                ) : null}
-              </Authlist>
-              <EndDate theme={theme}>{survey.ended_date.substring(0, 10)}</EndDate>
+  useEffect(() => {
+    console.log(`fetching : ${isFetch ? 'true' : 'false'}`);
+  }, [isFetch]);
+
+  // After get data from api server
+  if (!isLoading && isFetch) {
+    if (surveys.length === 0) {
+      return (
+        <Container theme={theme}>
+          <Header theme={theme} toggleTheme={toggleTheme} />
+          <Notification theme={theme}>
+            <Label theme={theme}>😥 참여가능한 설문이 없습니다...</Label>
+            <br />
+            <Button theme={theme}>설문 만들러 가기</Button>
+          </Notification>
+        </Container>
+      );
+    }
+    return (
+      <Container theme={theme}>
+        <Header theme={theme} toggleTheme={toggleTheme} />
+        <ListTable theme={theme}>
+          <ListHead>
+            <ListRow>
+              <HeadTitle theme={theme}>설문 제목</HeadTitle>
+              <HeadAuthList theme={theme}>필수인증</HeadAuthList>
+              <HeadEndDate theme={theme}>설문 종료일</HeadEndDate>
             </ListRow>
-          ))}
-        </ListBody>
-        {/* TODO: Show something when no data */}
-      </ListTable>
-      <Pagination currentPage={page} numOfTotalPage={13} numOfPageToShow={4} setPage={setPage} theme={theme} />
-    </Container>
-  );
+          </ListHead>
+
+          <ListBody>
+            {surveys.map((survey) => (
+              <ListRow key={survey.survey_id} theme={theme}>
+                <Title onClick={() => navigate(`/survey/${survey.survey_id}`)} theme={theme}>
+                  {survey.title}
+                </Title>
+                <Authlist theme={theme}>
+                  {survey.required_authentications.length === 0
+                    ? makeAuthLabel('')
+                    : survey.required_authentications.slice(0, 2).map((auth) => makeAuthLabel(auth))}
+                  {survey.required_authentications.length > 2 ? (
+                    <AuthSummary>{` ... +${survey.required_authentications.length - 2}`}</AuthSummary>
+                  ) : null}
+                </Authlist>
+                <EndDate theme={theme}>{survey.ended_date.substring(0, 10)}</EndDate>
+              </ListRow>
+            ))}
+          </ListBody>
+        </ListTable>
+
+        <Pagination currentPage={page} numOfTotalPage={13} numOfPageToShow={4} setPage={setPage} theme={theme} />
+      </Container>
+    );
+  }
+  // Before get data from api server
+  return <div>a</div>;
 }
