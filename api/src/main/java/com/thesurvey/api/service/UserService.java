@@ -3,6 +3,7 @@ package com.thesurvey.api.service;
 import com.thesurvey.api.domain.User;
 import com.thesurvey.api.dto.UserDto;
 import com.thesurvey.api.repository.UserRepository;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
@@ -16,20 +17,26 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User findByName(String name) {
+    public UserDto getUserByName(String name) {
         Optional<User> targetUser = userRepository.findByName(name);
-        return targetUser.get();
+        UserDto targetUserDto = new UserDto(targetUser.get());
+        return targetUserDto;
     }
-
-    public User findByEmail(String email) {
+    public UserDto getUserByEmail(String email) {
         Optional<User> targetUser = userRepository.findByEmail(email);
-        return targetUser.get();
+        UserDto targetUserDto = new UserDto(targetUser.get());
+        return targetUserDto;
     }
-
-//    public List<User> findAllUsersWithAnsweredQuestions() {
-//
-//    }
     public User join(User user) {
         return userRepository.save(user);
+    }
+    public List<UserDto> getAllUsersWithAnsweredQuestion(){
+        List<User> allUsersList = userRepository.findAll();
+        List<UserDto> userDtoList = new ArrayList<>();
+        for (User user : allUsersList) {
+            UserDto userDto = new UserDto(user);
+            userDtoList.add(userDto);
+        }
+        return userDtoList;
     }
 }
