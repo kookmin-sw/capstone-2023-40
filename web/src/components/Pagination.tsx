@@ -13,7 +13,6 @@ const ButtonList = styled.ul`
 
 const Button = styled.li`
   display: inline-flex;
-  font-family: 'Google Sans', Roboto, Arial, sans-serif;
   font-size: 13px;
   font-weight: 700;
   align-items: center;
@@ -30,26 +29,22 @@ const Button = styled.li`
 `;
 
 const PageButton = styled(Button)`
-  background-color: ${(props) => props.theme.colors.button};
+  background-color: transparent;
 
   &:hover {
-    background-color: ${(props) => props.theme.colors.btnhover};
+    background-color: ${(props) => props.theme.colors.prhover};
   }
 `;
 
 const SelectedPageButton = styled(Button)`
-  background-color: ${(props) => props.theme.colors.header};
-
-  &:hover {
-    background-color: ${(props) => props.theme.colors.header};
-  }
+  background-color: ${(props) => props.theme.colors.primary};
 `;
 
 const ArrowButton = styled(Button)`
-  background-color: ${(props) => props.theme.colors.container};
+  background-color: transparent;
 
   &:hover {
-    background-color: ${(props) => props.theme.colors.header};
+    background-color: ${(props) => props.theme.colors.prhover};
   }
 `;
 

@@ -42,7 +42,7 @@ const Item = styled.td`
   font-weight: bold;
   border-radius: 5px;
   color: ${(props) => props.theme.colors.default};
-  background-color: ${(props) => props.theme.colors.header};
+  background-color: ${(props) => props.theme.colors.background};
 `;
 
 const HeadItem = styled.th`
