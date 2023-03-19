@@ -5,6 +5,7 @@ import com.thesurvey.api.dto.SurveyDto;
 import com.thesurvey.api.repository.SurveyRepository;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,7 +23,7 @@ public class SurveyService {
         return surveyRepository.findAll();
     }
 
-    public Optional<Survey> getSurveyById(long surveyId) {
+    public Optional<Survey> getSurveyById(UUID surveyId) {
         Optional<Survey> targetSurvey = surveyRepository.findById(surveyId);
         return Optional.of(targetSurvey.get());
     }

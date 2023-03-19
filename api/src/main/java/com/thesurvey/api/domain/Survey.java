@@ -1,9 +1,9 @@
 package com.thesurvey.api.domain;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -26,12 +26,14 @@ public class Survey {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "survey_id")
-    private Long surveyId;
+    private UUID surveyId;
     @Column(name = "title", nullable = false)
     private String title;
-    @Column(name = "created_date", nullable = false)
-    private Timestamp createdDate;
-    @OneToMany(mappedBy = "survey", fetch = FetchType.EAGER, orphanRemoval = true)
+
+    @Column(name = "description", nullable = false)
+    private String description;
+
+    @OneToMany(mappedBy = "survey", fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<Question> questions;
 
@@ -39,11 +41,11 @@ public class Survey {
     private List<Participation> participations = new ArrayList<>();
 
     @Builder
-    public Survey(Long surveyId, String title, List<Question> questions, Timestamp createdDate, List<Participation> participations) {
-        this.surveyId = surveyId;
+    public Survey(String title, String description, List<Question> questions,
+        List<Participation> participations) {
         this.title = title;
+        this.description = description;
         this.questions = questions;
-        this.createdDate = createdDate;
         this.participations = participations;
     }
 
