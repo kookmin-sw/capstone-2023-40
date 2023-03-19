@@ -59,11 +59,18 @@ interface PaginationProps {
 export default function Pagination({ currentPage, numOfTotalPage, numOfPageToShow, setPage, theme }: PaginationProps) {
   const [pageListIndex, setPageListIndex] = useState<number>(Math.floor((currentPage - 1) / numOfPageToShow));
   const pageListLength = Math.floor(numOfTotalPage / numOfPageToShow);
-  const pageIndex = [];
 
-  for (let i = 1; i <= numOfTotalPage; i += 1) {
-    pageIndex.push(i);
-  }
+  const makeIndexArray = (maxIndex: number) => {
+    const a = Array<number>(maxIndex);
+    let b = 0;
+
+    while (b <= maxIndex) {
+      a[b] = b;
+      b += 1;
+    }
+
+    return a;
+  };
 
   const leftButtonClicked = () => {
     if (pageListIndex > 0) {
@@ -83,8 +90,8 @@ export default function Pagination({ currentPage, numOfTotalPage, numOfPageToSho
         <ArrowButton theme={theme} onClick={() => leftButtonClicked()}>
           &lt;
         </ArrowButton>
-        {pageIndex
-          .slice(pageListIndex * numOfPageToShow, pageListIndex * numOfPageToShow + numOfPageToShow)
+        {makeIndexArray(numOfTotalPage)
+          .slice(pageListIndex * numOfPageToShow + 1, pageListIndex * numOfPageToShow + numOfPageToShow + 1)
           .map((index: number) =>
             index === currentPage ? (
               <SelectedPageButton theme={theme} key={index}>
