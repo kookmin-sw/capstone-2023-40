@@ -1,6 +1,5 @@
 package com.thesurvey.api.controller;
 
-import com.thesurvey.api.domain.User;
 import com.thesurvey.api.dto.UserDto;
 import com.thesurvey.api.service.UserService;
 import java.util.List;
@@ -22,9 +21,9 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> join(@RequestBody User user) {
-        userService.join(user);
-        return ResponseEntity.ok(user);
+    public ResponseEntity<String> join(@RequestBody UserDto userDto) {
+        userService.join(userDto);
+        return ResponseEntity.ok().body("Success sign up");
     }
     @GetMapping
     public ResponseEntity<List<UserDto>> getAllUsersWithAnsweredQuestions(){

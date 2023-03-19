@@ -19,23 +19,27 @@ public class UserService {
 
     public UserDto getUserByName(String name) {
         Optional<User> targetUser = userRepository.findByName(name);
-        UserDto targetUserDto = new UserDto(targetUser.get());
+        UserDto targetUserDto = UserDto.builder().name(targetUser.get().getName()).build();
         return targetUserDto;
     }
+
     public UserDto getUserByEmail(String email) {
         Optional<User> targetUser = userRepository.findByEmail(email);
         UserDto targetUserDto = new UserDto(targetUser.get());
         return targetUserDto;
     }
-    public User join(User user) {
-        return userRepository.save(user);
+
+    public User join(UserDto userDto) {
+        User newUser = userDto.toEntity();
+        return userRepository.save(newUser);
     }
-    public List<UserDto> getAllUsersWithAnsweredQuestion(){
+
+    public List<UserDto> getAllUsersWithAnsweredQuestion() {
         List<User> allUsersList = userRepository.findAll();
         List<UserDto> userDtoList = new ArrayList<>();
         for (User user : allUsersList) {
-            UserDto userDto = new UserDto(user);
-            userDtoList.add(userDto);
+            userDtoList.add(
+                new UserDto().builder().name(user.getName()).email(user.getEmail()).build());
         }
         return userDtoList;
     }
