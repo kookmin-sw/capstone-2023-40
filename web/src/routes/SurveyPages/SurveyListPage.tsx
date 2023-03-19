@@ -230,7 +230,6 @@ export default function SurveyListPage() {
   };
 
   useEffect(() => {
-    setIsFetch(false);
     fetchSurveyData();
     setIsFetch(true);
   }, [page]);
