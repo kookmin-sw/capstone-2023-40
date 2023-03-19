@@ -4,6 +4,7 @@ import com.thesurvey.api.domain.Survey;
 import com.thesurvey.api.service.SurveyService;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,7 +29,7 @@ public class SurveyController {
         return ResponseEntity.ok(surveyList);
     }
     @GetMapping("/{surveyId}")
-    public ResponseEntity<Optional<Survey>> getSurveyWithId(@PathVariable Long surveyId) {
+    public ResponseEntity<Optional<Survey>> getSurveyWithId(@PathVariable UUID surveyId) {
         Optional<Survey> survey = surveyService.getSurveyById(surveyId);
         return ResponseEntity.ok(survey);
     }
