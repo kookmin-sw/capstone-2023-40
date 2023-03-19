@@ -80,10 +80,21 @@ const HeadEndDate = styled(HeadItem)`
 `;
 
 interface SkeletonProps {
+  numOfSurveyRow: number;
   theme: DefaultTheme;
 }
-export default function SurveyListSkeleton({ theme }: SkeletonProps) {
-  const surveyIndex = [1, 2, 3, 4, 5, 6, 7, 8];
+export default function SurveyListSkeleton({ numOfSurveyRow, theme }: SkeletonProps) {
+  const makeIndexArray = (maxIndex: number) => {
+    const a = Array<number>(maxIndex);
+    let b = 0;
+
+    while (b < maxIndex) {
+      a[b] = b;
+      b += 1;
+    }
+
+    return a;
+  };
 
   return (
     <ListTable theme={theme}>
@@ -96,7 +107,7 @@ export default function SurveyListSkeleton({ theme }: SkeletonProps) {
       </ListHead>
 
       <ListBody>
-        {surveyIndex.map((index: number) => (
+        {makeIndexArray(numOfSurveyRow).map((index: number) => (
           <ListRow key={index} theme={theme}>
             <Title theme={theme} />
             <Authlist theme={theme} />
