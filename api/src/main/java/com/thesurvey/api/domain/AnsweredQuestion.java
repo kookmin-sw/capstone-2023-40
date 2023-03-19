@@ -1,5 +1,6 @@
 package com.thesurvey.api.domain;
 
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -27,14 +28,19 @@ public class AnsweredQuestion {
     @JoinColumn(name = "user_id")
     private User user;
     @ManyToOne
-    @JoinColumn(name = "survey_id")
-    private Survey survey;
-    @ManyToOne
     @JoinColumn(name = "question_id")
     private Question question;
+    @ManyToOne
+    @JoinColumn(name = "survey_id")
+    private Survey survey;
+    @Column(name = "short_answer", nullable = true)
+    private String shortAnswer;
+
     @Builder
-    public AnsweredQuestion(Long answeredQuestionId) {
+    public AnsweredQuestion(Long answeredQuestionId, Question question, String shortAnswer) {
         this.answeredQuestionId = answeredQuestionId;
+        this.question = question;
+        this.shortAnswer = shortAnswer;
     }
 
 }

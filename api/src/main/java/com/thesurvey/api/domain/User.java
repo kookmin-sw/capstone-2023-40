@@ -30,15 +30,16 @@ public class User {
     private String email;
     @Column(name = "name", nullable = false)
     private String name;
-    @OneToMany(mappedBy = "survey", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Participation> participations = new ArrayList<>();
-    @OneToMany(mappedBy = "answered_question", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user")
     private List<AnsweredQuestion> answeredQuestions = new ArrayList<>();
 
     @Builder
-    public User(String email, String name) {
+    public User(String email, String name, List<AnsweredQuestion> answeredQuestions) {
         this.email = email;
         this.name = name;
+        this.answeredQuestions = answeredQuestions;
     }
 
 

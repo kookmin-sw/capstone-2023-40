@@ -1,10 +1,8 @@
 package com.thesurvey.api.domain;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -34,9 +32,9 @@ public class Participation {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
     @Builder
-    public Participation(Long participationId, Timestamp participateDate) {
-        this.participationId = participationId;
+    public Participation(Timestamp participateDate) {
         this.participateDate = participateDate;
     }
 }
