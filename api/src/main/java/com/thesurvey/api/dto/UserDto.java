@@ -1,6 +1,7 @@
 package com.thesurvey.api.dto;
 
 import com.thesurvey.api.domain.AnsweredQuestion;
+import com.thesurvey.api.domain.Participation;
 import com.thesurvey.api.domain.Role;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -23,5 +24,7 @@ public class UserDto {
     private Role role;
 
     private List<AnsweredQuestion> answeredQuestions;
+
+    private List<Participation> participations;
 
 }
