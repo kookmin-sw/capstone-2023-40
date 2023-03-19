@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "survey")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Survey {
+public class Survey extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
