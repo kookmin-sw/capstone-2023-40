@@ -12,10 +12,10 @@ public class SurveyMapper {
     public Optional<SurveyDto> toSurveyDto(Optional<Survey> survey) {
         return survey
             .map(value -> SurveyDto.builder()
-                .surveyId(value.getSurveyId())
-                .title(value.getTitle())
-                .description(value.getDescription())
-                .build());
+            .surveyId(value.getSurveyId())
+            .title(value.getTitle())
+            .description(value.getDescription())
+            .build());
     }
 
     public Survey toSurvey(SurveyDto surveyDto) {
