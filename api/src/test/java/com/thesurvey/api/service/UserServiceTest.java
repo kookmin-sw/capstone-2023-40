@@ -6,6 +6,9 @@ import com.thesurvey.api.domain.User;
 import com.thesurvey.api.dto.UserDto;
 import com.thesurvey.api.repository.UserRepository;
 import com.thesurvey.api.service.mapper.UserMapper;
+import com.thesurvey.api.domain.User;
+import com.thesurvey.api.dto.UserDto;
+import com.thesurvey.api.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,11 +17,13 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 @Transactional
 public class UserServiceTest {
-//
+
+    //
     @Autowired
     UserRepository userRepository;
     @Autowired
     UserService userService;
+
     @Autowired
     SurveyService surveyService;
     @Autowired
@@ -29,7 +34,8 @@ public class UserServiceTest {
 
     String phoneNumber = "010-1234-1234";
     Role role = Role.USER;
-    UserDto userDto = UserDto.builder().name(name).email(email).role(role).phoneNumber(phoneNumber).password(password).build();
+    UserDto userDto = UserDto.builder().name(name).email(email).role(role).phoneNumber(phoneNumber)
+        .password(password).build();
 
     @Test
     void testJoin() {
