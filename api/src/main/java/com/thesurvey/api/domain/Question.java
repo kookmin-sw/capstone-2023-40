@@ -29,9 +29,11 @@ public class Question {
     @ManyToOne
     @JoinColumn(name = "survey_id")
     private Survey survey;
-    @Builder
-    public Question(String description) {
-        this.description = description;
-    }
 
+    @Builder
+    public Question(Long questionId, String description, Survey survey) {
+        this.questionId = questionId;
+        this.description = description;
+        this.survey = survey;
+    }
 }

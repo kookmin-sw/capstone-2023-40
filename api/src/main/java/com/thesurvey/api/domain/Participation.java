@@ -34,7 +34,10 @@ public class Participation {
     private User user;
 
     @Builder
-    public Participation(Timestamp participateDate) {
+    public Participation(Long participationId, Timestamp participateDate, Survey survey, User user) {
+        this.participationId = participationId;
         this.participateDate = participateDate;
+        this.survey = survey;
+        this.user = user;
     }
 }

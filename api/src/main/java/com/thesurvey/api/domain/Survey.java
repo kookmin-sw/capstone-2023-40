@@ -39,10 +39,12 @@ public class Survey {
     private List<Participation> participations = new ArrayList<>();
 
     @Builder
-    public Survey(String title, List<Question> questions, Timestamp createdDate) {
+    public Survey(Long surveyId, String title, List<Question> questions, Timestamp createdDate, List<Participation> participations) {
+        this.surveyId = surveyId;
         this.title = title;
         this.questions = questions;
         this.createdDate = createdDate;
+        this.participations = participations;
     }
 
 }

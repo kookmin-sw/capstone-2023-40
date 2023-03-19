@@ -36,11 +36,13 @@ public class User {
     private List<AnsweredQuestion> answeredQuestions = new ArrayList<>();
 
     @Builder
-    public User(String email, String name, List<AnsweredQuestion> answeredQuestions) {
+    public User(Long userId, String email, String name, List<Participation> participations,
+        List<AnsweredQuestion> answeredQuestions) {
+        this.userId = userId;
         this.email = email;
         this.name = name;
+        this.participations = participations;
         this.answeredQuestions = answeredQuestions;
     }
-
 
 }

@@ -37,8 +37,10 @@ public class AnsweredQuestion {
     private String shortAnswer;
 
     @Builder
-    public AnsweredQuestion(Long answeredQuestionId, Question question, String shortAnswer) {
+    public AnsweredQuestion(Long answeredQuestionId, User user, Survey survey, Question question, String shortAnswer) {
         this.answeredQuestionId = answeredQuestionId;
+        this.user = user;
+        this.survey = survey;
         this.question = question;
         this.shortAnswer = shortAnswer;
     }
