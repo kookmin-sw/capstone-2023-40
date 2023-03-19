@@ -62,10 +62,10 @@ export default function Pagination({ currentPage, numOfTotalPage, numOfPageToSho
 
   const makeIndexArray = (maxIndex: number) => {
     const a = Array<number>(maxIndex);
-    let b = 0;
+    let b = 1;
 
     while (b <= maxIndex) {
-      a[b] = b;
+      a[b - 1] = b;
       b += 1;
     }
 
@@ -91,7 +91,7 @@ export default function Pagination({ currentPage, numOfTotalPage, numOfPageToSho
           &lt;
         </ArrowButton>
         {makeIndexArray(numOfTotalPage)
-          .slice(pageListIndex * numOfPageToShow + 1, pageListIndex * numOfPageToShow + numOfPageToShow + 1)
+          .slice(pageListIndex * numOfPageToShow, pageListIndex * numOfPageToShow + numOfPageToShow)
           .map((index: number) =>
             index === currentPage ? (
               <SelectedPageButton theme={theme} key={index}>

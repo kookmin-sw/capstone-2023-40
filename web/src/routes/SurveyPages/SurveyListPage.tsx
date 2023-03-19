@@ -289,7 +289,7 @@ export default function SurveyListPage() {
   return (
     <Container theme={theme}>
       <Header theme={theme} toggleTheme={toggleTheme} />
-      <SurveyListSkeleton theme={theme} />
+      <SurveyListSkeleton numOfSurveyRow={8} theme={theme} />
       <Pagination currentPage={page} numOfTotalPage={13} numOfPageToShow={4} setPage={setPage} theme={theme} />
     </Container>
   );
