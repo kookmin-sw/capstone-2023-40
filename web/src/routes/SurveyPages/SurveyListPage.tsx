@@ -180,7 +180,7 @@ const Button = styled.button`
   } 
 `;
 
-interface Survey {
+interface SurveyItem {
   survey_id: string;
   author: number;
   title: string;
@@ -192,16 +192,16 @@ interface Survey {
 
 export default function SurveyListPage() {
   const [theme, toggleTheme] = useTheme();
-  const [surveys, setSurveys] = useState<Survey[]>([]);
+  const [surveys, setSurveys] = useState<SurveyItem[]>([]);
   const [page, setPage] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [abortController, setAbortController] = useState<AbortController>(new AbortController());
   const navigate = useNavigate();
 
-  const fetchSurveyData = async (abortSignal: AbortSignal): Promise<void> => {
+  const fetchSurveyList = async (abortSignal: AbortSignal): Promise<void> => {
     setIsLoading(true);
     try {
-      const request: AxiosResponse<Survey[]> = await axios.get<Survey[]>(requests.fetchSurveyListPage + page, {
+      const request: AxiosResponse<SurveyItem[]> = await axios.get<SurveyItem[]>(requests.fetchSurveyListPage + page, {
         signal: abortSignal,
       });
       setSurveys(request.data);
@@ -241,7 +241,7 @@ export default function SurveyListPage() {
     const controller = new AbortController();
     const { signal } = controller;
     setAbortController(controller);
-    fetchSurveyData(signal);
+    fetchSurveyList(signal);
   }, [page]);
 
   // After get data from api server
