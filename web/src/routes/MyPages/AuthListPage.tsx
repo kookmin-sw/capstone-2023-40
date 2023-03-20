@@ -219,46 +219,62 @@ export default function MyPage() {
           <AuthListTitle theme={theme}>마이페이지 &gt; 인증정보 목록 </AuthListTitle>
           <ContainerBox theme={theme} onClick={() => navigate('../mypage/auth-list')} disabled={state.kakao}>
             <KakaoTalk type="submit" theme={theme} />
-            {state.kakao ? (
+            {!state.kakao ? (
               <BeforeText theme={theme}>카카오 본인인증 바로가기</BeforeText>
             ) : (
               <AfterText theme={theme}>카카오 본인인증 완료</AfterText>
             )}
-            {state.kakao ? <ArrowImage /> : <CheckImage />}
+            {!state.kakao ? <ArrowImage /> : <CheckImage />}
           </ContainerBox>
 
-          <ContainerBox theme={theme} onClick={() => navigate('../mypage/auth-list')}>
+          <ContainerBox theme={theme} onClick={() => navigate('../mypage/auth-list')} disabled={state.naver}>
             <NaverImage type="submit" theme={theme} />
-            {state.naver ? (
+            {!state.naver ? (
               <BeforeText theme={theme}>네이버 본인인증 바로가기</BeforeText>
             ) : (
               <AfterText theme={theme}>네이버 본인인증 완료</AfterText>
             )}
-            {state.naver ? <ArrowImage /> : <CheckImage />}
+            {!state.naver ? <ArrowImage /> : <CheckImage />}
           </ContainerBox>
 
-          <ContainerBox theme={theme} onClick={() => navigate('../mypage/auth-list')}>
+          <ContainerBox theme={theme} onClick={() => navigate('../mypage/auth-list')} disabled={state.google}>
             <GoogleImage type="submit" theme={theme} />
-            <BeforeText theme={theme}>구글 본인인증 바로가기</BeforeText>
-            <ArrowImage theme={theme} />
+            {!state.google ? (
+              <BeforeText theme={theme}>구글 본인인증 바로가기</BeforeText>
+            ) : (
+              <AfterText theme={theme}>구글 본인인증 완료</AfterText>
+            )}
+            {!state.google ? <ArrowImage /> : <CheckImage />}
           </ContainerBox>
 
-          <ContainerBox theme={theme} onClick={() => navigate('../mypage/auth-list')}>
+          <ContainerBox theme={theme} onClick={() => navigate('../mypage/auth-list')} disabled={state.identityCard}>
             <IdCardImage type="submit" theme={theme} />
-            <BeforeText theme={theme}>신분증 본인인증 바로가기</BeforeText>
-            <ArrowImage theme={theme} />
+            {!state.identityCard ? (
+              <BeforeText theme={theme}>신분증 본인인증 바로가기</BeforeText>
+            ) : (
+              <AfterText theme={theme}>신분증 본인인증 완료</AfterText>
+            )}
+            {!state.identityCard ? <ArrowImage /> : <CheckImage />}
           </ContainerBox>
 
-          <ContainerBox theme={theme} onClick={() => navigate('../mypage/auth-list')}>
+          <ContainerBox theme={theme} onClick={() => navigate('../mypage/auth-list')} disabled={state.driverCard}>
             <DriverCardImage type="submit" theme={theme} />
-            <BeforeText theme={theme}>운전면허 본인인증 바로가기</BeforeText>
-            <ArrowImage theme={theme} />
+            {!state.driverCard ? (
+              <BeforeText theme={theme}>운전면허 본인인증 바로가기</BeforeText>
+            ) : (
+              <AfterText theme={theme}>운전면허 본인인증 완료</AfterText>
+            )}
+            {!state.driverCard ? <ArrowImage /> : <CheckImage />}
           </ContainerBox>
 
-          <ContainerBox theme={theme} onClick={() => navigate('../mypage/auth-list')}>
+          <ContainerBox theme={theme} onClick={() => navigate('../mypage/auth-list')} disabled={state.schoolMail}>
             <SchoolImage type="submit" theme={theme} />
-            <BeforeText theme={theme}>학교 웹메일 본인인증 바로가기</BeforeText>
-            <ArrowImage theme={theme} />
+            {!state.schoolMail ? (
+              <BeforeText theme={theme}>학교 웹메일 본인인증 바로가기</BeforeText>
+            ) : (
+              <AfterText theme={theme}>학교 웹메일 본인인증 완료</AfterText>
+            )}
+            {!state.schoolMail ? <ArrowImage /> : <CheckImage />}
           </ContainerBox>
         </Form>
       </AuthListContainer>
