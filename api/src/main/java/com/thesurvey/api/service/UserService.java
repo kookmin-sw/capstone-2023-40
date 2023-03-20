@@ -3,6 +3,8 @@ package com.thesurvey.api.service;
 import com.thesurvey.api.domain.User;
 import com.thesurvey.api.dto.UserDto;
 import com.thesurvey.api.dto.UserInfoDto;
+import com.thesurvey.api.exception.ErrorMessage;
+import com.thesurvey.api.exception.NotFoundException;
 import com.thesurvey.api.repository.UserRepository;
 import com.thesurvey.api.service.mapper.UserMapper;
 import java.util.ArrayList;
@@ -25,15 +27,13 @@ public class UserService {
     }
 
     public UserInfoDto getUserByName(String name) {
-        // FIXME: exception handling
         return userMapper.toUserInfoDto(userRepository.findByName(name))
-            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            .orElseThrow(() -> new NotFoundException(ErrorMessage.USER_NAME_NOT_FOUND, name));
     }
 
     public UserInfoDto getUserByEmail(String email) {
-        // FIXME: exception handling
         return userMapper.toUserInfoDto(userRepository.findByEmail(email))
-            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            .orElseThrow(() -> new NotFoundException(ErrorMessage.USER_EMAIL_NOT_FOUND, email));
     }
 
     @Transactional
