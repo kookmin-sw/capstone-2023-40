@@ -4,7 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { ReactComponent as Arrow } from '../../assets/svg/arrow.svg';
+import { ReactComponent as Driver } from '../../assets/svg/DriverLicense.svg';
+import { ReactComponent as Google } from '../../assets/svg/Google.svg';
+import { ReactComponent as IdCard } from '../../assets/svg/IDCard.svg';
 import { ReactComponent as Kakao } from '../../assets/svg/KakaoTalk_logo.svg';
+import { ReactComponent as Naver } from '../../assets/svg/naver.svg';
+import { ReactComponent as School } from '../../assets/svg/School.svg';
 import Header from '../../components/Header';
 import { useTheme } from '../../hooks/useTheme';
 
@@ -12,32 +17,77 @@ const KakaoTalk = styled(Kakao).attrs({
   width: 30,
   height: 30,
 })`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
   width: 30px;
   height: 100%;
   padding: 1.5vh;
   margin-left: 1vh;
   border-radius: 30px;
-  cursor: pointer;
+`;
+
+const NaverImage = styled(Naver).attrs({
+  width: 30,
+  height: 30,
+})`
+  width: 30px;
+  height: 100%;
+  padding: 1.5vh;
+  margin-left: 1vh;
+  border-radius: 30px;
+`;
+
+const GoogleImage = styled(Google).attrs({
+  width: 30,
+  height: 30,
+})`
+  width: 30px;
+  height: 100%;
+  padding: 1.5vh;
+  margin-left: 1vh;
+  border-radius: 30px;
+`;
+
+const IdCardImage = styled(IdCard).attrs({
+  width: 30,
+  height: 30,
+})`
+  width: 30px;
+  height: 100%;
+  padding: 1.5vh;
+  margin-left: 1vh;
+  border-radius: 20px;
+`;
+
+const DriverCardImage = styled(Driver).attrs({
+  width: 30,
+  height: 30,
+})`
+  width: 30px;
+  height: 100%;
+  padding: 1.5vh;
+  margin-left: 1vh;
+  border-radius: 20px;
+`;
+
+const SchoolImage = styled(School).attrs({
+  width: 30,
+  height: 30,
+})`
+  width: 30px;
+  height: 100%;
+  padding: 1.5vh;
+  margin-left: 1vh;
+  border-radius: 30px;
 `;
 
 const ArrowImage = styled(Arrow).attrs({
   width: 30,
   height: 30,
 })`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
   width: 30px;
   height: 100%;
   padding: 1.5vh;
   margin-left: 1vh;
   border-radius: 30px;
-  cursor: pointer;
 `;
 
 const Container = styled.div`
@@ -64,6 +114,8 @@ const ContainerBox = styled.div`
   width: fit-content;
   margin-bottom: 1vh;
   border-radius: 30px;
+  cursor: pointer;
+
   &:hover {
     background-color: ${(props) => props.theme.colors.background};
   }
@@ -162,31 +214,31 @@ export default function MyPage() {
           </ContainerBox>
 
           <ContainerBox onClick={() => navigate('../mypage/auth-list')}>
-            <KakaoTalk type="submit" theme={theme} />
+            <NaverImage type="submit" theme={theme} />
             <FontText theme={theme}>네이버 본인인증 바로가기</FontText>
             <ArrowImage theme={theme} />
           </ContainerBox>
 
           <ContainerBox onClick={() => navigate('../mypage/auth-list')}>
-            <KakaoTalk type="submit" theme={theme} />
+            <GoogleImage type="submit" theme={theme} />
             <FontText theme={theme}>구글 본인인증 바로가기</FontText>
             <ArrowImage theme={theme} />
           </ContainerBox>
 
           <ContainerBox onClick={() => navigate('../mypage/auth-list')}>
-            <KakaoTalk type="submit" theme={theme} />
+            <IdCardImage type="submit" theme={theme} />
             <FontText theme={theme}>신분증 본인인증 바로가기</FontText>
             <ArrowImage theme={theme} />
           </ContainerBox>
 
           <ContainerBox onClick={() => navigate('../mypage/auth-list')}>
-            <KakaoTalk type="submit" theme={theme} />
+            <DriverCardImage type="submit" theme={theme} />
             <FontText theme={theme}>운전면허 본인인증 바로가기</FontText>
             <ArrowImage theme={theme} />
           </ContainerBox>
 
           <ContainerBox onClick={() => navigate('../mypage/auth-list')}>
-            <KakaoTalk type="submit" theme={theme} />
+            <SchoolImage type="submit" theme={theme} />
             <FontText theme={theme}>학교 웹메일 본인인증 바로가기</FontText>
             <ArrowImage theme={theme} />
           </ContainerBox>
