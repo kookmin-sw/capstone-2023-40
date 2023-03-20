@@ -84,16 +84,16 @@ interface SkeletonProps {
   theme: DefaultTheme;
 }
 export default function SurveyListSkeleton({ numOfSurveyRow, theme }: SkeletonProps) {
-  const makeIndexArray = (maxIndex: number) => {
-    const a = Array<number>(maxIndex);
-    let b = 0;
+  const makeZeroBaseArray = (length: number) => {
+    const arr: Array<number> = Array<number>(length);
+    let counter = 0;
 
-    while (b < maxIndex) {
-      a[b] = b;
-      b += 1;
+    while (counter < length) {
+      arr[counter] = counter;
+      counter += 1;
     }
 
-    return a;
+    return arr;
   };
 
   return (
@@ -107,7 +107,7 @@ export default function SurveyListSkeleton({ numOfSurveyRow, theme }: SkeletonPr
       </ListHead>
 
       <ListBody>
-        {makeIndexArray(numOfSurveyRow).map((index: number) => (
+        {makeZeroBaseArray(numOfSurveyRow).map((index: number) => (
           <ListRow key={index} theme={theme}>
             <Title theme={theme} />
             <Authlist theme={theme} />

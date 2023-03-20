@@ -60,16 +60,16 @@ export default function Pagination({ currentPage, numOfTotalPage, numOfPageToSho
   const [pageListIndex, setPageListIndex] = useState<number>(Math.floor((currentPage - 1) / numOfPageToShow));
   const pageListLength = Math.floor(numOfTotalPage / numOfPageToShow);
 
-  const makeIndexArray = (maxIndex: number) => {
-    const a = Array<number>(maxIndex);
-    let b = 1;
+  const makeOneBaseArray = (length: number) => {
+    const arr: Array<number> = Array<number>(length);
+    let counter = 1;
 
-    while (b <= maxIndex) {
-      a[b - 1] = b;
-      b += 1;
+    while (counter <= length) {
+      arr[counter - 1] = counter;
+      counter += 1;
     }
 
-    return a;
+    return arr;
   };
 
   const leftButtonClicked = () => {
@@ -90,7 +90,7 @@ export default function Pagination({ currentPage, numOfTotalPage, numOfPageToSho
         <ArrowButton theme={theme} onClick={() => leftButtonClicked()}>
           &lt;
         </ArrowButton>
-        {makeIndexArray(numOfTotalPage)
+        {makeOneBaseArray(numOfTotalPage)
           .slice(pageListIndex * numOfPageToShow, pageListIndex * numOfPageToShow + numOfPageToShow)
           .map((index: number) =>
             index === currentPage ? (
