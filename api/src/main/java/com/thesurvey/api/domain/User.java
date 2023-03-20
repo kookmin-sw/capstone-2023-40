@@ -1,14 +1,17 @@
 package com.thesurvey.api.domain;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -48,12 +51,14 @@ public class User extends BaseTimeEntity implements UserDetails {
     private String profileImage;
 
     @Builder
-    public User(String email, String name, Role role, String password, String phoneNumber) {
+    public User(String email, String name, Role role, String password, String phoneNumber, String address, String profileImage) {
         this.email = email;
         this.name = name;
         this.role = role;
         this.password = password;
         this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.profileImage = profileImage;
     }
 
     @Enumerated(EnumType.STRING)
@@ -93,5 +98,4 @@ public class User extends BaseTimeEntity implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
 }

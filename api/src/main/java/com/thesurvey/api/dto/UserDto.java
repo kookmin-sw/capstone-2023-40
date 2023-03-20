@@ -4,6 +4,7 @@ import com.thesurvey.api.domain.AnsweredQuestion;
 import com.thesurvey.api.domain.Participation;
 import com.thesurvey.api.domain.Role;
 import java.util.List;
+import javax.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,8 +24,10 @@ public class UserDto {
 
     private Role role;
 
-    private List<AnsweredQuestion> answeredQuestions;
+    private String phoneNumber;
 
-    private List<Participation> participations;
+    private String address;
+
+    private String profileImage;
 
 }

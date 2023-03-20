@@ -19,6 +19,9 @@ public class UserMapper {
             .email(userDto.getEmail())
             .password(userDto.getPassword())
             .role(userDto.getRole())
+            .phoneNumber(userDto.getPhoneNumber())
+            .address(userDto.getAddress())
+            .profileImage(userDto.getProfileImage())
             .build();
     }
 
@@ -28,6 +31,10 @@ public class UserMapper {
             .name(user.getName())
             .email(user.getEmail())
             .role(user.getRole())
+            .address(user.getAddress())
+            .profileImage(user.getProfileImage())
+            .phoneNumber(user.getPhoneNumber())
+            .password(user.getPassword())
             .build();
     }
 
