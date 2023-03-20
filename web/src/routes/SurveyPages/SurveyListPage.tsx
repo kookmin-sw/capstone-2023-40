@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { AxiosResponse } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -195,19 +195,24 @@ export default function SurveyListPage() {
   const [surveys, setSurveys] = useState<Survey[]>([]);
   const [page, setPage] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isFetch, setIsFetch] = useState<boolean>(false);
+  const [abortController, setAbortController] = useState<AbortController>(new AbortController());
   const navigate = useNavigate();
 
-  const fetchSurveyData = async (): Promise<void> => {
+  const fetchSurveyData = async (abortSignal: AbortSignal): Promise<void> => {
     setIsLoading(true);
-    // TODO: More detailed error handling is needed.
     try {
-      const request: AxiosResponse<Survey[]> = await axios.get<Survey[]>(requests.fetchSurveyListPage + page);
+      const request: AxiosResponse<Survey[]> = await axios.get<Survey[]>(requests.fetchSurveyListPage + page, {
+        signal: abortSignal,
+      });
       setSurveys(request.data);
-    } catch {
-      setSurveys([]);
+      setIsLoading(false);
+    } catch (error) {
+      const { name } = error as unknown as AxiosError;
+      if (name !== 'CanceledError') {
+        setSurveys([]);
+        setIsLoading(false);
+      }
     }
-    setIsLoading(false);
   };
 
   const makeAuthLabel = (auth: string) => {
@@ -230,12 +235,17 @@ export default function SurveyListPage() {
   };
 
   useEffect(() => {
-    fetchSurveyData();
-    setIsFetch(true);
+    if (isLoading) {
+      abortController.abort();
+    }
+    const controller = new AbortController();
+    const { signal } = controller;
+    setAbortController(controller);
+    fetchSurveyData(signal);
   }, [page]);
 
   // After get data from api server
-  if (!isLoading && isFetch) {
+  if (!isLoading) {
     if (surveys.length === 0) {
       return (
         <Container theme={theme}>
