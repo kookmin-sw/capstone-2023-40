@@ -26,7 +26,7 @@ const Item = styled.td`
   font-size: 1.7vh;
   font-weight: bold;
   border-radius: 5px;
-  background-color: ${(props) => props.theme.colors.header};
+  background-color: ${(props) => props.theme.colors.background};
 `;
 
 const HeadItem = styled.th`
