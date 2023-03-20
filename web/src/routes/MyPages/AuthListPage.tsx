@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { ReactComponent as Arrow } from '../../assets/svg/arrow.svg';
+import { ReactComponent as Check } from '../../assets/svg/CheckIcon.svg';
 import { ReactComponent as Driver } from '../../assets/svg/DriverLicense.svg';
 import { ReactComponent as Google } from '../../assets/svg/Google.svg';
 import { ReactComponent as IdCard } from '../../assets/svg/IDCard.svg';
@@ -17,8 +18,6 @@ const KakaoTalk = styled(Kakao).attrs({
   width: 30,
   height: 30,
 })`
-  width: 30px;
-  height: 100%;
   padding: 1.5vh;
   margin-left: 1vh;
   border-radius: 30px;
@@ -28,8 +27,6 @@ const NaverImage = styled(Naver).attrs({
   width: 30,
   height: 30,
 })`
-  width: 30px;
-  height: 100%;
   padding: 1.5vh;
   margin-left: 1vh;
   border-radius: 30px;
@@ -39,8 +36,6 @@ const GoogleImage = styled(Google).attrs({
   width: 30,
   height: 30,
 })`
-  width: 30px;
-  height: 100%;
   padding: 1.5vh;
   margin-left: 1vh;
   border-radius: 30px;
@@ -50,8 +45,6 @@ const IdCardImage = styled(IdCard).attrs({
   width: 30,
   height: 30,
 })`
-  width: 30px;
-  height: 100%;
   padding: 1.5vh;
   margin-left: 1vh;
   border-radius: 20px;
@@ -61,8 +54,6 @@ const DriverCardImage = styled(Driver).attrs({
   width: 30,
   height: 30,
 })`
-  width: 30px;
-  height: 100%;
   padding: 1.5vh;
   margin-left: 1vh;
   border-radius: 20px;
@@ -72,8 +63,6 @@ const SchoolImage = styled(School).attrs({
   width: 30,
   height: 30,
 })`
-  width: 30px;
-  height: 100%;
   padding: 1.5vh;
   margin-left: 1vh;
   border-radius: 30px;
@@ -83,8 +72,15 @@ const ArrowImage = styled(Arrow).attrs({
   width: 30,
   height: 30,
 })`
-  width: 30px;
-  height: 100%;
+  padding: 1.5vh;
+  margin-left: 1vh;
+  border-radius: 30px;
+`;
+
+const CheckImage = styled(Check).attrs({
+  width: 30,
+  height: 30,
+})`
   padding: 1.5vh;
   margin-left: 1vh;
   border-radius: 30px;
@@ -106,18 +102,21 @@ const AuthListContainer = styled.div`
   background-color: ${(props) => props.theme.colors.container};
 `;
 
-const ContainerBox = styled.div`
+const ContainerBox = styled.button`
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: left;
   width: fit-content;
   margin-bottom: 1vh;
+  border: none;
   border-radius: 30px;
   cursor: pointer;
+  background-color: ${(props) => props.theme.colors.container};
 
   &:hover {
-    background-color: ${(props) => props.theme.colors.background};
+    background-color: ${(props) => (!props.disabled ? props.theme.colors.background : props.theme.colors.container)};
+    cursor: ${(props) => (!props.disabled ? 'pointer' : 'auto')};
   }
 `;
 
@@ -134,7 +133,7 @@ const AuthListTitle = styled.span`
   color: ${(props) => props.theme.colors.default};
 `;
 
-const FontText = styled.span`
+const BeforeText = styled.span`
   text-align: left;
   font-size: calc(1vh + 1.4vmin);
   font-weight: 900;
@@ -142,6 +141,16 @@ const FontText = styled.span`
   max-width: 40vw;
   width: fit-content;
   color: ${(props) => props.theme.colors.default};
+`;
+
+const AfterText = styled.span`
+  text-align: left;
+  font-size: calc(1vh + 1.4vmin);
+  font-weight: 900;
+  min-width: 80px;
+  max-width: 40vw;
+  width: fit-content;
+  color: ${(props) => props.theme.colors.btnhover};
 `;
 
 type State = {
@@ -161,10 +170,11 @@ type Action =
   | { type: 'AUTH_DRIVER'; payload: boolean }
   | { type: 'AUTH_SCHOOLMAIL'; payload: boolean };
 
+// test
 const initalState = {
-  kakao: false,
+  kakao: true,
   naver: false,
-  google: false,
+  google: true,
   identityCard: false,
   driverCard: false,
   schoolMail: false,
@@ -207,39 +217,47 @@ export default function MyPage() {
       <AuthListContainer theme={theme}>
         <Form onSubmit={handleSubmit}>
           <AuthListTitle theme={theme}>마이페이지 &gt; 인증정보 목록 </AuthListTitle>
-          <ContainerBox onClick={() => navigate('../mypage/auth-list')}>
+          <ContainerBox theme={theme} onClick={() => navigate('../mypage/auth-list')} disabled={state.kakao}>
             <KakaoTalk type="submit" theme={theme} />
-            <FontText theme={theme}>카카오 본인인증 바로가기</FontText>
-            <ArrowImage theme={theme} />
+            {state.kakao ? (
+              <BeforeText theme={theme}>카카오 본인인증 바로가기</BeforeText>
+            ) : (
+              <AfterText theme={theme}>카카오 본인인증 완료</AfterText>
+            )}
+            {state.kakao ? <ArrowImage /> : <CheckImage />}
           </ContainerBox>
 
-          <ContainerBox onClick={() => navigate('../mypage/auth-list')}>
+          <ContainerBox theme={theme} onClick={() => navigate('../mypage/auth-list')}>
             <NaverImage type="submit" theme={theme} />
-            <FontText theme={theme}>네이버 본인인증 바로가기</FontText>
-            <ArrowImage theme={theme} />
+            {state.naver ? (
+              <BeforeText theme={theme}>네이버 본인인증 바로가기</BeforeText>
+            ) : (
+              <AfterText theme={theme}>네이버 본인인증 완료</AfterText>
+            )}
+            {state.naver ? <ArrowImage /> : <CheckImage />}
           </ContainerBox>
 
-          <ContainerBox onClick={() => navigate('../mypage/auth-list')}>
+          <ContainerBox theme={theme} onClick={() => navigate('../mypage/auth-list')}>
             <GoogleImage type="submit" theme={theme} />
-            <FontText theme={theme}>구글 본인인증 바로가기</FontText>
+            <BeforeText theme={theme}>구글 본인인증 바로가기</BeforeText>
             <ArrowImage theme={theme} />
           </ContainerBox>
 
-          <ContainerBox onClick={() => navigate('../mypage/auth-list')}>
+          <ContainerBox theme={theme} onClick={() => navigate('../mypage/auth-list')}>
             <IdCardImage type="submit" theme={theme} />
-            <FontText theme={theme}>신분증 본인인증 바로가기</FontText>
+            <BeforeText theme={theme}>신분증 본인인증 바로가기</BeforeText>
             <ArrowImage theme={theme} />
           </ContainerBox>
 
-          <ContainerBox onClick={() => navigate('../mypage/auth-list')}>
+          <ContainerBox theme={theme} onClick={() => navigate('../mypage/auth-list')}>
             <DriverCardImage type="submit" theme={theme} />
-            <FontText theme={theme}>운전면허 본인인증 바로가기</FontText>
+            <BeforeText theme={theme}>운전면허 본인인증 바로가기</BeforeText>
             <ArrowImage theme={theme} />
           </ContainerBox>
 
-          <ContainerBox onClick={() => navigate('../mypage/auth-list')}>
+          <ContainerBox theme={theme} onClick={() => navigate('../mypage/auth-list')}>
             <SchoolImage type="submit" theme={theme} />
-            <FontText theme={theme}>학교 웹메일 본인인증 바로가기</FontText>
+            <BeforeText theme={theme}>학교 웹메일 본인인증 바로가기</BeforeText>
             <ArrowImage theme={theme} />
           </ContainerBox>
         </Form>
