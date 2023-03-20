@@ -1,17 +1,14 @@
 package com.thesurvey.api.domain;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -32,28 +29,31 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Column(name = "user_id")
     private Long userId;
 
+    @Column(name = "name", nullable = false)
+    private String name;
+
     @Column(name = "email", nullable = false)
     private String email;
 
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "name", nullable = false)
-    private String name;
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<Participation> participations = new ArrayList<>();
-    @OneToMany(mappedBy = "user")
-    private List<AnsweredQuestion> answeredQuestions = new ArrayList<>();
+    @Column(name = "phone_number", nullable = false)
+    private String phoneNumber;
 
+    @Column(name = "address", nullable = true)
+    private String address;
+
+    @Column(name = "profile_image", nullable = true)
+    private String profileImage;
 
     @Builder
-    public User(String email, String name, Role role, String password,
-        List<AnsweredQuestion> answeredQuestions) {
+    public User(String email, String name, Role role, String password, String phoneNumber) {
         this.email = email;
         this.name = name;
         this.role = role;
         this.password = password;
-        this.answeredQuestions = answeredQuestions;
+        this.phoneNumber = phoneNumber;
     }
 
     @Enumerated(EnumType.STRING)
@@ -93,4 +93,5 @@ public class User extends BaseTimeEntity implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 }
