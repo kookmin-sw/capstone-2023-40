@@ -2,6 +2,8 @@ import React from 'react';
 
 import styled, { DefaultTheme } from 'styled-components';
 
+import { NumberUtils } from '../../utils/NumberUtils';
+
 const ListTable = styled.table`
   display: flex;
   flex-direction: column;
@@ -83,19 +85,8 @@ interface SkeletonProps {
   numOfSurveyRow: number;
   theme: DefaultTheme;
 }
+
 export default function SurveyListSkeleton({ numOfSurveyRow, theme }: SkeletonProps) {
-  const makeZeroBaseArray = (length: number) => {
-    const arr: Array<number> = Array<number>(length);
-    let counter = 0;
-
-    while (counter < length) {
-      arr[counter] = counter;
-      counter += 1;
-    }
-
-    return arr;
-  };
-
   return (
     <ListTable theme={theme}>
       <ListHead>
@@ -105,9 +96,8 @@ export default function SurveyListSkeleton({ numOfSurveyRow, theme }: SkeletonPr
           <HeadEndDate theme={theme}>설문 종료일</HeadEndDate>
         </ListRow>
       </ListHead>
-
       <ListBody>
-        {makeZeroBaseArray(numOfSurveyRow).map((index: number) => (
+        {NumberUtils.range(numOfSurveyRow).map((index: number) => (
           <ListRow key={index} theme={theme}>
             <Title theme={theme} />
             <Authlist theme={theme} />
