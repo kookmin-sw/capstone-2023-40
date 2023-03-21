@@ -4,21 +4,16 @@ import java.io.Serializable;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import lombok.Getter;
 
 @Embeddable
 @Getter
 public class QuestionId implements Serializable {
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "survey_id")
-    private Survey survey;
+    @Column(name = "survey_id")
+    private UUID survey_id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "question_bank_id", insertable = false, updatable = false)
-    private QuestionBank questionBank;
+    @Column (name = "question_bank_id")
+    private Long questionBank;
 
 }

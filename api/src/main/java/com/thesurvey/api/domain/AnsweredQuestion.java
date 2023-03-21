@@ -3,10 +3,6 @@ package com.thesurvey.api.domain;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -19,9 +15,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AnsweredQuestion {
 
-    @Id
-    @Column(name = "answered_question_id")
-    private Long answeredQuestionId;
+    @EmbeddedId
+    private AnsweredQuestionId answeredQuestionId;
 
     @Column(name = "single_choice", nullable = true)
     private Integer singleChoice;
@@ -39,31 +34,16 @@ public class AnsweredQuestion {
     @Column(name = "type", nullable = false)
     private String type;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "question_bank_id")
-    private QuestionBank questionBank;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "question_id")
-    private Question question;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "survey_id")
-    private Survey survey;
-
     @Builder
-    public AnsweredQuestion(Long answeredQuestionId, User user, Survey survey,
-        Question question,
-        String shortAnswer) {
+    public AnsweredQuestion(AnsweredQuestionId answeredQuestionId, Integer singleChoice,
+        Integer multipleChoice,
+        String shortAnswer, String longAnswer, String type) {
         this.answeredQuestionId = answeredQuestionId;
-        this.user = user;
-        this.survey = survey;
-        this.question = question;
         this.shortAnswer = shortAnswer;
+        this.longAnswer = longAnswer;
+        this.singleChoice = singleChoice;
+        this.multipleChoice = multipleChoice;
+        this.type = type;
 
     }
 }
