@@ -14,6 +14,6 @@ public class QuestionId implements Serializable {
     private UUID survey_id;
 
     @Column (name = "question_bank_id")
-    private Long questionBank;
+    private Long questionBankId;
 
 }

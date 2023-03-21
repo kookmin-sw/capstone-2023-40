@@ -13,9 +13,9 @@ public class AnsweredQuestionId implements Serializable {
     @Column(name = "user_id")
     private Long userId;
 
-    @Column(name = "question_id")
-    private Long questionId;
+    @Column(name = "question_bank_id")
+    private Long questionBankId;
 
     @Column (name = "survey_id")
-    private UUID survey;
+    private UUID surveyId;
 }
