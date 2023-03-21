@@ -46,7 +46,7 @@ const ListBox = styled.div`
   align-items: center;
   border: ${(props) => props.theme.borderResultList};
   border-radius: ${(props) => props.theme.borderRadius};
-  box-shadow: 10px 10px 10px rgba(0, 0, 0, 1);
+  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.4);
   cursor: pointer;
 `;
 

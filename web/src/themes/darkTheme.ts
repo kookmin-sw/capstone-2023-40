@@ -5,7 +5,7 @@ export const darkTheme: DefaultTheme = {
   borderRadius: '16px',
   padding: '2vh',
   border: '3px solid #ebeff7',
-  borderResultList: '1px solid black',
+  borderResultList: '0px solid black',
   themeToggle: '2px solid #FFFFFF',
 
   colors: {
