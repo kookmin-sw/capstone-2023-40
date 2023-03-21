@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 
 import styled, { DefaultTheme } from 'styled-components';
 
+import { NumberUtils } from '../utils/NumberUtils';
+
 const PaginationContainer = styled.nav`
   text-align: center;
 `;
@@ -60,18 +62,6 @@ export default function Pagination({ currentPage, numOfTotalPage, numOfPageToSho
   const [pageListIndex, setPageListIndex] = useState<number>(Math.floor((currentPage - 1) / numOfPageToShow));
   const pageListLength = Math.floor(numOfTotalPage / numOfPageToShow);
 
-  const makeOneBaseArray = (length: number) => {
-    const arr: Array<number> = Array<number>(length);
-    let counter = 1;
-
-    while (counter <= length) {
-      arr[counter - 1] = counter;
-      counter += 1;
-    }
-
-    return arr;
-  };
-
   const leftButtonClicked = () => {
     if (pageListIndex > 0) {
       setPageListIndex(pageListIndex - 1);
@@ -90,7 +80,7 @@ export default function Pagination({ currentPage, numOfTotalPage, numOfPageToSho
         <ArrowButton theme={theme} onClick={() => leftButtonClicked()}>
           &lt;
         </ArrowButton>
-        {makeOneBaseArray(numOfTotalPage)
+        {NumberUtils.range(1, numOfTotalPage + 1)
           .slice(pageListIndex * numOfPageToShow, pageListIndex * numOfPageToShow + numOfPageToShow)
           .map((index: number) =>
             index === currentPage ? (
