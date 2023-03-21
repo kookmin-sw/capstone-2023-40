@@ -1,6 +1,7 @@
 package com.thesurvey.api.controller;
 
 import com.thesurvey.api.domain.Survey;
+import com.thesurvey.api.dto.SurveyDto;
 import com.thesurvey.api.service.SurveyService;
 import java.util.List;
 import java.util.Optional;
@@ -24,14 +25,13 @@ public class SurveyController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<Survey>> getAllSurvey() {
-        List<Survey> surveyList = surveyService.getAllSurvey();
+    public ResponseEntity<List<Optional<SurveyDto>>> getAllSurvey() {
+        List<Optional<SurveyDto>> surveyList = surveyService.getAllSurveyDto();
         return ResponseEntity.ok(surveyList);
     }
     @GetMapping("/{surveyId}")
-    public ResponseEntity<Optional<Survey>> getSurveyWithId(@PathVariable UUID surveyId) {
-        Optional<Survey> survey = surveyService.getSurveyById(surveyId);
-        return ResponseEntity.ok(survey);
+    public ResponseEntity<Optional<SurveyDto>> getSurveyById(@PathVariable UUID surveyId) {
+        return ResponseEntity.ok(Optional.ofNullable(surveyService.getSurveyById(surveyId)));
     }
 
     @PostMapping

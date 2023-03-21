@@ -25,6 +25,10 @@ public class UserController {
     public ResponseEntity<List<UserDto>> getAllUsersWithAnsweredQuestions(){
         return ResponseEntity.ok(userService.getAllUsersWithAnsweredQuestion());
     }
-
+    @PostMapping
+    public ResponseEntity<String> join(@RequestBody UserDto userDto) {
+        userService.join(userDto);
+        return ResponseEntity.ok().body("Success sign up");
+    }
 
 }
