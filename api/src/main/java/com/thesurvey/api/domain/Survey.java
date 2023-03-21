@@ -19,9 +19,9 @@ import lombok.NoArgsConstructor;
 public class Survey extends BaseTimeEntity {
 
     @Id
-    @Column(name = "survey_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "survey_id", columnDefinition = "uuid")
     private UUID surveyId;
-
     @Column(name = "title", nullable = false)
     private String title;
 
