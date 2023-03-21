@@ -6,6 +6,7 @@ declare module 'styled-components' {
     fontSize?: string | number;
     padding?: string | number;
     border?: string;
+    borderResultList?: string;
     borderRadius?: string | number;
     themeToggle?: string | number;
 

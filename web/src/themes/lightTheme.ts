@@ -5,6 +5,7 @@ export const lightTheme: DefaultTheme = {
   borderRadius: '16px',
   padding: '2vh',
   border: '3px solid #ebeff7',
+  borderResultList: '1px solid black',
   themeToggle: '2px solid #ebeff7',
 
   colors: {

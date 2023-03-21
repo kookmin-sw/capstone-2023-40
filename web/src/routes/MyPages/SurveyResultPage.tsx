@@ -1,37 +1,18 @@
-import React, { useReducer } from 'react';
+import React from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { ReactComponent as Arrow } from '../../assets/svg/arrow.svg';
 import { ReactComponent as Pencil } from '../../assets/svg/pencil.svg';
+import { ReactComponent as Arrow } from '../../assets/svg/twoArrow.svg';
 import Header from '../../components/Header';
 import { useTheme } from '../../hooks/useTheme';
-
-const PencilImage = styled(Pencil).attrs({
-  width: 24,
-  height: 24,
-})`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  width: 25px;
-  height: 100%;
-  padding: 1.5vh;
-  margin-left: 1vh;
-  border-radius: 18px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: ${(props) => props.theme.colors.inputBackground};
-  }
-`;
 
 const ArrowImage = styled(Arrow).attrs({
   width: 24,
   height: 24,
 })`
+  margin-left: auto;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -39,13 +20,8 @@ const ArrowImage = styled(Arrow).attrs({
   width: 25px;
   height: 100%;
   padding: 1.5vh;
-  margin-left: 1vh;
   border-radius: 30px;
   cursor: pointer;
-
-  &:hover {
-    background-color: ${(props) => props.theme.colors.inputBackground};
-  }
 `;
 
 const Container = styled.div`
@@ -54,7 +30,7 @@ const Container = styled.div`
   background-color: ${(props) => props.theme.colors.container};
 `;
 
-const MypageContainer = styled.div`
+const SurveyResultContainer = styled.div`
   padding: 5vw;
   margin-left: calc(10vh - 5vmin);
   margin-right: calc(10vh - 5vmin);
@@ -64,10 +40,14 @@ const MypageContainer = styled.div`
   background-color: ${(props) => props.theme.colors.container};
 `;
 
-const ContainerBox = styled.div`
+const ListBox = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  border: ${(props) => props.theme.borderResultList};
+  border-radius: ${(props) => props.theme.borderRadius};
+  box-shadow: 10px 10px 10px rgba(0, 0, 0, 1);
+  cursor: pointer;
 `;
 
 const Form = styled.form`
@@ -75,27 +55,7 @@ const Form = styled.form`
   flex-direction: column;
 `;
 
-const Input = styled.input`
-  flex: 1;
-  min-width: 10vw;
-  max-width: 30vw;
-  width: 150px;
-  padding: 1.3vh;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  border: none;
-  border-radius: 10px;
-  font-size: 1.6vh;
-  font-weight: 700;
-  color: ${(props) => props.theme.colors.default};
-  background-color: ${(props) => props.theme.colors.inputBackground};
-  cursor: text;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-
-const MyPageTitle = styled.span`
+const SurVeyResultPageTitle = styled.span`
   text-align: left;
   font-size: calc(2vh + 2vmin);
   font-weight: 900;
@@ -107,92 +67,16 @@ const FontText = styled.span`
   text-align: left;
   font-size: calc(1vh + 1.4vmin);
   font-weight: 900;
-  margin-right: 3vw;
+  margin-left: 3vw;
   min-width: 80px;
   max-width: 20vw;
   width: 140px;
   color: ${(props) => props.theme.colors.default};
 `;
 
-const ReplacePagetext = styled.span`
-  border: none;
-  text-align: left;
-  font-size: 2.5vh;
-  font-weight: 900;
-  width: 170px;
-  color: ${(props) => props.theme.colors.default};
-  cursor: pointer;
-`;
-
-type State = {
-  email: string;
-  password: string;
-  name: string;
-  phoneNumber: string;
-  address: string;
-};
-
-type Action =
-  | { type: 'CHANGE_EMAIL'; payload: string }
-  | { type: 'CHANGE_PASSWORD'; payload: string }
-  | { type: 'CHANGE_NAME'; payload: string }
-  | { type: 'CHANGE_PHONE_NUMBER'; payload: string }
-  | { type: 'CHANGE_ADDRESS'; payload: string };
-
-const initalState = {
-  email: '',
-  password: '',
-  name: '',
-  phoneNumber: '',
-  address: '',
-};
-
-const reducer = (state: State, action: Action): State => {
-  switch (action.type) {
-    case 'CHANGE_EMAIL':
-      return { ...state, email: action.payload };
-    case 'CHANGE_PASSWORD':
-      return { ...state, password: action.payload };
-    case 'CHANGE_NAME':
-      return { ...state, name: action.payload };
-    case 'CHANGE_PHONE_NUMBER':
-      return { ...state, phoneNumber: action.payload };
-    case 'CHANGE_ADDRESS':
-      return { ...state, address: action.payload };
-    default:
-      return state;
-  }
-};
-
 export default function MyPage() {
   const [theme, toggleTheme] = useTheme();
   const navigate = useNavigate();
-
-  const [state, dispatch] = useReducer(reducer, initalState);
-
-  // Input Data list
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    switch (name) {
-      case 'email':
-        dispatch({ type: 'CHANGE_EMAIL', payload: value });
-        break;
-      case 'password':
-        dispatch({ type: 'CHANGE_PASSWORD', payload: value });
-        break;
-      case 'name':
-        dispatch({ type: 'CHANGE_NAME', payload: value });
-        break;
-      case 'phoneNumber':
-        dispatch({ type: 'CHANGE_PHONE_NUMBER', payload: value });
-        break;
-      case 'address':
-        dispatch({ type: 'CHANGE_ADDRESS', payload: value });
-        break;
-      default:
-        break;
-    }
-  };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -201,11 +85,17 @@ export default function MyPage() {
   return (
     <Container theme={theme}>
       <Header theme={theme} toggleTheme={toggleTheme} />
-      <MypageContainer theme={theme}>
+      <SurveyResultContainer theme={theme}>
         <Form onSubmit={handleSubmit}>
-          <MyPageTitle theme={theme}>마이페이지 &gt; 설문 결과 조회</MyPageTitle>
+          <SurVeyResultPageTitle style={{ marginBottom: '5vh' }} theme={theme}>
+            마이페이지 &gt; 설문 결과 조회
+          </SurVeyResultPageTitle>
+          <ListBox>
+            <FontText>test</FontText>
+            <ArrowImage />
+          </ListBox>
         </Form>
-      </MypageContainer>
+      </SurveyResultContainer>
     </Container>
   );
 }
