@@ -1,6 +1,5 @@
 package com.thesurvey.api.domain;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.UUID;
 import javax.persistence.Column;
@@ -24,6 +23,7 @@ public class Survey extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "survey_id", columnDefinition = "uuid")
     private UUID surveyId;
+
     @Column(name = "title", nullable = false)
     private String title;
 

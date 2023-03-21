@@ -5,6 +5,7 @@ import lombok.Setter;
 
 @Getter
 public class QuestionDto {
+    private int questionNo;
 
     private String description;
 }

@@ -17,6 +17,8 @@ public class Question {
 
     @EmbeddedId
     private QuestionId questionId;
+    @Column(name = "question_no", nullable = false)
+    private int questionNo;
 
     @Column(name = "description", nullable = true)
     private String description;
