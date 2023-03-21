@@ -4,6 +4,9 @@ import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -18,9 +21,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Question {
 
-    @EmbeddedId
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "question_id")
-    private QuestionId questionId;
+    private Long questionId;
 
     @Column(name = "description", nullable = true)
     private String description;
@@ -34,9 +38,10 @@ public class Question {
     private QuestionBank questionBank;
 
     @Builder
-    public Question(QuestionId questionId, String description, Survey survey) {
+    public Question(Long questionId, String description, Survey survey, QuestionBank questionBank) {
         this.questionId = questionId;
         this.description = description;
         this.survey = survey;
+        this.questionBank = questionBank;
     }
 }

@@ -1,12 +1,9 @@
 package com.thesurvey.api.domain;
 
-import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -22,9 +19,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AnsweredQuestion {
 
-    @EmbeddedId
+    @Id
     @Column(name = "answered_question_id")
-    private AnsweredQuestionId answeredQuestionId;
+    private Long answeredQuestionId;
 
     @Column(name = "single_choice", nullable = true)
     private Integer singleChoice;
@@ -59,7 +56,7 @@ public class AnsweredQuestion {
     private Survey survey;
 
     @Builder
-    public AnsweredQuestion(AnsweredQuestionId answeredQuestionId, User user, Survey survey,
+    public AnsweredQuestion(Long answeredQuestionId, User user, Survey survey,
         Question question,
         String shortAnswer) {
         this.answeredQuestionId = answeredQuestionId;
@@ -67,6 +64,6 @@ public class AnsweredQuestion {
         this.survey = survey;
         this.question = question;
         this.shortAnswer = shortAnswer;
-    }
 
+    }
 }
