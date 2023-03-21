@@ -2,6 +2,7 @@ package com.thesurvey.api.dto;
 
 import com.thesurvey.api.domain.Participation;
 import com.thesurvey.api.domain.Question;
+import com.thesurvey.api.domain.QuestionBank;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
@@ -17,8 +18,9 @@ public class SurveyDto {
     private String title;
 
     private String description;
+
     private Timestamp endedDate;
 
-    private List<Question> questions;
+    private List<QuestionBank> questionBanks;
 
 }
