@@ -1,5 +1,7 @@
 package com.thesurvey.api.domain;
 
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,13 +27,17 @@ public class Survey extends BaseTimeEntity {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "description", nullable = true)
     private String description;
 
+    @Column(name = "ended_date", nullable = true)
+    private Timestamp endedDate;
+
     @Builder
-    public Survey(String title, String description) {
+    public Survey(String title, String description, Timestamp endedDate) {
         this.title = title;
         this.description = description;
+        this.endedDate = endedDate;
     }
 
 }
