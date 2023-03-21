@@ -1,11 +1,15 @@
 package com.thesurvey.api.service;
 
+import com.thesurvey.api.domain.Question;
 import com.thesurvey.api.domain.Survey;
 import com.thesurvey.api.dto.SurveyDto;
+import com.thesurvey.api.repository.QuestionRepository;
 import com.thesurvey.api.repository.SurveyRepository;
 import com.thesurvey.api.service.mapper.SurveyMapper;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import javax.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +32,12 @@ public class SurveyService {
         return surveyRepository.findAll();
     }
 
+    public List<Optional<SurveyDto>> getAllSurveyDto() {
+        return surveyRepository.findAll().stream()
+            .map(survey -> surveyMapper.toSurveyDto(Optional.ofNullable(survey)))
+            .collect(Collectors.toList());
+    }
+
     public SurveyDto getSurveyById(UUID surveyId) {
         return surveyMapper.toSurveyDto(surveyRepository.findById(surveyId))
             .orElseThrow(() -> new EntityNotFoundException("Survey not found"));
@@ -35,9 +45,8 @@ public class SurveyService {
 
     @Transactional
     public Survey createSurvey(Survey survey) {
-        Survey newSurvey = surveyRepository.save(survey);
-        questionService.addQuestion(newSurvey.getQuestions());
-        return newSurvey;
+//        questionService.addQuestion(survey.getQuestions());
+        return surveyRepository.save(survey);
     }
 
 }
