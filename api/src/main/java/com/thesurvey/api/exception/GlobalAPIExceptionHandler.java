@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalAPIExceptionHandler {
 
     @ExceptionHandler
-    public ResponseEntity<String> handleNotFoundException(NotFoundException e) {
+    public ResponseEntity<String> handleNotFoundException(ExceptionMapper e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
     
