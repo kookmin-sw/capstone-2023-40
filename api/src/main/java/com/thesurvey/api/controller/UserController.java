@@ -1,14 +1,16 @@
 package com.thesurvey.api.controller;
 
+import com.thesurvey.api.domain.User;
 import com.thesurvey.api.dto.UserRegisterRequestDto;
 import com.thesurvey.api.dto.UserInfoDto;
 import com.thesurvey.api.exception.ErrorMessage;
 import com.thesurvey.api.exception.ExceptionMapper;
 import com.thesurvey.api.service.AuthenticationService;
 import com.thesurvey.api.service.UserService;
+import java.util.List;
+import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -32,12 +34,10 @@ public class UserController {
         this.userService = userService;
         this.authenticationService = authenticationService;
     }
-
-    // FIXME: needs to implement answered questions first
-//    @GetMapping
-//    public ResponseEntity<List<UserRegisterRequestDto>> getAllUsersWithAnsweredQuestions() {
-//        return ResponseEntity.ok(userService.getAllUsersWithAnsweredQuestions());
-//    }
+    @GetMapping
+    public ResponseEntity<Optional<List<User>>> getAllUsersWithAnsweredQuestions() {
+        return ResponseEntity.ok(userService.getAllUsersWithAnsweredQuestions());
+    }
 
     @PostMapping("/register")
     public ResponseEntity<UserInfoDto> register(
