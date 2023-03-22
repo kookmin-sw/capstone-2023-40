@@ -1,5 +1,6 @@
 package com.thesurvey.api.domain;
 
+import com.thesurvey.api.domain.EnumTypeEntity.Role;
 import java.util.Collection;
 import java.util.List;
 import javax.persistence.CascadeType;

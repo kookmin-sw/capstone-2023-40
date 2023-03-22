@@ -1,6 +1,6 @@
 package com.thesurvey.api.service.mapper;
 
-import com.thesurvey.api.domain.Role;
+import com.thesurvey.api.domain.EnumTypeEntity.Role;
 import com.thesurvey.api.domain.User;
 import com.thesurvey.api.dto.UserRegisterRequestDto;
 import com.thesurvey.api.dto.UserInfoDto;

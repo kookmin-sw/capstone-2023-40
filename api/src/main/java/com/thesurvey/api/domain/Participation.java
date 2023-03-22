@@ -1,5 +1,6 @@
 package com.thesurvey.api.domain;
 
+import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;

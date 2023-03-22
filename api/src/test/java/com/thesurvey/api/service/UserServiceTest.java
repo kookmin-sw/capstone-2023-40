@@ -1,7 +1,7 @@
 package com.thesurvey.api.service;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import com.thesurvey.api.domain.Role;
+import com.thesurvey.api.domain.EnumTypeEntity.Role;
 import com.thesurvey.api.domain.User;
 import com.thesurvey.api.dto.UserInfoDto;
 import com.thesurvey.api.dto.UserRegisterRequestDto;

@@ -1,9 +1,8 @@
 package com.thesurvey.api.dto;
 
+import com.thesurvey.api.domain.EnumTypeEntity.QuestionType;
 import com.thesurvey.api.domain.QuestionOption;
-import com.thesurvey.api.domain.QuestionType;
 import java.util.List;
-import javax.persistence.Column;
 import lombok.Builder;
 import lombok.Getter;
 
