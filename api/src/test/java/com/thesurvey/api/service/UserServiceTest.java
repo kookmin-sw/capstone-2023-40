@@ -10,6 +10,12 @@ import com.thesurvey.api.service.mapper.UserMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
@@ -20,6 +26,8 @@ public class UserServiceTest {
     UserRepository userRepository;
     @Autowired
     UserService userService;
+    @Autowired
+    AuthenticationService authenticationService;
 
     @Autowired
     SurveyService surveyService;
@@ -30,11 +38,16 @@ public class UserServiceTest {
     String email = "kjmdkdlel@google.com";
     String password = "1234";
     String phoneNumber = "010-1234-1234";
+    String address = "Sungbuk-gu, Seoul";
     Role role = Role.USER;
 
     UserRegisterRequestDto userRegisterRequestDto = UserRegisterRequestDto.builder().name(name)
-        .email(email).role(role).phoneNumber(phoneNumber)
-        .password(password).build();
+        .email(email).role(role).password(password).phoneNumber(phoneNumber).address(address)
+        .build();
+
+    User user = User.builder().name(name)
+        .email(email).role(role).password(password).phoneNumber(phoneNumber).address(address)
+        .build();
 
     @Test
     void testJoin() {
@@ -42,6 +55,20 @@ public class UserServiceTest {
         assertThat(result.getName()).isEqualTo(name);
         assertThat(result.getPhoneNumber()).isEqualTo(phoneNumber);
         assertThat(result.getUserId()).isEqualTo(userService.getUserByName(name).getUserId());
+    }
+
+    @Test
+    void testLogin() {
+        UserInfoDto userInfoDto = userService.join(userRegisterRequestDto);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+            userRegisterRequestDto.getEmail(), userRegisterRequestDto.getPassword());
+
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication result = authenticationService.authenticate(authentication);
+        context.setAuthentication(result);
+
+        assertThat(result.isAuthenticated()).isTrue();
+        assertThat(userInfoDto.getName()).isEqualTo(result.getName());
     }
 
 //
