@@ -62,7 +62,8 @@ public class UserController {
     }
 
     @GetMapping("/mypage")
-    public ResponseEntity<UserInfoDto> getUserByName() {
+    public ResponseEntity<UserInfoDto> getUserProfile() {
+        // FIXME: not working as expected
         if (!isAuthenticated()) {
             throw new ExceptionMapper(ErrorMessage.FAILED_AUTHENTICATION);
         }
