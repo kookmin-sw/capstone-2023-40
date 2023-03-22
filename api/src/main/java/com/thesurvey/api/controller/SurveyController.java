@@ -3,6 +3,7 @@ package com.thesurvey.api.controller;
 import com.thesurvey.api.domain.Survey;
 import com.thesurvey.api.dto.SurveyDto;
 import com.thesurvey.api.service.SurveyService;
+import com.thesurvey.api.service.UserService;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -19,24 +20,28 @@ import org.springframework.web.bind.annotation.RestController;
 public class SurveyController {
 
     private final SurveyService surveyService;
+    private final UserService userService;
 
-    public SurveyController(SurveyService surveyService) {
+    public SurveyController(SurveyService surveyService, UserService userService) {
         this.surveyService = surveyService;
+        this.userService = userService;
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<Optional<SurveyDto>>> getAllSurvey() {
-        List<Optional<SurveyDto>> surveyList = surveyService.getAllSurveyDto();
-        return ResponseEntity.ok(surveyList);
+    public ResponseEntity<List<Survey>> getAllSurvey() {
+        return ResponseEntity.ok(surveyService.getAllSurvey());
     }
     @GetMapping("/{surveyId}")
-    public ResponseEntity<Optional<SurveyDto>> getSurveyById(@PathVariable UUID surveyId) {
-        return ResponseEntity.ok(Optional.ofNullable(surveyService.getSurveyById(surveyId)));
+    public ResponseEntity<Optional<Optional<Survey>>> getSurveyById(@PathVariable UUID surveyId) {
+        return ResponseEntity.ok(Optional.ofNullable(surveyService.getSurveyByIdWithRelatedQuestion(surveyId)));
     }
 
-    @PostMapping
-    public ResponseEntity<Survey> createSurvey(@RequestBody Survey survey) {
-        Survey newSurvey = surveyService.createSurvey(survey);
-        return ResponseEntity.ok(newSurvey);
-    }
+//    @PostMapping
+//    public ResponseEntity<Survey> createSurvey(@RequestBody SurveyDto requestedSurveyDto) {
+//        return ResponseEntity.ok(surveyService.createSurvey(requestedSurveyDto));
+//    }
+//    @PostMapping("/submit")
+//    public ResponseEntity<Survey> submitSurvey(@RequestBody SurveyDto requestedSurveyDto) {
+//        return ResponseEntity.ok(surveyService.respondSurvey(requestedSurveyDto));
+//    }
 }
