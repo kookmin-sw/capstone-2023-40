@@ -41,10 +41,13 @@ public class UserMapper {
 
     public Optional<UserInfoDto> toUserInfoDto(Optional<User> user) {
         return user.map(value -> UserInfoDto.builder()
-                .userId(value.getUserId())
-                .name(value.getName())
-                .email(value.getEmail())
-                .build());
+            .userId(value.getUserId())
+            .name(value.getName())
+            .email(value.getEmail())
+            .address(value.getAddress())
+            .phoneNumber(value.getPhoneNumber())
+            .profileImage(value.getProfileImage())
+            .build());
     }
 
     private PasswordEncoder passwordEncoder() {
