@@ -24,8 +24,9 @@ public class Question {
     private String description;
 
     @Builder
-    public Question(QuestionId questionId, String description) {
+    public Question(QuestionId questionId, int questionNo, String description) {
         this.questionId = questionId;
+        this.questionNo = questionNo;
         this.description = description;
     }
 }

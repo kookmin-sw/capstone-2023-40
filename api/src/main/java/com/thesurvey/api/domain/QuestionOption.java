@@ -30,6 +30,5 @@ public class QuestionOption {
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "QuestionBank")
     private QuestionBank questionBank;
 }

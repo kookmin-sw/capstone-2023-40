@@ -19,11 +19,11 @@ public class AnsweredQuestion {
     private AnsweredQuestionId answeredQuestionId;
 
     @Column(name = "single_choice", nullable = true)
-    private Integer singleChoice;
+    private String singleChoice;
 
     // FIXME: modify to join columns
-    @Column(name = "multiple_choice", nullable = true)
-    private Integer multipleChoice;
+    @Column(name = "multiple_choices", nullable = true)
+    private String multipleChoices;
 
     @Column(name = "short_answer", nullable = true)
     private String shortAnswer;
@@ -31,19 +31,15 @@ public class AnsweredQuestion {
     @Column(name = "long_answer", nullable = true)
     private String longAnswer;
 
-    @Column(name = "type", nullable = false)
-    private String type;
 
     @Builder
-    public AnsweredQuestion(AnsweredQuestionId answeredQuestionId, Integer singleChoice,
-        Integer multipleChoice,
-        String shortAnswer, String longAnswer, String type) {
-        this.answeredQuestionId = answeredQuestionId;
+    public AnsweredQuestion(String singleChoice,
+        String multipleChoices,
+        String shortAnswer, String longAnswer) {
         this.shortAnswer = shortAnswer;
         this.longAnswer = longAnswer;
         this.singleChoice = singleChoice;
-        this.multipleChoice = multipleChoice;
-        this.type = type;
+        this.multipleChoices = multipleChoices;
 
     }
 }

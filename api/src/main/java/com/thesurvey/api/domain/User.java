@@ -2,6 +2,7 @@ package com.thesurvey.api.domain;
 
 import java.util.Collection;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -9,6 +10,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -29,6 +31,18 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Column(name = "user_id")
     private Long userId;
 
+    @OneToMany(
+        mappedBy = "participationId.user",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+    )
+    private List<Participation> participations;
+    @OneToMany(
+        mappedBy = "answeredQuestionId.user",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+    )
+    private List<AnsweredQuestion> answeredQuestions;
     @Column(name = "name", nullable = false)
     private String name;
 

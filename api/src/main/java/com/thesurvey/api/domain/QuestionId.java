@@ -3,6 +3,7 @@ package com.thesurvey.api.domain;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Embeddable;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import lombok.Getter;
@@ -12,11 +13,9 @@ import lombok.Getter;
 public class QuestionId implements Serializable {
 
     @ManyToOne
-    @JoinColumn(name = "survey_id")
     private Survey survey;
 
     @ManyToOne
-    @JoinColumn(name = "question_bank_id")
     private QuestionBank questionBank;
 
     @Override

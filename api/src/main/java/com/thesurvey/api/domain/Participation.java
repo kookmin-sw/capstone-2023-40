@@ -26,6 +26,6 @@ public class Participation {
     private LocalDateTime submittedDate;
 
     @Column(name = "certification_type", nullable = false)
-    private String certificationType;
+    private CertificationType certificationType;
 
 }
