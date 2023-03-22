@@ -3,12 +3,9 @@ package com.thesurvey.api.service;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import com.thesurvey.api.domain.Role;
 import com.thesurvey.api.domain.User;
-import com.thesurvey.api.dto.UserDto;
+import com.thesurvey.api.dto.UserRegisterRequestDto;
 import com.thesurvey.api.repository.UserRepository;
 import com.thesurvey.api.service.mapper.UserMapper;
-import com.thesurvey.api.domain.User;
-import com.thesurvey.api.dto.UserDto;
-import com.thesurvey.api.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class UserServiceTest {
 
-    //
     @Autowired
     UserRepository userRepository;
     @Autowired
@@ -28,29 +24,33 @@ public class UserServiceTest {
     SurveyService surveyService;
     @Autowired
     UserMapper userMapper;
+
     String name = "JinMyeong";
     String email = "kjmdkdlel@google.com";
     String password = "1234";
-
     String phoneNumber = "010-1234-1234";
     Role role = Role.USER;
-    UserDto userDto = UserDto.builder().name(name).email(email).role(role).phoneNumber(phoneNumber)
+
+    UserRegisterRequestDto userRegisterRequestDto = UserRegisterRequestDto.builder().name(name).email(email).role(role).phoneNumber(phoneNumber)
         .password(password).build();
 
     @Test
     void testJoin() {
-        User user = userService.join(userDto);
+        User user = userService.join(userRegisterRequestDto);
         String result = userService.getUserByName(user.getName()).getName();
         assertThat(result).isEqualTo(name);
     }
+
+
+
 //
 ////    @Test
 ////    void getAllUsersWithAnsweredQuestions() {
 ////        // Create test User.
 ////        String name = "JinMyeong";
 ////        String email = "kjmdkdlel@google.com";
-////        UserDto userDto = new UserDto();
-////        User user = userDto.toEntity();
+////        UserRegisterRequestDto userRegisterRequestDto = new UserRegisterRequestDto();
+////        User user = userRegisterRequestDto.toEntity();
 //////        // Create test Survey.
 //////        SurveyDto surveyDto = new SurveyDto();
 //////        String title = "Test Survey";

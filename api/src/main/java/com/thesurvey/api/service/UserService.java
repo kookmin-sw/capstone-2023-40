@@ -1,7 +1,7 @@
 package com.thesurvey.api.service;
 
 import com.thesurvey.api.domain.User;
-import com.thesurvey.api.dto.UserDto;
+import com.thesurvey.api.dto.UserRegisterRequestDto;
 import com.thesurvey.api.dto.UserInfoDto;
 import com.thesurvey.api.exception.ErrorMessage;
 import com.thesurvey.api.exception.ExceptionMapper;
@@ -33,15 +33,17 @@ public class UserService {
         return userMapper.toUserInfoDto(userRepository.findByEmail(email))
             .orElseThrow(() -> new ExceptionMapper(ErrorMessage.USER_EMAIL_NOT_FOUND, email));
     }
-    @Transactional
-    public User join(UserDto userDto) {
-        return userRepository.save(userMapper.toUser(userDto));
-    }
 
     @Transactional
-    public List<UserDto> getAllUsersWithAnsweredQuestion() {
-        return  userRepository.findAll().stream()
-            .map(user -> userMapper.toUserDto(user))
-            .collect(Collectors.toList());
+    public User join(UserRegisterRequestDto userRegisterRequestDto) {
+        return userRepository.save(userMapper.toUser(userRegisterRequestDto));
     }
+
+    // FIXME: needs to implement answered questions first
+//    @Transactional
+//    public List<UserRegisterRequestDto> getAllUsersWithAnsweredQuestions() {
+//        return userRepository.findAll().stream()
+//            .map(userMapper::toUserDto)
+//            .collect(Collectors.toList());
+//    }
 }
