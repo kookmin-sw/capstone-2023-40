@@ -7,7 +7,9 @@ on:
     branches: ["develop", "feature/base-api"]
 
 permissions:
-  contents: read
+  contents: write
+  actions: write
+  checks: write
 
 jobs:
   build:
@@ -47,4 +49,4 @@ jobs:
         if: always()
         with:
           files: |
-            api/build/test-results/**/*.xml
+            ./build/test-results/**/*.xml
