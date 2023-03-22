@@ -28,7 +28,7 @@ public class SurveyController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<Survey>> getAllSurvey() {
+    public ResponseEntity<List<Optional<SurveyDto>>> getAllSurvey() {
         return ResponseEntity.ok(surveyService.getAllSurvey());
     }
     @GetMapping("/{surveyId}")
@@ -36,10 +36,10 @@ public class SurveyController {
         return ResponseEntity.ok(Optional.ofNullable(surveyService.getSurveyByIdWithRelatedQuestion(surveyId)));
     }
 
-//    @PostMapping
-//    public ResponseEntity<Survey> createSurvey(@RequestBody SurveyDto requestedSurveyDto) {
-//        return ResponseEntity.ok(surveyService.createSurvey(requestedSurveyDto));
-//    }
+    @PostMapping
+    public ResponseEntity<Survey> createSurvey(@RequestBody SurveyDto surveyDto) {
+        return ResponseEntity.ok(surveyService.createSurvey(surveyDto));
+    }
 //    @PostMapping("/submit")
 //    public ResponseEntity<Survey> submitSurvey(@RequestBody SurveyDto requestedSurveyDto) {
 //        return ResponseEntity.ok(surveyService.respondSurvey(requestedSurveyDto));
