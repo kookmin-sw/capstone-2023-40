@@ -2,9 +2,9 @@ name: SpringBoot CI with Gradle
 
 on:
   push:
-    branches: [ "develop", "feature/base-api" ]
+    branches: ["develop", "feature/base-api"]
   pull_request:
-    branches: [ "develop", "feature/base-api" ]
+    branches: ["develop", "feature/base-api"]
 
 permissions:
   contents: read
@@ -23,8 +23,8 @@ jobs:
       - name: Set up JDK 11
         uses: actions/setup-java@v3
         with:
-          java-version: '11'
-          distribution: 'temurin'
+          java-version: "11"
+          distribution: "temurin"
 
       - name: Cache gradle
         uses: actions/cache@v3
@@ -40,7 +40,10 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build with Gradle
-        run: ./gradlew clean build
+        run: ./gradlew build -x test
+
+      - name: Run Test
+        run: ./gradlew test
 
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2
