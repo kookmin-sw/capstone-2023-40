@@ -35,8 +35,9 @@ public class UserService {
     }
 
     @Transactional
-    public User join(UserRegisterRequestDto userRegisterRequestDto) {
-        return userRepository.save(userMapper.toUser(userRegisterRequestDto));
+    public UserInfoDto join(UserRegisterRequestDto userRegisterRequestDto) {
+        User user = userRepository.save(userMapper.toUser(userRegisterRequestDto));
+        return userMapper.toUserInfoDto(user);
     }
 
     // FIXME: needs to implement answered questions first

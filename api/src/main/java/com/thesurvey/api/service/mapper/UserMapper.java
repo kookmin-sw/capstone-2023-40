@@ -50,6 +50,18 @@ public class UserMapper {
             .build());
     }
 
+    public UserInfoDto toUserInfoDto(User user) {
+        return UserInfoDto
+            .builder()
+            .userId(user.getUserId())
+            .name(user.getName())
+            .email(user.getEmail())
+            .address(user.getAddress())
+            .phoneNumber(user.getPhoneNumber())
+            .profileImage(user.getProfileImage())
+            .build();
+    }
+
     private PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
