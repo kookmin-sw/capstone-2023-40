@@ -3,6 +3,7 @@ package com.thesurvey.api.service;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import com.thesurvey.api.domain.Role;
 import com.thesurvey.api.domain.User;
+import com.thesurvey.api.dto.UserInfoDto;
 import com.thesurvey.api.dto.UserRegisterRequestDto;
 import com.thesurvey.api.repository.UserRepository;
 import com.thesurvey.api.service.mapper.UserMapper;
@@ -31,17 +32,17 @@ public class UserServiceTest {
     String phoneNumber = "010-1234-1234";
     Role role = Role.USER;
 
-    UserRegisterRequestDto userRegisterRequestDto = UserRegisterRequestDto.builder().name(name).email(email).role(role).phoneNumber(phoneNumber)
+    UserRegisterRequestDto userRegisterRequestDto = UserRegisterRequestDto.builder().name(name)
+        .email(email).role(role).phoneNumber(phoneNumber)
         .password(password).build();
 
     @Test
     void testJoin() {
-        User user = userService.join(userRegisterRequestDto);
-        String result = userService.getUserByName(user.getName()).getName();
-        assertThat(result).isEqualTo(name);
+        UserInfoDto result = userService.join(userRegisterRequestDto);
+        assertThat(result.getName()).isEqualTo(name);
+        assertThat(result.getPhoneNumber()).isEqualTo(phoneNumber);
+        assertThat(result.getUserId()).isEqualTo(userService.getUserByName(name).getUserId());
     }
-
-
 
 //
 ////    @Test
