@@ -8,15 +8,14 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class SurveyCreateDto {
+public class SurveyDto {
 
     private UUID surveyId;
 
     private String title;
 
     private String description;
-    private Timestamp createdDate;
-    private Timestamp lastModifiedDate;
+
     private Timestamp startedDate;
 
     private Timestamp endedDate;

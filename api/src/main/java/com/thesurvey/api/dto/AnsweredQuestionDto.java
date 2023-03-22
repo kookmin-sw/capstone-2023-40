@@ -6,16 +6,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
+@Builder
 public class AnsweredQuestionDto {
     private String shortAnswer;
 
-    public AnsweredQuestionDto(AnsweredQuestion answeredQuestion) {
-        this.shortAnswer = answeredQuestion.getShortAnswer();
-    }
-    @Builder
-    public AnsweredQuestion toEntity(String shortAnswer) {
-        return AnsweredQuestion.builder().shortAnswer(shortAnswer)
-            .build();
-    }
+    private String longAnswer;
+
+    private String singleChoice;
+
+    private String multipleChoices;
+
 }

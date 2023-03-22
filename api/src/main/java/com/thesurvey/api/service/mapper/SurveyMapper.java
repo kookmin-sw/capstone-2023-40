@@ -14,6 +14,8 @@ public class SurveyMapper {
             .map(value -> SurveyDto.builder()
                 .surveyId(value.getSurveyId())
                 .title(value.getTitle())
+                .startedDate(value.getStartedDate())
+                .endedDate(value.getEndedDate())
                 .description(value.getDescription())
                 .build());
     }
@@ -23,6 +25,8 @@ public class SurveyMapper {
             .builder()
             .title(surveyDto.getTitle())
             .description(surveyDto.getDescription())
+            .startedDate(surveyDto.getStartedDate())
+            .endedDate(surveyDto.getEndedDate())
             .build();
     }
 }
