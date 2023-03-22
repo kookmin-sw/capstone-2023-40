@@ -1,14 +1,14 @@
 package com.thesurvey.api.service;
 
 import com.thesurvey.api.domain.User;
-import com.thesurvey.api.dto.UserRegisterRequestDto;
 import com.thesurvey.api.dto.UserInfoDto;
+import com.thesurvey.api.dto.UserRegisterRequestDto;
 import com.thesurvey.api.exception.ErrorMessage;
 import com.thesurvey.api.exception.ExceptionMapper;
 import com.thesurvey.api.repository.UserRepository;
 import com.thesurvey.api.service.mapper.UserMapper;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,11 +40,9 @@ public class UserService {
         return userMapper.toUserInfoDto(user);
     }
 
-    // FIXME: needs to implement answered questions first
-//    @Transactional
-//    public List<UserRegisterRequestDto> getAllUsersWithAnsweredQuestions() {
-//        return userRepository.findAll().stream()
-//            .map(userMapper::toUserDto)
-//            .collect(Collectors.toList());
-//    }
+    @Transactional
+    public Optional<List<User>> getAllUsersWithAnsweredQuestions() {
+            return userRepository.findByAllWithAnsweredQuestion();
+    }
+
 }
