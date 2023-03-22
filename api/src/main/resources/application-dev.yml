@@ -1,7 +1,7 @@
 server:
   port: 8080
   servlet:
-    #    context-path: /api
+    context-path: /api
     session:
       timeout: 10m
 
@@ -11,11 +11,13 @@ spring:
     username: the_survey_dev
     password: the_survey_dev
   jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create
+    show-sql: false
     properties:
       hibernate:
-        show_sql: true
+        show_sql: false
         format_sql: true
         jdbc:
           lob:

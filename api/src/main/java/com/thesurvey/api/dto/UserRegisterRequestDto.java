@@ -1,10 +1,6 @@
 package com.thesurvey.api.dto;
 
-import com.thesurvey.api.domain.AnsweredQuestion;
-import com.thesurvey.api.domain.Participation;
 import com.thesurvey.api.domain.Role;
-import java.util.List;
-import javax.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDto {
+public class UserRegisterRequestDto {
 
     private String name;
 
