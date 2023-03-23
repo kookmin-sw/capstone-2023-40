@@ -29,14 +29,14 @@ public class Survey extends BaseTimeEntity {
     private UUID surveyId;
 
     @OneToMany(
-        mappedBy = "participationId.survey",
+        mappedBy = "survey",
         cascade = CascadeType.ALL,
         orphanRemoval = true
     )
     private List<Participation> participations;
 
     @OneToMany(
-        mappedBy = "questionId.survey",
+        mappedBy = "survey",
         cascade = CascadeType.ALL,
         orphanRemoval = true
     )

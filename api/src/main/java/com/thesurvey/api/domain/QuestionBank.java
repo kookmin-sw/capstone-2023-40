@@ -28,7 +28,7 @@ public class QuestionBank {
     @Column(name = "question_bank_id")
     private Long questionBankId;
     @OneToMany(
-        mappedBy = "questionId.questionBank",
+        mappedBy = "questionBank",
         cascade = CascadeType.ALL,
         orphanRemoval = true
     )

@@ -33,13 +33,13 @@ public class User extends BaseTimeEntity implements UserDetails {
     private Long userId;
 
     @OneToMany(
-        mappedBy = "participationId.user",
+        mappedBy = "user",
         cascade = CascadeType.ALL,
         orphanRemoval = true
     )
     private List<Participation> participations;
     @OneToMany(
-        mappedBy = "answeredQuestionId.user",
+        mappedBy = "user",
         cascade = CascadeType.ALL,
         orphanRemoval = true
     )

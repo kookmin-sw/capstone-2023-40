@@ -2,6 +2,7 @@ package com.thesurvey.api.domain;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -11,14 +12,11 @@ import lombok.Getter;
 @Getter
 public class AnsweredQuestionId implements Serializable {
 
-    @ManyToOne
-    private User user;
+    private Long userId;
 
-    @ManyToOne
-    private Survey survey;
+    private UUID surveyId;
 
-    @ManyToOne
-    private QuestionBank questionBank;
+    private Long questionBankId;
 
     @Override
     public boolean equals(Object o) {
@@ -29,13 +27,13 @@ public class AnsweredQuestionId implements Serializable {
             return false;
         }
         AnsweredQuestionId that = (AnsweredQuestionId) o;
-        return Objects.equals(user, that.user) && Objects.equals(survey, that.survey)
-            && Objects.equals(questionBank, that.questionBank);
+        return Objects.equals(userId, that.userId) && Objects.equals(surveyId, that.surveyId)
+            && Objects.equals(questionBankId, that.questionBankId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(user, survey, questionBank);
+        return Objects.hash(userId, surveyId, questionBankId);
     }
 
 }

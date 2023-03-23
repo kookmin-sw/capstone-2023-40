@@ -21,6 +21,6 @@ public interface SurveyRepository extends JpaRepository<Survey, UUID> {
     @Override
     Optional<Survey> findById(UUID surveyId);
 
-    @Query("SELECT s FROM Survey s JOIN FETCH s.questions q JOIN q.questionId.questionBank qb WHERE s.surveyId = :survey_id")
+    @Query("SELECT s FROM Survey s JOIN FETCH s.questions q JOIN q.questionBank qb WHERE s.surveyId = :survey_id")
     Optional<Survey> findBySurveyIdWithRelatedQuestionBank(@Param("survey_id") UUID surveyId);
 }
