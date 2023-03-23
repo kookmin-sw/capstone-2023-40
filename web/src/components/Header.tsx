@@ -3,8 +3,7 @@ import React, { useState, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
 
-import { ReactComponent as LogoDark } from '../assets/svg/logo-dark.svg';
-import { ReactComponent as LogoLight } from '../assets/svg/logo-light.svg';
+import { Icons } from '../assets/svg';
 
 const HeaderContainer = styled.header<{ isTransitionEnabled: boolean }>`
   position: sticky;
@@ -20,14 +19,14 @@ const HeaderContainer = styled.header<{ isTransitionEnabled: boolean }>`
   -ms-transition: ${(props) => (props.isTransitionEnabled ? 'background-color 300ms linear' : 'none')};
 `;
 
-const LogoLightContainer = styled(LogoLight)`
+const LogoLightContainer = styled(Icons.LightLogo)`
   margin-left: 2vw;
   width: 150px;
   height: fit-content;
   cursor: pointer;
 `;
 
-const LogoDarkContainer = styled(LogoDark)`
+const LogoDarkContainer = styled(Icons.DarkLogo)`
   margin-left: 2vw;
   width: 150px;
   height: fit-content;
