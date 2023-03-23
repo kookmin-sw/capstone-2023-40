@@ -9,6 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -31,4 +32,10 @@ public class QuestionOption {
 
     @ManyToOne
     private QuestionBank questionBank;
+
+    @Builder
+    public QuestionOption (String option, String description) {
+        this.option = option;
+        this.description = description;
+    }
 }
