@@ -5,7 +5,6 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -40,24 +39,24 @@ public class QuestionBank {
     )
     private List<QuestionOption> questionOptions;
 
-    @Column(name = "title", nullable = false)
+    @Column(name = "title", nullable = true)
     private String title;
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "description", nullable = true)
     private String description;
 
-    @Column(name = "question", nullable = true)
+    @Column(name = "question", nullable = false)
     private String question;
 
-    @Column(name = "type", nullable = true)
-    private QuestionType questionType;
+    @Column(name = "type", nullable = false)
+    private QuestionType type;
 
     @Builder
-    public QuestionBank(String title, String description, String question, QuestionType questionType, List<QuestionOption> questionOptions) {
+    public QuestionBank(String title, String description, String question, QuestionType type, List<QuestionOption> questionOptions) {
         this.title = title;
         this.description = description;
         this.question = question;
-        this.questionType = questionType;
+        this.type = type;
         this.questionOptions = questionOptions;
     }
 
