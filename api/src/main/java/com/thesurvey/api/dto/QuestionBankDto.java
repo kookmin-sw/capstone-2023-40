@@ -1,7 +1,6 @@
 package com.thesurvey.api.dto;
 
 import com.thesurvey.api.domain.EnumTypeEntity.QuestionType;
-import com.thesurvey.api.domain.QuestionOption;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,6 +17,6 @@ public class QuestionBankDto {
 
     private QuestionType questionType;
 
-    private List<QuestionOption> questionOptions;
+    private List<QuestionOptionDto> questionOptionDtos;
 
 }
