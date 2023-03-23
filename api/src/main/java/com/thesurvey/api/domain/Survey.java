@@ -55,8 +55,8 @@ public class Survey extends BaseTimeEntity {
     private Timestamp endedDate;
 
     @Builder
-    public Survey(String title, List<Question> questions, String description, Timestamp createdDate,
-        Timestamp lastModifiedDate, Timestamp startedDate, Timestamp endedDate) {
+    public Survey(String title, List<Question> questions, String description,
+        Timestamp startedDate, Timestamp endedDate) {
         this.title = title;
         this.questions = questions;
         this.description = description;
