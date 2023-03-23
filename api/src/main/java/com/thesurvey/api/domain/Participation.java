@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -43,5 +44,13 @@ public class Participation {
 
     @Enumerated(EnumType.STRING)
     private CertificationType certificationType;
+
+    @Builder
+    public Participation(ParticipationId participationId, LocalDateTime participateDate, LocalDateTime submittedDate, CertificationType certificationType) {
+        this.participationId = participationId;
+        this.participateDate = participateDate;
+        this.submittedDate = submittedDate;
+        this.certificationType = certificationType;
+    }
 
 }

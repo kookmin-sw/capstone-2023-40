@@ -1,12 +1,11 @@
 package com.thesurvey.api.domain;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -49,14 +48,14 @@ public class Survey extends BaseTimeEntity {
     private String description;
 
     @Column(name = "started_date", nullable = true)
-    private Timestamp startedDate;
+    private LocalDateTime startedDate;
 
     @Column(name = "ended_date", nullable = true)
-    private Timestamp endedDate;
+    private LocalDateTime endedDate;
 
     @Builder
     public Survey(String title, List<Question> questions, String description,
-        Timestamp startedDate, Timestamp endedDate) {
+        LocalDateTime startedDate, LocalDateTime endedDate) {
         this.title = title;
         this.questions = questions;
         this.description = description;
