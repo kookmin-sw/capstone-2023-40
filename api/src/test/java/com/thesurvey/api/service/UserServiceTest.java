@@ -63,9 +63,8 @@ public class UserServiceTest {
         Authentication authentication = new UsernamePasswordAuthenticationToken(
             userRegisterRequestDto.getEmail(), userRegisterRequestDto.getPassword());
 
-        SecurityContext context = SecurityContextHolder.getContext();
         Authentication result = authenticationService.authenticate(authentication);
-        context.setAuthentication(result);
+        SecurityContextHolder.getContext().setAuthentication(result);
 
         assertThat(result.isAuthenticated()).isTrue();
         assertThat(userInfoDto.getName()).isEqualTo(result.getName());
