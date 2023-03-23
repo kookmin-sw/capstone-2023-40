@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -26,7 +28,7 @@ public class Participation {
     @Column(name = "submitted_date", nullable = false)
     private LocalDateTime submittedDate;
 
-    @Column(name = "certification_type", nullable = false)
+    @Enumerated(EnumType.STRING)
     private CertificationType certificationType;
 
 }
