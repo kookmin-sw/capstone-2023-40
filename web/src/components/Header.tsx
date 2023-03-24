@@ -1,4 +1,4 @@
-import React, { useState, ReactNode } from 'react';
+import React, { useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
@@ -19,18 +19,38 @@ const HeaderContainer = styled.header<{ isTransitionEnabled: boolean }>`
   -ms-transition: ${(props) => (props.isTransitionEnabled ? 'background-color 300ms linear' : 'none')};
 `;
 
-const LogoLightContainer = styled(Icons.LightLogo)`
+const LogoLightContainer = styled(Icons.LIGHT_LOGO)`
   margin-left: 2vw;
   width: 150px;
   height: fit-content;
   cursor: pointer;
+
+  @media only screen and (max-width: 700px) {
+    display: none;
+  }
 `;
 
-const LogoDarkContainer = styled(Icons.DarkLogo)`
+const LogoDarkContainer = styled(Icons.DARK_LOGO)`
   margin-left: 2vw;
   width: 150px;
   height: fit-content;
   cursor: pointer;
+
+  @media only screen and (max-width: 700px) {
+    display: none;
+  }
+`;
+
+const FaviconContainer = styled(Icons.FAVICON)`
+  margin: 1vw;
+  margin-left: 3vw;
+  width: 40px;
+  height: fit-content;
+  cursor: pointer;
+
+  @media only screen and (min-width: 700px) {
+    display: none;
+  }
 `;
 
 const CheckBoxWrapper = styled.div`
@@ -43,10 +63,10 @@ const CheckBoxLabel = styled.label`
   left: 0;
   width: 42px;
   height: 26px;
-  margin-top: 2.5vh;
   border-radius: 15px;
   background: #f8f8f8;
   cursor: pointer;
+
   &::after {
     content: '';
     display: block;
@@ -66,8 +86,10 @@ const CheckBox = styled.input`
   border-radius: 15px;
   width: 42px;
   height: 26px;
+
   &:checked + ${CheckBoxLabel} {
     background: #ebeff7;
+
     &::after {
       content: '';
       display: block;
@@ -148,9 +170,15 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
   return (
     <HeaderContainer theme={theme} isTransitionEnabled={isTransitionEnabled}>
       {theme.alt === 'light' ? (
-        <LogoLightContainer onClick={() => navigate('/')} title="logo" />
+        <>
+          <LogoLightContainer onClick={() => navigate('/')} title="logo" />
+          <FaviconContainer onClick={() => navigate('/')} title="logo" />
+        </>
       ) : (
-        <LogoDarkContainer onClick={() => navigate('/')} title="logo" />
+        <>
+          <LogoDarkContainer onClick={() => navigate('/')} title="logo" />
+          <FaviconContainer onClick={() => navigate('/')} title="logo" />
+        </>
       )}
       <NavigatorContainer theme={theme}>
         <Navigator onClick={() => navigate('/survey')}>설문</Navigator>
@@ -162,7 +190,7 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
           <CheckBoxLabel htmlFor="checkbox" theme={theme} />
         </CheckBoxWrapper>
         <LoginInformation onClick={() => navigate('/login')} theme={theme}>
-          로그인/회원가입{' '}
+          로그인/회원가입
         </LoginInformation>
       </ButtonContainer>
     </HeaderContainer>
