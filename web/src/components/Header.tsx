@@ -53,6 +53,12 @@ const FaviconContainer = styled(Icons.FAVICON)`
   }
 `;
 
+const CheckBoxContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 const CheckBoxWrapper = styled.div`
   position: relative;
 `;
@@ -185,13 +191,15 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
         <Navigator onClick={() => navigate('/report')}>리포트</Navigator>
       </NavigatorContainer>
       <ButtonContainer>
-        <CheckBoxWrapper>
-          <CheckBox id="checkbox" type="checkbox" theme={theme} onClick={handleClick} />
-          <CheckBoxLabel htmlFor="checkbox" theme={theme} />
-        </CheckBoxWrapper>
-        <LoginInformation onClick={() => navigate('/login')} theme={theme}>
-          로그인/회원가입
-        </LoginInformation>
+        <CheckBoxContainer>
+          <CheckBoxWrapper>
+            <CheckBox id="checkbox" type="checkbox" theme={theme} onClick={handleClick} />
+            <CheckBoxLabel htmlFor="checkbox" theme={theme} />
+          </CheckBoxWrapper>
+          <LoginInformation onClick={() => navigate('/login')} theme={theme}>
+            로그인/회원가입
+          </LoginInformation>
+        </CheckBoxContainer>
       </ButtonContainer>
     </HeaderContainer>
   );
