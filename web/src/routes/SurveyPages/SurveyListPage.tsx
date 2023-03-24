@@ -80,8 +80,7 @@ const EndDate = styled(Item)`
 
   @media screen and (max-width: 900px) {
     display: none;
-    }
-  } 
+  }
 `;
 
 const HeadTitle = styled(HeadItem)`
@@ -97,11 +96,10 @@ const HeadAuthList = styled(HeadItem)`
 const HeadEndDate = styled(HeadItem)`
   min-width: 150px;
   width: 13vw;
-  
+
   @media screen and (max-width: 900px) {
     display: none;
-    }
-  } 
+  }
 `;
 
 const Auth = styled.label`
@@ -152,8 +150,7 @@ const Label = styled.label`
 
   @media screen and (max-width: 700px) {
     font-size: 30px;
-    }
-  } 
+  }
 `;
 
 const Button = styled.button`
@@ -177,8 +174,7 @@ const Button = styled.button`
   }
   @media screen and (max-width: 700px) {
     font-size: 18px;
-    }
-  } 
+  }
 `;
 
 interface Survey {
