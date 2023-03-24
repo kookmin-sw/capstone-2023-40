@@ -65,22 +65,22 @@ const CheckBoxWrapper = styled.div`
 
 const CheckBoxLabel = styled.label`
   position: absolute;
+  margin: 2px;
   top: 0;
   left: 0;
-  width: 42px;
-  height: 26px;
-  border-radius: 15px;
-  border: ${(props) => props.theme.themeToggle};
-  background: #f8f8f8;
+  width: 60px;
+  height: 30px;
+  border-radius: ${(props) => props.theme.borderRadius};
+  background-color: ${(props) => props.theme.colors.button};
   cursor: pointer;
 
   &::after {
     content: '';
     display: block;
     border-radius: 50%;
-    width: 18px;
-    height: 18px;
-    margin: 3px;
+    width: 25px;
+    height: 25px;
+    margin: 2px;
     background-color: ${(props) => props.theme.colors.opposite};
     box-shadow: 1px 3px 3px 1px rgba(0, 0, 0, 0.2);
     transition: 0.2s;
@@ -90,20 +90,20 @@ const CheckBoxLabel = styled.label`
 const CheckBox = styled.input`
   opacity: 0;
   z-index: 1;
-  border-radius: 15px;
-  width: 42px;
-  height: 26px;
+  border-radius: ${(props) => props.theme.borderRadius};
+  width: 60px;
+  height: 30px;
 
   &:checked + ${CheckBoxLabel} {
-    background: #ebeff7;
+    background-color: ${(props) => props.theme.colors.button};
 
     &::after {
       content: '';
       display: block;
       border-radius: 50%;
-      width: 18px;
-      height: 18px;
-      margin-left: 21px;
+      width: 25px;
+      height: 25px;
+      margin-left: calc(60px / 2);
       transition: 0.2s;
       cursor: pointer;
     }
