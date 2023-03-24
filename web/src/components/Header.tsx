@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
 
+import DarkModeIcon from '../assets/darkmode.webp';
+import LightModeIcon from '../assets/lightmode.webp';
 import { Icons } from '../assets/svg';
 
 const HeaderContainer = styled.header<{ isTransitionEnabled: boolean }>`
@@ -81,8 +83,8 @@ const CheckBoxLabel = styled.label`
     width: 25px;
     height: 25px;
     margin: 2px;
-    background-color: ${(props) => props.theme.colors.opposite};
-    box-shadow: 1px 3px 3px 1px rgba(0, 0, 0, 0.2);
+    background-image: url(${(props) => (props.theme.alt === 'light' ? LightModeIcon : DarkModeIcon)});
+    background-size: cover;
     transition: 0.2s;
   }
 `;
@@ -103,6 +105,8 @@ const CheckBox = styled.input`
       border-radius: 50%;
       width: 25px;
       height: 25px;
+      background-image: url(${(props) => (props.theme.alt === 'light' ? LightModeIcon : DarkModeIcon)});
+      background-size: cover;
       margin-left: calc(60px / 2);
       transition: 0.2s;
       cursor: pointer;
