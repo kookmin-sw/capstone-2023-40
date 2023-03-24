@@ -70,15 +70,12 @@ const Button = styled.button`
   border-radius: ${(props) => props.theme.borderRadius};
   background-color: ${(props) => props.theme.colors.button};
   cursor: pointer;
+  font-weight: 700;
+  color: ${(props) => props.theme.colors.text};
 
   &:hover {
     background-color: ${(props) => props.theme.colors.btnhover};
   }
-`;
-
-const ButtonText = styled.span`
-  font-weight: 700;
-  color: ${(props) => props.theme.colors.text};
 `;
 
 export type LogLevel = 'ERROR' | 'WARN' | 'INFO';
@@ -114,9 +111,7 @@ export default function AlertModal({ theme, title, level, text }: AlertModalProp
         <BodyContainer>
           {/* FIXME: To verification shortcut list */}
           {/* <ListContainer></ListContainer> */}
-          <Button theme={theme}>
-            <ButtonText theme={theme}>{text}</ButtonText>
-          </Button>
+          <Button theme={theme}>{text}</Button>
         </BodyContainer>
       </Modal>
     </Container>
