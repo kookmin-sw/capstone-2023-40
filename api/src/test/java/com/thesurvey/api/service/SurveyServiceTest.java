@@ -2,15 +2,13 @@ package com.thesurvey.api.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import com.thesurvey.api.domain.EnumTypeEntity;
 import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
 import com.thesurvey.api.domain.EnumTypeEntity.QuestionType;
 import com.thesurvey.api.domain.QuestionBank;
 import com.thesurvey.api.domain.QuestionOption;
 import com.thesurvey.api.domain.Survey;
-import com.thesurvey.api.dto.QuestionBankDto;
-import com.thesurvey.api.dto.QuestionOptionDto;
 import com.thesurvey.api.dto.SurveyDto;
+import com.thesurvey.api.repository.ParticipationRepository;
 import com.thesurvey.api.repository.QuestionRepository;
 import com.thesurvey.api.repository.SurveyRepository;
 import com.thesurvey.api.service.mapper.SurveyMapper;
@@ -38,6 +36,8 @@ public class SurveyServiceTest {
     QuestionService questionService;
     @Autowired
     SurveyMapper surveyMapper;
+    @Autowired
+    ParticipationRepository participationRepository;
     String title = "My name is Jin";
 
     QuestionOption questionOption1 = QuestionOption.builder().option("student").build();
@@ -55,6 +55,28 @@ public class SurveyServiceTest {
     SurveyDto surveyDto = SurveyDto.builder().title(title).startedDate(LocalDateTime.now())
         .endedDate(LocalDateTime.now()).questionBank(questionBanks).certificationType(
             CertificationType.GOOGLE).build();
+
+//    @Test
+//    void testParticipationSave() {
+//        Survey savedSurvey = surveyRepository.save(surveyMapper.toSurvey(surveyDto));
+//        Long tmpUserId = 1L;
+//        ParticipationId participationId = new ParticipationId(savedSurvey.getSurveyId(), tmpUserId);
+//        Participation participation = Participation.builder()
+//            .participationId(participationId)
+//            .certificationType(surveyDto.getCertificationType())
+//            .participateDate(LocalDateTime.now())
+//            .submittedDate(LocalDateTime.now())
+//            .build();
+//
+//        Participation savedParticipation = participationRepository.save(participation);
+//
+//        assertNotNull(savedParticipation);
+//        assertEquals(tmpUserId, savedParticipation.getParticipationId().getUserId());
+//
+//
+//
+//
+//    }
 
     @Test
     void testCreateSurvey() {
