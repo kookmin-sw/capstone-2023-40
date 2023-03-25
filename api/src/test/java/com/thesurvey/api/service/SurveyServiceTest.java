@@ -33,8 +33,6 @@ public class SurveyServiceTest {
     @Autowired
     SurveyService surveyService;
     @Autowired
-    QuestionService questionService;
-    @Autowired
     SurveyMapper surveyMapper;
     @Autowired
     ParticipationRepository participationRepository;
