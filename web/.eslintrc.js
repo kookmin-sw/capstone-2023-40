@@ -25,6 +25,7 @@ module.exports = {
     'global-require': 'off',
     '@typescript-eslint/no-var-requires': 'off',
     'no-underscore-dangle': 'off',
+    'object-shorthand': 'off',
     '@typescript-eslint/no-unused-expressions': 'warn',
     '@typescript-eslint/naming-convention': 'warn',
     'react/require-default-props': 'warn',
