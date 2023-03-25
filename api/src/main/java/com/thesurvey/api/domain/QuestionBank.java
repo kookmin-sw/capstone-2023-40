@@ -35,8 +35,8 @@ public class QuestionBank {
     private List<Question> questions;
 
     @OneToMany(
-        mappedBy = "optionNo",
-        cascade = CascadeType.PERSIST,
+        mappedBy = "questionBank",
+        cascade = CascadeType.ALL,
         orphanRemoval = true
     )
     private List<QuestionOption> questionOptions;
