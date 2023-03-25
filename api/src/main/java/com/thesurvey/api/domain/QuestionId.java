@@ -3,18 +3,22 @@ package com.thesurvey.api.domain;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Embeddable
 @Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class QuestionId implements Serializable {
-
+    @Column(name = "survey_id")
     private UUID surveyId;
-
+    @Column(name = "question_bank_id")
     private Long questionBankId;
 
     @Override

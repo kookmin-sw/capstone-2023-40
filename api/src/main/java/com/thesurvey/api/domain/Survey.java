@@ -15,6 +15,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 @Entity
 @Table(name = "survey")
@@ -33,10 +34,9 @@ public class Survey extends BaseTimeEntity {
         orphanRemoval = true
     )
     private List<Participation> participations;
-
     @OneToMany(
         mappedBy = "survey",
-        cascade = CascadeType.ALL,
+        cascade = CascadeType.PERSIST,
         orphanRemoval = true
     )
     private List<Question> questions;

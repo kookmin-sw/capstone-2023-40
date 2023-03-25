@@ -29,14 +29,14 @@ public class QuestionBank {
     private Long questionBankId;
     @OneToMany(
         mappedBy = "questionBank",
-        cascade = CascadeType.ALL,
+        cascade = CascadeType.PERSIST,
         orphanRemoval = true
     )
     private List<Question> questions;
 
     @OneToMany(
         mappedBy = "optionNo",
-        cascade = CascadeType.ALL,
+        cascade = CascadeType.PERSIST,
         orphanRemoval = true
     )
     private List<QuestionOption> questionOptions;
@@ -54,11 +54,12 @@ public class QuestionBank {
     private QuestionType type;
 
     @Builder
-    public QuestionBank(String title, String description, String question, QuestionType type, List<QuestionOption> questionOptions) {
+    public QuestionBank(String title, String description, String question, QuestionType type,List<Question> questions, List<QuestionOption> questionOptions) {
         this.title = title;
         this.description = description;
         this.question = question;
         this.type = type;
+        this.questions = questions;
         this.questionOptions = questionOptions;
     }
 

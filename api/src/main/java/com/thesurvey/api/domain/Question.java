@@ -21,13 +21,13 @@ public class Question {
     @EmbeddedId
     private QuestionId questionId;
 
-    @MapsId("surveyId")
     @ManyToOne
+    @MapsId("surveyId")
     @JoinColumn(name = "survey_id")
     public Survey survey;
 
-    @MapsId("questionBankId")
     @ManyToOne
+    @MapsId("questionBankId")
     @JoinColumn(name = "question_bank_id")
     public QuestionBank questionBank;
 
@@ -38,8 +38,10 @@ public class Question {
     private String description;
 
     @Builder
-    public Question(QuestionId questionId, int questionNo, String description) {
-        this.questionId = questionId;
+    public Question(QuestionBank questionBank, Survey survey, int questionNo, String description) {
+        this.questionId = new QuestionId(survey.getSurveyId(), questionBank.getQuestionBankId());
+        this.survey = survey;
+        this.questionBank = questionBank;
         this.questionNo = questionNo;
         this.description = description;
     }
