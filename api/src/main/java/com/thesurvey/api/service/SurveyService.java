@@ -68,33 +68,20 @@ public class SurveyService {
         // First, save Survey, QuestionBank
         Survey savedSurvey = surveyRepository.save(surveyMapper.toSurvey(surveyDto));
         List<QuestionBank> savedQuestionBank = questionBankRepository.saveAll(surveyDto.getQuestionBank());
-
-        // Second, save participation
-//        Optional<User> author = userRepository.findByName(
-//            SecurityContextHolder.getContext().getAuthentication().getName());
-        Long tmpUserId = 1L;
-//        ParticipationId participationId = new ParticipationId(savedSurvey.getSurveyId(), author.get()
-//            .getUserId());
-        ParticipationId participationId = new ParticipationId(savedSurvey.getSurveyId(), tmpUserId);
-        Participation participation = Participation.builder()
-            .participationId(participationId)
-            .certificationType(surveyDto.getCertificationType())
-            .participateDate(LocalDateTime.now())
-            .submittedDate(LocalDateTime.now())
-            .build();
-        participationRepository.save(participation);
-
-        // Third, save question
+        // Second, save question
         int questionNo = 0;
+        List<Question> questions = new ArrayList<>();
         for (QuestionBank questionBank : savedQuestionBank) {
             Question question = Question.builder()
-                .questionId(
-                    new QuestionId(savedSurvey.getSurveyId(), questionBank.getQuestionBankId()))
+                .survey(savedSurvey)
+                .questionBank(questionBank)
                 .questionNo(++questionNo)
                 .description(questionBank.getDescription())
                 .build();
-            questionRepository.save(question);
+            questions.add(question);
         }
+        questionRepository.saveAll(questions);
+
         return savedSurvey;
     }
 
