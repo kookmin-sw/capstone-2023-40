@@ -1,12 +1,9 @@
 package com.thesurvey.api.service;
 
-import com.thesurvey.api.domain.Participation;
-import com.thesurvey.api.domain.ParticipationId;
 import com.thesurvey.api.domain.Question;
 import com.thesurvey.api.domain.QuestionBank;
-import com.thesurvey.api.domain.QuestionId;
+import com.thesurvey.api.domain.QuestionOption;
 import com.thesurvey.api.domain.Survey;
-import com.thesurvey.api.domain.User;
 import com.thesurvey.api.dto.SurveyDto;
 import com.thesurvey.api.exception.ErrorMessage;
 import com.thesurvey.api.exception.ExceptionMapper;
@@ -16,13 +13,13 @@ import com.thesurvey.api.repository.QuestionRepository;
 import com.thesurvey.api.repository.SurveyRepository;
 import com.thesurvey.api.repository.UserRepository;
 import com.thesurvey.api.service.mapper.SurveyMapper;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import javax.transaction.Transactional;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -67,11 +64,15 @@ public class SurveyService {
     public Survey createSurvey(SurveyDto surveyDto) {
         // First, save Survey, QuestionBank
         Survey savedSurvey = surveyRepository.save(surveyMapper.toSurvey(surveyDto));
-        List<QuestionBank> savedQuestionBank = questionBankRepository.saveAll(surveyDto.getQuestionBank());
+        List<QuestionBank> savedQuestionBank = surveyDto.getQuestionBank();
         // Second, save question
         int questionNo = 0;
-        List<Question> questions = new ArrayList<>();
+        Set<Question> questions = new HashSet<>();
         for (QuestionBank questionBank : savedQuestionBank) {
+            // Set QuestionOption's parent entity
+            for (QuestionOption questionOption : questionBank.getQuestionOptions()) {
+                questionOption.setQuestionBank(questionBank);
+            }
             Question question = Question.builder()
                 .survey(savedSurvey)
                 .questionBank(questionBank)
@@ -80,6 +81,7 @@ public class SurveyService {
                 .build();
             questions.add(question);
         }
+        questionBankRepository.saveAll(savedQuestionBank);
         questionRepository.saveAll(questions);
 
         return savedSurvey;

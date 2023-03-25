@@ -4,11 +4,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
 import com.thesurvey.api.domain.EnumTypeEntity.QuestionType;
+import com.thesurvey.api.domain.Question;
 import com.thesurvey.api.domain.QuestionBank;
 import com.thesurvey.api.domain.QuestionOption;
 import com.thesurvey.api.domain.Survey;
 import com.thesurvey.api.dto.SurveyDto;
 import com.thesurvey.api.repository.ParticipationRepository;
+import com.thesurvey.api.repository.QuestionBankRepository;
+import com.thesurvey.api.repository.QuestionOptionRepository;
 import com.thesurvey.api.repository.QuestionRepository;
 import com.thesurvey.api.repository.SurveyRepository;
 import com.thesurvey.api.service.mapper.SurveyMapper;
@@ -31,13 +34,17 @@ public class SurveyServiceTest {
     @Autowired
     QuestionRepository questionRepository;
     @Autowired
+    QuestionBankRepository questionBankRepository;
+    @Autowired
     SurveyService surveyService;
     @Autowired
     SurveyMapper surveyMapper;
     @Autowired
     ParticipationRepository participationRepository;
-    String title = "My name is Jin";
+    @Autowired
+    QuestionOptionRepository questionOptionRepository;
 
+    String title = "My name is Jin";
     QuestionOption questionOption1 = QuestionOption.builder().option("student").build();
     QuestionOption questionOption2 = QuestionOption.builder().option("professor").build();
     List<QuestionOption> questionOptions = Arrays.asList(questionOption1, questionOption2);
@@ -47,7 +54,7 @@ public class SurveyServiceTest {
     QuestionBank questionBank1 = QuestionBank.builder().title("test1").question("what's your job?")
         .type(
             QuestionType.LONG_ANSWER).questionOptions(questionOptions).build();
-    QuestionBank questionBank2 = QuestionBank.builder().title("test2").question("what's your job2?")
+    QuestionBank questionBank2 = QuestionBank.builder().title("test2").question("what's your hobby?")
         .type(QuestionType.SHORT_ANSWER).questionOptions(questionOptions2).build();
     List<QuestionBank> questionBanks = Arrays.asList(questionBank1, questionBank2);
     SurveyDto surveyDto = SurveyDto.builder().title(title).startedDate(LocalDateTime.now())
@@ -81,6 +88,22 @@ public class SurveyServiceTest {
         Survey newSurvey = surveyService.createSurvey(surveyDto);
 
         Optional<Survey> savedSurvey = surveyRepository.findById(newSurvey.getSurveyId());
+        List<Question> savedQuestions = questionRepository.findAll();
+        List<QuestionBank> savedQuestionBanks = questionBankRepository.findAll();
+        List<QuestionOption> savedQuestionOptions = questionOptionRepository.findAll();
+        System.out.println("Question Table:");
+        for (Question q : savedQuestions) {
+            System.out.println(q.getQuestionNo() + " " + q.getQuestionBank().getQuestion());
+        }
+        System.out.println("QuestionBank Table:");
+        for (QuestionBank qb : savedQuestionBanks) {
+            System.out.println(qb.getTitle() + " " + qb.getQuestion());
+        }
+        System.out.println("QuestionOption Table:");
+        for (QuestionOption qo : savedQuestionOptions) {
+            System.out.println(qo.getOption() + " " + qo.getQuestionBank().getQuestionBankId());
+        }
+
         assertNotNull(savedSurvey);
         assertEquals(title, savedSurvey.get().getTitle());
     }
