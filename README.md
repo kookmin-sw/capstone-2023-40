@@ -5,7 +5,7 @@
       <img src="docs/assets/logo-light.webp" height="128">
     </picture>
   </a>
-  <p align="center" style="font-size:1.618em;font-weight:bold;">설문조사 플랫폼, the <span style="color:#FF8A00">s</span>urvey</p>
+  <h1 align="center">설문조사 플랫폼, the <span style="color:orange">s</span>urvey</h1>
 </p>
 
 <br/>   
