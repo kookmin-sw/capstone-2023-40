@@ -1,77 +1,133 @@
-[![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-c66648af7eb3fe8bc4f294546bfd86ef473780cde1dea487d3c4ff354943c9ae.svg)](https://classroom.github.com/online_ide?assignment_repo_id=10028921&assignment_repo_type=AssignmentRepo)
-# Welcome to GitHub
+<p align="center">
+  <a href="https://capstone-2023-40-thesurvey.vercel.app">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="docs/assets/logo-dark.webp">
+      <img src="docs/assets/logo-light.webp" height="128">
+    </picture>
+  </a>
+  <h1 align="center">설문조사 플랫폼, the <span style="color:orange">s</span>urvey</h1>
+</p>
 
-캡스톤 팀 생성을 축하합니다.
+<br/>   
 
-## 팀소개 및 페이지를 꾸며주세요.
+**프로젝트 개요**   
+&nbsp;&nbsp;'**the survey**' 는 간편한 인증 절차와 포인트 시스템을 통해 누구나 쉽게 설문조사를 진행하고 참여할 수 있는 웹 어플리케이션입니다. C2C(Customer to Customer) 타겟을 고려한 저렴한 비용과 높은 신뢰도를 바탕으로, 누구나 쉽게 사용할 수 있는 설문조사 서비스를 제공합니다.
 
-- 프로젝트 소개
-  - 프로젝트 설치방법 및 데모, 사용방법, 프리뷰등을 readme.md에 작성.
-  - Api나 사용방법등 내용이 많을경우 wiki에 꾸미고 링크 추가.
+<br/>   
 
-- 팀페이지 꾸미기
-  - 프로젝트 소개 및 팀원 소개
-  - index.md 예시보고 수정.
+## 목차
+<ul>
+  <li><a href="#프로젝트-소개">프로젝트 소개</a></li>
+  <li><a href="#데모-영상">데모 영상</a></li>
+  <li><a href="#사용법">사용법</a></li>
+  <li><a href="#팀-소개">팀 소개</a></li>
+</ul>
 
-- GitHub Pages 리파지토리 Settings > Options > GitHub Pages 
-  - Source를 marster branch
-  - Theme Chooser에서 태마선택
-  - 수정후 팀페이지 확인하여 점검.
+<br/>   
 
-**팀페이지 주소** -> https://kookmin-sw.github.io/ '{{자신의 리파지토리 아이디}}'
+## 프로젝트 소개
+&nbsp;&nbsp;먼저, '**the survey**'는 설문조사를 생성하고 참여할 수 있는 플랫폼입니다. 해당 서비스는 B2C, C2C, B2B 등 <u>**다양한 형태의 사용자들이 서로 자유롭게 설문조사를 생성하고 참여**</u>할 수 있는 환경을 제공합니다.
 
-**예시)** 2023년 0조  https://kookmin-sw.github.io/capstone-2023-00/
+&nbsp;&nbsp;또한, 설문을 생성한 사용자는, <u>**설문 참여에 설정한 필수 인증 과정**</u>을 통해, 원하는 참여자들을 바탕으로 <u>**신뢰성 높은 설문조사 결과**</u>를 얻을 수 있습니다.
 
+&nbsp;&nbsp;<u>**무분별한 설문조사 게시를 방지**</u>하기 위해, 게시를 위해서는 일정 포인트가 필요하며, <u>**설문조사 참여에 대한 보상**</u>으로 포인트를 얻을 수 있습니다. 또한, 적립된 포인트로, 새로운 설문조사를 생성하거나, 기프티콘과 같은 상품으로 교환할 수도 있습니다.
 
-## 내용에 아래와 같은 내용들을 추가하세요.
+<br/>   
 
-### 1. 프로잭트 소개
+## 데모 영상
+TODO: 
 
-프로젝트
+<br/>   
 
-### 2. 소개 영상
+## 사용법
 
-프로젝트 소개하는 영상을 추가하세요
+- [소개 페이지 바로가기](https://kookmin-sw.github.io/capstone-2023-40/)
+- [the survey 이용하러 가기](https://capstone-2023-40-thesurvey.vercel.app)
 
-### 3. 팀 소개
+<br/>   
 
-팀을 소개하세요.
+## 팀 소개
+<table>
+  <thead align="center">
+    <tr align="center">
+      <th align="center" style="text-align: center;">
+        <a href="https://github.com/SeiwonPark">박세원</a>
+      </th>
+      <th align="center" style="text-align: center;">
+        <a href="https://github.com/kimjinmyeong">김진명</a>
+      </th>
+      <th align="center" style="text-align: center;">
+        <a href="https://github.com/ohsung1125">오성혁</a>
+      </th>
+      <th align="center" style="text-align: center;">
+        <a href="https://github.com/sanghyun1128">이상현</a>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="center">
+        <a href="https://github.com/SeiwonPark">
+          <img src="https://avatars.githubusercontent.com/SeiwonPark" alt="SeiwonPark" width="128" height="128">
+        </a>
+      </td>
+      <td align="center">
+        <a href="https://github.com/kimjinmyeong">
+          <img src="https://avatars.githubusercontent.com/kimjinmyeong" alt="kimjinmyeong" width="128" height="128">
+        </a>
+      </td>
+      <td align="center">
+        <a href="https://github.com/ohsung1125">
+          <img src="https://avatars.githubusercontent.com/ohsung1125" alt="ohsung1125" width="128" height="128">
+        </a>
+      </td>
+      <td align="center">
+        <a href="https://github.com/sanghyun1128">
+          <img src="https://avatars.githubusercontent.com/sanghyun1128" alt="sanghyun1128" width="128" height="128">
+        </a>
+      </td>
+    </tr>
+    <tr align="center">
+      <td align="center" style="text-align: center;">
+        ****3178
+      </td>
+      <td align="center" style="text-align: center;">
+        ****1599
+      </td>
+      <td align="center" style="text-align: center;">
+        ****1247
+      </td>
+      <td align="center" style="text-align: center;">
+        ****1657
+      </td>
+    </tr>
+    <tr>
+      <td align="left">
+        <ul style="list-style-type:'- ';padding-left:0;">
+          <li>PM</li>
+          <li>Backend</li>
+        </ul>
+      </td>
+      <td align="left">
+        <ul style="list-style-type:'- ';padding-left:0;">
+          <li>Backend</li>
+          <li>DevOps</li>
+        </ul>
+      </td>
+      <td align="left">
+        <ul style="list-style-type:'- ';padding-left:0;">
+          <li>Frontend</li>
+          <li>UI/UX</li>
+        </ul>
+      </td>
+      <td align="left">
+        <ul style="list-style-type:'- ';padding-left:0;">
+          <li>Frontend</li>
+          <li>UI/UX</li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
 
-팀원정보 및 담당이나 사진 및 SNS를 이용하여 소개하세요.
-
-### 4. 사용법
-
-소스코드제출시 설치법이나 사용법을 작성하세요.
-
-### 5. 기타
-
-추가적인 내용은 자유롭게 작성하세요.
-
-
-## Markdown을 사용하여 내용꾸미기
-
-Markdown은 작문을 스타일링하기위한 가볍고 사용하기 쉬운 구문입니다. 여기에는 다음을위한 규칙이 포함됩니다.
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-자세한 내용은 [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Support or Contact
-
-readme 파일 생성에 추가적인 도움이 필요하면 [도움말](https://help.github.com/articles/about-readmes/) 이나 [contact support](https://github.com/contact) 을 이용하세요.
+<br/>   
