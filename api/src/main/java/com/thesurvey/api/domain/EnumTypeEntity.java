@@ -13,7 +13,8 @@ public class EnumTypeEntity {
         NAVER,
         GOOGLE,
         WEBMAIL,
-        DRIVER_LICENSE
+        DRIVER_LICENSE,
+        MOBILE_PHONE
     }
     public enum Role {
         USER,
