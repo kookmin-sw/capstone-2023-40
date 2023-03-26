@@ -10,14 +10,17 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Embeddable
 @Getter
+@Setter
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class ParticipationId implements Serializable {
-
+    @Column(name = "survey_id")
     private UUID surveyId;
+    @Column(name = "user_id")
     private Long userId;
     @Override
     public boolean equals(Object o) {
