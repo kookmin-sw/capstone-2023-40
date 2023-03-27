@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+@RestController("/users")
 public class UserController {
 
     private final UserService userService;
@@ -61,7 +61,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/mypage")
+    @GetMapping("/profile")
     public ResponseEntity<UserInfoDto> getUserProfile() {
         // FIXME: not working as expected
         if (!isAuthenticated()) {
