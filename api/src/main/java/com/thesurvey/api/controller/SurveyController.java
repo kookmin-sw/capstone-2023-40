@@ -2,6 +2,7 @@ package com.thesurvey.api.controller;
 
 import com.thesurvey.api.domain.Survey;
 import com.thesurvey.api.dto.SurveyDto;
+import com.thesurvey.api.dto.request.SurveyRequestDto;
 import com.thesurvey.api.service.SurveyService;
 import com.thesurvey.api.service.UserService;
 import java.util.List;
@@ -31,15 +32,18 @@ public class SurveyController {
     public ResponseEntity<List<Optional<SurveyDto>>> getAllSurvey() {
         return ResponseEntity.ok(surveyService.getAllSurvey());
     }
+
     @GetMapping("/{surveyId}")
     public ResponseEntity<Optional<Optional<Survey>>> getSurveyById(@PathVariable UUID surveyId) {
-        return ResponseEntity.ok(Optional.ofNullable(surveyService.getSurveyByIdWithRelatedQuestion(surveyId)));
+        return ResponseEntity.ok(
+            Optional.ofNullable(surveyService.getSurveyByIdWithRelatedQuestion(surveyId)));
     }
 
     @PostMapping
-    public ResponseEntity<Survey> createSurvey(@RequestBody SurveyDto surveyDto) {
-        return ResponseEntity.ok(surveyService.createSurvey(surveyDto));
+    public ResponseEntity<Survey> createSurvey(@RequestBody SurveyRequestDto surveyRequestDto) {
+        return ResponseEntity.ok(surveyService.createSurvey(surveyRequestDto));
     }
+
 //    @PostMapping("/submit")
 //    public ResponseEntity<Survey> submitSurvey(@RequestBody SurveyDto requestedSurveyDto) {
 //        return ResponseEntity.ok(surveyService.respondSurvey(requestedSurveyDto));

@@ -2,10 +2,10 @@ package com.thesurvey.api.service.mapper;
 
 import com.thesurvey.api.domain.Survey;
 import com.thesurvey.api.dto.SurveyDto;
+import com.thesurvey.api.dto.request.SurveyRequestDto;
 import java.util.Optional;
 import org.springframework.stereotype.Component;
 
-// @formatter:off
 @Component
 public class SurveyMapper {
 
@@ -20,14 +20,13 @@ public class SurveyMapper {
                 .build());
     }
 
-    public Survey toSurvey(SurveyDto surveyDto) {
+    public Survey toSurvey(SurveyRequestDto surveyRequestDto) {
         return Survey
             .builder()
-            .title(surveyDto.getTitle())
-            .description(surveyDto.getDescription())
-            .startedDate(surveyDto.getStartedDate())
-            .endedDate(surveyDto.getEndedDate())
+            .title(surveyRequestDto.getTitle())
+            .description(surveyRequestDto.getDescription())
+            .startedDate(surveyRequestDto.getStartedDate())
+            .endedDate(surveyRequestDto.getEndedDate())
             .build();
     }
 }
-// @formatter:on

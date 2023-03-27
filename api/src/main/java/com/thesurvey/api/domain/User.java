@@ -63,7 +63,9 @@ public class User extends BaseTimeEntity implements UserDetails {
     private String profileImage;
 
     @Builder
-    public User(List<Participation> participations, List<AnsweredQuestion> answeredQuestions, String email, String name, Role role, String password, String phoneNumber, String address, String profileImage) {
+    public User(List<Participation> participations, List<AnsweredQuestion> answeredQuestions,
+        String email, String name, Role role, String password, String phoneNumber, String address,
+        String profileImage) {
         this.participations = participations;
         this.answeredQuestions = answeredQuestions;
         this.email = email;

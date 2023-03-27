@@ -4,18 +4,15 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import com.thesurvey.api.domain.EnumTypeEntity.Role;
 import com.thesurvey.api.domain.User;
 import com.thesurvey.api.dto.UserInfoDto;
-import com.thesurvey.api.dto.UserRegisterRequestDto;
+import com.thesurvey.api.dto.request.UserRegisterRequestDto;
 import com.thesurvey.api.repository.UserRepository;
 import com.thesurvey.api.service.mapper.UserMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest

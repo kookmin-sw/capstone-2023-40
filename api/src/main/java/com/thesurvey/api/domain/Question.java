@@ -1,5 +1,6 @@
 package com.thesurvey.api.domain;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -26,7 +27,7 @@ public class Question {
     @JoinColumn(name = "survey_id")
     public Survey survey;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @MapsId("questionBankId")
     @JoinColumn(name = "question_bank_id")
     public QuestionBank questionBank;
@@ -34,15 +35,18 @@ public class Question {
     @Column(name = "question_no", nullable = false)
     private int questionNo;
 
-    @Column(name = "description", nullable = true)
-    private String description;
+    @Column(name = "is_required", nullable = false)
+    private boolean isRequired;
 
     @Builder
-    public Question(QuestionBank questionBank, Survey survey, int questionNo, String description) {
-        this.questionId = new QuestionId(survey.getSurveyId(), questionBank.getQuestionBankId());
+    public Question(QuestionBank questionBank, Survey survey, int questionNo, boolean isRequired) {
         this.survey = survey;
         this.questionBank = questionBank;
         this.questionNo = questionNo;
-        this.description = description;
+        this.isRequired = isRequired;
+        this.questionId = QuestionId.builder()
+            .surveyId(survey.getSurveyId())
+            .questionBankId(questionBank.getQuestionBankId())
+            .build();
     }
 }

@@ -12,5 +12,5 @@ public class GlobalAPIExceptionHandler {
     public ResponseEntity<String> handleNotFoundException(ExceptionMapper e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
-    
+
 }
