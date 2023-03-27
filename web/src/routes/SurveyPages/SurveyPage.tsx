@@ -12,50 +12,126 @@ import { useTheme } from '../../hooks/useTheme';
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
+`;
+
+const HeadContainer = styled.div`
+  padding: 6vh 8vw 0vh 8vw;
   background-color: ${(props) => props.theme.colors.container};
 `;
 
-const HeadContainer = styled.div``;
-const Title = styled.label`
+const Title = styled.span`
   font-size: 40px;
-  font-weight: 700;
+  font-weight: 600;
   color: ${(props) => props.theme.colors.default};
 `;
+
 const EndDate = styled.label`
-  font-size: 18px;
-  font-weight: 700;
+  font-size: 20px;
+  font-weight: 600;
   color: ${(props) => props.theme.colors.text};
 `;
 
-const BodyContainer = styled.div``;
+const BodyContainer = styled.div`
+  width: 84vw;
+  padding: 1vh 8vw 1vh 8vw;
+  background-color: ${(props) => props.theme.colors.container};
+`;
 
 const QuestionContainer = styled.div`
-  margin: 2px;
-  padding: 2vh;
-  font-size: 1.7vh;
-  font-weight: bold;
-  border-radius: 5px;
+  margin-top: 23px;
+  border-radius: 8px;
+  border-left: 10px solid ${(props) => props.theme.colors.primary};
+  padding: 1.2vh 2vw 1.2vh 2vw;
   color: ${(props) => props.theme.colors.default};
   background-color: ${(props) => props.theme.colors.background};
 `;
+
 const QuestionTitle = styled.div`
-  margin: 2px;
-  padding: 2vh;
-  font-size: 1.7vh;
-  font-weight: bold;
-  border-radius: 5px;
+  width: 76vw;
+  padding: 1.2vh 1.5vw 1.2vh 1.5vw;
+  margin-top: 7px;
+  margin-bottom: 25px;
+  border-radius: 15px;
+  font-size: 18px;
+  font-weight: 900;
   color: ${(props) => props.theme.colors.default};
   background-color: ${(props) => props.theme.colors.container};
 `;
 
-const MultipleChoiceContainer = styled.div``;
-const ChoiceOption = styled.input``;
-const ChoiceLabel = styled.label``;
+const Answer = styled.textarea`
+  padding: 1.2vh 2vw 1.2vh 2vw;
+  margin-bottom: 5px;
+  border-radius: 15px;
 
-const LongAnswerInput = styled.input`
-  background-color: red;
+  font-weight: 100;
+  color: ${(props) => props.theme.colors.default};
+  background-color: ${(props) => props.theme.colors.container};
 `;
-const ShortAnswerInput = styled.input``;
+
+const LongAnswer = styled(Answer)`
+  width: 74vw;
+  height: 70px;
+  font-size: 15px;
+`;
+
+const ShortAnswer = styled(Answer)`
+  text-align: center;
+  width: 20vw;
+  height: 22px;
+  font-size: 18px;
+  margin-left: 55vw;
+`;
+
+const MultipleChoiceContainer = styled.div`
+  padding: 0px;
+`;
+
+const RadioContainer = styled.label`
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 1.2vh 1vw 1.2vh 1vw;
+  margin-left: 1.3vw;
+  margin-bottom: 10px;
+  border-radius: 15px;
+  width: 75.7vw;
+  color: ${(props) => props.theme.colors.default};
+  background-color: ${(props) => props.theme.colors.container};
+`;
+
+const RadioInput = styled.input.attrs({ type: 'radio' })`
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+
+  &:checked + span:before {
+    background: ${(props) => props.theme.colors.primary};
+    border: 7px solid ${(props) => props.theme.colors.primary};
+  }
+`;
+
+const RadioCheckmark = styled.span`
+  position: relative;
+  display: inline-block;
+  height: 20px;
+  width: 20px;
+  margin-right: 15px;
+  background: transparent;
+  border: 2px solid #999da0;
+  border-radius: 50%;
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+  }
+`;
 
 interface QuestionOption {
   option_number: number;
@@ -102,31 +178,43 @@ export default function SurveyPage() {
 
   const makeInputBox = (question: SurveyQuestion) => {
     if (question.type === 'LONG_ANSWER') {
-      return <LongAnswerInput theme={theme} />;
+      return <LongAnswer theme={theme} />;
     }
-    return <ShortAnswerInput theme={theme} />;
+    return <ShortAnswer theme={theme} />;
   };
+
+  const [select, setSelect] = useState<string>('optionA');
 
   return (
     <Container theme={theme}>
       <Header theme={theme} toggleTheme={toggleTheme} />
       <HeadContainer theme={theme}>
         <Title theme={theme}>{surveyData?.title}</Title>
-        <EndDate theme={theme}> ~{surveyData?.ended_date.substring(0, 10)}</EndDate>
+        <EndDate theme={theme}> &nbsp;&nbsp;~ {surveyData?.ended_date.substring(0, 10)}</EndDate>
       </HeadContainer>
 
       <BodyContainer theme={theme}>
-        {surveyData?.questions?.map((question: SurveyQuestion) => (
+        {surveyData?.questions?.map((question: SurveyQuestion, index) => (
           <QuestionContainer theme={theme} key={question.question_id}>
-            <QuestionTitle theme={theme}>{question.title}</QuestionTitle>
+            <QuestionTitle theme={theme}>
+              {index + 1}.&nbsp;&nbsp;{question.title}
+            </QuestionTitle>
             {question.type === 'MULTIPLE_CHOICE' ? (
               <MultipleChoiceContainer theme={theme}>
                 {question.options.map((option: QuestionOption) => (
-                  <ChoiceLabel theme={theme} key={option.option_number}>
-                    <ChoiceOption theme={theme} type="radio" name={question.title} />
+                  <RadioContainer theme={theme} key={option.option_number}>
+                    <RadioInput
+                      theme={theme}
+                      name={question.title}
+                      checked={select === `${option.option_number}`}
+                      onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                        setSelect(event.target.value);
+                      }}
+                      value={`${option.option_number}`}
+                    />
+                    <RadioCheckmark theme={theme} />
                     {option.text}
-                    <br />
-                  </ChoiceLabel>
+                  </RadioContainer>
                 ))}
               </MultipleChoiceContainer>
             ) : (
