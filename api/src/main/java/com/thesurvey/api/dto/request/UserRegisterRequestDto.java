@@ -1,4 +1,4 @@
-package com.thesurvey.api.dto;
+package com.thesurvey.api.dto.request;
 
 import com.thesurvey.api.domain.EnumTypeEntity.Role;
 import lombok.AllArgsConstructor;
