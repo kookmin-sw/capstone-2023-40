@@ -42,7 +42,7 @@ public class UserService {
 
     @Transactional
     public Optional<List<User>> getAllUsersWithAnsweredQuestions() {
-            return userRepository.findByAllWithAnsweredQuestion();
+        return userRepository.findByAllWithAnsweredQuestion();
     }
 
 }

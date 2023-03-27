@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AnsweredQuestionId implements Serializable {
+
     @Column(name = "user_id")
     private Long userId;
     @Column(name = "survey_id")

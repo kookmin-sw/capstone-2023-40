@@ -1,6 +1,7 @@
 package com.thesurvey.api.domain;
 
 public class EnumTypeEntity {
+
     public enum QuestionType {
         SINGLE_CHOICE,
         MULTIPLE_CHOICE,
@@ -16,11 +17,11 @@ public class EnumTypeEntity {
         DRIVER_LICENSE,
         MOBILE_PHONE
     }
+
     public enum Role {
         USER,
         ADMIN
     }
-
 
 
 }
