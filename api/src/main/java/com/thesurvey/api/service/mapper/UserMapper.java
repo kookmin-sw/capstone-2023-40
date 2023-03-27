@@ -9,7 +9,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-// @formatter:off
 @Component
 public class UserMapper {
 
@@ -67,4 +66,3 @@ public class UserMapper {
     }
 
 }
-// @formatter:on

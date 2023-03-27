@@ -6,7 +6,6 @@ import com.thesurvey.api.dto.request.SurveyRequestDto;
 import java.util.Optional;
 import org.springframework.stereotype.Component;
 
-// @formatter:off
 @Component
 public class SurveyMapper {
 
@@ -31,4 +30,3 @@ public class SurveyMapper {
             .build();
     }
 }
-// @formatter:on
