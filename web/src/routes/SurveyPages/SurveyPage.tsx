@@ -133,6 +133,26 @@ const RadioCheckmark = styled.span`
   }
 `;
 
+const SubmitButton = styled.button`
+  margin-top: 1vh;
+  border: none;
+  padding: 2vh;
+  padding-left: 3vw;
+  padding-right: 3vw;
+  margin-top: 30px;
+  margin-left: 73vw;
+  border-radius: ${(props) => props.theme.borderRadius};
+  font-size: 2vh;
+  font-weight: 700;
+  color: ${(props) => props.theme.colors.text};
+  background-color: ${(props) => props.theme.colors.primary};
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${(props) => props.theme.colors.prhover};
+  }
+`;
+
 interface QuestionOption {
   option_number: number;
   text: string;
@@ -222,6 +242,7 @@ export default function SurveyPage() {
             )}
           </QuestionContainer>
         ))}
+        <SubmitButton theme={theme}>제출하기</SubmitButton>
       </BodyContainer>
     </Container>
   );
