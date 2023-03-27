@@ -185,6 +185,16 @@ export default function SurveyPage() {
   const [surveyData, setSurveyData] = useState<SurveyData>();
   const [theme, toggleTheme] = useTheme();
   const [select, setSelect] = useState<string>('');
+  const [endedDate, setEndedDate] = useState<string>('');
+  const nowDate = new Date();
+
+  const getDateDiff = (date: string) => {
+    const endDate = new Date(date);
+
+    const diffDate = endDate.getTime() - nowDate.getTime();
+
+    return Math.floor(Math.abs(diffDate / (1000 * 60 * 60 * 24)));
+  };
 
   const fetchSurveyData = async () => {
     try {
@@ -195,10 +205,6 @@ export default function SurveyPage() {
     }
   };
 
-  useEffect(() => {
-    fetchSurveyData();
-  }, []);
-
   const makeInputBox = (question: SurveyQuestion) => {
     if (question.type === 'LONG_ANSWER') {
       return <LongAnswer placeholder="답변을 입력해주세요" theme={theme} />;
@@ -206,12 +212,26 @@ export default function SurveyPage() {
     return <ShortAnswer placeholder="답변을 입력해주세요" theme={theme} />;
   };
 
+  const handleClick = () => {};
+
+  useEffect(() => {
+    fetchSurveyData();
+  }, []);
+
+  useEffect(() => {
+    if (typeof surveyData !== 'undefined') {
+      setEndedDate(surveyData.ended_date.substring(0, 10));
+    }
+  }, [surveyData]);
+
   return (
     <Container theme={theme}>
       <Header theme={theme} toggleTheme={toggleTheme} />
       <HeadContainer theme={theme}>
         <Title theme={theme}>{surveyData?.title}</Title>
-        <EndDate theme={theme}> &nbsp;&nbsp;~ {surveyData?.ended_date.substring(0, 10)}</EndDate>
+        <EndDate theme={theme}>
+          &nbsp;&nbsp;~ {endedDate} (D-{getDateDiff(endedDate)})
+        </EndDate>
       </HeadContainer>
 
       <BodyContainer theme={theme}>
@@ -243,7 +263,9 @@ export default function SurveyPage() {
             )}
           </QuestionContainer>
         ))}
-        <SubmitButton theme={theme}>제출하기</SubmitButton>
+        <SubmitButton onClick={handleClick} type="submit" theme={theme}>
+          제출하기
+        </SubmitButton>
       </BodyContainer>
     </Container>
   );
