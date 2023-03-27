@@ -2,7 +2,6 @@ package com.thesurvey.api.service;
 
 import com.thesurvey.api.domain.User;
 import com.thesurvey.api.dto.UserInfoDto;
-import com.thesurvey.api.dto.request.UserRegisterRequestDto;
 import com.thesurvey.api.exception.ErrorMessage;
 import com.thesurvey.api.exception.ExceptionMapper;
 import com.thesurvey.api.repository.UserRepository;
@@ -32,12 +31,6 @@ public class UserService {
     public UserInfoDto getUserByEmail(String email) {
         return userMapper.toUserInfoDto(userRepository.findByEmail(email))
             .orElseThrow(() -> new ExceptionMapper(ErrorMessage.USER_EMAIL_NOT_FOUND, email));
-    }
-
-    @Transactional
-    public UserInfoDto join(UserRegisterRequestDto userRegisterRequestDto) {
-        User user = userRepository.save(userMapper.toUser(userRegisterRequestDto));
-        return userMapper.toUserInfoDto(user);
     }
 
     @Transactional
