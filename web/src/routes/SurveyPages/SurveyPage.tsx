@@ -52,7 +52,6 @@ const QuestionTitle = styled.div`
   margin-top: 7px;
   margin-bottom: 25px;
   border-radius: 15px;
-  border: 2px solid #999da0;
   font-size: 18px;
   font-weight: 900;
   color: ${(props) => props.theme.colors.default};
@@ -63,7 +62,7 @@ const Answer = styled.textarea`
   padding: 1.2vh 2vw 1.2vh 2vw;
   margin-bottom: 5px;
   border-radius: 15px;
-  border: 2px solid #999da0;
+  border: 2px solid ${(props) => props.theme.colors.primary};
   resize: none;
   font-weight: 100;
   color: ${(props) => props.theme.colors.default};
@@ -71,7 +70,7 @@ const Answer = styled.textarea`
 `;
 
 const LongAnswer = styled(Answer)`
-  width: 74vw;
+  width: 75vw;
   height: 70px;
   font-size: 15px;
 `;
@@ -97,7 +96,6 @@ const RadioContainer = styled.label`
   margin-left: 1.3vw;
   margin-bottom: 10px;
   border-radius: 15px;
-  border: 2px solid #999da0;
   width: 75.7vw;
   color: ${(props) => props.theme.colors.default};
   background-color: ${(props) => props.theme.colors.container};
