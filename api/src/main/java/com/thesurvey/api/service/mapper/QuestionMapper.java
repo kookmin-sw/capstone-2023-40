@@ -6,11 +6,11 @@ import com.thesurvey.api.domain.Survey;
 import com.thesurvey.api.dto.request.QuestionRequestDto;
 import org.springframework.stereotype.Component;
 
-// @formatter:off
 @Component
 public class QuestionMapper {
 
-    public Question toQuestion(QuestionRequestDto questionRequestDto, Survey survey, QuestionBank questionBank) {
+    public Question toQuestion(QuestionRequestDto questionRequestDto, Survey survey,
+        QuestionBank questionBank) {
         return Question
             .builder()
             .isRequired(questionRequestDto.isRequired())
@@ -20,4 +20,3 @@ public class QuestionMapper {
             .build();
     }
 }
-// @formatter:on
