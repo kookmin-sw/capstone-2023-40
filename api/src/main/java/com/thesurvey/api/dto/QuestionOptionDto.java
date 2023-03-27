@@ -7,6 +7,8 @@ import lombok.Getter;
 @Getter
 public class QuestionOptionDto {
 
+    private Long questionBankId;
+
     private String option;
 
     private String description;

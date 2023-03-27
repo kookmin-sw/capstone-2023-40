@@ -19,6 +19,8 @@ public class QuestionRequestDto {
 
     private int questionNo;
 
+    private boolean isRequired;
+
     private List<Question> questions;
 
     private List<QuestionOptionDto> questionOptions;
