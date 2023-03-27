@@ -52,6 +52,7 @@ const QuestionTitle = styled.div`
   margin-top: 7px;
   margin-bottom: 25px;
   border-radius: 15px;
+  border: 2px solid #999da0;
   font-size: 18px;
   font-weight: 900;
   color: ${(props) => props.theme.colors.default};
@@ -62,7 +63,8 @@ const Answer = styled.textarea`
   padding: 1.2vh 2vw 1.2vh 2vw;
   margin-bottom: 5px;
   border-radius: 15px;
-
+  border: 2px solid #999da0;
+  resize: none;
   font-weight: 100;
   color: ${(props) => props.theme.colors.default};
   background-color: ${(props) => props.theme.colors.container};
@@ -95,6 +97,7 @@ const RadioContainer = styled.label`
   margin-left: 1.3vw;
   margin-bottom: 10px;
   border-radius: 15px;
+  border: 2px solid #999da0;
   width: 75.7vw;
   color: ${(props) => props.theme.colors.default};
   background-color: ${(props) => props.theme.colors.container};
@@ -140,11 +143,12 @@ const SubmitButton = styled.button`
   padding-left: 3vw;
   padding-right: 3vw;
   margin-top: 30px;
+  margin-bottom: 30px;
   margin-left: 73vw;
   border-radius: ${(props) => props.theme.borderRadius};
   font-size: 2vh;
   font-weight: 700;
-  color: ${(props) => props.theme.colors.text};
+  color: ${(props) => props.theme.colors.default};
   background-color: ${(props) => props.theme.colors.primary};
   cursor: pointer;
 
@@ -182,6 +186,7 @@ export default function SurveyPage() {
   const { id } = useParams();
   const [surveyData, setSurveyData] = useState<SurveyData>();
   const [theme, toggleTheme] = useTheme();
+  const [select, setSelect] = useState<string>('');
 
   const fetchSurveyData = async () => {
     try {
@@ -198,12 +203,10 @@ export default function SurveyPage() {
 
   const makeInputBox = (question: SurveyQuestion) => {
     if (question.type === 'LONG_ANSWER') {
-      return <LongAnswer theme={theme} />;
+      return <LongAnswer placeholder="답변을 입력해주세요" theme={theme} />;
     }
-    return <ShortAnswer theme={theme} />;
+    return <ShortAnswer placeholder="답변을 입력해주세요" theme={theme} />;
   };
-
-  const [select, setSelect] = useState<string>('optionA');
 
   return (
     <Container theme={theme}>
