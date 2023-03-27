@@ -2,7 +2,7 @@ package com.thesurvey.api.service.mapper;
 
 import com.thesurvey.api.domain.EnumTypeEntity.Role;
 import com.thesurvey.api.domain.User;
-import com.thesurvey.api.dto.UserRegisterRequestDto;
+import com.thesurvey.api.dto.request.UserRegisterRequestDto;
 import com.thesurvey.api.dto.UserInfoDto;
 import java.util.Optional;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

@@ -2,7 +2,7 @@ package com.thesurvey.api.service;
 
 import com.thesurvey.api.domain.User;
 import com.thesurvey.api.dto.UserInfoDto;
-import com.thesurvey.api.dto.UserRegisterRequestDto;
+import com.thesurvey.api.dto.request.UserRegisterRequestDto;
 import com.thesurvey.api.exception.ErrorMessage;
 import com.thesurvey.api.exception.ExceptionMapper;
 import com.thesurvey.api.repository.UserRepository;
