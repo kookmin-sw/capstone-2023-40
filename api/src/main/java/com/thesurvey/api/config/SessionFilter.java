@@ -6,7 +6,6 @@ import com.thesurvey.api.exception.ExceptionMapper;
 import com.thesurvey.api.repository.UserRepository;
 import java.io.IOException;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -18,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -32,11 +30,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 @Component
-@Slf4j
 @RequiredArgsConstructor
 public class SessionFilter extends OncePerRequestFilter {
 
     private final UserDetailsService userDetailsService;
+
     private final UserRepository userRepository;
 
     @Override
@@ -45,33 +43,41 @@ public class SessionFilter extends OncePerRequestFilter {
 
         if (SecurityContextHolder.getContext().getAuthentication() == null
             && request.getCookies() != null) {
-            Optional<Cookie> jSessionIdCookie = Arrays.stream(request.getCookies())
-                .filter(cookie -> cookie.getName().equals("JSESSIONID")).findFirst();
+            Optional<Cookie> jSessionIdCookie = getJSessionIdCookie(request);
 
             if (jSessionIdCookie.isEmpty()) {
-                String email = request.getParameter("email");
-                String password = request.getParameter("password");
-
-                if (email != null && password != null) {
-                    UserDetails userDetails = this.userDetailsService.loadUserByUsername(email);
-                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails, password, userDetails.getAuthorities());
-
-                    try {
-                        Authentication authentication = authenticationManager().authenticate(
-                            authToken);
-                        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-                        jSessionIdCookie.get().setValue(request.getSession().getId());
-                        response.addCookie(jSessionIdCookie.get());
-
-                    } catch (AuthenticationException e) {
-                        log.error(MessageFormat.format("[ERROR] {0}", e.getMessage()));
-                    }
-                }
+                authenticateUser(request, response);
             }
         }
         filterChain.doFilter(request, response);
+    }
+
+    private Optional<Cookie> getJSessionIdCookie(HttpServletRequest request) {
+        return Arrays.stream(request.getCookies())
+            .filter(cookie -> cookie.getName().equals("JSESSIONID")).findFirst();
+    }
+
+    private void authenticateUser(HttpServletRequest request, HttpServletResponse response) {
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+
+        if (email != null && password != null) {
+            UserDetails userDetails = this.userDetailsService.loadUserByUsername(email);
+            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                userDetails, password, userDetails.getAuthorities());
+
+            try {
+                Authentication authentication = authenticationManager().authenticate(authToken);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+
+                Optional<Cookie> jSessionIdCookie = getJSessionIdCookie(request);
+                jSessionIdCookie.get().setValue(request.getSession().getId());
+                response.addCookie(jSessionIdCookie.get());
+
+            } catch (AuthenticationException e) {
+                throw new ExceptionMapper(ErrorMessage.FAILED_AUTHENTICATION);
+            }
+        }
     }
 
     private AuthenticationManager authenticationManager() {
@@ -85,10 +91,10 @@ public class SessionFilter extends OncePerRequestFilter {
                 throw new ExceptionMapper(ErrorMessage.INVALID_CREDENTIALS);
             }
 
-            List<GrantedAuthority> authorities = new ArrayList<>();
-            authorities.add(new SimpleGrantedAuthority(user.getRole().name()));
-
-            return new UsernamePasswordAuthenticationToken(email, password, authorities);
+            return new UsernamePasswordAuthenticationToken(email, password,
+                List.of(new SimpleGrantedAuthority(user.getRole().name()))
+            );
         };
     }
+
 }
