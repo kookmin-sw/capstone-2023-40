@@ -8,17 +8,26 @@ import com.thesurvey.api.domain.Question;
 import com.thesurvey.api.domain.QuestionBank;
 import com.thesurvey.api.domain.QuestionOption;
 import com.thesurvey.api.domain.Survey;
+import com.thesurvey.api.dto.QuestionOptionDto;
 import com.thesurvey.api.dto.SurveyDto;
+import com.thesurvey.api.dto.request.QuestionRequestDto;
+import com.thesurvey.api.dto.request.SurveyRequestDto;
 import com.thesurvey.api.repository.ParticipationRepository;
 import com.thesurvey.api.repository.QuestionBankRepository;
 import com.thesurvey.api.repository.QuestionOptionRepository;
 import com.thesurvey.api.repository.QuestionRepository;
 import com.thesurvey.api.repository.SurveyRepository;
+import com.thesurvey.api.service.mapper.QuestionBankMapper;
+import com.thesurvey.api.service.mapper.QuestionMapper;
 import com.thesurvey.api.service.mapper.SurveyMapper;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -40,26 +49,20 @@ public class SurveyServiceTest {
     @Autowired
     SurveyMapper surveyMapper;
     @Autowired
+    QuestionMapper questionMapper;
+    @Autowired
+    QuestionBankMapper questionBankMapper;
+    @Autowired
     ParticipationRepository participationRepository;
     @Autowired
     QuestionOptionRepository questionOptionRepository;
 
-    String title = "My name is Jin";
-    QuestionOption questionOption1 = QuestionOption.builder().option("student").build();
-    QuestionOption questionOption2 = QuestionOption.builder().option("professor").build();
-    List<QuestionOption> questionOptions = Arrays.asList(questionOption1, questionOption2);
-    QuestionOption questionOption3 = QuestionOption.builder().option("soccer").build();
-    QuestionOption questionOption4 = QuestionOption.builder().option("game").build();
-    List<QuestionOption> questionOptions2 = Arrays.asList(questionOption3, questionOption4);
-    QuestionBank questionBank1 = QuestionBank.builder().title("test1").question("what's your job?")
-        .type(
-            QuestionType.LONG_ANSWER).questionOptions(questionOptions).build();
-    QuestionBank questionBank2 = QuestionBank.builder().title("test2").question("what's your hobby?")
-        .type(QuestionType.SHORT_ANSWER).questionOptions(questionOptions2).build();
-    List<QuestionBank> questionBanks = Arrays.asList(questionBank1, questionBank2);
-    SurveyDto surveyDto = SurveyDto.builder().title(title).startedDate(LocalDateTime.now())
-        .endedDate(LocalDateTime.now()).questionBank(questionBanks).certificationType(
-            CertificationType.GOOGLE).build();
+//    SurveyDto surveyDto = SurveyDto.builder()
+//        .title(title)
+//        .startedDate(LocalDateTime.now())
+//        .endedDate(LocalDateTime.now())
+//        .questionBank(questionBanks)
+//        .certificationType(CertificationType.GOOGLE).build();
 
 //    @Test
 //    void testParticipationSave() {
@@ -84,28 +87,95 @@ public class SurveyServiceTest {
 //    }
 
     @Test
-    void testCreateSurvey() {
-        Survey newSurvey = surveyService.createSurvey(surveyDto);
+    public void testCreateSurvey() {
+        SurveyRequestDto surveyRequestDto = SurveyRequestDto
+            .builder()
+            .title("My name is Jin")
+            .description("A test survey for Jin")
+            .startedDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")))
+            .endedDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")).plusWeeks(1))
+            .build();
 
-        Optional<Survey> savedSurvey = surveyRepository.findById(newSurvey.getSurveyId());
-        List<Question> savedQuestions = questionRepository.findAll();
-        List<QuestionBank> savedQuestionBanks = questionBankRepository.findAll();
-        List<QuestionOption> savedQuestionOptions = questionOptionRepository.findAll();
-        System.out.println("Question Table:");
-        for (Question q : savedQuestions) {
-            System.out.println(q.getQuestionNo() + " " + q.getQuestionBank().getQuestion());
-        }
-        System.out.println("QuestionBank Table:");
-        for (QuestionBank qb : savedQuestionBanks) {
-            System.out.println(qb.getTitle() + " " + qb.getQuestion());
-        }
-        System.out.println("QuestionOption Table:");
-        for (QuestionOption qo : savedQuestionOptions) {
-            System.out.println(qo.getOption() + " " + qo.getQuestionBank().getQuestionBankId());
-        }
+        QuestionRequestDto singleChoiceDto = QuestionRequestDto
+            .builder()
+            .title("A format to be saved to QuestionBank")
+            .description("Question1's description")
+            .questionType(QuestionType.SINGLE_CHOICE)
+            .questionNo(1)
+            .isRequired(true)
+            .build();
 
-        assertNotNull(savedSurvey);
-        assertEquals(title, savedSurvey.get().getTitle());
+        QuestionRequestDto multipleChoiceDto = QuestionRequestDto
+            .builder()
+            .title("A format to be saved to QuestionBank")
+            .description("Question2's description")
+            .questionType(QuestionType.MULTIPLE_CHOICE)
+            .questionNo(2)
+            .isRequired(true)
+            .build();
+
+        QuestionRequestDto shortAnswerDto = QuestionRequestDto
+            .builder()
+            .title("A format to be saved to QuestionBank")
+            .description("Question3's description")
+            .questionType(QuestionType.SHORT_ANSWER)
+            .questionNo(3)
+            .isRequired(true)
+            .build();
+
+        QuestionRequestDto longAnswerDto = QuestionRequestDto
+            .builder()
+            .title("A format to be saved to QuestionBank")
+            .description("Question4's description")
+            .questionType(QuestionType.LONG_ANSWER)
+            .questionNo(4)
+            .isRequired(false)
+            .build();
+
+        Survey survey = surveyRepository.save(surveyMapper.toSurvey(surveyRequestDto));
+
+        QuestionBank singleChoiceQuestionBank = questionBankRepository.save(
+            questionBankMapper.toQuestionBank(singleChoiceDto));
+
+        QuestionBank multipleChoiceQuestionBank = questionBankRepository.save(
+            questionBankMapper.toQuestionBank(multipleChoiceDto));
+
+        QuestionBank shortAnswerQuestionBank = questionBankRepository.save(
+            questionBankMapper.toQuestionBank(shortAnswerDto));
+
+        QuestionBank longAnswerQuestionBank = questionBankRepository.save(
+            questionBankMapper.toQuestionBank(longAnswerDto));
+
+        Question singlieChoiceQuestion = questionRepository.save(
+            questionMapper.toQuestion(singleChoiceDto, survey, singleChoiceQuestionBank));
+
+        Question multipleChoiceQuestion = questionRepository.save(
+            questionMapper.toQuestion(singleChoiceDto, survey, singleChoiceQuestionBank));
+
+        Question shortAnswerQuestion = questionRepository.save(
+            questionMapper.toQuestion(singleChoiceDto, survey, singleChoiceQuestionBank));
+
+        Question longAnswerQuestion = questionRepository.save(
+            questionMapper.toQuestion(singleChoiceDto, survey, singleChoiceQuestionBank));
+
+        List<QuestionOption> questionOptions = questionOptionRepository.saveAll(Stream.of(
+                QuestionOption.builder().option("option 1").description("option 1").build(),
+                QuestionOption.builder().option("option 2").description("option 2").build(),
+                QuestionOption.builder().option("option 3").description("option 3").build())
+            .collect(Collectors.toList()));
+
+        assertNotNull(survey);
+        assertNotNull(singleChoiceQuestionBank);
+        assertNotNull(multipleChoiceQuestionBank);
+        assertNotNull(shortAnswerQuestionBank);
+        assertNotNull(longAnswerQuestionBank);
+        assertNotNull(singlieChoiceQuestion);
+        assertNotNull(multipleChoiceQuestion);
+        assertNotNull(shortAnswerQuestion);
+        assertNotNull(longAnswerQuestion);
+        assertNotNull(questionOptions);
+        assertEquals(3, questionOptions.size());
+        assertEquals("My name is Jin", survey.getTitle());
     }
 
 //    @Test
