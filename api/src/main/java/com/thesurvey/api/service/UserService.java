@@ -8,6 +8,7 @@ import com.thesurvey.api.repository.UserRepository;
 import com.thesurvey.api.service.mapper.UserMapper;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +32,12 @@ public class UserService {
     public UserInfoDto getUserByEmail(String email) {
         return userMapper.toUserInfoDto(userRepository.findByEmail(email))
             .orElseThrow(() -> new ExceptionMapper(ErrorMessage.USER_EMAIL_NOT_FOUND, email));
+    }
+
+    public UserInfoDto getUserProfile(Authentication authentication) {
+        return userMapper.toUserInfoDto(userRepository.findByName(authentication.getName()))
+            .orElseThrow(() -> new ExceptionMapper(ErrorMessage.USER_NAME_NOT_FOUND,
+                authentication.getName()));
     }
 
     @Transactional

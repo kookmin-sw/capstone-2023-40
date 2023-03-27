@@ -4,6 +4,7 @@ import com.thesurvey.api.domain.User;
 import com.thesurvey.api.dto.UserInfoDto;
 import com.thesurvey.api.exception.ErrorMessage;
 import com.thesurvey.api.exception.ExceptionMapper;
+import com.thesurvey.api.repository.UserRepository;
 import com.thesurvey.api.service.UserService;
 import java.util.List;
 import java.util.Optional;
@@ -30,14 +31,8 @@ public class UserController {
     }
 
     @GetMapping("/profile")
-    public ResponseEntity<UserInfoDto> getUserProfile() {
-        // FIXME: not working as expected
-        if (!isAuthenticated()) {
-            throw new ExceptionMapper(ErrorMessage.FAILED_AUTHENTICATION);
-        }
-
-        return ResponseEntity.ok(userService.getUserByName(
-            SecurityContextHolder.getContext().getAuthentication().getName()));
+    public ResponseEntity<UserInfoDto> getUserProfile(Authentication authentication) {
+        return ResponseEntity.ok(userService.getUserProfile(authentication));
     }
 
     public boolean isAuthenticated() {
