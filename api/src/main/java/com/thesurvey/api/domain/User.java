@@ -38,12 +38,21 @@ public class User extends BaseTimeEntity implements UserDetails {
         orphanRemoval = true
     )
     private List<Participation> participations;
+
     @OneToMany(
         mappedBy = "user",
         cascade = CascadeType.ALL,
         orphanRemoval = true
     )
     private List<AnsweredQuestion> answeredQuestions;
+
+    @OneToMany(
+        mappedBy = "user",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+    )
+    private List<PointHistory> pointHistories;
+
     @Column(name = "name", nullable = false)
     private String name;
 
@@ -64,10 +73,12 @@ public class User extends BaseTimeEntity implements UserDetails {
 
     @Builder
     public User(List<Participation> participations, List<AnsweredQuestion> answeredQuestions,
-        String email, String name, Role role, String password, String phoneNumber, String address,
+        List<PointHistory> pointHistories, String email, String name, Role role, String password,
+        String phoneNumber, String address,
         String profileImage) {
         this.participations = participations;
         this.answeredQuestions = answeredQuestions;
+        this.pointHistories = pointHistories;
         this.email = email;
         this.name = name;
         this.role = role;
