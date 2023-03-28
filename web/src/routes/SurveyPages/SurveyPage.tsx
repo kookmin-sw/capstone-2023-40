@@ -174,14 +174,13 @@ interface SurveyData {
   created_date: string;
   ended_date: string;
   required_authentications: Array<string>;
-  questions: Array<SurveyQuestion> | null;
+  questions: Array<SurveyQuestion>;
 }
 
 export default function SurveyPage() {
   const { id } = useParams();
   const [theme, toggleTheme] = useTheme();
   const [surveyData, setSurveyData] = useState<SurveyData>();
-  const [select, setSelect] = useState<string>('');
   const [endedDate, setEndedDate] = useState<string>('');
   const [answers, setAnswers] = useState<string[]>([]);
   const nowDate = new Date();
@@ -204,7 +203,22 @@ export default function SurveyPage() {
     }
   };
 
-  const handleClick = () => {};
+  const handleSubmitClick = () => {
+    let answerStatus = true;
+    if (typeof surveyData !== 'undefined') {
+      for (let i = 0; i < surveyData.questions.length; i += 1) {
+        if (typeof answers[i] === 'undefined') {
+          console.log(`Answer ${i + 1} is empty`);
+          answerStatus = false;
+          break;
+        }
+      }
+    }
+
+    if (answerStatus) {
+      console.log(answers);
+    }
+  };
 
   const handleAnswerChange = (
     index: number,
@@ -288,7 +302,7 @@ export default function SurveyPage() {
             )}
           </QuestionContainer>
         ))}
-        <SubmitButton onClick={handleClick} type="submit" theme={theme}>
+        <SubmitButton onClick={handleSubmitClick} type="submit" theme={theme}>
           제출하기
         </SubmitButton>
       </BodyContainer>
