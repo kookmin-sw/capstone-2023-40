@@ -26,7 +26,7 @@ public class SurveyController {
         this.surveyService = surveyService;
     }
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<Optional<SurveyDto>>> getAllSurvey() {
         return ResponseEntity.ok(surveyService.getAllSurvey());
     }
@@ -37,8 +37,9 @@ public class SurveyController {
             Optional.ofNullable(surveyService.getSurveyByIdWithRelatedQuestion(surveyId)));
     }
 
-    @PostMapping("/")
-    public ResponseEntity<Survey> createSurvey(Authentication authentication, @RequestBody SurveyRequestDto surveyRequestDto) {
+    @PostMapping
+    public ResponseEntity<Survey> createSurvey(Authentication authentication,
+        @RequestBody SurveyRequestDto surveyRequestDto) {
         return ResponseEntity.ok(surveyService.createSurvey(authentication, surveyRequestDto));
     }
 
