@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,8 +38,8 @@ public class SurveyController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Survey> createSurvey(@RequestBody SurveyRequestDto surveyRequestDto) {
-        return ResponseEntity.ok(surveyService.createSurvey(surveyRequestDto));
+    public ResponseEntity<Survey> createSurvey(Authentication authentication, @RequestBody SurveyRequestDto surveyRequestDto) {
+        return ResponseEntity.ok(surveyService.createSurvey(authentication, surveyRequestDto));
     }
 
 //    @PostMapping("/submit")

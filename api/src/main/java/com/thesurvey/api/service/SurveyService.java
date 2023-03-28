@@ -1,9 +1,12 @@
 package com.thesurvey.api.service;
 
+import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
+import com.thesurvey.api.domain.Participation;
 import com.thesurvey.api.domain.Question;
 import com.thesurvey.api.domain.QuestionBank;
 import com.thesurvey.api.domain.QuestionOption;
 import com.thesurvey.api.domain.Survey;
+import com.thesurvey.api.domain.User;
 import com.thesurvey.api.dto.SurveyDto;
 import com.thesurvey.api.dto.request.QuestionRequestDto;
 import com.thesurvey.api.dto.request.SurveyRequestDto;
@@ -19,11 +22,16 @@ import com.thesurvey.api.service.mapper.QuestionBankMapper;
 import com.thesurvey.api.service.mapper.QuestionMapper;
 import com.thesurvey.api.service.mapper.QuestionOptionMapper;
 import com.thesurvey.api.service.mapper.SurveyMapper;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -75,7 +83,7 @@ public class SurveyService {
     }
 
     @Transactional
-    public Survey createSurvey(SurveyRequestDto surveyRequestDto) {
+    public Survey createSurvey(Authentication authentication, SurveyRequestDto surveyRequestDto) {
         Survey survey = surveyRepository.save(surveyMapper.toSurvey(surveyRequestDto));
 
         for (QuestionRequestDto questionRequestDto : surveyRequestDto.getQuestions()) {
@@ -93,6 +101,21 @@ public class SurveyService {
 
             questionOptionRepository.saveAll(options);
         }
+
+        User user = userRepository.findByName(authentication.getName())
+            .orElseThrow(() -> new ExceptionMapper(ErrorMessage.USER_NAME_NOT_FOUND, authentication.getName()));
+
+        for (CertificationType certificationType : surveyRequestDto.getCertificationType()) {
+            Participation participation = Participation.builder()
+                .user(user)
+                .survey(survey)
+                .certificationType(certificationType)
+                .participateDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")))
+                .submittedDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")))
+                .build();
+            participationRepository.save(participation);
+        }
+
         return survey;
     }
 

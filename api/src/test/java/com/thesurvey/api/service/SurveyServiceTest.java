@@ -4,10 +4,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
 import com.thesurvey.api.domain.EnumTypeEntity.QuestionType;
+import com.thesurvey.api.domain.Participation;
 import com.thesurvey.api.domain.Question;
 import com.thesurvey.api.domain.QuestionBank;
 import com.thesurvey.api.domain.QuestionOption;
 import com.thesurvey.api.domain.Survey;
+import com.thesurvey.api.domain.User;
 import com.thesurvey.api.dto.QuestionOptionDto;
 import com.thesurvey.api.dto.SurveyDto;
 import com.thesurvey.api.dto.request.QuestionRequestDto;
@@ -17,6 +19,7 @@ import com.thesurvey.api.repository.QuestionBankRepository;
 import com.thesurvey.api.repository.QuestionOptionRepository;
 import com.thesurvey.api.repository.QuestionRepository;
 import com.thesurvey.api.repository.SurveyRepository;
+import com.thesurvey.api.repository.UserRepository;
 import com.thesurvey.api.service.mapper.QuestionBankMapper;
 import com.thesurvey.api.service.mapper.QuestionMapper;
 import com.thesurvey.api.service.mapper.SurveyMapper;
@@ -26,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
@@ -56,6 +60,8 @@ public class SurveyServiceTest {
     ParticipationRepository participationRepository;
     @Autowired
     QuestionOptionRepository questionOptionRepository;
+    @Autowired
+    UserRepository userRepository;
 
 //    SurveyDto surveyDto = SurveyDto.builder()
 //        .title(title)
@@ -92,6 +98,7 @@ public class SurveyServiceTest {
             .builder()
             .title("My name is Jin")
             .description("A test survey for Jin")
+            .certificationType(Arrays.asList(CertificationType.GOOGLE, CertificationType.DRIVER_LICENSE))
             .startedDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")))
             .endedDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")).plusWeeks(1))
             .build();
@@ -164,7 +171,27 @@ public class SurveyServiceTest {
                 QuestionOption.builder().option("option 3").description("option 3").build())
             .collect(Collectors.toList()));
 
-        assertNotNull(survey);
+        User user = userRepository.save(User.builder()
+            .name("jinmyeong_kim")
+            .email("jinmyeong@g.com")
+            .password("12341234")
+            .phoneNumber("010-0000-0000")
+            .build());
+
+        for (CertificationType certificationType : surveyRequestDto.getCertificationType()) {
+            Participation participation = Participation.builder()
+                .user(user)
+                .survey(survey)
+                .certificationType(certificationType)
+                .participateDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")))
+                .submittedDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")))
+                .build();
+            Participation participation1 = participationRepository.save(participation);
+            System.out.println("############" + participation1.getParticipationId().getCertificationType());
+        }
+        List<Participation> savedparticipations = participationRepository.findAll();
+
+
         assertNotNull(singleChoiceQuestionBank);
         assertNotNull(multipleChoiceQuestionBank);
         assertNotNull(shortAnswerQuestionBank);
@@ -174,6 +201,7 @@ public class SurveyServiceTest {
         assertNotNull(shortAnswerQuestion);
         assertNotNull(longAnswerQuestion);
         assertNotNull(questionOptions);
+        assertEquals(2, savedparticipations.size());
         assertEquals(3, questionOptions.size());
         assertEquals("My name is Jin", survey.getTitle());
     }
