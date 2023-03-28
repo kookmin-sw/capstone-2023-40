@@ -206,7 +206,10 @@ export default function SurveyPage() {
 
   const handleClick = () => {};
 
-  const handleTextAreaChange = (index: number, event: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleAnswerChange = (
+    index: number,
+    event: React.ChangeEvent<HTMLTextAreaElement> | React.ChangeEvent<HTMLInputElement>
+  ) => {
     const newInputs = [...answers];
     newInputs[index] = event.target.value;
     setAnswers(newInputs);
@@ -217,7 +220,7 @@ export default function SurveyPage() {
       return (
         <LongAnswer
           onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
-            handleTextAreaChange(index, event);
+            handleAnswerChange(index, event);
           }}
           maxLength={450}
           placeholder="답변을 입력해주세요"
@@ -228,7 +231,7 @@ export default function SurveyPage() {
     return (
       <ShortAnswer
         onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
-          handleTextAreaChange(index, event);
+          handleAnswerChange(index, event);
         }}
         maxLength={19}
         placeholder="답변을 입력해주세요"
@@ -270,9 +273,8 @@ export default function SurveyPage() {
                     <RadioInput
                       theme={theme}
                       name={question.title}
-                      checked={select === `${option.option_number}`}
                       onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                        setSelect(event.target.value);
+                        handleAnswerChange(index, event);
                       }}
                       value={`${option.option_number}`}
                     />
