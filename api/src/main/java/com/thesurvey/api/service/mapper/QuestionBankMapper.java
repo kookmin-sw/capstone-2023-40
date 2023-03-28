@@ -10,7 +10,6 @@ public class QuestionBankMapper {
     public QuestionBank toQuestionBank(QuestionRequestDto questionRequestDto) {
         return QuestionBank.builder()
             .title(questionRequestDto.getTitle())
-            .questions(questionRequestDto.getQuestions())
             .type(questionRequestDto.getQuestionType())
             .description(questionRequestDto.getDescription())
             .build();

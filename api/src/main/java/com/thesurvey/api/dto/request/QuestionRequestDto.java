@@ -21,7 +21,5 @@ public class QuestionRequestDto {
 
     private boolean isRequired;
 
-    private List<Question> questions;
-
     private List<QuestionOptionDto> questionOptions;
 }
