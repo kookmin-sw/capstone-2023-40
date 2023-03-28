@@ -44,8 +44,7 @@ public class UserService {
     @Transactional
     public UserInfoDto updateUserProfile(Authentication authentication,
         UserUpdateRequestDto userUpdateRequestDto) {
-        User user = userRepository.findByName(authentication.getName()).orElseThrow(
-            () -> new ExceptionMapper(ErrorMessage.USER_NAME_NOT_FOUND, authentication.getName()));
+        User user = getUserFromAuthentication(authentication);
 
         if (userUpdateRequestDto.getPassword() != null) {
             user.changePassword(userUpdateRequestDto.getPassword());
@@ -67,8 +66,18 @@ public class UserService {
     }
 
     @Transactional
+    public void deleteUser(Authentication authentication) {
+        userRepository.delete(getUserFromAuthentication(authentication));
+    }
+
+    @Transactional
     public Optional<List<User>> getAllUsersWithAnsweredQuestions() {
         return userRepository.findByAllWithAnsweredQuestion();
+    }
+
+    private User getUserFromAuthentication(Authentication authentication) {
+        return userRepository.findByName(authentication.getName()).orElseThrow(
+            () -> new ExceptionMapper(ErrorMessage.USER_NAME_NOT_FOUND, authentication.getName()));
     }
 
 }
