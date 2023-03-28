@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import { isDisabled } from '@testing-library/user-event/dist/utils';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -18,11 +19,11 @@ const TwoArrow = styled(Icons.TWOARROW).attrs({
   border: none;
   padding: 1.5vh;
   border-radius: 30px;
-  cursor: pointer;
   transition: transform 0.2s ease-in-out;
 `;
 
 const ChartImage = styled(Icons.CHART)`
+  margin-right: auto;
   width: 100vw;
   height: 100%;
   border-radius: 20px;
@@ -31,6 +32,12 @@ const ChartImage = styled(Icons.CHART)`
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
+  background-color: ${(props) => props.theme.colors.container};
+`;
+
+const ListBoxContainer = styled.div`
+  position: relative;
+  margin-bottom: 1vh;
   background-color: ${(props) => props.theme.colors.container};
 `;
 
@@ -45,6 +52,7 @@ const SurveyResultContainer = styled.div`
 `;
 
 const ListBox = styled.div`
+  z-index: 1;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -57,11 +65,13 @@ const ListBox = styled.div`
 
 const ResultBox = styled.div`
   height: 40vh;
+  width: 100%;
   align-items: center;
   border: ${(props) => props.theme.borderResultList};
   border-radius: ${(props) => props.theme.borderRadius};
   background-color: ${(props) => props.theme.colors.opposite};
   box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
 `;
 
 const Form = styled.form`
@@ -91,16 +101,21 @@ const FontText = styled.span`
 
 export default function MyPage() {
   const [theme, toggleTheme] = useTheme();
-  const [resultClick, setResultClick] = useState<boolean>(false);
+  const [resultClickFirst, setResultClickFirst] = useState<boolean>(false);
+  const [resultClickSecond, setResultClickSecond] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
   };
 
-  const handleClick = () => {
-    console.log(resultClick);
-    setResultClick(!resultClick);
+  const handleClick = (ClickNumber: number) => {
+    console.log(resultClickFirst);
+    if (ClickNumber === 1) {
+      setResultClickFirst(!resultClickFirst);
+    } else if (ClickNumber === 2) {
+      setResultClickSecond(!resultClickSecond);
+    }
   };
 
   return (
@@ -111,19 +126,56 @@ export default function MyPage() {
           <SurVeyResultPageTitle style={{ marginBottom: '5vh' }} theme={theme} onClick={() => navigate('../mypage')}>
             마이페이지 &gt; 설문 결과 조회
           </SurVeyResultPageTitle>
-          <ListBox theme={theme} onClick={() => handleClick()}>
-            <FontText theme={theme}>test</FontText>
-            <TwoArrow style={{ transform: resultClick ? 'rotate(90deg)' : 'rotate(0deg)' }} />
-          </ListBox>
-          <ResultBox
-            style={{
-              marginTop: '1.5vh',
-              opacity: resultClick ? 1 : 0,
-              transition: 'opacity 0.4s ease-in-out',
-            }}
-          >
-            <ChartImage />
-          </ResultBox>
+          <ListBoxContainer theme={theme}>
+            <ListBox
+              theme={theme}
+              onClick={() => handleClick(1)}
+              style={{
+                zIndex: resultClickFirst ? 1 : 'auto', // 설정 추가
+              }}
+            >
+              <FontText theme={theme}>test1</FontText>
+              <TwoArrow style={{ transform: resultClickFirst ? 'rotate(90deg)' : 'rotate(0deg)' }} />
+            </ListBox>
+            <ResultBox
+              style={{
+                marginTop: '1.5vh',
+                opacity: resultClickFirst ? 1 : 0,
+                transition: 'opacity 0.4s ease-in-out',
+                position: 'absolute',
+                top: '100%',
+                zIndex: resultClickFirst ? 1 : -1, // 설정 추가
+              }}
+              theme={theme}
+            >
+              <ChartImage />
+            </ResultBox>
+          </ListBoxContainer>
+          <ListBoxContainer theme={theme}>
+            <ListBox
+              theme={theme}
+              style={{
+                cursor: resultClickFirst ? 'auto' : 'pointer', // 설정 추가
+              }}
+              onClick={!resultClickFirst ? () => handleClick(2) : undefined}
+            >
+              <FontText theme={theme}>test2</FontText>
+              <TwoArrow theme={theme} style={{ transform: resultClickSecond ? 'rotate(90deg)' : 'rotate(0deg)' }} />
+            </ListBox>
+            <ResultBox
+              style={{
+                marginTop: '1.5vh',
+                opacity: resultClickSecond ? 1 : 0,
+                transition: 'opacity 0.4s ease-in-out',
+                position: 'absolute',
+                top: '100%',
+                zIndex: resultClickSecond ? 1 : -1, // 설정 추가
+              }}
+              theme={theme}
+            >
+              <ChartImage theme={theme} />
+            </ResultBox>
+          </ListBoxContainer>
         </Form>
       </SurveyResultContainer>
     </Container>
