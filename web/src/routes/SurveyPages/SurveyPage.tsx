@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import { AxiosResponse, AxiosError } from 'axios';
 import { useParams } from 'react-router-dom';
@@ -183,6 +183,7 @@ export default function SurveyPage() {
   const [surveyData, setSurveyData] = useState<SurveyData>();
   const [endedDate, setEndedDate] = useState<string>('');
   const [answers, setAnswers] = useState<string[]>([]);
+  const questionRef = useRef<HTMLDivElement[]>([]);
   const nowDate = new Date();
 
   const getDateDiff = (date: string) => {
@@ -207,10 +208,14 @@ export default function SurveyPage() {
     let answerStatus = true;
     if (typeof surveyData !== 'undefined') {
       for (let i = 0; i < surveyData.questions.length; i += 1) {
-        if (typeof answers[i] === 'undefined') {
-          console.log(`Answer ${i + 1} is empty`);
+        // TODO: response validation will be needed
+        if (typeof answers[i] === 'undefined' || answers[i] === '') {
+          questionRef.current[i].style.borderLeft = '10px solid #FF5733';
+          questionRef.current[i].scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'smooth' });
           answerStatus = false;
           break;
+        } else {
+          questionRef.current[i].style.borderLeft = `10px solid ${theme.colors.primary}`;
         }
       }
     }
@@ -276,7 +281,13 @@ export default function SurveyPage() {
 
       <BodyContainer theme={theme}>
         {surveyData?.questions?.map((question: SurveyQuestion, index) => (
-          <QuestionContainer theme={theme} key={question.question_id}>
+          <QuestionContainer
+            theme={theme}
+            key={question.question_id}
+            ref={(element) => {
+              questionRef.current[index] = element as HTMLDivElement;
+            }}
+          >
             <QuestionTitle theme={theme}>
               {index + 1}.&nbsp;&nbsp;{question.title}
             </QuestionTitle>
