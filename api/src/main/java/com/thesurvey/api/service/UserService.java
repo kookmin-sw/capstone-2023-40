@@ -2,6 +2,7 @@ package com.thesurvey.api.service;
 
 import com.thesurvey.api.domain.User;
 import com.thesurvey.api.dto.UserInfoDto;
+import com.thesurvey.api.dto.request.UserUpdateRequestDto;
 import com.thesurvey.api.exception.ErrorMessage;
 import com.thesurvey.api.exception.ExceptionMapper;
 import com.thesurvey.api.repository.UserRepository;
@@ -38,6 +39,31 @@ public class UserService {
         return userMapper.toUserInfoDto(userRepository.findByName(authentication.getName()))
             .orElseThrow(() -> new ExceptionMapper(ErrorMessage.USER_NAME_NOT_FOUND,
                 authentication.getName()));
+    }
+
+    @Transactional
+    public UserInfoDto updateUserProfile(Authentication authentication,
+        UserUpdateRequestDto userUpdateRequestDto) {
+        User user = userRepository.findByName(authentication.getName()).orElseThrow(
+            () -> new ExceptionMapper(ErrorMessage.USER_NAME_NOT_FOUND, authentication.getName()));
+
+        if (userUpdateRequestDto.getPassword() != null) {
+            user.changePassword(userUpdateRequestDto.getPassword());
+        }
+
+        if (userUpdateRequestDto.getPhoneNumber() != null) {
+            user.changePhoneNumber(userUpdateRequestDto.getPhoneNumber());
+        }
+
+        if (userUpdateRequestDto.getProfileImage() != null) {
+            user.changeProfileImage(userUpdateRequestDto.getProfileImage());
+        }
+
+        if (userUpdateRequestDto.getAddress() != null) {
+            user.changeAddress(userUpdateRequestDto.getAddress());
+        }
+
+        return userMapper.toUserInfoDto(userRepository.save(user));
     }
 
     @Transactional

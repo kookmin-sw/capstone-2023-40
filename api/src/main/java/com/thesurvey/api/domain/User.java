@@ -3,6 +3,7 @@ package com.thesurvey.api.domain;
 import com.thesurvey.api.domain.EnumTypeEntity.Role;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,6 +21,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Entity
 @Table(name = "users")
@@ -53,7 +56,10 @@ public class User extends BaseTimeEntity implements UserDetails {
     )
     private List<PointHistory> pointHistories;
 
-    @Column(name = "name", nullable = false)
+    /**
+     * User's name should be unique. This will be used when finding user during authentication
+     */
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
 
     @Column(name = "email", nullable = false)
@@ -70,6 +76,22 @@ public class User extends BaseTimeEntity implements UserDetails {
 
     @Column(name = "profile_image", nullable = true)
     private String profileImage;
+
+    public void changePassword(String password) {
+        this.password = passwordEncoder().encode(password);
+    }
+
+    public void changeAddress(String address) {
+        this.address = address;
+    }
+
+    public void changePhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void changeProfileImage(String profileImage) {
+        this.profileImage = profileImage;
+    }
 
     @Builder
     public User(List<Participation> participations, List<AnsweredQuestion> answeredQuestions,
@@ -90,6 +112,29 @@ public class User extends BaseTimeEntity implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        User user = (User) o;
+        return Objects.equals(userId, user.userId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId);
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
