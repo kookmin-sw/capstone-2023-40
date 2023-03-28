@@ -64,4 +64,17 @@ public class Survey extends BaseTimeEntity {
         this.endedDate = endedDate;
     }
 
+    public void changeTitle(String title) { this.title = title; }
+
+    public void changeDescription(String description) {
+        this.description = description;
+    }
+
+    public void changeStartedDate(LocalDateTime startedDate) {
+        this.startedDate = startedDate;
+    }
+
+    public void changeEndedDate(LocalDateTime endedDate) {
+        this.endedDate = endedDate;
+    }
 }

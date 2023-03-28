@@ -42,16 +42,28 @@ public class QuestionBank {
     private String description;
 
     @Enumerated(EnumType.STRING)
-    private QuestionType type;
+    private QuestionType questionType;
 
     @Builder
-    public QuestionBank(String title, String description, QuestionType type,
+    public QuestionBank(String title, String description, QuestionType questionType,
         List<Question> questions, List<QuestionOption> questionOptions) {
         this.title = title;
         this.description = description;
-        this.type = type;
+        this.questionType = questionType;
         this.questions = questions;
         this.questionOptions = questionOptions;
+    }
+
+    public void changeTitle(String title) {
+        this.title = title;
+    }
+
+    public void changeDescription(String description) {
+        this.description = description;
+    }
+
+    public void changeQuestionType(QuestionType questionType) {
+        this.questionType = questionType;
     }
 
 }

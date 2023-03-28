@@ -43,4 +43,13 @@ public class QuestionOption {
         this.option = option;
         this.description = description;
     }
+
+    public void changeOption(String option) {
+        this.option = option;
+    }
+
+    public void changeDescription(String description) {
+        this.description = description;
+    }
+
 }
