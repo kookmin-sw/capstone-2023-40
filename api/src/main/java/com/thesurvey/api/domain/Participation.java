@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
@@ -23,16 +24,15 @@ import lombok.NoArgsConstructor;
 public class Participation {
 
     @EmbeddedId
-    @Column(name = "participation_id")
     private ParticipationId participationId;
 
     @MapsId("surveyId")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "survey_id")
     public Survey survey;
 
     @MapsId("userId")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     public User user;
 
@@ -49,12 +49,15 @@ public class Participation {
     public Participation(Survey survey, User user,
         LocalDateTime participateDate, LocalDateTime submittedDate,
         CertificationType certificationType) {
-        this.participationId = new ParticipationId(survey.getSurveyId(), user.getUserId());
         this.survey = survey;
         this.user = user;
         this.participateDate = participateDate;
         this.submittedDate = submittedDate;
         this.certificationType = certificationType;
+        this.participationId = ParticipationId.builder()
+            .surveyId(survey.getSurveyId())
+            .userId(user.getUserId())
+            .build();
     }
 
 }

@@ -1,9 +1,9 @@
 package com.thesurvey.api.domain;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
@@ -22,12 +22,12 @@ public class Question {
     @EmbeddedId
     private QuestionId questionId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("surveyId")
     @JoinColumn(name = "survey_id")
     public Survey survey;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("questionBankId")
     @JoinColumn(name = "question_bank_id")
     public QuestionBank questionBank;

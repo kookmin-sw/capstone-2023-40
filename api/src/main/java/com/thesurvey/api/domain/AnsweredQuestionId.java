@@ -5,25 +5,32 @@ import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Embeddable
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AnsweredQuestionId implements Serializable {
 
     @Column(name = "user_id")
     private Long userId;
+
     @Column(name = "survey_id")
     private UUID surveyId;
+
     @Column(name = "question_bank_id")
     private Long questionBankId;
+
+    @Builder
+    public AnsweredQuestionId(Long userId, UUID surveyId, Long questionBankId) {
+        this.userId = userId;
+        this.surveyId = surveyId;
+        this.questionBankId = questionBankId;
+    }
 
     @Override
     public boolean equals(Object o) {

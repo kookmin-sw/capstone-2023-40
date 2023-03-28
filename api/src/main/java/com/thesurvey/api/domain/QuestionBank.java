@@ -27,6 +27,7 @@ public class QuestionBank {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "question_bank_id")
     private Long questionBankId;
+
     @OneToMany(mappedBy = "questionBank", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<Question> questions;
 
@@ -43,9 +44,8 @@ public class QuestionBank {
     private QuestionType type;
 
     @Builder
-    public QuestionBank(Long questionBankId, String title, String description, QuestionType type,
+    public QuestionBank(String title, String description, QuestionType type,
         List<Question> questions, List<QuestionOption> questionOptions) {
-        this.questionBankId = questionBankId;
         this.title = title;
         this.description = description;
         this.type = type;
