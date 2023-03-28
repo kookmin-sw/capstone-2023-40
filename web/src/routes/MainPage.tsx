@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -58,7 +58,7 @@ const Button = styled.button`
 export default function MainPage() {
   const [theme, toggleTheme] = useTheme();
   const navigate = useNavigate();
-  const loginCheck = false;
+  const [loginCheck, setLoginCheck] = useState(true);
 
   return (
     <Container>
