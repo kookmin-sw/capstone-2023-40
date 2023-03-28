@@ -69,7 +69,7 @@ public class UserService {
     public void deleteUser(Authentication authentication) {
         userRepository.delete(getUserFromAuthentication(authentication));
     }
-
+    // Need to test
     @Transactional
     public Optional<List<User>> getAllUsersWithAnsweredQuestions() {
         return userRepository.findByAllWithAnsweredQuestion();

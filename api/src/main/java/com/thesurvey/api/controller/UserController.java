@@ -25,7 +25,7 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
-
+    // Need to test
     @GetMapping
     public ResponseEntity<Optional<List<User>>> getAllUsersWithAnsweredQuestions() {
         return ResponseEntity.ok(userService.getAllUsersWithAnsweredQuestions());
