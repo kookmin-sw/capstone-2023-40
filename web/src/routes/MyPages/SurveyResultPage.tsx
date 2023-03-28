@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -7,7 +7,7 @@ import { Icons } from '../../assets/svg/index';
 import Header from '../../components/Header';
 import { useTheme } from '../../hooks/useTheme';
 
-const ArrowImage = styled(Icons.TWOARROW).attrs({
+const TwoArrow = styled(Icons.TWOARROW).attrs({
   width: 24,
   height: 24,
 })`
@@ -16,11 +16,16 @@ const ArrowImage = styled(Icons.TWOARROW).attrs({
   align-items: center;
   justify-content: center;
   border: none;
-  width: 25px;
-  height: 100%;
   padding: 1.5vh;
   border-radius: 30px;
   cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+`;
+
+const ChartImage = styled(Icons.CHART)`
+  width: 100vw;
+  height: 100%;
+  border-radius: 20px;
 `;
 
 const Container = styled.div`
@@ -45,8 +50,18 @@ const ListBox = styled.div`
   align-items: center;
   border: ${(props) => props.theme.borderResultList};
   border-radius: ${(props) => props.theme.borderRadius};
+  background-color: ${(props) => props.theme.colors.opposite};
   box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.4);
   cursor: pointer;
+`;
+
+const ResultBox = styled.div`
+  height: 40vh;
+  align-items: center;
+  border: ${(props) => props.theme.borderResultList};
+  border-radius: ${(props) => props.theme.borderRadius};
+  background-color: ${(props) => props.theme.colors.opposite};
+  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.4);
 `;
 
 const Form = styled.form`
@@ -60,6 +75,7 @@ const SurVeyResultPageTitle = styled.span`
   font-weight: 900;
   margin-bottom: 2vh;
   color: ${(props) => props.theme.colors.default};
+  cursor: pointer;
 `;
 
 const FontText = styled.span`
@@ -75,10 +91,16 @@ const FontText = styled.span`
 
 export default function MyPage() {
   const [theme, toggleTheme] = useTheme();
+  const [resultClick, setResultClick] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+  };
+
+  const handleClick = () => {
+    console.log(resultClick);
+    setResultClick(!resultClick);
   };
 
   return (
@@ -86,13 +108,22 @@ export default function MyPage() {
       <Header theme={theme} toggleTheme={toggleTheme} />
       <SurveyResultContainer theme={theme}>
         <Form onSubmit={handleSubmit}>
-          <SurVeyResultPageTitle style={{ marginBottom: '5vh' }} theme={theme}>
+          <SurVeyResultPageTitle style={{ marginBottom: '5vh' }} theme={theme} onClick={() => navigate('../mypage')}>
             마이페이지 &gt; 설문 결과 조회
           </SurVeyResultPageTitle>
-          <ListBox>
-            <FontText>test</FontText>
-            <ArrowImage />
+          <ListBox theme={theme} onClick={() => handleClick()}>
+            <FontText theme={theme}>test</FontText>
+            <TwoArrow style={{ transform: resultClick ? 'rotate(90deg)' : 'rotate(0deg)' }} />
           </ListBox>
+          <ResultBox
+            style={{
+              marginTop: '1.5vh',
+              opacity: resultClick ? 1 : 0,
+              transition: 'opacity 0.4s ease-in-out',
+            }}
+          >
+            <ChartImage />
+          </ResultBox>
         </Form>
       </SurveyResultContainer>
     </Container>

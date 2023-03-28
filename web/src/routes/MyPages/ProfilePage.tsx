@@ -114,7 +114,6 @@ const ReplacePagetext = styled.span`
   font-weight: 900;
   width: 170px;
   color: ${(props) => props.theme.colors.default};
-  cursor: pointer;
 `;
 
 const CompleteButton = styled.button`

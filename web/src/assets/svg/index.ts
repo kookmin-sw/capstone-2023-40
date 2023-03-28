@@ -1,4 +1,5 @@
 import { ReactComponent as Arrow } from './arrow.svg';
+import { ReactComponent as Chart } from './chartImage.svg';
 import { ReactComponent as Check } from './Check-Icon.svg';
 import { ReactComponent as DriverLicense } from './DriverLicense.svg';
 import { ReactComponent as Error } from './error-icon.svg';
@@ -12,7 +13,7 @@ import { ReactComponent as LightLogo } from './logo-light.svg';
 import { ReactComponent as MobilePhone } from './mobile-phone-icon.svg';
 import { ReactComponent as Naver } from './naver-icon.svg';
 import { ReactComponent as Pencil } from './pencil.svg';
-import { ReactComponent as TwoArrow } from './twoArrow.svg';
+import { ReactComponent as TwoArrow } from './twoArrowRight.svg';
 import { ReactComponent as Warn } from './warn-icon.svg';
 import { ReactComponent as Webmail } from './webmail-icon.svg';
 
@@ -36,4 +37,5 @@ export const Icons: { [src: string]: IconType } = {
   ARROW: Arrow,
   PENCIL: Pencil,
   TWOARROW: TwoArrow,
+  CHART: Chart,
 };

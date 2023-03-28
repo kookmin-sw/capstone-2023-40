@@ -124,6 +124,7 @@ const AuthListTitle = styled.span`
   font-weight: 900;
   margin-bottom: 2vh;
   color: ${(props) => props.theme.colors.default};
+  cursor: pointer;
 `;
 
 const BeforeText = styled.span`
@@ -209,7 +210,9 @@ export default function MyPage() {
       <Header theme={theme} toggleTheme={toggleTheme} />
       <AuthListContainer theme={theme}>
         <Form onSubmit={handleSubmit}>
-          <AuthListTitle theme={theme}>마이페이지 &gt; 인증정보 목록 </AuthListTitle>
+          <AuthListTitle theme={theme} style={{ marginBottom: '35px' }} onClick={() => navigate('../mypage')}>
+            마이페이지 &gt; 인증정보 목록{' '}
+          </AuthListTitle>
           <ContainerBox theme={theme} onClick={() => navigate('../mypage/auth-list')} disabled={state.kakao}>
             <KakaoTalk type="submit" />
             {!state.kakao ? (
