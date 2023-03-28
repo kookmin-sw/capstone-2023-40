@@ -39,15 +39,15 @@ public class SecurityConfiguration {
             .cors().and()
             .authorizeRequests()
                 .antMatchers("/admin/**").hasAuthority("ADMIN")
-                .antMatchers("/survey/**").authenticated()
-                .antMatchers("/mypage/**").authenticated()
+                .antMatchers("/surveys/**").authenticated()
+                .antMatchers("/users/**").authenticated()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .anyRequest().permitAll()
             .and()
             .exceptionHandling()
             .and()
             .logout()
-                .logoutUrl("/logout")
+                .logoutUrl("/auth/logout")
                 .permitAll()
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
@@ -58,7 +58,6 @@ public class SecurityConfiguration {
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 .sessionConcurrency(configurer -> {
                     configurer.maximumSessions(1);
-                    configurer.expiredUrl("/login");
                     configurer.maxSessionsPreventsLogin(true);
                 })
             .and()

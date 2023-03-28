@@ -48,7 +48,7 @@ public class UserServiceTest {
 
     @Test
     void testJoin() {
-        UserInfoDto result = userService.join(userRegisterRequestDto);
+        UserInfoDto result = authenticationService.register(userRegisterRequestDto);
         assertThat(result.getName()).isEqualTo(name);
         assertThat(result.getPhoneNumber()).isEqualTo(phoneNumber);
         assertThat(result.getUserId()).isEqualTo(userService.getUserByName(name).getUserId());
@@ -56,7 +56,7 @@ public class UserServiceTest {
 
     @Test
     void testLogin() {
-        UserInfoDto userInfoDto = userService.join(userRegisterRequestDto);
+        UserInfoDto userInfoDto = authenticationService.register(userRegisterRequestDto);
         Authentication authentication = new UsernamePasswordAuthenticationToken(
             userRegisterRequestDto.getEmail(), userRegisterRequestDto.getPassword());
 
