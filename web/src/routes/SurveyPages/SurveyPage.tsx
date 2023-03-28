@@ -135,14 +135,12 @@ const RadioCheckmark = styled.span`
 `;
 
 const SubmitButton = styled.button`
-  margin-top: 1vh;
+  width: 15vw;
   border: none;
-  padding: 2vh;
-  padding-left: 3vw;
-  padding-right: 3vw;
+  padding: 2vh 2vw 2vh 2vw;
   margin-top: 30px;
   margin-bottom: 30px;
-  margin-left: 73vw;
+  margin-left: 69vw;
   border-radius: ${(props) => props.theme.borderRadius};
   font-size: 2vh;
   font-weight: 700;
@@ -179,13 +177,13 @@ interface SurveyData {
   questions: Array<SurveyQuestion> | null;
 }
 
-// TODO: over ended date while participant survey
 export default function SurveyPage() {
   const { id } = useParams();
-  const [surveyData, setSurveyData] = useState<SurveyData>();
   const [theme, toggleTheme] = useTheme();
+  const [surveyData, setSurveyData] = useState<SurveyData>();
   const [select, setSelect] = useState<string>('');
   const [endedDate, setEndedDate] = useState<string>('');
+  const [answers, setAnswers] = useState<string[]>([]);
   const nowDate = new Date();
 
   const getDateDiff = (date: string) => {
@@ -202,17 +200,42 @@ export default function SurveyPage() {
       setSurveyData(request.data);
     } catch (error) {
       const { name } = error as unknown as AxiosError;
+      // TODO: handle error while fetching data
     }
-  };
-
-  const makeInputBox = (question: SurveyQuestion) => {
-    if (question.type === 'LONG_ANSWER') {
-      return <LongAnswer placeholder="답변을 입력해주세요" theme={theme} />;
-    }
-    return <ShortAnswer placeholder="답변을 입력해주세요" theme={theme} />;
   };
 
   const handleClick = () => {};
+
+  const handleTextAreaChange = (index: number, event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newInputs = [...answers];
+    newInputs[index] = event.target.value;
+    setAnswers(newInputs);
+  };
+
+  const makeTextArea = (question: SurveyQuestion, index: number) => {
+    if (question.type === 'LONG_ANSWER') {
+      return (
+        <LongAnswer
+          onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
+            handleTextAreaChange(index, event);
+          }}
+          maxLength={450}
+          placeholder="답변을 입력해주세요"
+          theme={theme}
+        />
+      );
+    }
+    return (
+      <ShortAnswer
+        onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
+          handleTextAreaChange(index, event);
+        }}
+        maxLength={19}
+        placeholder="답변을 입력해주세요"
+        theme={theme}
+      />
+    );
+  };
 
   useEffect(() => {
     fetchSurveyData();
@@ -259,7 +282,7 @@ export default function SurveyPage() {
                 ))}
               </MultipleChoiceContainer>
             ) : (
-              makeInputBox(question)
+              makeTextArea(question, index)
             )}
           </QuestionContainer>
         ))}
