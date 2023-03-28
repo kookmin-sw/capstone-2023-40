@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,7 +32,7 @@ public class QuestionBank {
     @OneToMany(mappedBy = "questionBank", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<Question> questions;
 
-    @OneToMany(mappedBy = "questionBank", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "questionBank", fetch = FetchType.EAGER ,cascade = CascadeType.ALL, orphanRemoval = true)
     private List<QuestionOption> questionOptions;
 
     @Column(name = "title", nullable = true)
