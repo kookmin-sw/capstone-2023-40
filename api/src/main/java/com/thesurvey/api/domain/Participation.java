@@ -1,10 +1,8 @@
 package com.thesurvey.api.domain;
 
 import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
-import com.thesurvey.api.service.converter.CertificationTypeConverter;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
-import javax.persistence.Convert;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -42,7 +40,7 @@ public class Participation {
     @Column(name = "submitted_date", nullable = false)
     private LocalDateTime submittedDate;
 
-    @Convert(converter = CertificationTypeConverter.class)
+    @Column(name = "certification_type", insertable = false, updatable = false)
     private CertificationType certificationType;
 
     @Builder
@@ -55,6 +53,7 @@ public class Participation {
         this.submittedDate = submittedDate;
         this.certificationType = certificationType;
         this.participationId = ParticipationId.builder()
+            .certificationType(certificationType)
             .surveyId(survey.getSurveyId())
             .userId(user.getUserId())
             .build();

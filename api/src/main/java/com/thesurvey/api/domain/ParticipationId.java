@@ -1,5 +1,6 @@
 package com.thesurvey.api.domain;
 
+import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
@@ -15,13 +16,22 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ParticipationId implements Serializable {
 
+    /*
+    * the value of id is set to the index of EnumTypeEntity.CertificationType.
+    * 0: KAKAO, 1: NAVER, 2: GOOGLE, 3: WEBMAIL, 4: DRIVER_LICENSE, 5: MOBILE_PHONE
+    */
+    @Column(name = "certification_type")
+    private CertificationType certificationType;
+
     @Column(name = "survey_id")
     private UUID surveyId;
+
     @Column(name = "user_id")
     private Long userId;
 
     @Builder
-    public ParticipationId(UUID surveyId, Long userId) {
+    public ParticipationId(CertificationType certificationType, UUID surveyId, Long userId) {
+        this.certificationType = certificationType;
         this.surveyId = surveyId;
         this.userId = userId;
     }
