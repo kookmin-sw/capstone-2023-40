@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import axios from '../../api/axios';
 import requests from '../../api/request';
 import Header from '../../components/Header';
+import SurveyPageResultModal from '../../components/Modal/SurveyPageResultModal';
 import SurveyPageSkeleton from '../../components/Skeleton/SurveyPageSkeleton';
 import { useTheme } from '../../hooks/useTheme';
 
@@ -80,15 +81,15 @@ const LongAnswer = styled(Answer)`
 const ShortAnswer = styled(Answer)`
   text-align: center;
   width: 20vw;
-  height: 22px;
-  font-size: 18px;
+  height: 18px;
+  font-size: 15px;
   margin-left: 55vw;
 `;
 
 const MultipleChoiceContainer = styled.div`
   padding: 0px;
 `;
-
+// FIXME: radio button is working but need refactoring
 const RadioContainer = styled.label`
   display: inline-flex;
   align-items: center;
@@ -191,6 +192,7 @@ export default function SurveyPage() {
   const [endedDate, setEndedDate] = useState<string>('');
   const [userAnswers, setUserAnswers] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [resultModalOpen, setResultModalOpen] = useState<boolean>(false);
   const questionRefs = useRef<HTMLDivElement[]>([]);
   const nowDate = new Date();
 
@@ -218,8 +220,13 @@ export default function SurveyPage() {
 
   const postSurveyAnswers = async () => {
     console.log(userAnswers);
-    // TODO: post answers to server
+    // FIXME: post answers to server
     // axios.post(requests.postSurvey)
+
+    // FIXME: when post server success
+    if (true) {
+      setResultModalOpen(true);
+    }
   };
 
   const turnOnUserAttention = (domIndex: number) => {
@@ -357,6 +364,7 @@ export default function SurveyPage() {
           제출하기
         </SubmitButton>
       </BodyContainer>
+      {resultModalOpen && <SurveyPageResultModal theme={theme} />}
     </Container>
   );
 }
