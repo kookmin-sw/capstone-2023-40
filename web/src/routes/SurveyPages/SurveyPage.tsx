@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 
 import { AxiosResponse, AxiosError } from 'axios';
 import { useParams } from 'react-router-dom';
@@ -194,6 +194,8 @@ export default function SurveyPage() {
     return Math.floor(Math.abs(diffDate / (1000 * 60 * 60 * 24)));
   };
 
+  const remainDate = useMemo(() => getDateDiff(endedDate), [endedDate]);
+
   const fetchSurveyData = async () => {
     try {
       const request: AxiosResponse<SurveyData> = await axios.get<SurveyData>(requests.fetchSurvey + id);
@@ -275,7 +277,7 @@ export default function SurveyPage() {
       <HeadContainer theme={theme}>
         <Title theme={theme}>{surveyData?.title}</Title>
         <EndDate theme={theme}>
-          &nbsp;&nbsp;~ {endedDate} (D-{getDateDiff(endedDate)})
+          &nbsp;&nbsp;~ {endedDate} (D-{remainDate})
         </EndDate>
       </HeadContainer>
 
