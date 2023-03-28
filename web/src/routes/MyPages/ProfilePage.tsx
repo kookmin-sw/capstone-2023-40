@@ -82,7 +82,7 @@ const Input = styled.input`
   font-weight: 700;
   color: ${(props) => props.theme.colors.default};
   background-color: ${(props) => props.theme.colors.inputBackground};
-  cursor: text;
+  cursor: auto;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -144,6 +144,11 @@ type State = {
   name: string;
   phoneNumber: string;
   address: string;
+  emailDisabled: boolean;
+  passwordDisabled: boolean;
+  nameDisabled: boolean;
+  phoneNumberDisabled: boolean;
+  addressDisabled: boolean;
 };
 
 type Action =
@@ -151,14 +156,24 @@ type Action =
   | { type: 'CHANGE_PASSWORD'; payload: string }
   | { type: 'CHANGE_NAME'; payload: string }
   | { type: 'CHANGE_PHONE_NUMBER'; payload: string }
-  | { type: 'CHANGE_ADDRESS'; payload: string };
+  | { type: 'CHANGE_ADDRESS'; payload: string }
+  | { type: 'SET_CHANGE_EMAIL'; payload: boolean }
+  | { type: 'SET_CHANGE_PASSWORD'; payload: boolean }
+  | { type: 'SET_CHANGE_NAME'; payload: boolean }
+  | { type: 'SET_CHANGE_PHONE_NUMBER'; payload: boolean }
+  | { type: 'SET_CHANGE_ADDRESS'; payload: boolean };
 
 const initalState = {
-  email: '',
-  password: '',
-  name: '',
-  phoneNumber: '',
-  address: '',
+  email: 'test@gmail.com',
+  password: 'asdf1234!',
+  name: 'jsontest',
+  phoneNumber: '010-1234-5678',
+  address: '서울특별시 성북구 정릉동 국민대학교 기숙사',
+  emailDisabled: false,
+  passwordDisabled: false,
+  nameDisabled: false,
+  phoneNumberDisabled: false,
+  addressDisabled: false,
 };
 
 const reducer = (state: State, action: Action): State => {
@@ -173,9 +188,33 @@ const reducer = (state: State, action: Action): State => {
       return { ...state, phoneNumber: action.payload };
     case 'CHANGE_ADDRESS':
       return { ...state, address: action.payload };
+    case 'SET_CHANGE_EMAIL':
+      return { ...state, emailDisabled: action.payload };
+    case 'SET_CHANGE_PASSWORD':
+      return { ...state, passwordDisabled: action.payload };
+    case 'SET_CHANGE_NAME':
+      return { ...state, nameDisabled: action.payload };
+    case 'SET_CHANGE_PHONE_NUMBER':
+      return { ...state, phoneNumberDisabled: action.payload };
+    case 'SET_CHANGE_ADDRESS':
+      return { ...state, addressDisabled: action.payload };
     default:
       return state;
   }
+};
+
+const formatPhoneNumber = (value: string): string => {
+  // 입력된 문자열에서 숫자 이외의 문자 제거
+  const phone = value.replace(/[^0-9]/g, '');
+
+  // 전화번호의 길이가 10자리 이상일 때
+  if (phone.length >= 10) {
+    // '-'을 포함한 형태로 변환
+    return phone.replace(/(\d{3})(\d{3,4})(\d{4})/, '$1-$2-$3');
+  }
+
+  // 10자리 미만이면 입력된 값을 그대로 반환
+  return phone;
 };
 
 export default function MyPage() {
@@ -198,13 +237,27 @@ export default function MyPage() {
         dispatch({ type: 'CHANGE_NAME', payload: value });
         break;
       case 'phoneNumber':
-        dispatch({ type: 'CHANGE_PHONE_NUMBER', payload: value });
+        dispatch({ type: 'CHANGE_PHONE_NUMBER', payload: formatPhoneNumber(value) });
         break;
       case 'address':
         dispatch({ type: 'CHANGE_ADDRESS', payload: value });
         break;
       default:
         break;
+    }
+  };
+
+  const handleClick = (text: string) => {
+    if (text === 'email') {
+      dispatch({ type: 'SET_CHANGE_EMAIL', payload: !state.emailDisabled });
+    } else if (text === 'password') {
+      dispatch({ type: 'SET_CHANGE_PASSWORD', payload: !state.passwordDisabled });
+    } else if (text === 'name') {
+      dispatch({ type: 'SET_CHANGE_NAME', payload: !state.nameDisabled });
+    } else if (text === 'phoneNumber') {
+      dispatch({ type: 'SET_CHANGE_PHONE_NUMBER', payload: !state.phoneNumberDisabled });
+    } else if (text === 'address') {
+      dispatch({ type: 'SET_CHANGE_ADDRESS', payload: !state.addressDisabled });
     }
   };
 
@@ -220,18 +273,39 @@ export default function MyPage() {
           <MyPageTitle theme={theme}>마이페이지</MyPageTitle>
           <ContainerBox>
             <FontText theme={theme}>이메일</FontText>
-            <Input type="email" name="email" value={state.email} onChange={handleInputChange} theme={theme} />
-            <PencilImage type="submit" theme={theme} />
+            <Input
+              type="email"
+              name="email"
+              value={state.email}
+              onChange={handleInputChange}
+              theme={theme}
+              disabled={!state.emailDisabled}
+            />
+            <PencilImage type="submit" theme={theme} onClick={() => handleClick('email')} />
           </ContainerBox>
           <ContainerBox>
             <FontText theme={theme}>이름</FontText>
-            <Input type="text" name="name" value={state.name} onChange={handleInputChange} theme={theme} />
-            <PencilImage type="submit" theme={theme} />
+            <Input
+              type="text"
+              name="name"
+              value={state.name}
+              onChange={handleInputChange}
+              theme={theme}
+              disabled={!state.nameDisabled}
+            />
+            <PencilImage type="submit" theme={theme} onClick={() => handleClick('name')} />
           </ContainerBox>
           <ContainerBox>
             <FontText theme={theme}>비밀번호</FontText>
-            <Input type="text" name="password" value={state.password} onChange={handleInputChange} theme={theme} />
-            <PencilImage type="submit" theme={theme} />
+            <Input
+              type={state.passwordDisabled ? 'text' : 'password'}
+              name="password"
+              value={state.password}
+              onChange={handleInputChange}
+              theme={theme}
+              disabled={!state.passwordDisabled}
+            />
+            <PencilImage type="submit" theme={theme} onClick={() => handleClick('password')} />
           </ContainerBox>
           <ContainerBox>
             <FontText theme={theme}>휴대폰 번호</FontText>
@@ -240,15 +314,23 @@ export default function MyPage() {
               name="phoneNumber"
               value={state.phoneNumber}
               onChange={handleInputChange}
-              maxLength={11}
+              maxLength={13}
               theme={theme}
+              disabled={!state.phoneNumberDisabled}
             />
-            <PencilImage type="submit" theme={theme} />
+            <PencilImage type="submit" theme={theme} onClick={() => handleClick('phoneNumber')} />
           </ContainerBox>
           <ContainerBox>
             <FontText theme={theme}>주소</FontText>
-            <Input type="text" name="address" value={state.address} onChange={handleInputChange} theme={theme} />
-            <PencilImage type="submit" theme={theme} />
+            <Input
+              type="text"
+              name="address"
+              value={state.address}
+              onChange={handleInputChange}
+              theme={theme}
+              disabled={!state.addressDisabled}
+            />
+            <PencilImage type="submit" theme={theme} onClick={() => handleClick('address')} />
           </ContainerBox>
           <ContainerBox style={{ marginTop: '10vh' }}>
             <ReplacePagetext theme={theme}>인증정보 목록</ReplacePagetext>
