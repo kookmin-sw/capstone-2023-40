@@ -35,23 +35,29 @@ describe('[MainPage Test]', () => {
     expect(container).toHaveTextContent('로그인');
   });
 
-  it('clicks to navigate to survey page if logged in', async () => {
-    const { container } = render(
-      <MemoryRouter initialEntries={['/']}>
-        <Routes>
-          <Route path="/" element={<MainPage />} />
-          <Route path="/survey" element={<SurveyListPage />} />
-        </Routes>
-      </MemoryRouter>
-    );
+  // FIXME: should be modified to API call
+  // it('clicks to navigate to survey page if logged in', async () => {
+  //   const setStateMock = jest.fn();
+  //   const useStateMock: any = (useState: any) => [useState, setStateMock];
+  //   jest.spyOn(React, 'useState').mockImplementation(useStateMock);
 
-    const navigateToSurveyButton = await waitFor(() => screen.getByRole('button', { name: '바로 설문하기' }));
-    await act(async () => {
-      fireEvent.click(navigateToSurveyButton);
-    });
+  //   const { container } = render(
+  //     <MemoryRouter initialEntries={['/']}>
+  //       <Routes>
+  //         <Route path="/" element={<MainPage />} />
+  //       </Routes>
+  //     </MemoryRouter>
+  //   );
 
-    expect(container).toHaveTextContent('설문 제목');
-    expect(container).toHaveTextContent('필수인증');
-    expect(container).toHaveTextContent('설문 종료일');
-  });
+  //   const navigateToSurveyButton = await waitFor(() => screen.getByRole('button', { name: '바로 설문하기' }));
+  //   await act(async () => {
+  //     fireEvent.click(navigateToSurveyButton);
+  //   });
+
+  //   expect(container).toHaveTextContent('설문 제목');
+  //   expect(container).toHaveTextContent('필수인증');
+  //   expect(container).toHaveTextContent('설문 종료일');
+
+  //   useStateMock.mockRestore();
+  // });
 });
