@@ -3,18 +3,14 @@ import React, { useReducer } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { ReactComponent as Arrow } from '../../assets/svg/arrow.svg';
-import { ReactComponent as Pencil } from '../../assets/svg/pencil.svg';
+import { Icons } from '../../assets/svg/index';
 import Header from '../../components/Header';
 import { useTheme } from '../../hooks/useTheme';
 
-const PencilImage = styled(Pencil).attrs({
+const PencilImage = styled(Icons.PENCIL).attrs({
   width: 24,
   height: 24,
 })`
-  display: flex;
-  align-items: center;
-  justify-content: center;
   border: none;
   width: 25px;
   height: 100%;
@@ -28,7 +24,7 @@ const PencilImage = styled(Pencil).attrs({
   }
 `;
 
-const ArrowImage = styled(Arrow).attrs({
+const ArrowImage = styled(Icons.ARROW).attrs({
   width: 24,
   height: 24,
 })`

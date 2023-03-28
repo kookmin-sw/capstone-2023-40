@@ -3,12 +3,11 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { ReactComponent as Pencil } from '../../assets/svg/pencil.svg';
-import { ReactComponent as Arrow } from '../../assets/svg/twoArrow.svg';
+import { Icons } from '../../assets/svg/index';
 import Header from '../../components/Header';
 import { useTheme } from '../../hooks/useTheme';
 
-const ArrowImage = styled(Arrow).attrs({
+const ArrowImage = styled(Icons.TWOARROW).attrs({
   width: 24,
   height: 24,
 })`

@@ -3,18 +3,11 @@ import React, { useReducer } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { ReactComponent as Arrow } from '../../assets/svg/arrow.svg';
-import { ReactComponent as Check } from '../../assets/svg/CheckIcon.svg';
-import { ReactComponent as Driver } from '../../assets/svg/DriverLicense.svg';
-import { ReactComponent as Google } from '../../assets/svg/Google.svg';
-import { ReactComponent as IdCard } from '../../assets/svg/IDCard.svg';
-import { ReactComponent as Kakao } from '../../assets/svg/KakaoTalk_logo.svg';
-import { ReactComponent as Naver } from '../../assets/svg/naver.svg';
-import { ReactComponent as School } from '../../assets/svg/School.svg';
+import { Icons } from '../../assets/svg/index';
 import Header from '../../components/Header';
 import { useTheme } from '../../hooks/useTheme';
 
-const KakaoTalk = styled(Kakao).attrs({
+const KakaoTalk = styled(Icons.KAKAO).attrs({
   width: 30,
   height: 30,
 })`
@@ -23,7 +16,7 @@ const KakaoTalk = styled(Kakao).attrs({
   border-radius: 30px;
 `;
 
-const NaverImage = styled(Naver).attrs({
+const NaverImage = styled(Icons.NAVER).attrs({
   width: 30,
   height: 30,
 })`
@@ -32,7 +25,7 @@ const NaverImage = styled(Naver).attrs({
   border-radius: 30px;
 `;
 
-const GoogleImage = styled(Google).attrs({
+const GoogleImage = styled(Icons.GOOGLE).attrs({
   width: 30,
   height: 30,
 })`
@@ -41,7 +34,7 @@ const GoogleImage = styled(Google).attrs({
   border-radius: 30px;
 `;
 
-const IdCardImage = styled(IdCard).attrs({
+const IdCardImage = styled(Icons.ID).attrs({
   width: 30,
   height: 30,
 })`
@@ -50,7 +43,7 @@ const IdCardImage = styled(IdCard).attrs({
   border-radius: 20px;
 `;
 
-const DriverCardImage = styled(Driver).attrs({
+const DriverCardImage = styled(Icons.DRIVER_LICENSE).attrs({
   width: 30,
   height: 30,
 })`
@@ -59,7 +52,7 @@ const DriverCardImage = styled(Driver).attrs({
   border-radius: 20px;
 `;
 
-const SchoolImage = styled(School).attrs({
+const SchoolImage = styled(Icons.WEBMAIL).attrs({
   width: 30,
   height: 30,
 })`
@@ -68,7 +61,7 @@ const SchoolImage = styled(School).attrs({
   border-radius: 30px;
 `;
 
-const ArrowImage = styled(Arrow).attrs({
+const ArrowImage = styled(Icons.ARROW).attrs({
   width: 30,
   height: 30,
 })`
@@ -77,7 +70,7 @@ const ArrowImage = styled(Arrow).attrs({
   border-radius: 30px;
 `;
 
-const CheckImage = styled(Check).attrs({
+const CheckImage = styled(Icons.CHECK).attrs({
   width: 30,
   height: 30,
 })`
@@ -171,7 +164,7 @@ type Action =
   | { type: 'AUTH_SCHOOLMAIL'; payload: boolean };
 
 // test
-const initalState = {
+const initialState = {
   kakao: true,
   naver: false,
   google: true,
@@ -203,7 +196,7 @@ export default function MyPage() {
   const [theme, toggleTheme] = useTheme();
   const navigate = useNavigate();
 
-  const [state, dispatch] = useReducer(reducer, initalState);
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   // Input Data list
 
@@ -218,7 +211,7 @@ export default function MyPage() {
         <Form onSubmit={handleSubmit}>
           <AuthListTitle theme={theme}>마이페이지 &gt; 인증정보 목록 </AuthListTitle>
           <ContainerBox theme={theme} onClick={() => navigate('../mypage/auth-list')} disabled={state.kakao}>
-            <KakaoTalk type="submit" theme={theme} />
+            <KakaoTalk type="submit" />
             {!state.kakao ? (
               <BeforeText theme={theme}>카카오 본인인증 바로가기</BeforeText>
             ) : (
