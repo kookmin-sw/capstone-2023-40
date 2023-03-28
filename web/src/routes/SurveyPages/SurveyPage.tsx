@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import axios from '../../api/axios';
 import requests from '../../api/request';
 import Header from '../../components/Header';
+import SurveyPageSkeleton from '../../components/Skeleton/SurveyPageSkeleton';
 import { useTheme } from '../../hooks/useTheme';
 
 const Container = styled.div`
@@ -183,6 +184,7 @@ export default function SurveyPage() {
   const [surveyData, setSurveyData] = useState<SurveyData>();
   const [endedDate, setEndedDate] = useState<string>('');
   const [answers, setAnswers] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const questionRef = useRef<HTMLDivElement[]>([]);
   const nowDate = new Date();
 
@@ -197,9 +199,11 @@ export default function SurveyPage() {
   const remainDate = useMemo(() => getDateDiff(endedDate), [endedDate]);
 
   const fetchSurveyData = async () => {
+    setIsLoading(true);
     try {
       const request: AxiosResponse<SurveyData> = await axios.get<SurveyData>(requests.fetchSurvey + id);
       setSurveyData(request.data);
+      setIsLoading(false);
     } catch (error) {
       const { name } = error as unknown as AxiosError;
       // TODO: handle error while fetching data
@@ -262,15 +266,27 @@ export default function SurveyPage() {
   };
 
   useEffect(() => {
+    console.log(1);
     fetchSurveyData();
   }, []);
 
   useEffect(() => {
+    console.log(2);
     if (typeof surveyData !== 'undefined') {
       setEndedDate(surveyData.ended_date.substring(0, 10));
     }
   }, [surveyData]);
 
+  console.log(444);
+
+  if (isLoading) {
+    return (
+      <Container theme={theme}>
+        <Header theme={theme} toggleTheme={toggleTheme} />
+        <SurveyPageSkeleton theme={theme} />
+      </Container>
+    );
+  }
   return (
     <Container theme={theme}>
       <Header theme={theme} toggleTheme={toggleTheme} />
