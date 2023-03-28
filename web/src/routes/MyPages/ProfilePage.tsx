@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, SyntheticEvent } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -116,7 +116,7 @@ const ReplacePagetext = styled.span`
   color: ${(props) => props.theme.colors.default};
 `;
 
-const CompleteButton = styled.button`
+const CompleteButton = styled.div`
   margin-left: auto;
   display: flex;
   padding: 1.5vh;
@@ -204,16 +204,10 @@ const reducer = (state: State, action: Action): State => {
 };
 
 const formatPhoneNumber = (value: string): string => {
-  // 입력된 문자열에서 숫자 이외의 문자 제거
   const phone = value.replace(/[^0-9]/g, '');
-
-  // 전화번호의 길이가 10자리 이상일 때
   if (phone.length >= 10) {
-    // '-'을 포함한 형태로 변환
     return phone.replace(/(\d{3})(\d{3,4})(\d{4})/, '$1-$2-$3');
   }
-
-  // 10자리 미만이면 입력된 값을 그대로 반환
   return phone;
 };
 
@@ -224,26 +218,28 @@ export default function MyPage() {
   const [state, dispatch] = useReducer(reducer, initalState);
 
   // Input Data list
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    switch (name) {
-      case 'email':
-        dispatch({ type: 'CHANGE_EMAIL', payload: value });
-        break;
-      case 'password':
-        dispatch({ type: 'CHANGE_PASSWORD', payload: value });
-        break;
-      case 'name':
-        dispatch({ type: 'CHANGE_NAME', payload: value });
-        break;
-      case 'phoneNumber':
-        dispatch({ type: 'CHANGE_PHONE_NUMBER', payload: formatPhoneNumber(value) });
-        break;
-      case 'address':
-        dispatch({ type: 'CHANGE_ADDRESS', payload: value });
-        break;
-      default:
-        break;
+  const handleInputChange = (e: SyntheticEvent<HTMLInputElement>) => {
+    const { name, value } = e.currentTarget;
+    if (e.type === 'change' || e.type === 'Enter' || e.type === 'blur') {
+      switch (name) {
+        case 'email':
+          dispatch({ type: 'CHANGE_EMAIL', payload: value });
+          break;
+        case 'password':
+          dispatch({ type: 'CHANGE_PASSWORD', payload: value });
+          break;
+        case 'name':
+          dispatch({ type: 'CHANGE_NAME', payload: value });
+          break;
+        case 'phoneNumber':
+          dispatch({ type: 'CHANGE_PHONE_NUMBER', payload: formatPhoneNumber(value) });
+          break;
+        case 'address':
+          dispatch({ type: 'CHANGE_ADDRESS', payload: value });
+          break;
+        default:
+          break;
+      }
     }
   };
 
@@ -278,6 +274,8 @@ export default function MyPage() {
               name="email"
               value={state.email}
               onChange={handleInputChange}
+              onKeyDown={handleInputChange}
+              onBlur={handleInputChange}
               theme={theme}
               disabled={!state.emailDisabled}
             />
@@ -290,6 +288,8 @@ export default function MyPage() {
               name="name"
               value={state.name}
               onChange={handleInputChange}
+              onKeyDown={handleInputChange}
+              onBlur={handleInputChange}
               theme={theme}
               disabled={!state.nameDisabled}
             />
@@ -302,6 +302,8 @@ export default function MyPage() {
               name="password"
               value={state.password}
               onChange={handleInputChange}
+              onKeyDown={handleInputChange}
+              onBlur={handleInputChange}
               theme={theme}
               disabled={!state.passwordDisabled}
             />
@@ -314,6 +316,8 @@ export default function MyPage() {
               name="phoneNumber"
               value={state.phoneNumber}
               onChange={handleInputChange}
+              onKeyDown={handleInputChange}
+              onBlur={handleInputChange}
               maxLength={13}
               theme={theme}
               disabled={!state.phoneNumberDisabled}
@@ -327,6 +331,8 @@ export default function MyPage() {
               name="address"
               value={state.address}
               onChange={handleInputChange}
+              onKeyDown={handleInputChange}
+              onBlur={handleInputChange}
               theme={theme}
               disabled={!state.addressDisabled}
             />
