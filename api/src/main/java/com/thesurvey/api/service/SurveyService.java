@@ -1,17 +1,13 @@
 package com.thesurvey.api.service;
 
-import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
 import com.thesurvey.api.domain.Participation;
 import com.thesurvey.api.domain.Question;
-import com.thesurvey.api.domain.QuestionBank;
-import com.thesurvey.api.domain.QuestionOption;
 import com.thesurvey.api.domain.Survey;
-import com.thesurvey.api.domain.User;
-import com.thesurvey.api.dto.SurveyDto;
-import com.thesurvey.api.dto.request.QuestionRequestDto;
+import com.thesurvey.api.dto.SurveyInfoDto;
 import com.thesurvey.api.dto.request.SurveyRequestDto;
 import com.thesurvey.api.exception.ErrorMessage;
 import com.thesurvey.api.exception.ExceptionMapper;
+import com.thesurvey.api.repository.AnsweredQuestionRepository;
 import com.thesurvey.api.repository.ParticipationRepository;
 import com.thesurvey.api.repository.QuestionBankRepository;
 import com.thesurvey.api.repository.QuestionOptionRepository;
@@ -22,106 +18,102 @@ import com.thesurvey.api.service.mapper.QuestionBankMapper;
 import com.thesurvey.api.service.mapper.QuestionMapper;
 import com.thesurvey.api.service.mapper.QuestionOptionMapper;
 import com.thesurvey.api.service.mapper.SurveyMapper;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class SurveyService {
 
-    // FIXME: Is this correct...? So strongly coupled
     private final SurveyRepository surveyRepository;
     private final SurveyMapper surveyMapper;
-    private final QuestionBankMapper questionBankMapper;
-    private final QuestionMapper questionMapper;
-    private final QuestionOptionMapper questionOptionMapper;
-    private final QuestionBankRepository questionBankRepository;
-    private final QuestionOptionRepository questionOptionRepository;
-    private final ParticipationRepository participationRepository;
-    private final UserRepository userRepository;
-    private final QuestionRepository questionRepository;
+    private final QuestionService questionService;
+    private final ParticipationService participationService;
 
     public SurveyService(SurveyRepository surveyRepository, SurveyMapper surveyMapper,
-        QuestionBankMapper questionBankMapper, QuestionMapper questionMapper,
-        QuestionOptionMapper questionOptionMapper, QuestionBankRepository questionBankRepository,
-        QuestionOptionRepository questionOptionRepository,
-        ParticipationRepository participationRepository, UserRepository userRepository,
-        QuestionRepository questionRepository) {
+        QuestionService questionService,
+        ParticipationService participationService) {
         this.surveyRepository = surveyRepository;
         this.surveyMapper = surveyMapper;
-        this.questionBankMapper = questionBankMapper;
-        this.questionMapper = questionMapper;
-        this.questionOptionMapper = questionOptionMapper;
-        this.questionBankRepository = questionBankRepository;
-        this.questionOptionRepository = questionOptionRepository;
-        this.participationRepository = participationRepository;
-        this.userRepository = userRepository;
-        this.questionRepository = questionRepository;
+        this.questionService = questionService;
+        this.participationService = participationService;
     }
 
-    public List<Optional<SurveyDto>> getAllSurvey() {
+    public List<Optional<SurveyInfoDto>> getAllSurvey() {
         List<Survey> surveyList = surveyRepository.findAll();
-        List<Optional<SurveyDto>> surveyDtoList = new ArrayList<>();
+        List<Optional<SurveyInfoDto>> surveyDtoList = new ArrayList<>();
         for (Survey survey : surveyList) {
-            surveyDtoList.add(surveyMapper.toSurveyDto(Optional.ofNullable(survey)));
+            surveyDtoList.add(Optional.ofNullable(surveyMapper.toSurveyInfoDto(survey)));
         }
         return surveyDtoList;
     }
 
+    // Need to test
     public Optional<Survey> getSurveyByIdWithRelatedQuestion(UUID surveyId) {
         return Optional.ofNullable(surveyRepository.findBySurveyIdWithRelatedQuestionBank(surveyId))
             .orElseThrow(() -> new ExceptionMapper(ErrorMessage.SURVEY_NOT_FOUND));
     }
 
     @Transactional
-    public Survey createSurvey(Authentication authentication, SurveyRequestDto surveyRequestDto) {
+    public SurveyInfoDto createSurvey(Authentication authentication,
+        SurveyRequestDto surveyRequestDto) {
         Survey survey = surveyRepository.save(surveyMapper.toSurvey(surveyRequestDto));
-
-        for (QuestionRequestDto questionRequestDto : surveyRequestDto.getQuestions()) {
-            QuestionBank questionBank = questionBankRepository.save(
-                questionBankMapper.toQuestionBank(questionRequestDto));
-
-            Question question = questionRepository.save(
-                questionMapper.toQuestion(questionRequestDto, survey, questionBank));
-
-            final QuestionBank _questionBank = questionBank; // lambda needs final
-            List<QuestionOption> options = questionRequestDto.getQuestionOptions()
-                .stream()
-                .map(optionDto -> questionOptionMapper.toQuestionOption(optionDto, _questionBank))
-                .collect(Collectors.toList());
-
-            questionOptionRepository.saveAll(options);
-        }
-
-        User user = userRepository.findByName(authentication.getName())
-            .orElseThrow(() -> new ExceptionMapper(ErrorMessage.USER_NAME_NOT_FOUND, authentication.getName()));
-
-        for (CertificationType certificationType : surveyRequestDto.getCertificationType()) {
-            Participation participation = Participation.builder()
-                .user(user)
-                .survey(survey)
-                .certificationType(certificationType)
-                .participateDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")))
-                .submittedDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")))
-                .build();
-            participationRepository.save(participation);
-        }
-
-        return survey;
+        questionService.createQuestion(surveyRequestDto, survey);
+        participationService.createParticipation(authentication, surveyRequestDto, survey);
+        return surveyMapper.toSurveyInfoDto(survey);
     }
 
-//    @Transactional
-//    public Survey submitSurvey(AnsweredQuestionDto answeredQuestionDto) {
-//
-//    }
+    @Transactional
+    public void deleteSurvey(UUID surveyId) {
+        Survey survey = surveyRepository.findById(surveyId)
+            .orElseThrow(() -> new ExceptionMapper(ErrorMessage.SURVEY_NOT_FOUND, surveyId));
+        ;
+        surveyRepository.delete(survey);
+        participationService.deleteParticipation(surveyId);
+        questionService.deleteQuestion(surveyId);
+        // Need to implement.
+//        List<AnsweredQuestion> answeredQuestionList = answeredQuestionRepository.findAllById_surveyId(surveyId);
+//        answeredQuestionRepository.deleteAll(answeredQuestionList);
+    }
 
+//    public SurveyInfoDto modifySurvey(SurveyUpdateRequestDto surveyUpdateRequestDto) {
+//        Survey survey = surveyRepository.findBySurveyId(surveyUpdateRequestDto.getSurveyId())
+//            .orElseThrow(
+//                () -> new ExceptionMapper(ErrorMessage.SURVEY_NOT_FOUND,
+//                    surveyUpdateRequestDto.getSurveyId()));
+//        if (surveyUpdateRequestDto.getTitle() != null) {
+//            survey.changeTitle(surveyUpdateRequestDto.getTitle());
+//        }
+//        if (surveyUpdateRequestDto.getDescription() != null) {
+//            survey.changeDescription(surveyUpdateRequestDto.getDescription());
+//        }
+//        if (surveyUpdateRequestDto.getStartedDate() != null) {
+//            survey.changeStartedDate(surveyUpdateRequestDto.getStartedDate());
+//        }
+//        if (surveyUpdateRequestDto.getEndedDate() != null) {
+//            survey.changeEndedDate(surveyUpdateRequestDto.getEndedDate());
+//        }
+//
+//        List<QuestionBankUpdateRequestDto> questionBankList = surveyUpdateRequestDto.getQuestions();
+//        for (QuestionBankUpdateRequestDto questionBankUpdateRequestDto : questionBankList) {
+//            QuestionBank questionBank = questionBankRepository.findByQuestionBankId(
+//                questionBankUpdateRequestDto.getQuestionBankId()).get();
+//            if (questionBankUpdateRequestDto.getTitle() != null) {
+//                questionBank.changeTitle(questionBankUpdateRequestDto.getTitle());
+//            }
+//            if (questionBankUpdateRequestDto.getDescription() != null) {
+//                questionBank.changeDescription(questionBankUpdateRequestDto.getDescription());
+//            }
+//            if (questionBankUpdateRequestDto.getQuestionType() != null) {
+//                questionBank.changeQuestionType(questionBankUpdateRequestDto.getQuestionType());
+//            }
+//        }
+//
+//        return surveyMapper.toSurveyInfoDto(survey);
+//    }
 }
