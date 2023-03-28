@@ -10,8 +10,6 @@ import com.thesurvey.api.domain.QuestionBank;
 import com.thesurvey.api.domain.QuestionOption;
 import com.thesurvey.api.domain.Survey;
 import com.thesurvey.api.domain.User;
-import com.thesurvey.api.dto.QuestionOptionDto;
-import com.thesurvey.api.dto.SurveyDto;
 import com.thesurvey.api.dto.request.QuestionRequestDto;
 import com.thesurvey.api.dto.request.SurveyRequestDto;
 import com.thesurvey.api.repository.ParticipationRepository;
@@ -25,11 +23,8 @@ import com.thesurvey.api.service.mapper.QuestionMapper;
 import com.thesurvey.api.service.mapper.SurveyMapper;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
@@ -62,35 +57,6 @@ public class SurveyServiceTest {
     QuestionOptionRepository questionOptionRepository;
     @Autowired
     UserRepository userRepository;
-
-//    SurveyDto surveyDto = SurveyDto.builder()
-//        .title(title)
-//        .startedDate(LocalDateTime.now())
-//        .endedDate(LocalDateTime.now())
-//        .questionBank(questionBanks)
-//        .certificationType(CertificationType.GOOGLE).build();
-
-//    @Test
-//    void testParticipationSave() {
-//        Survey savedSurvey = surveyRepository.save(surveyMapper.toSurvey(surveyDto));
-//        Long tmpUserId = 1L;
-//        ParticipationId participationId = new ParticipationId(savedSurvey.getSurveyId(), tmpUserId);
-//        Participation participation = Participation.builder()
-//            .participationId(participationId)
-//            .certificationType(surveyDto.getCertificationType())
-//            .participateDate(LocalDateTime.now())
-//            .submittedDate(LocalDateTime.now())
-//            .build();
-//
-//        Participation savedParticipation = participationRepository.save(participation);
-//
-//        assertNotNull(savedParticipation);
-//        assertEquals(tmpUserId, savedParticipation.getParticipationId().getUserId());
-//
-//
-//
-//
-//    }
 
     @Test
     public void testCreateSurvey() {
@@ -205,25 +171,5 @@ public class SurveyServiceTest {
         assertEquals(3, questionOptions.size());
         assertEquals("My name is Jin", survey.getTitle());
     }
-
-//    @Test
-//    void getSurveyById() {
-//        String title = "My name is Jin";
-//        Question question1 = new Question("what's your name?");
-//        Question question2 = new Question("what's your id?");
-//        List<Question> questions = Arrays.asList(question1, question2);
-//        Survey survey = new Survey(title, questions);
-//        Survey newSurvey = surveyService.createSurvey(survey);
-//        questionService.addQuestion(survey.getQuestions());
-//
-//        Optional<Survey> targetSurvey = surveyService.getSurveyById(newSurvey.getSurveyId());
-//
-//        assertEquals(survey.getSurveyId(), targetSurvey.get().getSurveyId());
-//        assertEquals(survey.getTitle(), targetSurvey.get().getTitle());
-//        assertEquals(survey.getQuestions().get(1).getContent(),
-//            targetSurvey.get().getQuestions().get(1).getContent());
-//
-//
-//    }
 
 }
