@@ -3,6 +3,7 @@ package com.thesurvey.api.domain;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
@@ -22,17 +23,17 @@ public class AnsweredQuestion {
     private AnsweredQuestionId answeredQuestionId;
 
     @MapsId("surveyId")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "survey_id")
     public Survey survey;
 
     @MapsId("userId")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     public User user;
 
     @MapsId("questionBankId")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "question_bank_id")
     public QuestionBank questionBank;
 
@@ -53,11 +54,16 @@ public class AnsweredQuestion {
     @Builder
     public AnsweredQuestion(String singleChoice,
         String multipleChoices,
-        String shortAnswer, String longAnswer) {
+        String shortAnswer, String longAnswer, Survey survey, User user,
+        QuestionBank questionBank) {
         this.shortAnswer = shortAnswer;
         this.longAnswer = longAnswer;
         this.singleChoice = singleChoice;
         this.multipleChoices = multipleChoices;
-
+        this.answeredQuestionId = AnsweredQuestionId.builder()
+            .surveyId(survey.getSurveyId())
+            .userId(user.getUserId())
+            .questionBankId(questionBank.getQuestionBankId())
+            .build();
     }
 }
