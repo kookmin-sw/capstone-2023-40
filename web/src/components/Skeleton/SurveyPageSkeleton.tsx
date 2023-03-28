@@ -24,7 +24,7 @@ const BodyContainer = styled.div`
 const QuestionContainer = styled.div`
   height: 150px;
   margin-top: 23px;
-  border-radius: 8px;
+  border-radius: ${(props) => props.theme.borderRadius};
   border-left: 10px solid ${(props) => props.theme.colors.primary};
   padding: 1.2vh 2vw 1.2vh 2vw;
   color: ${(props) => props.theme.colors.default};
@@ -37,7 +37,7 @@ const QuestionTitle = styled.div`
   padding: 1.2vh 1.5vw 1.2vh 1.5vw;
   margin-top: 7px;
   margin-bottom: 25px;
-  border-radius: 15px;
+  border-radius: ${(props) => props.theme.borderRadius};
   color: ${(props) => props.theme.colors.default};
   background-color: ${(props) => props.theme.colors.container};
 `;

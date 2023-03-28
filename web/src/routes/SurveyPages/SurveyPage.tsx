@@ -40,7 +40,7 @@ const BodyContainer = styled.div`
 
 const QuestionContainer = styled.div`
   margin-top: 23px;
-  border-radius: 8px;
+  border-radius: ${(props) => props.theme.borderRadius};
   border-left: 10px solid ${(props) => props.theme.colors.primary};
   padding: 1.2vh 2vw 1.2vh 2vw;
   color: ${(props) => props.theme.colors.default};
@@ -52,7 +52,8 @@ const QuestionTitle = styled.div`
   padding: 1.2vh 1.5vw 1.2vh 1.5vw;
   margin-top: 7px;
   margin-bottom: 25px;
-  border-radius: 15px;
+  border: ${(props) => props.theme.border};
+  border-radius: ${(props) => props.theme.borderRadius};
   font-size: 18px;
   font-weight: 900;
   color: ${(props) => props.theme.colors.default};
@@ -62,8 +63,8 @@ const QuestionTitle = styled.div`
 const Answer = styled.textarea`
   padding: 1.2vh 2vw 1.2vh 2vw;
   margin-bottom: 5px;
-  border-radius: 15px;
-  border: 2px solid ${(props) => props.theme.colors.primary};
+  border-radius: ${(props) => props.theme.borderRadius};
+  border: ${(props) => props.theme.border};
   resize: none;
   font-weight: 100;
   color: ${(props) => props.theme.colors.default};
@@ -96,10 +97,15 @@ const RadioContainer = styled.label`
   padding: 1.2vh 1vw 1.2vh 1vw;
   margin-left: 1.3vw;
   margin-bottom: 10px;
-  border-radius: 15px;
+  border-radius: ${(props) => props.theme.borderRadius};
+  border: ${(props) => props.theme.border};
   width: 75.7vw;
   color: ${(props) => props.theme.colors.default};
   background-color: ${(props) => props.theme.colors.container};
+
+  &:hover {
+    opacity: 0.8;
+  }
 `;
 
 const RadioInput = styled.input.attrs({ type: 'radio' })`
@@ -213,6 +219,7 @@ export default function SurveyPage() {
   const postSurveyAnswers = async () => {
     console.log(userAnswers);
     // TODO: post answers to server
+    // axios.post(requests.postSurvey)
   };
 
   const turnOnUserAttention = (domIndex: number) => {
@@ -258,6 +265,7 @@ export default function SurveyPage() {
     setUserAnswers(newInputs);
   };
 
+  // TODO: show current and max text count
   const makeTextArea = (question: SurveyQuestion, index: number) => {
     if (question.type === 'LONG_ANSWER') {
       return (
