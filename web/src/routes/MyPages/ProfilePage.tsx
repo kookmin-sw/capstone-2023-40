@@ -247,7 +247,7 @@ export default function MyPage() {
     }
   };
 
-  const handleClick = (text: string) => {
+  const pencilClick = (text: string) => {
     if (text === 'email') {
       dispatch({ type: 'SET_CHANGE_EMAIL', payload: !state.emailDisabled });
     } else if (text === 'password') {
@@ -281,7 +281,7 @@ export default function MyPage() {
               theme={theme}
               disabled={!state.emailDisabled}
             />
-            <PencilImage type="submit" theme={theme} onClick={() => handleClick('email')} />
+            <PencilImage type="submit" theme={theme} onClick={() => pencilClick('email')} />
           </ContainerBox>
           <ContainerBox>
             <FontText theme={theme}>이름</FontText>
@@ -293,7 +293,7 @@ export default function MyPage() {
               theme={theme}
               disabled={!state.nameDisabled}
             />
-            <PencilImage type="submit" theme={theme} onClick={() => handleClick('name')} />
+            <PencilImage type="submit" theme={theme} onClick={() => pencilClick('name')} />
           </ContainerBox>
           <ContainerBox>
             <FontText theme={theme}>비밀번호</FontText>
@@ -305,7 +305,7 @@ export default function MyPage() {
               theme={theme}
               disabled={!state.passwordDisabled}
             />
-            <PencilImage type="submit" theme={theme} onClick={() => handleClick('password')} />
+            <PencilImage type="submit" theme={theme} onClick={() => pencilClick('password')} />
           </ContainerBox>
           <ContainerBox>
             <FontText theme={theme}>휴대폰 번호</FontText>
@@ -318,7 +318,7 @@ export default function MyPage() {
               theme={theme}
               disabled={!state.phoneNumberDisabled}
             />
-            <PencilImage type="submit" theme={theme} onClick={() => handleClick('phoneNumber')} />
+            <PencilImage type="submit" theme={theme} onClick={() => pencilClick('phoneNumber')} />
           </ContainerBox>
           <ContainerBox>
             <FontText theme={theme}>주소</FontText>
@@ -330,7 +330,7 @@ export default function MyPage() {
               theme={theme}
               disabled={!state.addressDisabled}
             />
-            <PencilImage type="submit" theme={theme} onClick={() => handleClick('address')} />
+            <PencilImage type="submit" theme={theme} onClick={() => pencilClick('address')} />
           </ContainerBox>
           <ContainerBox style={{ marginTop: '10vh' }}>
             <ReplacePagetext theme={theme}>인증정보 목록</ReplacePagetext>
