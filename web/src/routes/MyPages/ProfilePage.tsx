@@ -8,8 +8,8 @@ import Header from '../../components/Header';
 import { useTheme } from '../../hooks/useTheme';
 
 const PencilImage = styled(Icons.PENCIL).attrs({
-  width: 24,
-  height: 24,
+  width: 25,
+  height: 25,
 })`
   border: none;
   width: 25px;
@@ -25,15 +25,13 @@ const PencilImage = styled(Icons.PENCIL).attrs({
 `;
 
 const ArrowImage = styled(Icons.ARROW).attrs({
-  width: 24,
-  height: 24,
+  width: 30,
+  height: 30,
 })`
   display: flex;
   align-items: center;
   justify-content: center;
   border: none;
-  width: 25px;
-  height: 100%;
   padding: 1.5vh;
   border-radius: 30px;
   cursor: pointer;
