@@ -279,7 +279,12 @@ export default function MyPage() {
               theme={theme}
               disabled={!state.emailDisabled}
             />
-            <PencilImage type="submit" theme={theme} onClick={() => pencilClick('email')} />
+            <PencilImage
+              type="submit"
+              theme={theme}
+              title={!state.emailDisabled ? '수정하기' : '수정완료'}
+              onClick={() => pencilClick('email')}
+            />
           </ContainerBox>
           <ContainerBox>
             <FontText theme={theme}>이름</FontText>
@@ -293,7 +298,12 @@ export default function MyPage() {
               theme={theme}
               disabled={!state.nameDisabled}
             />
-            <PencilImage type="submit" theme={theme} onClick={() => pencilClick('name')} />
+            <PencilImage
+              type="submit"
+              theme={theme}
+              title={!state.nameDisabled ? '수정하기' : '수정완료'}
+              onClick={() => pencilClick('name')}
+            />
           </ContainerBox>
           <ContainerBox>
             <FontText theme={theme}>비밀번호</FontText>
@@ -307,7 +317,12 @@ export default function MyPage() {
               theme={theme}
               disabled={!state.passwordDisabled}
             />
-            <PencilImage type="submit" theme={theme} onClick={() => pencilClick('password')} />
+            <PencilImage
+              type="submit"
+              theme={theme}
+              title={!state.passwordDisabled ? '수정하기' : '수정완료'}
+              onClick={() => pencilClick('password')}
+            />
           </ContainerBox>
           <ContainerBox>
             <FontText theme={theme}>휴대폰 번호</FontText>
@@ -322,7 +337,12 @@ export default function MyPage() {
               theme={theme}
               disabled={!state.phoneNumberDisabled}
             />
-            <PencilImage type="submit" theme={theme} onClick={() => pencilClick('phoneNumber')} />
+            <PencilImage
+              type="submit"
+              theme={theme}
+              title={!state.phoneNumberDisabled ? '수정하기' : '수정완료'}
+              onClick={() => pencilClick('phoneNumber')}
+            />
           </ContainerBox>
           <ContainerBox>
             <FontText theme={theme}>주소</FontText>
@@ -336,7 +356,12 @@ export default function MyPage() {
               theme={theme}
               disabled={!state.addressDisabled}
             />
-            <PencilImage type="submit" theme={theme} onClick={() => pencilClick('address')} />
+            <PencilImage
+              type="submit"
+              theme={theme}
+              title={!state.addressDisabled ? '수정하기' : '수정완료'}
+              onClick={() => pencilClick('address')}
+            />
           </ContainerBox>
           <ContainerBox style={{ marginTop: '10vh' }}>
             <ReplacePagetext theme={theme}>인증정보 목록</ReplacePagetext>
