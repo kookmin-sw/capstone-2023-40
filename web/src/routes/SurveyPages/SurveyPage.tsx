@@ -183,17 +183,17 @@ export default function SurveyPage() {
   const [theme, toggleTheme] = useTheme();
   const [surveyData, setSurveyData] = useState<SurveyData>();
   const [endedDate, setEndedDate] = useState<string>('');
-  const [answers, setAnswers] = useState<string[]>([]);
+  const [userAnswers, setUserAnswers] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const questionRef = useRef<HTMLDivElement[]>([]);
+  const questionRefs = useRef<HTMLDivElement[]>([]);
   const nowDate = new Date();
 
   const getDateDiff = (date: string) => {
     const endDate = new Date(date);
 
-    const diffDate = endDate.getTime() - nowDate.getTime();
+    const dateDiff = endDate.getTime() - nowDate.getTime();
 
-    return Math.floor(Math.abs(diffDate / (1000 * 60 * 60 * 24)));
+    return Math.floor(Math.abs(dateDiff / (1000 * 60 * 60 * 24)));
   };
 
   const remainDate = useMemo(() => getDateDiff(endedDate), [endedDate]);
@@ -210,24 +210,42 @@ export default function SurveyPage() {
     }
   };
 
-  const handleSubmitClick = () => {
-    let answerStatus = true;
+  const postSurveyAnswers = async () => {
+    console.log(userAnswers);
+    // TODO: post answers to server
+  };
+
+  const turnOnUserAttention = (domIndex: number) => {
+    questionRefs.current[domIndex].style.borderLeft = '15px solid #FF5733';
+    questionRefs.current[domIndex].scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'smooth' });
+  };
+
+  const turnOffUserAttention = (domIndex: number) => {
+    questionRefs.current[domIndex].style.borderLeft = `10px solid ${theme.colors.primary}`;
+  };
+
+  const checkAnswers = () => {
+    let answersVerification = true;
     if (typeof surveyData !== 'undefined') {
       for (let i = 0; i < surveyData.questions.length; i += 1) {
         // TODO: response validation will be needed
-        if (typeof answers[i] === 'undefined' || answers[i] === '') {
-          questionRef.current[i].style.borderLeft = '10px solid #FF5733';
-          questionRef.current[i].scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'smooth' });
-          answerStatus = false;
+        if (typeof userAnswers[i] === 'undefined' || userAnswers[i] === '') {
+          turnOnUserAttention(i);
+          answersVerification = false;
           break;
         } else {
-          questionRef.current[i].style.borderLeft = `10px solid ${theme.colors.primary}`;
+          turnOffUserAttention(i);
         }
       }
     }
+    return answersVerification;
+  };
 
-    if (answerStatus) {
-      console.log(answers);
+  const handleSubmitButtonClick = () => {
+    const answersVerificationResult = checkAnswers();
+
+    if (answersVerificationResult) {
+      postSurveyAnswers();
     }
   };
 
@@ -235,9 +253,9 @@ export default function SurveyPage() {
     index: number,
     event: React.ChangeEvent<HTMLTextAreaElement> | React.ChangeEvent<HTMLInputElement>
   ) => {
-    const newInputs = [...answers];
+    const newInputs = [...userAnswers];
     newInputs[index] = event.target.value;
-    setAnswers(newInputs);
+    setUserAnswers(newInputs);
   };
 
   const makeTextArea = (question: SurveyQuestion, index: number) => {
@@ -266,18 +284,14 @@ export default function SurveyPage() {
   };
 
   useEffect(() => {
-    console.log(1);
     fetchSurveyData();
   }, []);
 
   useEffect(() => {
-    console.log(2);
     if (typeof surveyData !== 'undefined') {
       setEndedDate(surveyData.ended_date.substring(0, 10));
     }
   }, [surveyData]);
-
-  console.log(444);
 
   if (isLoading) {
     return (
@@ -303,7 +317,7 @@ export default function SurveyPage() {
             theme={theme}
             key={question.question_id}
             ref={(element) => {
-              questionRef.current[index] = element as HTMLDivElement;
+              questionRefs.current[index] = element as HTMLDivElement;
             }}
           >
             <QuestionTitle theme={theme}>
@@ -331,7 +345,7 @@ export default function SurveyPage() {
             )}
           </QuestionContainer>
         ))}
-        <SubmitButton onClick={handleSubmitClick} type="submit" theme={theme}>
+        <SubmitButton onClick={handleSubmitButtonClick} type="submit" theme={theme}>
           제출하기
         </SubmitButton>
       </BodyContainer>
