@@ -110,7 +110,6 @@ export default function MyPage() {
   };
 
   const handleClick = (ClickNumber: number) => {
-    console.log(resultClickFirst);
     if (ClickNumber === 1) {
       setResultClickFirst(!resultClickFirst);
     } else if (ClickNumber === 2) {

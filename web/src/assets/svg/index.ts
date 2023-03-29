@@ -13,7 +13,7 @@ import { ReactComponent as LightLogo } from './logo-light.svg';
 import { ReactComponent as MobilePhone } from './mobile-phone-icon.svg';
 import { ReactComponent as Naver } from './naver-icon.svg';
 import { ReactComponent as Pencil } from './pencil.svg';
-import { ReactComponent as TwoArrow } from './twoArrowRight.svg';
+import { ReactComponent as TwoArrow } from './twoArrow.svg';
 import { ReactComponent as Warn } from './warn-icon.svg';
 import { ReactComponent as Webmail } from './webmail-icon.svg';
 

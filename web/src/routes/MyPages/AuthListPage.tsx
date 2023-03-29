@@ -164,11 +164,10 @@ type Action =
   | { type: 'AUTH_DRIVER'; payload: boolean }
   | { type: 'AUTH_SCHOOLMAIL'; payload: boolean };
 
-// test
 const initialState = {
-  kakao: true,
+  kakao: false,
   naver: false,
-  google: true,
+  google: false,
   identityCard: false,
   driverCard: false,
   schoolMail: false,
@@ -198,8 +197,6 @@ export default function MyPage() {
   const navigate = useNavigate();
 
   const [state, dispatch] = useReducer(reducer, initialState);
-
-  // Input Data list
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
