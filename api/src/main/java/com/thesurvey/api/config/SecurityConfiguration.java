@@ -39,10 +39,12 @@ public class SecurityConfiguration {
             .cors().and()
             .authorizeRequests()
                 .antMatchers(
-                    "/v2/api-docs",
-                    "/swagger-resources/**",
+                    "/v2/api-docs/**",
+                    "/v3/api-docs/**",
+                    "/configuration/**",
                     "/swagger-ui.html",
-                    "/webjars/**"
+                    "/swagger-ui/**",
+                    "/docs/**"
                 ).permitAll()
                 .antMatchers("/admin/**").hasAuthority("ADMIN")
                 .antMatchers("/surveys/**").authenticated()
