@@ -56,6 +56,9 @@ public class AnsweredQuestion {
         String multipleChoices,
         String shortAnswer, String longAnswer, Survey survey, User user,
         QuestionBank questionBank) {
+        this.user = user;
+        this.survey = survey;
+        this.questionBank = questionBank;
         this.shortAnswer = shortAnswer;
         this.longAnswer = longAnswer;
         this.singleChoice = singleChoice;
