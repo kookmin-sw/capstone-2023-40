@@ -17,7 +17,6 @@ import lombok.Setter;
 
 @Entity
 @Getter
-@Setter
 @Table(name = "question_option")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class QuestionOption {
