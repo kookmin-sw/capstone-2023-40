@@ -44,11 +44,9 @@ public class SurveyService {
         return surveyDtoList;
     }
 
-    // Need to test
     public SurveyInfoDto getSurveyBySurveyIdWithRelatedQuestion(UUID surveyId) {
-        Survey survey = surveyRepository.findBySurveyIdWithRelatedQuestionBank(surveyId)
+        Survey survey = surveyRepository.findBySurveyId(surveyId)
             .orElseThrow(() -> new ExceptionMapper(ErrorMessage.SURVEY_NOT_FOUND));
-
         return surveyMapper.toSurveyInfoDto(survey);
     }
 

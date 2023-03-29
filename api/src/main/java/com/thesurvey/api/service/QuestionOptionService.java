@@ -40,7 +40,6 @@ public class QuestionOptionService {
         List<QuestionOptionUpdateRequestDto> questionOptionUpdateRequestDtoList) {
 
         for (QuestionOptionUpdateRequestDto questionOptionUpdateRequestDto : questionOptionUpdateRequestDtoList) {
-            System.out.println(questionOptionUpdateRequestDto.getOptionId() + "#######");
             QuestionOption questionOption = questionOptionRepository.findByQuestionOptionId(
                 questionOptionUpdateRequestDto.getOptionId()).orElseThrow(
                 () -> new ExceptionMapper(ErrorMessage.QUESTION_OPTION_NOT_FOUND,

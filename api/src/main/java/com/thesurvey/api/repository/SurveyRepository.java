@@ -13,9 +13,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SurveyRepository extends JpaRepository<Survey, UUID> {
 
-    @Query("SELECT s FROM Survey s JOIN FETCH s.questions q JOIN q.questionBank qb WHERE s.surveyId = :survey_id")
-    Optional<Survey> findBySurveyIdWithRelatedQuestionBank(@Param("survey_id") UUID surveyId);
-
     @Query("SELECT p.certificationType FROM Participation p WHERE p.survey.surveyId = :survey_id")
     List<Integer> findCertificationTypeBySurveyId(@Param("survey_id") UUID surveyId);
 

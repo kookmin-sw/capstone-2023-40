@@ -33,7 +33,7 @@ public class SurveyController {
     public ResponseEntity<List<Optional<SurveyInfoDto>>> getAllSurvey() {
         return ResponseEntity.ok(surveyService.getAllSurvey());
     }
-    // Need to test
+
     @GetMapping("/{surveyId}")
     public ResponseEntity<SurveyInfoDto> readSurvey(@PathVariable UUID surveyId) {
         return ResponseEntity.ok(surveyService.getSurveyBySurveyIdWithRelatedQuestion(surveyId));
@@ -45,7 +45,7 @@ public class SurveyController {
         return ResponseEntity.ok(surveyService.createSurvey(authentication, surveyRequestDto));
     }
 
-    @PutMapping("/update")
+    @PutMapping
     public ResponseEntity<SurveyInfoDto> updateSurvey(@RequestBody SurveyUpdateRequestDto surveyUpdateRequestDto) {
         return ResponseEntity.ok(surveyService.updateSurvey(surveyUpdateRequestDto));
     }
