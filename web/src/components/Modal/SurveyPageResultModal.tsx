@@ -65,8 +65,15 @@ export default function SurveyPageResultModal({ theme }: ModalProps) {
   const navigate = useNavigate();
   const modalRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    const originalStyle = window.getComputedStyle(document.body).overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = originalStyle;
+    };
+  }, []);
+
   // FIXME: there will be a way to float in right place, without scroll
-  // FIXME: prevent scroll while modal is on
   useEffect(() => {
     if (modalRef.current) {
       modalRef.current.scrollIntoView({ block: 'center', behavior: 'smooth' });

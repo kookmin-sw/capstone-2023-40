@@ -14,6 +14,7 @@ import { useTheme } from '../../hooks/useTheme';
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
+  background-color: ${(props) => props.theme.colors.container};
 `;
 
 const HeadContainer = styled.div`
@@ -186,15 +187,16 @@ interface SurveyData {
 }
 
 export default function SurveyPage() {
+  const nowDate = new Date();
   const { id } = useParams();
   const [theme, toggleTheme] = useTheme();
+  const questionRefs = useRef<HTMLDivElement[]>([]);
+
   const [surveyData, setSurveyData] = useState<SurveyData>();
   const [endedDate, setEndedDate] = useState<string>('');
   const [userAnswers, setUserAnswers] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [resultModalOpen, setResultModalOpen] = useState<boolean>(false);
-  const questionRefs = useRef<HTMLDivElement[]>([]);
-  const nowDate = new Date();
 
   const getDateDiff = (date: string) => {
     const endDate = new Date(date);
@@ -263,6 +265,7 @@ export default function SurveyPage() {
     }
   };
 
+  // FIXME: it cause rerendering every single typing
   const handleAnswerChange = (
     index: number,
     event: React.ChangeEvent<HTMLTextAreaElement> | React.ChangeEvent<HTMLInputElement>
