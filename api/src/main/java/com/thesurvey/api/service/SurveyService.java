@@ -45,9 +45,11 @@ public class SurveyService {
     }
 
     // Need to test
-    public Optional<Survey> getSurveyByIdWithRelatedQuestion(UUID surveyId) {
-        return Optional.ofNullable(surveyRepository.findBySurveyIdWithRelatedQuestionBank(surveyId))
+    public SurveyInfoDto getSurveyBySurveyIdWithRelatedQuestion(UUID surveyId) {
+        Survey survey = surveyRepository.findBySurveyIdWithRelatedQuestionBank(surveyId)
             .orElseThrow(() -> new ExceptionMapper(ErrorMessage.SURVEY_NOT_FOUND));
+
+        return surveyMapper.toSurveyInfoDto(survey);
     }
 
     @Transactional
@@ -81,7 +83,7 @@ public class SurveyService {
         /* If client tries to modify the survey already started,
             Can't update survey.
          */
-        if (LocalDateTime.now(ZoneId.of("Asia/Seoul")).isBefore(survey.getStartedDate())) {
+        if (LocalDateTime.now(ZoneId.of("Asia/Seoul")).isAfter(survey.getStartedDate())) {
             throw new ExceptionMapper(ErrorMessage.SURVEY_ALREADY_STARTED);
         }
 
