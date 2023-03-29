@@ -1,28 +1,16 @@
 package com.thesurvey.api.service;
 
-import com.thesurvey.api.domain.Participation;
-import com.thesurvey.api.domain.Question;
 import com.thesurvey.api.domain.Survey;
 import com.thesurvey.api.dto.SurveyInfoDto;
 import com.thesurvey.api.dto.request.SurveyRequestDto;
 import com.thesurvey.api.exception.ErrorMessage;
 import com.thesurvey.api.exception.ExceptionMapper;
-import com.thesurvey.api.repository.AnsweredQuestionRepository;
-import com.thesurvey.api.repository.ParticipationRepository;
-import com.thesurvey.api.repository.QuestionBankRepository;
-import com.thesurvey.api.repository.QuestionOptionRepository;
-import com.thesurvey.api.repository.QuestionRepository;
 import com.thesurvey.api.repository.SurveyRepository;
-import com.thesurvey.api.repository.UserRepository;
-import com.thesurvey.api.service.mapper.QuestionBankMapper;
-import com.thesurvey.api.service.mapper.QuestionMapper;
-import com.thesurvey.api.service.mapper.QuestionOptionMapper;
 import com.thesurvey.api.service.mapper.SurveyMapper;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -72,7 +60,7 @@ public class SurveyService {
     public void deleteSurvey(UUID surveyId) {
         Survey survey = surveyRepository.findById(surveyId)
             .orElseThrow(() -> new ExceptionMapper(ErrorMessage.SURVEY_NOT_FOUND, surveyId));
-        ;
+        
         surveyRepository.delete(survey);
         participationService.deleteParticipation(surveyId);
         questionService.deleteQuestion(surveyId);
