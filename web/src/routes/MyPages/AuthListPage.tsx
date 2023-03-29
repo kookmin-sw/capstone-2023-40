@@ -190,12 +190,48 @@ export default function MyPage() {
 
   // containerBox list
   const authState = [
-    { number: 1, image: <KakaoImage />, title: '카카오', checkAuth: state.kakao },
-    { number: 2, image: <NaverImage />, title: '네이버', checkAuth: state.naver },
-    { number: 3, image: <GoogleImage />, title: '구글', checkAuth: state.google },
-    { number: 4, image: <IdCardImage />, title: '신분증', checkAuth: state.identityCard },
-    { number: 5, image: <DriverCardImage />, title: '운전면허', checkAuth: state.driverCard },
-    { number: 6, image: <SchoolImage />, title: '웹메일', checkAuth: state.schoolMail },
+    {
+      number: 1,
+      image: <KakaoImage />,
+      title: '카카오',
+      checkAuth: state.kakao,
+      pageNavigate: () => navigate('../mypage/auth-list'),
+    },
+    {
+      number: 2,
+      image: <NaverImage />,
+      title: '네이버',
+      checkAuth: state.naver,
+      pageNavigate: () => navigate('../mypage/auth-list'),
+    },
+    {
+      number: 3,
+      image: <GoogleImage />,
+      title: '구글',
+      checkAuth: state.google,
+      pageNavigate: () => navigate('../mypage/auth-list'),
+    },
+    {
+      number: 4,
+      image: <IdCardImage />,
+      title: '신분증',
+      checkAuth: state.identityCard,
+      pageNavigate: () => navigate('../mypage/auth-list'),
+    },
+    {
+      number: 5,
+      image: <DriverCardImage />,
+      title: '운전면허',
+      checkAuth: state.driverCard,
+      pageNavigate: () => navigate('../mypage/auth-list'),
+    },
+    {
+      number: 6,
+      image: <SchoolImage />,
+      title: '웹메일',
+      checkAuth: state.schoolMail,
+      pageNavigate: () => navigate('../mypage/auth-list'),
+    },
   ];
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -210,13 +246,8 @@ export default function MyPage() {
           <AuthListTitle theme={theme} style={{ marginBottom: '4vh' }} onClick={() => navigate('../mypage')}>
             마이페이지 &gt; 인증정보 목록{' '}
           </AuthListTitle>
-          {authState.map(({ number, image, title, checkAuth }) => (
-            <ContainerBox
-              key={number}
-              theme={theme}
-              onClick={() => navigate('../mypage/auth-list')}
-              disabled={checkAuth}
-            >
+          {authState.map(({ number, image, title, checkAuth, pageNavigate }) => (
+            <ContainerBox key={number} theme={theme} onClick={pageNavigate} disabled={checkAuth}>
               {image}
               <TextType
                 theme={theme}
