@@ -188,6 +188,7 @@ export default function MyPage() {
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  // containerBox list
   const authState = [
     { number: 1, image: <KakaoImage />, title: '카카오', checkAuth: state.kakao },
     { number: 2, image: <NaverImage />, title: '네이버', checkAuth: state.naver },

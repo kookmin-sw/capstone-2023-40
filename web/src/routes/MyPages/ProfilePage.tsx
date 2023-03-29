@@ -261,108 +261,71 @@ export default function MyPage() {
     event.preventDefault();
   };
 
+  // containerBox list
+  const myProfileInformation = [
+    {
+      number: 1,
+      title: '이메일',
+      name: 'email',
+      type: 'email',
+      information: state.email,
+      isdisabled: state.emailDisabled,
+    },
+    { number: 2, title: '이름', name: 'name', type: 'text', information: state.name, disabled: state.nameDisabled },
+    {
+      number: 3,
+      title: '비밀번호',
+      name: 'password',
+      type: state.passwordDisabled ? 'text' : 'password',
+      information: state.password,
+      isdisabled: state.passwordDisabled,
+    },
+
+    {
+      number: 4,
+      title: '전화번호',
+      name: 'phoneNumber',
+      type: 'text',
+      information: state.phoneNumber,
+      isdisabled: state.phoneNumberDisabled,
+    },
+    {
+      number: 5,
+      title: '주소',
+      name: 'address',
+      type: 'text',
+      information: state.address,
+      isdisabled: state.addressDisabled,
+    },
+  ];
+
   return (
     <Container theme={theme}>
       <Header theme={theme} toggleTheme={toggleTheme} />
       <MypageContainer theme={theme}>
         <Form onSubmit={handleSubmit}>
           <MyPageTitle theme={theme}>마이페이지</MyPageTitle>
-          <ContainerBox>
-            <FontText theme={theme}>이메일</FontText>
-            <Input
-              type="email"
-              name="email"
-              value={state.email}
-              onChange={handleInputChange}
-              onKeyDown={handleInputChange}
-              onBlur={handleInputChange}
-              theme={theme}
-              disabled={!state.emailDisabled}
-            />
-            <PencilImage
-              type="submit"
-              theme={theme}
-              title={!state.emailDisabled ? '수정하기' : '수정완료'}
-              onClick={() => pencilClick('email')}
-            />
-          </ContainerBox>
-          <ContainerBox>
-            <FontText theme={theme}>이름</FontText>
-            <Input
-              type="text"
-              name="name"
-              value={state.name}
-              onChange={handleInputChange}
-              onKeyDown={handleInputChange}
-              onBlur={handleInputChange}
-              theme={theme}
-              disabled={!state.nameDisabled}
-            />
-            <PencilImage
-              type="submit"
-              theme={theme}
-              title={!state.nameDisabled ? '수정하기' : '수정완료'}
-              onClick={() => pencilClick('name')}
-            />
-          </ContainerBox>
-          <ContainerBox>
-            <FontText theme={theme}>비밀번호</FontText>
-            <Input
-              type={state.passwordDisabled ? 'text' : 'password'}
-              name="password"
-              value={state.password}
-              onChange={handleInputChange}
-              onKeyDown={handleInputChange}
-              onBlur={handleInputChange}
-              theme={theme}
-              disabled={!state.passwordDisabled}
-            />
-            <PencilImage
-              type="submit"
-              theme={theme}
-              title={!state.passwordDisabled ? '수정하기' : '수정완료'}
-              onClick={() => pencilClick('password')}
-            />
-          </ContainerBox>
-          <ContainerBox>
-            <FontText theme={theme}>휴대폰 번호</FontText>
-            <Input
-              type="text"
-              name="phoneNumber"
-              value={state.phoneNumber}
-              onChange={handleInputChange}
-              onKeyDown={handleInputChange}
-              onBlur={handleInputChange}
-              maxLength={13}
-              theme={theme}
-              disabled={!state.phoneNumberDisabled}
-            />
-            <PencilImage
-              type="submit"
-              theme={theme}
-              title={!state.phoneNumberDisabled ? '수정하기' : '수정완료'}
-              onClick={() => pencilClick('phoneNumber')}
-            />
-          </ContainerBox>
-          <ContainerBox>
-            <FontText theme={theme}>주소</FontText>
-            <Input
-              type="text"
-              name="address"
-              value={state.address}
-              onChange={handleInputChange}
-              onKeyDown={handleInputChange}
-              onBlur={handleInputChange}
-              theme={theme}
-              disabled={!state.addressDisabled}
-            />
-            <PencilImage
-              type="submit"
-              theme={theme}
-              title={!state.addressDisabled ? '수정하기' : '수정완료'}
-              onClick={() => pencilClick('address')}
-            />
-          </ContainerBox>
+          {myProfileInformation.map(({ number, title, name, type, information, isdisabled }) => (
+            <ContainerBox key={number} theme={theme}>
+              <FontText theme={theme}>{title}</FontText>
+              <Input
+                type={type}
+                name={name}
+                value={information}
+                onChange={handleInputChange}
+                onKeyDown={handleInputChange}
+                onBlur={handleInputChange}
+                theme={theme}
+                disabled={!isdisabled}
+              />
+              <PencilImage
+                type="submit"
+                theme={theme}
+                title={!isdisabled ? '수정하기' : '수정완료'}
+                onClick={() => pencilClick(name)}
+              />
+            </ContainerBox>
+          ))}
           <ContainerBox style={{ marginTop: '10vh' }}>
             <ReplacePagetext theme={theme}>인증정보 목록</ReplacePagetext>
             <ArrowImage theme={theme} onClick={() => navigate('../mypage/auth-list')} />

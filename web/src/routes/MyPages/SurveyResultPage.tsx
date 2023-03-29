@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 
-import { isDisabled } from '@testing-library/user-event/dist/utils';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -125,12 +124,13 @@ export default function MyPage() {
           <SurVeyResultPageTitle style={{ marginBottom: '5vh' }} theme={theme} onClick={() => navigate('../mypage')}>
             마이페이지 &gt; 설문 결과 조회
           </SurVeyResultPageTitle>
+
           <ListBoxContainer theme={theme}>
             <ListBox
               theme={theme}
               onClick={() => handleClick(1)}
               style={{
-                zIndex: resultClickFirst ? 1 : 'auto', // 설정 추가
+                zIndex: resultClickFirst ? 1 : 'auto',
               }}
             >
               <FontText theme={theme}>test1</FontText>
@@ -143,18 +143,19 @@ export default function MyPage() {
                 transition: 'opacity 0.4s ease-in-out',
                 position: 'absolute',
                 top: '100%',
-                zIndex: resultClickFirst ? 1 : -1, // 설정 추가
+                zIndex: resultClickFirst ? 1 : -1,
               }}
               theme={theme}
             >
               <ChartImage />
             </ResultBox>
           </ListBoxContainer>
+
           <ListBoxContainer theme={theme}>
             <ListBox
               theme={theme}
               style={{
-                cursor: resultClickFirst ? 'auto' : 'pointer', // 설정 추가
+                cursor: resultClickFirst ? 'auto' : 'pointer',
               }}
               onClick={!resultClickFirst ? () => handleClick(2) : undefined}
             >
@@ -168,7 +169,7 @@ export default function MyPage() {
                 transition: 'opacity 0.4s ease-in-out',
                 position: 'absolute',
                 top: '100%',
-                zIndex: resultClickSecond ? 1 : -1, // 설정 추가
+                zIndex: resultClickSecond ? 1 : -1,
               }}
               theme={theme}
             >
