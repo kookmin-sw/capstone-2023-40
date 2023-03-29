@@ -38,6 +38,14 @@ public class SecurityConfiguration {
             .csrf().disable()
             .cors().and()
             .authorizeRequests()
+                .antMatchers(
+                    "/v2/api-docs/**",
+                    "/v3/api-docs/**",
+                    "/configuration/**",
+                    "/swagger-ui.html",
+                    "/swagger-ui/**",
+                    "/docs/**"
+                ).permitAll()
                 .antMatchers("/admin/**").hasAuthority("ADMIN")
                 .antMatchers("/surveys/**").authenticated()
                 .antMatchers("/users/**").authenticated()
