@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,9 +35,8 @@ public class SurveyController {
     }
     // Need to test
     @GetMapping("/{surveyId}")
-    public ResponseEntity<Optional<Optional<Survey>>> getSurveyById(@PathVariable UUID surveyId) {
-        return ResponseEntity.ok(
-            Optional.ofNullable(surveyService.getSurveyByIdWithRelatedQuestion(surveyId)));
+    public ResponseEntity<SurveyInfoDto> readSurvey(@PathVariable UUID surveyId) {
+        return ResponseEntity.ok(surveyService.getSurveyBySurveyIdWithRelatedQuestion(surveyId));
     }
 
     @PostMapping
@@ -45,7 +45,7 @@ public class SurveyController {
         return ResponseEntity.ok(surveyService.createSurvey(authentication, surveyRequestDto));
     }
 
-    @PostMapping("/update")
+    @PutMapping("/update")
     public ResponseEntity<SurveyInfoDto> updateSurvey(@RequestBody SurveyUpdateRequestDto surveyUpdateRequestDto) {
         return ResponseEntity.ok(surveyService.updateSurvey(surveyUpdateRequestDto));
     }
