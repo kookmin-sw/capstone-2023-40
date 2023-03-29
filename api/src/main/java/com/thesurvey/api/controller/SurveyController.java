@@ -1,9 +1,11 @@
 package com.thesurvey.api.controller;
 
-import com.thesurvey.api.domain.Survey;
+import com.thesurvey.api.dto.AnsweredInfoQuestionDto;
 import com.thesurvey.api.dto.SurveyInfoDto;
+import com.thesurvey.api.dto.request.AnsweredQuestionRequestDto;
 import com.thesurvey.api.dto.request.SurveyRequestDto;
 import com.thesurvey.api.dto.request.SurveyUpdateRequestDto;
+import com.thesurvey.api.service.AnsweredQuestionService;
 import com.thesurvey.api.service.SurveyService;
 import java.util.List;
 import java.util.Optional;
@@ -24,9 +26,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class SurveyController {
 
     private final SurveyService surveyService;
+    private final AnsweredQuestionService answeredQuestionService;
 
-    public SurveyController(SurveyService surveyService) {
+    public SurveyController(SurveyService surveyService,
+        AnsweredQuestionService answeredQuestionService) {
         this.surveyService = surveyService;
+        this.answeredQuestionService = answeredQuestionService;
     }
 
     @GetMapping
@@ -46,7 +51,8 @@ public class SurveyController {
     }
 
     @PutMapping
-    public ResponseEntity<SurveyInfoDto> updateSurvey(@RequestBody SurveyUpdateRequestDto surveyUpdateRequestDto) {
+    public ResponseEntity<SurveyInfoDto> updateSurvey(
+        @RequestBody SurveyUpdateRequestDto surveyUpdateRequestDto) {
         return ResponseEntity.ok(surveyService.updateSurvey(surveyUpdateRequestDto));
     }
 
@@ -56,8 +62,9 @@ public class SurveyController {
         return ResponseEntity.ok().build();
     }
 
-//    @PostMapping("/submit")
-//    public ResponseEntity<Survey> submitSurvey(@RequestBody SurveyDto requestedSurveyDto) {
-//        return ResponseEntity.ok(surveyService.respondSurvey(requestedSurveyDto));
-//    }
+    @PostMapping("/submit")
+    public ResponseEntity<AnsweredInfoQuestionDto> submitSurvey(Authentication authentication,
+        @RequestBody AnsweredQuestionRequestDto answeredQuestionRequestDto) {
+        return ResponseEntity.ok(answeredQuestionService.createAnswer(authentication, answeredQuestionRequestDto));
+    }
 }

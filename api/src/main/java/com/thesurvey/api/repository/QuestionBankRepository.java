@@ -14,4 +14,7 @@ public interface QuestionBankRepository extends JpaRepository<QuestionBank, Long
     Optional<QuestionBank> findByQuestionBankId(Long questionBankId);
     @Query("SELECT qb FROM QuestionBank qb JOIN FETCH qb.questions q JOIN q.survey s WHERE q.questionId.surveyId= :surveyId")
     List<QuestionBank> findAllBySurveyId(UUID surveyId);
+    @Query("SELECT qb FROM QuestionBank qb JOIN FETCH qb.questions q JOIN q.survey s WHERE q.questionId.surveyId = :surveyId AND qb.title = :title")
+    Optional<QuestionBank> findBySurveyIdAndTitle(UUID surveyId, String title);
+
 }
