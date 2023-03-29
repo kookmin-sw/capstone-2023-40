@@ -36,7 +36,7 @@ public class SurveyController {
         this.surveyService = surveyService;
     }
 
-    @ApiOperation(value = "모든 설문조사 조회")
+    @ApiOperation(value = "모든 설문조사 조회", notes = "모든 설문조사를 조회합니다.")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "요청 성공"),
         @ApiResponse(code = 400, message = "잘못된 요청"),
@@ -49,7 +49,7 @@ public class SurveyController {
         return ResponseEntity.ok(surveyService.getAllSurvey());
     }
 
-    @ApiOperation(value = "설문조사 조회")
+    @ApiOperation(value = "설문조사 조회", notes = "파라미터로 전달 받은 UUID에 해당하는 설문조사를 조회합니다.")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "요청 성공"),
         @ApiResponse(code = 400, message = "잘못된 요청"),
@@ -64,7 +64,7 @@ public class SurveyController {
         return ResponseEntity.ok(surveyService.getSurveyBySurveyIdWithRelatedQuestion(surveyId));
     }
 
-    @ApiOperation(value = "설문조사 생성")
+    @ApiOperation(value = "설문조사 생성", notes = "새로운 설문조사를 생성합니다.")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "요청 성공"),
         @ApiResponse(code = 400, message = "잘못된 요청"),
@@ -81,7 +81,7 @@ public class SurveyController {
     }
 
 
-    @ApiOperation(value = "설문조사 수정")
+    @ApiOperation(value = "설문조사 수정", notes = "설문조사 내용을 수정합니다. 아래의 모든 필드를 담아 전송해야 합니다.")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "요청 성공"),
         @ApiResponse(code = 400, message = "잘못된 요청"),
@@ -97,7 +97,7 @@ public class SurveyController {
         return ResponseEntity.ok(surveyService.updateSurvey(surveyUpdateRequestDto));
     }
 
-    @ApiOperation(value = "설문조사 삭제")
+    @ApiOperation(value = "설문조사 삭제", notes = "파라미터로 전달 받은 UUID에 해당하는 설문조사를 삭제합니다.")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "요청 성공"),
         @ApiResponse(code = 400, message = "잘못된 요청"),

@@ -28,7 +28,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @ApiOperation(value = "사용자 정보 조회")
+    @ApiOperation(value = "사용자 정보 조회", notes = "요청한 사용자의 정보를 가져옵니다.")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "요청 성공"),
         @ApiResponse(code = 400, message = "잘못된 요청"),
@@ -42,7 +42,7 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserProfile(authentication));
     }
 
-    @ApiOperation(value = "사용자 정보 수정")
+    @ApiOperation(value = "사용자 정보 수정", notes = "요청한 사용자의 정보를 수정합니다. 아래의 모든 필드를 담아 전송해야 합니다.")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "요청 성공"),
         @ApiResponse(code = 400, message = "잘못된 요청"),
@@ -58,7 +58,7 @@ public class UserController {
             userService.updateUserProfile(authentication, userUpdateRequestDto));
     }
 
-    @ApiOperation(value = "사용자 삭제")
+    @ApiOperation(value = "사용자 삭제", notes = "요청한 사용자의 정보를 삭제합니다.")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "요청 성공"),
         @ApiResponse(code = 400, message = "잘못된 요청"),

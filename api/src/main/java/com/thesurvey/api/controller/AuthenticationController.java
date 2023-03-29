@@ -30,7 +30,7 @@ public class AuthenticationController {
         this.authenticationService = authenticationService;
     }
 
-    @ApiOperation(value = "회원가입")
+    @ApiOperation(value = "회원가입", notes = "회원가입을 요청합니다.")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "요청 성공"),
         @ApiResponse(code = 400, message = "잘못된 요청"),
@@ -49,7 +49,7 @@ public class AuthenticationController {
         }
     }
 
-    @ApiOperation(value = "로그인")
+    @ApiOperation(value = "로그인", notes = "로그인을 요청합니다.")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "요청 성공"),
         @ApiResponse(code = 401, message = "유효하지 않은 인증정보"),
