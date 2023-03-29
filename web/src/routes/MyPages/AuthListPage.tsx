@@ -7,7 +7,7 @@ import { Icons } from '../../assets/svg/index';
 import Header from '../../components/Header';
 import { useTheme } from '../../hooks/useTheme';
 
-const KakaoTalk = styled(Icons.KAKAO).attrs({
+const KakaoImage = styled(Icons.KAKAO).attrs({
   width: 30,
   height: 30,
 })`
@@ -127,24 +127,14 @@ const AuthListTitle = styled.span`
   cursor: pointer;
 `;
 
-const BeforeText = styled.span`
+const TextType = styled.span`
+  border: none;
   text-align: left;
   font-size: calc(1vh + 1.4vmin);
   font-weight: 900;
   min-width: 80px;
   max-width: 40vw;
   width: fit-content;
-  color: ${(props) => props.theme.colors.default};
-`;
-
-const AfterText = styled.span`
-  text-align: left;
-  font-size: calc(1vh + 1.4vmin);
-  font-weight: 900;
-  min-width: 80px;
-  max-width: 40vw;
-  width: fit-content;
-  color: ${(props) => props.theme.colors.btnhover};
 `;
 
 type State = {
@@ -198,6 +188,15 @@ export default function MyPage() {
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  const authState = [
+    { number: 1, image: <KakaoImage />, title: '카카오', checkAuth: state.kakao },
+    { number: 2, image: <NaverImage />, title: '네이버', checkAuth: state.naver },
+    { number: 3, image: <GoogleImage />, title: '구글', checkAuth: state.google },
+    { number: 4, image: <IdCardImage />, title: '신분증', checkAuth: state.identityCard },
+    { number: 5, image: <DriverCardImage />, title: '운전면허', checkAuth: state.driverCard },
+    { number: 6, image: <SchoolImage />, title: '웹메일', checkAuth: state.schoolMail },
+  ];
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
   };
@@ -207,68 +206,26 @@ export default function MyPage() {
       <Header theme={theme} toggleTheme={toggleTheme} />
       <AuthListContainer theme={theme}>
         <Form onSubmit={handleSubmit}>
-          <AuthListTitle theme={theme} style={{ marginBottom: '35px' }} onClick={() => navigate('../mypage')}>
+          <AuthListTitle theme={theme} style={{ marginBottom: '4vh' }} onClick={() => navigate('../mypage')}>
             마이페이지 &gt; 인증정보 목록{' '}
           </AuthListTitle>
-          <ContainerBox theme={theme} onClick={() => navigate('../mypage/auth-list')} disabled={state.kakao}>
-            <KakaoTalk type="submit" />
-            {!state.kakao ? (
-              <BeforeText theme={theme}>카카오 본인인증 바로가기</BeforeText>
-            ) : (
-              <AfterText theme={theme}>카카오 본인인증 완료</AfterText>
-            )}
-            {!state.kakao ? <ArrowImage /> : <CheckImage />}
-          </ContainerBox>
-
-          <ContainerBox theme={theme} onClick={() => navigate('../mypage/auth-list')} disabled={state.naver}>
-            <NaverImage type="submit" theme={theme} />
-            {!state.naver ? (
-              <BeforeText theme={theme}>네이버 본인인증 바로가기</BeforeText>
-            ) : (
-              <AfterText theme={theme}>네이버 본인인증 완료</AfterText>
-            )}
-            {!state.naver ? <ArrowImage /> : <CheckImage />}
-          </ContainerBox>
-
-          <ContainerBox theme={theme} onClick={() => navigate('../mypage/auth-list')} disabled={state.google}>
-            <GoogleImage type="submit" theme={theme} />
-            {!state.google ? (
-              <BeforeText theme={theme}>구글 본인인증 바로가기</BeforeText>
-            ) : (
-              <AfterText theme={theme}>구글 본인인증 완료</AfterText>
-            )}
-            {!state.google ? <ArrowImage /> : <CheckImage />}
-          </ContainerBox>
-
-          <ContainerBox theme={theme} onClick={() => navigate('../mypage/auth-list')} disabled={state.identityCard}>
-            <IdCardImage type="submit" theme={theme} />
-            {!state.identityCard ? (
-              <BeforeText theme={theme}>신분증 본인인증 바로가기</BeforeText>
-            ) : (
-              <AfterText theme={theme}>신분증 본인인증 완료</AfterText>
-            )}
-            {!state.identityCard ? <ArrowImage /> : <CheckImage />}
-          </ContainerBox>
-
-          <ContainerBox theme={theme} onClick={() => navigate('../mypage/auth-list')} disabled={state.driverCard}>
-            <DriverCardImage type="submit" theme={theme} />
-            {!state.driverCard ? (
-              <BeforeText theme={theme}>운전면허 본인인증 바로가기</BeforeText>
-            ) : (
-              <AfterText theme={theme}>운전면허 본인인증 완료</AfterText>
-            )}
-            {!state.driverCard ? <ArrowImage /> : <CheckImage />}
-          </ContainerBox>
-
-          <ContainerBox theme={theme} onClick={() => navigate('../mypage/auth-list')} disabled={state.schoolMail}>
-            <SchoolImage type="submit" theme={theme} />
-            {!state.schoolMail ? (
-              <BeforeText theme={theme}>학교 웹메일 본인인증 바로가기</BeforeText>
-            ) : (
-              <AfterText theme={theme}>학교 웹메일 본인인증 완료</AfterText>
-            )}
-            {!state.schoolMail ? <ArrowImage /> : <CheckImage />}
-          </ContainerBox>
+          {authState.map(({ number, image, title, checkAuth }) => (
+            <ContainerBox
+              key={number}
+              theme={theme}
+              onClick={() => navigate('../mypage/auth-list')}
+              disabled={checkAuth}
+            >
+              {image}
+              <TextType
+                theme={theme}
+                style={!checkAuth ? { color: theme.colors.default } : { color: theme.colors.btnhover }}
+              >
+                {title} {!checkAuth ? '본인인증 바로가기 ' : '본인인증 완료'}
+              </TextType>
+              {!checkAuth ? <ArrowImage /> : <CheckImage />}
+            </ContainerBox>
+          ))}
         </Form>
       </AuthListContainer>
     </Container>
