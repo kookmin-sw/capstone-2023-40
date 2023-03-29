@@ -1,14 +1,10 @@
 package com.thesurvey.api.controller;
 
-import com.thesurvey.api.domain.User;
 import com.thesurvey.api.dto.UserInfoDto;
 import com.thesurvey.api.dto.request.UserUpdateRequestDto;
 import com.thesurvey.api.service.UserService;
-import java.util.List;
-import java.util.Optional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -24,11 +20,6 @@ public class UserController {
 
     public UserController(UserService userService) {
         this.userService = userService;
-    }
-    // Need to test
-    @GetMapping
-    public ResponseEntity<Optional<List<User>>> getAllUsersWithAnsweredQuestions() {
-        return ResponseEntity.ok(userService.getAllUsersWithAnsweredQuestions());
     }
 
     @GetMapping("/profile")
@@ -47,11 +38,6 @@ public class UserController {
     public ResponseEntity<Void> deleteUser(Authentication authentication) {
         userService.deleteUser(authentication);
         return ResponseEntity.ok().build();
-    }
-
-    public boolean isAuthenticated() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return authentication != null && authentication.isAuthenticated();
     }
 
 }
