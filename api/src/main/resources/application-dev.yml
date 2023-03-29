@@ -23,6 +23,9 @@ spring:
           lob:
             non_contextual_creation: true
     open-in-view: false
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 
 logging:
   level:
