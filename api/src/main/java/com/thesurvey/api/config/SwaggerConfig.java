@@ -41,8 +41,7 @@ public class SwaggerConfig {
             .build()
             .useDefaultResponseMessages(false)
             .securitySchemes(List.of(new ApiKey("JSESSIONID", "JSESSIONID", "cookie")))
-            .securityContexts(List.of(securityContext()))
-            .pathMapping("/api/docs");
+            .securityContexts(List.of(securityContext()));
     }
 
     private Set<String> getConsumeContentTypes() {
