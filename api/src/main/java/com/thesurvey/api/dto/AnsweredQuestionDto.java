@@ -1,5 +1,6 @@
 package com.thesurvey.api.dto;
 
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -7,12 +8,16 @@ import lombok.Getter;
 @Builder
 public class AnsweredQuestionDto {
 
-    private String shortAnswer;
+    private String questionTitle;
 
-    private String longAnswer;
+    private String questionDescription;
 
     private String singleChoice;
 
-    private String multipleChoices;
+    private List<String> multipleChoices;
+
+    private String shortAnswer;
+
+    private String longAnswer;
 
 }
