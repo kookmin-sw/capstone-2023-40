@@ -16,6 +16,7 @@ import com.thesurvey.api.service.mapper.QuestionMapper;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,10 +42,10 @@ public class QuestionService {
 
     public List<QuestionBankInfoDto> getQuestionBankInfoDtoListBySurveyId(UUID surveyId) {
         List<QuestionBank> questionBankList = questionBankRepository.findAllBySurveyId(surveyId);
-        List<QuestionBankInfoDto> questionBankInfoDtoList = new ArrayList<>();
-        for (QuestionBank questionBank : questionBankList) {
-            questionBankInfoDtoList.add(questionBankMapper.toQuestionBankInfoDto(questionBank));
-        }
+        List<QuestionBankInfoDto> questionBankInfoDtoList = questionBankList
+            .stream()
+            .map(questionBank -> questionBankMapper.toQuestionBankInfoDto(questionBank))
+            .collect(Collectors.toList());
         return questionBankInfoDtoList;
     }
 

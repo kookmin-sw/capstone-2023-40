@@ -8,6 +8,7 @@ import com.thesurvey.api.dto.request.QuestionRequestDto;
 import com.thesurvey.api.repository.QuestionOptionRepository;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -33,12 +34,10 @@ public class QuestionBankMapper {
     public QuestionBankInfoDto toQuestionBankInfoDto(QuestionBank questionBank) {
         List<QuestionOption> questionOptionList = questionOptionRepository.findByQuestionBankId(
             questionBank.getQuestionBankId());
-        List<QuestionOptionInfoDto> questionOptionInfoDtoList = new ArrayList<>();
-
-        for (QuestionOption questionOption : questionOptionList) {
-            questionOptionInfoDtoList.add(
-                questionOptionMapper.toQuestionOptionInfoDto(questionOption));
-        }
+        List<QuestionOptionInfoDto> questionOptionInfoDtoList = questionOptionList
+            .stream()
+            .map(questionOption -> questionOptionMapper.toQuestionOptionInfoDto(questionOption))
+            .collect(Collectors.toList());
 
         return QuestionBankInfoDto.builder()
             .title(questionBank.getTitle())
