@@ -39,7 +39,6 @@ public class AuthenticationController {
     })
     @PostMapping("/register")
     public ResponseEntity<UserInfoDto> register(
-        @ApiParam(value = "UserRegisterRequestDto 객체", required = true)
         @RequestBody UserRegisterRequestDto userRegisterRequestDto) {
         try {
             return ResponseEntity.ok(authenticationService.register(userRegisterRequestDto));
@@ -57,9 +56,7 @@ public class AuthenticationController {
         @ApiResponse(code = 404, message = "요청한 리소스 찾을 수 없음")
     })
     @PostMapping("/login")
-    public ResponseEntity<UserInfoDto> login(
-        @ApiParam(value = "UserLoginRequestDto 객체", required = true)
-        @RequestBody UserLoginRequestDto userLoginRequestDto) {
+    public ResponseEntity<UserInfoDto> login(@RequestBody UserLoginRequestDto userLoginRequestDto) {
         try {
             UserInfoDto userInfoDto = authenticationService.login(userLoginRequestDto);
             return ResponseEntity.ok(userInfoDto);

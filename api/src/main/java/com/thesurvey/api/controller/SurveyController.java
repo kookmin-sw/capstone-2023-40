@@ -75,7 +75,6 @@ public class SurveyController {
     })
     @PostMapping
     public ResponseEntity<SurveyInfoDto> createSurvey(Authentication authentication,
-        @ApiParam(value = "SurveyRequestDto 객체", required = true)
         @RequestBody SurveyRequestDto surveyRequestDto) {
         return ResponseEntity.ok(surveyService.createSurvey(authentication, surveyRequestDto));
     }
@@ -92,7 +91,6 @@ public class SurveyController {
     })
     @PutMapping
     public ResponseEntity<SurveyInfoDto> updateSurvey(
-        @ApiParam(value = "SurveyUpdateRequestDto 객체", required = true)
         @RequestBody SurveyUpdateRequestDto surveyUpdateRequestDto) {
         return ResponseEntity.ok(surveyService.updateSurvey(surveyUpdateRequestDto));
     }

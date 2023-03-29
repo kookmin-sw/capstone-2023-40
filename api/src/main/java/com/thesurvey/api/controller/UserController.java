@@ -52,7 +52,6 @@ public class UserController {
     })
     @PutMapping("/profile")
     public ResponseEntity<UserInfoDto> updateUserProfile(Authentication authentication,
-        @ApiParam(value = "UserUpdateRequestDto 객체", required = true)
         @RequestBody UserUpdateRequestDto userUpdateRequestDto) {
         return ResponseEntity.ok(
             userService.updateUserProfile(authentication, userUpdateRequestDto));
