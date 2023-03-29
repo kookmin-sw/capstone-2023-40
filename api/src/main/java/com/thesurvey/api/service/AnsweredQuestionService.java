@@ -57,18 +57,18 @@ public class AnsweredQuestionService {
                     survey.getSurveyId(), answeredQuestionDto.getQuestionTitle())
                 .orElseThrow(() -> new ExceptionMapper(ErrorMessage.QUESTION_BANK_NOT_FOUND));
 
-            if (answeredQuestionDto.getMultipleChoices() != null) {
+            if (answeredQuestionDto.getMultipleChoices().size() != 0) {
                 List<AnsweredQuestion> answeredQuestionList = answeredQuestionDto.getMultipleChoices()
                     .stream()
                     .map(choice -> answeredQuestionMapper.toAnsweredQuestion(
                         answeredQuestionDto, user, survey, questionBank, choice))
                     .collect(Collectors.toList());
                 answeredQuestionRepository.saveAll(answeredQuestionList);
-            } else {
+            }
+            else {
                 answeredQuestionRepository.save(
                     answeredQuestionMapper.toAnsweredQuestion(answeredQuestionDto, user,
-                        survey,
-                        questionBank, null));
+                        survey, questionBank, null));
             }
         }
 
