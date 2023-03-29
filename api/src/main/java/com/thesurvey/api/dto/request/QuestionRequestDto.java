@@ -1,8 +1,7 @@
 package com.thesurvey.api.dto.request;
 
 import com.thesurvey.api.domain.EnumTypeEntity.QuestionType;
-import com.thesurvey.api.domain.Question;
-import com.thesurvey.api.dto.QuestionOptionDto;
+import com.thesurvey.api.dto.QuestionOptionInfoDto;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,5 +20,5 @@ public class QuestionRequestDto {
 
     private boolean isRequired;
 
-    private List<QuestionOptionDto> questionOptions;
+    private List<QuestionOptionInfoDto> questionOptions;
 }

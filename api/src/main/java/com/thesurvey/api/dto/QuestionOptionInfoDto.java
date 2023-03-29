@@ -5,11 +5,10 @@ import lombok.Getter;
 
 @Builder
 @Getter
-public class QuestionOptionDto {
-
-    private Long questionBankId;
+public class QuestionOptionInfoDto {
 
     private String option;
 
     private String description;
+
 }
