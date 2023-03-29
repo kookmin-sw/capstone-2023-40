@@ -2,7 +2,10 @@ package com.thesurvey.api.service;
 
 import com.thesurvey.api.domain.QuestionBank;
 import com.thesurvey.api.domain.QuestionOption;
+import com.thesurvey.api.dto.request.QuestionOptionUpdateRequestDto;
 import com.thesurvey.api.dto.request.QuestionRequestDto;
+import com.thesurvey.api.exception.ErrorMessage;
+import com.thesurvey.api.exception.ExceptionMapper;
 import com.thesurvey.api.repository.QuestionOptionRepository;
 import com.thesurvey.api.service.mapper.QuestionOptionMapper;
 import java.util.List;
@@ -24,11 +27,33 @@ public class QuestionOptionService {
     }
 
     @Transactional
-    public void createQuestionOption(QuestionRequestDto questionRequestDto, QuestionBank questionBank) {
+    public void createQuestionOption(QuestionRequestDto questionRequestDto,
+        QuestionBank questionBank) {
         List<QuestionOption> options = questionRequestDto.getQuestionOptions()
             .stream()
             .map(optionDto -> questionOptionMapper.toQuestionOption(optionDto, questionBank))
             .collect(Collectors.toList());
         questionOptionRepository.saveAll(options);
+    }
+
+    public void updateQuestionOption(
+        List<QuestionOptionUpdateRequestDto> questionOptionUpdateRequestDtoList) {
+
+        for (QuestionOptionUpdateRequestDto questionOptionUpdateRequestDto : questionOptionUpdateRequestDtoList) {
+            System.out.println(questionOptionUpdateRequestDto.getOptionId() + "#######");
+            QuestionOption questionOption = questionOptionRepository.findByQuestionOptionId(
+                questionOptionUpdateRequestDto.getOptionId()).orElseThrow(
+                () -> new ExceptionMapper(ErrorMessage.QUESTION_OPTION_NOT_FOUND,
+                    questionOptionUpdateRequestDto.getOptionId()));
+
+            if (questionOptionUpdateRequestDto.getOption() != null) {
+                questionOption.changeOption(questionOptionUpdateRequestDto.getOption());
+            }
+            if (questionOptionUpdateRequestDto.getDescription() != null) {
+                questionOption.changeDescription(questionOptionUpdateRequestDto.getDescription());
+            }
+
+        }
+
     }
 }

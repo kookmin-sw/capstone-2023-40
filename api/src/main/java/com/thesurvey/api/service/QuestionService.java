@@ -3,8 +3,11 @@ package com.thesurvey.api.service;
 import com.thesurvey.api.domain.Question;
 import com.thesurvey.api.domain.QuestionBank;
 import com.thesurvey.api.domain.Survey;
+import com.thesurvey.api.dto.request.QuestionBankUpdateRequestDto;
 import com.thesurvey.api.dto.request.QuestionRequestDto;
 import com.thesurvey.api.dto.request.SurveyRequestDto;
+import com.thesurvey.api.exception.ErrorMessage;
+import com.thesurvey.api.exception.ExceptionMapper;
 import com.thesurvey.api.repository.QuestionBankRepository;
 import com.thesurvey.api.repository.QuestionRepository;
 import com.thesurvey.api.service.mapper.QuestionBankMapper;
@@ -43,6 +46,41 @@ public class QuestionService {
                 questionMapper.toQuestion(questionRequestDto, survey, questionBank));
 
             questionOptionService.createQuestionOption(questionRequestDto, questionBank);
+        }
+    }
+
+    @Transactional
+    public void updateQuestion(List<QuestionBankUpdateRequestDto> questionBankUpdateRequestDtoList) {
+        for (QuestionBankUpdateRequestDto questionBankUpdateRequestDto : questionBankUpdateRequestDtoList) {
+            System.out.println(questionBankUpdateRequestDto.getQuestionBankId() + "########");
+            QuestionBank questionBank = questionBankRepository.findByQuestionBankId(
+                questionBankUpdateRequestDto.getQuestionBankId()).orElseThrow(()-> new ExceptionMapper(
+                ErrorMessage.QUESTION_BANK_NOT_FOUND,
+                questionBankUpdateRequestDto.getQuestionBankId()));
+
+            if (questionBankUpdateRequestDto.getTitle() != null) {
+                questionBank.changeTitle(questionBankUpdateRequestDto.getTitle());
+            }
+            if (questionBankUpdateRequestDto.getDescription() != null) {
+                questionBank.changeDescription(questionBankUpdateRequestDto.getDescription());
+            }
+            if (questionBankUpdateRequestDto.getQuestionType() != null) {
+                questionBank.changeQuestionType(questionBankUpdateRequestDto.getQuestionType());
+            }
+            questionBankRepository.save(questionBank);
+
+            Question question = questionRepository.findByQuestionId_QuestionBankId(
+                questionBank.getQuestionBankId());
+            if (questionBankUpdateRequestDto.getIsRequired() != null) {
+                question.changeIsRequired(questionBankUpdateRequestDto.getIsRequired());
+            }
+            if (questionBankUpdateRequestDto.getQuestionNo() != null) {
+                question.changeQuestionNo(questionBankUpdateRequestDto.getQuestionNo());
+            }
+            questionRepository.save(question);
+
+            if (questionBankUpdateRequestDto.getQuestionOptions() != null)
+                questionOptionService.updateQuestionOption(questionBankUpdateRequestDto.getQuestionOptions());
         }
     }
 

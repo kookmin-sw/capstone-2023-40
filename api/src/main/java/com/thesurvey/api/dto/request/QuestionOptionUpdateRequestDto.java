@@ -7,9 +7,7 @@ import lombok.Getter;
 @Builder
 public class QuestionOptionUpdateRequestDto {
 
-    private Long questionOptionId;
-
-    private Long questionBankId;
+    private Long optionId;
 
     private String option;
 

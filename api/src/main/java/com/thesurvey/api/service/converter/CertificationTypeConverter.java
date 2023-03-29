@@ -35,7 +35,7 @@ public class CertificationTypeConverter {
             else if (type.intValue() == 5) {
                 convertedCertificationTypeList.add(CertificationType.MOBILE_PHONE);
             }
-            
+
         }
         return convertedCertificationTypeList;
     }

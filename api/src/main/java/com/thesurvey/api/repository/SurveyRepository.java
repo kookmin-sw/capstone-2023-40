@@ -19,4 +19,5 @@ public interface SurveyRepository extends JpaRepository<Survey, UUID> {
     @Query("SELECT p.certificationType FROM Participation p WHERE p.survey.surveyId = :survey_id")
     List<Integer> findCertificationTypeBySurveyId(@Param("survey_id") UUID surveyId);
 
+    Optional<Survey> findBySurveyId(UUID surveyId);
 }

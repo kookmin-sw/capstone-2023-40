@@ -45,10 +45,10 @@ public class SurveyController {
         return ResponseEntity.ok(surveyService.createSurvey(authentication, surveyRequestDto));
     }
 
-//    @PostMapping
-//    public ResponseEntity<SurveyInfoDto> modifySurvey(@RequestBody SurveyUpdateRequestDto surveyUpdateRequestDto) {
-//        return ResponseEntity.ok(surveyService.modifySurvey(surveyUpdateRequestDto));
-//    }
+    @PostMapping("/update")
+    public ResponseEntity<SurveyInfoDto> updateSurvey(@RequestBody SurveyUpdateRequestDto surveyUpdateRequestDto) {
+        return ResponseEntity.ok(surveyService.updateSurvey(surveyUpdateRequestDto));
+    }
 
     @DeleteMapping("/{surveyId}")
     public ResponseEntity<Void> deleteSurvey(@PathVariable("surveyId") String surveyId) {

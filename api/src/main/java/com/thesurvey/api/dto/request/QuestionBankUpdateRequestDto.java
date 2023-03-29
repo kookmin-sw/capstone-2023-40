@@ -17,7 +17,9 @@ public class QuestionBankUpdateRequestDto {
 
     private QuestionType questionType;
 
-    private boolean isRequired;
+    private Boolean isRequired;
+
+    private Integer questionNo;
 
     private List<QuestionOptionUpdateRequestDto> questionOptions;
 }

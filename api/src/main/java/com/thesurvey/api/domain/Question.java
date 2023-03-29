@@ -49,4 +49,12 @@ public class Question {
             .questionBankId(questionBank.getQuestionBankId())
             .build();
     }
+
+    public void changeQuestionNo(int questionNo) {
+        this.questionNo = questionNo;
+    }
+
+    public void changeIsRequired(boolean isRequired) {
+        this.isRequired = isRequired;
+    }
 }
