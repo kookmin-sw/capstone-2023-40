@@ -1,7 +1,6 @@
 package com.thesurvey.api.dto;
 
 import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
-import com.thesurvey.api.domain.QuestionBank;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -22,7 +21,7 @@ public class SurveyInfoDto {
 
     private LocalDateTime endedDate;
 
-//    private List<Question> questionBank;
+    private List<QuestionBankInfoDto> questions;
 
     private List<CertificationType> certificationType;
 

@@ -3,6 +3,7 @@ package com.thesurvey.api.service;
 import com.thesurvey.api.domain.Question;
 import com.thesurvey.api.domain.QuestionBank;
 import com.thesurvey.api.domain.Survey;
+import com.thesurvey.api.dto.QuestionBankInfoDto;
 import com.thesurvey.api.dto.request.QuestionBankUpdateRequestDto;
 import com.thesurvey.api.dto.request.QuestionRequestDto;
 import com.thesurvey.api.dto.request.SurveyRequestDto;
@@ -12,6 +13,7 @@ import com.thesurvey.api.repository.QuestionBankRepository;
 import com.thesurvey.api.repository.QuestionRepository;
 import com.thesurvey.api.service.mapper.QuestionBankMapper;
 import com.thesurvey.api.service.mapper.QuestionMapper;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
@@ -37,6 +39,15 @@ public class QuestionService {
         this.questionOptionService = questionOptionService;
     }
 
+    public List<QuestionBankInfoDto> getQuestionBankInfoDtoListBySurveyId(UUID surveyId) {
+        List<QuestionBank> questionBankList = questionBankRepository.findAllBySurveyId(surveyId);;
+        List<QuestionBankInfoDto> questionBankInfoDtoList = new ArrayList<>();
+        for (QuestionBank questionBank : questionBankList) {
+            questionBankInfoDtoList.add(questionBankMapper.toQuestionBankInfoDto(questionBank));
+        }
+        return questionBankInfoDtoList;
+    }
+
     @Transactional
     public void createQuestion(SurveyRequestDto surveyRequestDto, Survey survey) {
         for (QuestionRequestDto questionRequestDto : surveyRequestDto.getQuestions()) {
@@ -44,19 +55,19 @@ public class QuestionService {
                 questionBankMapper.toQuestionBank(questionRequestDto));
             questionRepository.save(
                 questionMapper.toQuestion(questionRequestDto, survey, questionBank));
-
             questionOptionService.createQuestionOption(questionRequestDto, questionBank);
         }
     }
 
     @Transactional
-    public void updateQuestion(List<QuestionBankUpdateRequestDto> questionBankUpdateRequestDtoList) {
+    public void updateQuestion(
+        List<QuestionBankUpdateRequestDto> questionBankUpdateRequestDtoList) {
         for (QuestionBankUpdateRequestDto questionBankUpdateRequestDto : questionBankUpdateRequestDtoList) {
-            System.out.println(questionBankUpdateRequestDto.getQuestionBankId() + "########");
             QuestionBank questionBank = questionBankRepository.findByQuestionBankId(
-                questionBankUpdateRequestDto.getQuestionBankId()).orElseThrow(()-> new ExceptionMapper(
-                ErrorMessage.QUESTION_BANK_NOT_FOUND,
-                questionBankUpdateRequestDto.getQuestionBankId()));
+                    questionBankUpdateRequestDto.getQuestionBankId())
+                .orElseThrow(() -> new ExceptionMapper(
+                    ErrorMessage.QUESTION_BANK_NOT_FOUND,
+                    questionBankUpdateRequestDto.getQuestionBankId()));
 
             if (questionBankUpdateRequestDto.getTitle() != null) {
                 questionBank.changeTitle(questionBankUpdateRequestDto.getTitle());
@@ -70,7 +81,9 @@ public class QuestionService {
             questionBankRepository.save(questionBank);
 
             Question question = questionRepository.findByQuestionId_QuestionBankId(
-                questionBank.getQuestionBankId());
+                questionBank.getQuestionBankId()).orElseThrow(() -> new ExceptionMapper(
+                ErrorMessage.QUESTION_NOT_FOUND,
+                questionBank.getQuestionBankId()));
             if (questionBankUpdateRequestDto.getIsRequired() != null) {
                 question.changeIsRequired(questionBankUpdateRequestDto.getIsRequired());
             }
@@ -79,8 +92,10 @@ public class QuestionService {
             }
             questionRepository.save(question);
 
-            if (questionBankUpdateRequestDto.getQuestionOptions() != null)
-                questionOptionService.updateQuestionOption(questionBankUpdateRequestDto.getQuestionOptions());
+            if (questionBankUpdateRequestDto.getQuestionOptions() != null) {
+                questionOptionService.updateQuestionOption(
+                    questionBankUpdateRequestDto.getQuestionOptions());
+            }
         }
     }
 
