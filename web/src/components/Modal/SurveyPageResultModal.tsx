@@ -1,12 +1,12 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useEffect } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
 
 const Container = styled.div`
   width: 100vw;
-  height: 500vh;
-  position: absolute;
+  height: 100vh;
+  position: fixed;
   z-index: 100;
   top: 50%;
   left: 50%;
@@ -63,7 +63,6 @@ interface ModalProps {
 // TODO: show point earned instead of emoji
 export default function SurveyPageResultModal({ theme }: ModalProps) {
   const navigate = useNavigate();
-  const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const originalStyle = window.getComputedStyle(document.body).overflow;
@@ -73,16 +72,9 @@ export default function SurveyPageResultModal({ theme }: ModalProps) {
     };
   }, []);
 
-  // FIXME: there will be a way to float in right place, without scroll
-  useEffect(() => {
-    if (modalRef.current) {
-      modalRef.current.scrollIntoView({ block: 'center', behavior: 'smooth' });
-    }
-  }, []);
-
   return (
     <Container theme={theme}>
-      <ModalContainer ref={modalRef} theme={theme}>
+      <ModalContainer theme={theme}>
         <Label theme={theme}>🥳</Label>
         <Button theme={theme} onClick={() => navigate('/survey')}>
           완료하기

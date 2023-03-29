@@ -31,6 +31,7 @@ const Title = styled.span`
 const EndDate = styled.label`
   font-size: 20px;
   font-weight: 600;
+  margin-left: 15px;
   color: ${(props) => props.theme.colors.text};
 `;
 
@@ -325,7 +326,7 @@ export default function SurveyPage() {
       <HeadContainer theme={theme}>
         <Title theme={theme}>{surveyData?.title}</Title>
         <EndDate theme={theme}>
-          &nbsp;&nbsp;~ {endedDate} (D-{remainDate})
+          ~ {endedDate} (D-{remainDate})
         </EndDate>
       </HeadContainer>
 
