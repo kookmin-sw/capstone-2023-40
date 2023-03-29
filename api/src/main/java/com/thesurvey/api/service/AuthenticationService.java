@@ -2,6 +2,7 @@ package com.thesurvey.api.service;
 
 import com.thesurvey.api.domain.User;
 import com.thesurvey.api.dto.UserInfoDto;
+import com.thesurvey.api.dto.request.UserLoginRequestDto;
 import com.thesurvey.api.dto.request.UserRegisterRequestDto;
 import com.thesurvey.api.exception.ErrorMessage;
 import com.thesurvey.api.exception.ExceptionMapper;
@@ -56,8 +57,9 @@ public class AuthenticationService {
         return userMapper.toUserInfoDto(user);
     }
 
-    public UserInfoDto login(String email, String password) {
-        Authentication authentication = new UsernamePasswordAuthenticationToken(email, password);
+    public UserInfoDto login(UserLoginRequestDto userLoginRequestDto) {
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+            userLoginRequestDto.getEmail(), userLoginRequestDto.getPassword());
 
         try {
             Authentication authenticated = authenticate(authentication);
