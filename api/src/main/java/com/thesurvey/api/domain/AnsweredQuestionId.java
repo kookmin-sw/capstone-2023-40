@@ -6,7 +6,6 @@ import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +14,9 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AnsweredQuestionId implements Serializable {
+
+    @Column(name = "answer_id")
+    private UUID answerId;
 
     @Column(name = "user_id")
     private Long userId;
@@ -27,6 +29,7 @@ public class AnsweredQuestionId implements Serializable {
 
     @Builder
     public AnsweredQuestionId(Long userId, UUID surveyId, Long questionBankId) {
+        this.answerId = UUID.randomUUID();
         this.userId = userId;
         this.surveyId = surveyId;
         this.questionBankId = questionBankId;
