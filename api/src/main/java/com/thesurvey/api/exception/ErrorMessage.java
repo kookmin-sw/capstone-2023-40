@@ -11,6 +11,7 @@ public enum ErrorMessage {
     INTERNAL_ERROR("알 수 없는 오류가 발생했습니다. 다시 시도해주세요.\n{0}"),
     QUESTION_BANK_NOT_FOUND("존재하지 않는 질문입니다."),
     QUESTION_OPTION_NOT_FOUND("존재하지 않는 항목입니다."),
+    QUESTION_NOT_FOUND("존재하지 않는 설문조사 또는 질문입니다."),
     SURVEY_ALREADY_STARTED("이미 시작된 설문조사입니다.");
 
     private final String message;
