@@ -1,5 +1,6 @@
 package com.thesurvey.api.service;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
@@ -12,6 +13,9 @@ import com.thesurvey.api.domain.Survey;
 import com.thesurvey.api.domain.User;
 import com.thesurvey.api.dto.request.QuestionRequestDto;
 import com.thesurvey.api.dto.request.SurveyRequestDto;
+import com.thesurvey.api.dto.response.SurveyResponseDto;
+import com.thesurvey.api.exception.ErrorMessage;
+import com.thesurvey.api.exception.ExceptionMapper;
 import com.thesurvey.api.repository.ParticipationRepository;
 import com.thesurvey.api.repository.QuestionBankRepository;
 import com.thesurvey.api.repository.QuestionOptionRepository;
@@ -64,7 +68,8 @@ public class SurveyServiceTest {
             .builder()
             .title("My name is Jin")
             .description("A test survey for Jin")
-            .certificationType(Arrays.asList(CertificationType.GOOGLE, CertificationType.DRIVER_LICENSE))
+            .certificationType(
+                Arrays.asList(CertificationType.GOOGLE, CertificationType.DRIVER_LICENSE))
             .startedDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")))
             .endedDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")).plusWeeks(1))
             .build();
@@ -153,10 +158,10 @@ public class SurveyServiceTest {
                 .submittedDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")))
                 .build();
             Participation participation1 = participationRepository.save(participation);
-            System.out.println("############" + participation1.getParticipationId().getCertificationType());
+            System.out.println(
+                "############" + participation1.getParticipationId().getCertificationType());
         }
         List<Participation> savedparticipations = participationRepository.findAll();
-
 
         assertNotNull(singleChoiceQuestionBank);
         assertNotNull(multipleChoiceQuestionBank);
@@ -187,13 +192,17 @@ public class SurveyServiceTest {
             .endedDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")).plusWeeks(1))
             .build();
 
-        oldSurvey = surveyRepository.save(oldSurvey);
-        latestSurvey = surveyRepository.save(latestSurvey);
+        surveyRepository.save(oldSurvey);
+        surveyRepository.save(latestSurvey);
 
-        Optional<Survey> foundOldSurvey = surveyRepository.findBySurveyId(oldSurvey.getSurveyId());
-        Optional<Survey> foundLatestSurvey = surveyRepository.findBySurveyId(latestSurvey.getSurveyId());
+        List<SurveyResponseDto> surveys = Optional.ofNullable(
+                surveyRepository.findAllInDescendingOrder())
+            .orElseThrow(() -> new ExceptionMapper(ErrorMessage.SURVEY_NOT_FOUND))
+            .stream()
+            .map(survey -> surveyMapper.toSurveyResponseDto(survey))
+            .collect(Collectors.toList());
 
-        assertNotNull(foundOldSurvey);
-        assertNotNull(foundLatestSurvey);
+        assertNotNull(surveys);
+        assertThat(surveys.get(0).getCreatedDate()).isAfter(surveys.get(1).getCreatedDate());
     }
 }

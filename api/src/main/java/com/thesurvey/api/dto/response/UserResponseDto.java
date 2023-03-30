@@ -1,5 +1,6 @@
 package com.thesurvey.api.dto.response;
 
+import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -18,5 +19,9 @@ public class UserResponseDto {
     private String address;
 
     private String profileImage;
+
+    private LocalDateTime createdDate;
+
+    private LocalDateTime modifiedDate;
 
 }

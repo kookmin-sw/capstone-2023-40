@@ -8,7 +8,6 @@ import com.thesurvey.api.dto.request.SurveyUpdateRequestDto;
 import com.thesurvey.api.service.AnsweredQuestionService;
 import com.thesurvey.api.service.SurveyService;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -50,7 +49,7 @@ public class SurveyController {
         @ApiResponse(code = 404, message = "요청한 리소스 찾을 수 없음")
     })
     @GetMapping
-    public ResponseEntity<List<Optional<SurveyResponseDto>>> getAllSurvey() {
+    public ResponseEntity<List<SurveyResponseDto>> getAllSurvey() {
         return ResponseEntity.ok(surveyService.getAllSurvey());
     }
 
@@ -84,7 +83,6 @@ public class SurveyController {
         return ResponseEntity.ok(surveyService.createSurvey(authentication, surveyRequestDto));
     }
 
-
     @ApiOperation(value = "설문조사 수정", notes = "설문조사 내용을 수정합니다. 아래의 모든 필드를 담아 전송해야 합니다.")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "요청 성공"),
@@ -114,9 +112,18 @@ public class SurveyController {
         return ResponseEntity.ok().build();
     }
 
+    @ApiOperation(value = "설문조사 응답 제출", notes = "설문조사 응답을 제출합니다.")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "요청 성공"),
+        @ApiResponse(code = 400, message = "잘못된 요청"),
+        @ApiResponse(code = 401, message = "사용자 인증 실패"),
+        @ApiResponse(code = 403, message = "접근 권한 없음"),
+        @ApiResponse(code = 404, message = "요청한 리소스 찾을 수 없음")
+    })
     @PostMapping("/submit")
     public ResponseEntity<AnsweredQuestionResponseDto> submitSurvey(Authentication authentication,
         @RequestBody AnsweredQuestionRequestDto answeredQuestionRequestDto) {
-        return ResponseEntity.ok(answeredQuestionService.createAnswer(authentication, answeredQuestionRequestDto));
+        return ResponseEntity.ok(
+            answeredQuestionService.createAnswer(authentication, answeredQuestionRequestDto));
     }
 }

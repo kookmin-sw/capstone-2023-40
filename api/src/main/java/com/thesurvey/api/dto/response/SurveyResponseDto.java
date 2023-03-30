@@ -23,6 +23,10 @@ public class SurveyResponseDto {
 
     private List<QuestionBankResponseDto> questions;
 
+    private LocalDateTime createdDate;
+
+    private LocalDateTime modifiedDate;
+
     private List<CertificationType> certificationType;
 
 }

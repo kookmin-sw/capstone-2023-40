@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "participation")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Participation {
+public class Participation extends BaseTimeEntity {
 
     @EmbeddedId
     private ParticipationId participationId;
