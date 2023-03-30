@@ -9,10 +9,10 @@ import com.thesurvey.api.exception.ErrorMessage;
 import com.thesurvey.api.exception.ExceptionMapper;
 import com.thesurvey.api.repository.ParticipationRepository;
 import com.thesurvey.api.repository.UserRepository;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import com.thesurvey.api.service.mapper.ParticipationMapper;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,12 +21,16 @@ import org.springframework.transaction.annotation.Transactional;
 public class ParticipationService {
 
     private final UserRepository userRepository;
+
     private final ParticipationRepository participationRepository;
 
+    private final ParticipationMapper participationMapper;
+
     public ParticipationService(UserRepository userRepository,
-        ParticipationRepository participationRepository) {
+        ParticipationRepository participationRepository, ParticipationMapper participationMapper) {
         this.userRepository = userRepository;
         this.participationRepository = participationRepository;
+        this.participationMapper = participationMapper;
     }
 
     @Transactional
@@ -36,16 +40,10 @@ public class ParticipationService {
             .orElseThrow(() -> new ExceptionMapper(ErrorMessage.USER_NAME_NOT_FOUND,
                 authentication.getName()));
 
-        for (CertificationType certificationType : surveyRequestDto.getCertificationType()) {
-            Participation participation = Participation.builder()
-                .user(user)
-                .survey(survey)
-                .certificationType(certificationType)
-                .participateDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")))
-                .submittedDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")))
-                .build();
-            participationRepository.save(participation);
-        }
+        surveyRequestDto.getCertificationType().stream()
+            .map((certificationType) -> participationMapper.toParticipation(user, survey,
+                certificationType))
+            .forEach(participationRepository::save);
     }
 
     @Transactional

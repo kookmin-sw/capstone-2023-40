@@ -40,13 +40,13 @@ public class QuestionService {
         this.questionOptionService = questionOptionService;
     }
 
+    @Transactional(readOnly = true)
     public List<QuestionBankInfoDto> getQuestionBankInfoDtoListBySurveyId(UUID surveyId) {
         List<QuestionBank> questionBankList = questionBankRepository.findAllBySurveyId(surveyId);
-        List<QuestionBankInfoDto> questionBankInfoDtoList = questionBankList
+        return questionBankList
             .stream()
-            .map(questionBank -> questionBankMapper.toQuestionBankInfoDto(questionBank))
+            .map(questionBankMapper::toQuestionBankInfoDto)
             .collect(Collectors.toList());
-        return questionBankInfoDtoList;
     }
 
     @Transactional
