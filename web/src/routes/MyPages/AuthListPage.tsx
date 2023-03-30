@@ -87,9 +87,6 @@ const Container = styled.div`
 
 const AuthListContainer = styled.div`
   padding: 5vw;
-  margin-left: calc(10vh - 5vmin);
-  margin-right: calc(10vh - 5vmin);
-  margin-top: calc(3vw - 2vmin);
   min-width: 40vh;
   height: 80vh;
   background-color: ${(props) => props.theme.colors.container};

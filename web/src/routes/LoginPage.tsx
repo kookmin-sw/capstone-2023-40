@@ -23,7 +23,7 @@ const LoginContainer = styled.div`
   padding: 9vw;
   margin-left: 20vw;
   margin-right: 20vw;
-  margin-top: calc(5vw - 1vmin);
+  margin-top: 2vw;
   min-width: 20vh;
   height: 50vh;
   border-radius: ${(props) => props.theme.borderRadius};
