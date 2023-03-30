@@ -84,7 +84,6 @@ public class SurveyController {
         return ResponseEntity.ok(surveyService.createSurvey(authentication, surveyRequestDto));
     }
 
-
     @ApiOperation(value = "설문조사 수정", notes = "설문조사 내용을 수정합니다. 아래의 모든 필드를 담아 전송해야 합니다.")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "요청 성공"),
@@ -117,6 +116,7 @@ public class SurveyController {
     @PostMapping("/submit")
     public ResponseEntity<AnsweredQuestionResponseDto> submitSurvey(Authentication authentication,
         @RequestBody AnsweredQuestionRequestDto answeredQuestionRequestDto) {
-        return ResponseEntity.ok(answeredQuestionService.createAnswer(authentication, answeredQuestionRequestDto));
+        return ResponseEntity.ok(
+            answeredQuestionService.createAnswer(authentication, answeredQuestionRequestDto));
     }
 }
