@@ -3,7 +3,6 @@ package com.thesurvey.api.service;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
 import com.thesurvey.api.domain.EnumTypeEntity.QuestionType;
 import com.thesurvey.api.domain.Participation;
@@ -12,9 +11,9 @@ import com.thesurvey.api.domain.QuestionBank;
 import com.thesurvey.api.domain.QuestionOption;
 import com.thesurvey.api.domain.Survey;
 import com.thesurvey.api.domain.User;
-import com.thesurvey.api.dto.SurveyInfoDto;
 import com.thesurvey.api.dto.request.QuestionRequestDto;
 import com.thesurvey.api.dto.request.SurveyRequestDto;
+import com.thesurvey.api.dto.response.SurveyResponseDto;
 import com.thesurvey.api.exception.ErrorMessage;
 import com.thesurvey.api.exception.ExceptionMapper;
 import com.thesurvey.api.repository.ParticipationRepository;
@@ -196,11 +195,11 @@ public class SurveyServiceTest {
         surveyRepository.save(oldSurvey);
         surveyRepository.save(latestSurvey);
 
-        List<SurveyInfoDto> surveys = Optional.ofNullable(
+        List<SurveyResponseDto> surveys = Optional.ofNullable(
                 surveyRepository.findAllInDescendingOrder())
             .orElseThrow(() -> new ExceptionMapper(ErrorMessage.SURVEY_NOT_FOUND))
             .stream()
-            .map(survey -> surveyMapper.toSurveyInfoDto(survey))
+            .map(survey -> surveyMapper.toSurveyResponseDto(survey))
             .collect(Collectors.toList());
 
         assertNotNull(surveys);
