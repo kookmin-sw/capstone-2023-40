@@ -143,6 +143,9 @@ const TextType = styled.span`
   min-width: 80px;
   max-width: 40vw;
   width: fit-content;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 type State = {

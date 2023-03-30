@@ -108,9 +108,12 @@ const FontText = styled.span`
   font-weight: 900;
   margin-left: 3vw;
   min-width: 80px;
-  max-width: 20vw;
-  width: 140px;
+  max-width: 100vw;
+  width: 100%;
   color: ${(props) => props.theme.colors.default};
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export default function MyPage() {
@@ -132,7 +135,12 @@ export default function MyPage() {
   };
 
   const resultList = [
-    { id: 1, title: 'test1', resultClick: resultClickFirst },
+    {
+      id: 1,
+      title:
+        'test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1',
+      resultClick: resultClickFirst,
+    },
     { id: 2, title: 'test2', resultClick: resultClickSecond },
   ];
 
