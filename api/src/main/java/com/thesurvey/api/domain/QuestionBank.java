@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(name = "question_bank")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class QuestionBank {
+public class QuestionBank extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

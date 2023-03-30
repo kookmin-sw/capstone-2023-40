@@ -37,7 +37,7 @@ public class SurveyService {
 
     @Transactional(readOnly = true)
     public List<Optional<SurveyResponseDto>> getAllSurvey() {
-        return surveyRepository.findAll().stream()
+        return surveyRepository.findAllInDescendingOrder().stream()
             .map((survey) -> Optional.ofNullable(surveyMapper.toSurveyResponseDto(survey)))
             .collect(Collectors.toList());
     }
@@ -88,12 +88,15 @@ public class SurveyService {
         if (surveyUpdateRequestDto.getTitle() != null) {
             survey.changeTitle(surveyUpdateRequestDto.getTitle());
         }
+
         if (surveyUpdateRequestDto.getDescription() != null) {
             survey.changeDescription(surveyUpdateRequestDto.getDescription());
         }
+
         if (surveyUpdateRequestDto.getStartedDate() != null) {
             survey.changeStartedDate(surveyUpdateRequestDto.getStartedDate());
         }
+
         if (surveyUpdateRequestDto.getEndedDate() != null) {
             survey.changeEndedDate(surveyUpdateRequestDto.getEndedDate());
         }

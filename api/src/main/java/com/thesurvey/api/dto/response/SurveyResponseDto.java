@@ -21,7 +21,15 @@ public class SurveyResponseDto {
 
     private LocalDateTime endedDate;
 
+<<<<<<< HEAD:api/src/main/java/com/thesurvey/api/dto/response/SurveyResponseDto.java
     private List<QuestionBankResponseDto> questions;
+=======
+    private LocalDateTime createdDate;
+
+    private LocalDateTime modifiedDate;
+
+    private List<QuestionBankInfoDto> questions;
+>>>>>>> d0f29fe (feat: add created and modified date):api/src/main/java/com/thesurvey/api/dto/SurveyInfoDto.java
 
     private List<CertificationType> certificationType;
 

@@ -34,6 +34,8 @@ public class SurveyMapper {
             .description(survey.getDescription())
             .startedDate(survey.getStartedDate())
             .endedDate(survey.getEndedDate())
+            .createdDate(survey.getCreatedDate())
+            .modifiedDate(survey.getModifiedDate())
             .certificationType(certificationTypeConverter.toCertificationTypeList(
                 surveyRepository.findCertificationTypeBySurveyId(survey.getSurveyId())))
             .questions(questionBankResponseDtoList)
