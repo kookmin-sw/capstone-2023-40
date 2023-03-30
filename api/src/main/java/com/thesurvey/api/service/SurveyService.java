@@ -10,10 +10,10 @@ import com.thesurvey.api.repository.SurveyRepository;
 import com.thesurvey.api.service.mapper.SurveyMapper;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,12 +37,9 @@ public class SurveyService {
 
     @Transactional(readOnly = true)
     public List<Optional<SurveyInfoDto>> getAllSurvey() {
-        List<Survey> surveyList = surveyRepository.findAll();
-        List<Optional<SurveyInfoDto>> surveyDtoList = new ArrayList<>();
-        for (Survey survey : surveyList) {
-            surveyDtoList.add(Optional.ofNullable(surveyMapper.toSurveyInfoDto(survey)));
-        }
-        return surveyDtoList;
+        return surveyRepository.findAll().stream()
+            .map((survey) -> Optional.ofNullable(surveyMapper.toSurveyInfoDto(survey)))
+            .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
