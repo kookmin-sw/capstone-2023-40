@@ -112,6 +112,14 @@ public class SurveyController {
         return ResponseEntity.ok().build();
     }
 
+    @ApiOperation(value = "설문조사 응답 제출", notes = "설문조사 응답을 제출합니다.")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "요청 성공"),
+        @ApiResponse(code = 400, message = "잘못된 요청"),
+        @ApiResponse(code = 401, message = "사용자 인증 실패"),
+        @ApiResponse(code = 403, message = "접근 권한 없음"),
+        @ApiResponse(code = 404, message = "요청한 리소스 찾을 수 없음")
+    })
     @PostMapping("/submit")
     public ResponseEntity<AnsweredQuestionResponseDto> submitSurvey(Authentication authentication,
         @RequestBody AnsweredQuestionRequestDto answeredQuestionRequestDto) {
