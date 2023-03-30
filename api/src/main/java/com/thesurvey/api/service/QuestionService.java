@@ -40,13 +40,13 @@ public class QuestionService {
         this.questionOptionService = questionOptionService;
     }
 
+    @Transactional(readOnly = true)
     public List<QuestionBankInfoDto> getQuestionBankInfoDtoListBySurveyId(UUID surveyId) {
         List<QuestionBank> questionBankList = questionBankRepository.findAllBySurveyId(surveyId);
-        List<QuestionBankInfoDto> questionBankInfoDtoList = questionBankList
+        return questionBankList
             .stream()
-            .map(questionBank -> questionBankMapper.toQuestionBankInfoDto(questionBank))
+            .map(questionBankMapper::toQuestionBankInfoDto)
             .collect(Collectors.toList());
-        return questionBankInfoDtoList;
     }
 
     @Transactional
@@ -81,10 +81,10 @@ public class QuestionService {
             }
             questionBankRepository.save(questionBank);
 
-            Question question = questionRepository.findByQuestionIdQuestionBankId(
+            Question question = questionRepository.findByQuestionBankId(
                 questionBank.getQuestionBankId()).orElseThrow(() -> new ExceptionMapper(
-                ErrorMessage.QUESTION_NOT_FOUND,
-                questionBank.getQuestionBankId()));
+                ErrorMessage.QUESTION_NOT_FOUND));
+
             if (questionBankUpdateRequestDto.getIsRequired() != null) {
                 question.changeIsRequired(questionBankUpdateRequestDto.getIsRequired());
             }
@@ -102,7 +102,7 @@ public class QuestionService {
 
     @Transactional
     public void deleteQuestion(UUID surveyId) {
-        List<Question> questionList = questionRepository.findAllByQuestionIdSurveyId(surveyId);
+        List<Question> questionList = questionRepository.findAllBySurveyId(surveyId);
         questionRepository.deleteAll(questionList);
     }
 

@@ -1,6 +1,5 @@
 package com.thesurvey.api.repository;
 
-import com.thesurvey.api.domain.EnumTypeEntity;
 import com.thesurvey.api.domain.Survey;
 import java.util.List;
 import java.util.Optional;
@@ -16,5 +15,6 @@ public interface SurveyRepository extends JpaRepository<Survey, UUID> {
     @Query("SELECT p.certificationType FROM Participation p WHERE p.survey.surveyId = :survey_id")
     List<Integer> findCertificationTypeBySurveyId(@Param("survey_id") UUID surveyId);
 
+    @Query("SELECT s FROM Survey s WHERE s.surveyId = :surveyId ORDER BY s.createdDate DESC")
     Optional<Survey> findBySurveyId(UUID surveyId);
 }

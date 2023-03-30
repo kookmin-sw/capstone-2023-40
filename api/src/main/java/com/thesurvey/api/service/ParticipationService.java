@@ -1,6 +1,5 @@
 package com.thesurvey.api.service;
 
-import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
 import com.thesurvey.api.domain.Participation;
 import com.thesurvey.api.domain.Survey;
 import com.thesurvey.api.domain.User;
@@ -9,8 +8,7 @@ import com.thesurvey.api.exception.ErrorMessage;
 import com.thesurvey.api.exception.ExceptionMapper;
 import com.thesurvey.api.repository.ParticipationRepository;
 import com.thesurvey.api.repository.UserRepository;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import com.thesurvey.api.service.mapper.ParticipationMapper;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.security.core.Authentication;
@@ -21,12 +19,16 @@ import org.springframework.transaction.annotation.Transactional;
 public class ParticipationService {
 
     private final UserRepository userRepository;
+
     private final ParticipationRepository participationRepository;
 
+    private final ParticipationMapper participationMapper;
+
     public ParticipationService(UserRepository userRepository,
-        ParticipationRepository participationRepository) {
+        ParticipationRepository participationRepository, ParticipationMapper participationMapper) {
         this.userRepository = userRepository;
         this.participationRepository = participationRepository;
+        this.participationMapper = participationMapper;
     }
 
     @Transactional
@@ -36,21 +38,15 @@ public class ParticipationService {
             .orElseThrow(() -> new ExceptionMapper(ErrorMessage.USER_NAME_NOT_FOUND,
                 authentication.getName()));
 
-        for (CertificationType certificationType : surveyRequestDto.getCertificationType()) {
-            Participation participation = Participation.builder()
-                .user(user)
-                .survey(survey)
-                .certificationType(certificationType)
-                .participateDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")))
-                .submittedDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")))
-                .build();
-            participationRepository.save(participation);
-        }
+        surveyRequestDto.getCertificationType().stream()
+            .map((certificationType) -> participationMapper.toParticipation(user, survey,
+                certificationType))
+            .forEach(participationRepository::save);
     }
 
     @Transactional
     public void deleteParticipation(UUID surveyId) {
-        List<Participation> participationList = participationRepository.findAllByParticipationId_surveyId(
+        List<Participation> participationList = participationRepository.findAllBySurveyId(
             surveyId);
         participationRepository.deleteAll(participationList);
     }
