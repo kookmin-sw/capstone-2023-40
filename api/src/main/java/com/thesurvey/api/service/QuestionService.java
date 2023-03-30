@@ -44,7 +44,7 @@ public class QuestionService {
         List<QuestionBank> questionBankList = questionBankRepository.findAllBySurveyId(surveyId);
         return questionBankList
             .stream()
-            .map(questionBankMapper::toQuestionBankInfoDto)
+            .map(questionBankMapper::toQuestionBankResponseDto)
             .collect(Collectors.toList());
     }
 

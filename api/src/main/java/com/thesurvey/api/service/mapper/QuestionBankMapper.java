@@ -30,13 +30,16 @@ public class QuestionBankMapper {
             .build();
     }
 
-    public QuestionBankResponseDto toQuestionBankInfoDto(QuestionBank questionBank) {
+    public QuestionBankResponseDto toQuestionBankResponseDto(QuestionBank questionBank) {
         List<QuestionOption> questionOptionList = questionOptionRepository.findByQuestionBankId(
             questionBank.getQuestionBankId());
-        List<QuestionOptionResponseDto> questionOptionResponseDtoList = questionOptionList
-            .stream()
-            .map(questionOptionMapper::toQuestionOptionInfoDto)
-            .collect(Collectors.toList());
+        List<QuestionOptionResponseDto> questionOptionResponseDtoList = null;
+        if (questionOptionList != null && questionOptionList.size() != 0) {
+            questionOptionResponseDtoList = questionOptionList
+                .stream()
+                .map(questionOptionMapper::toQuestionOptionResponseDto)
+                .collect(Collectors.toList());
+        }
 
         return QuestionBankResponseDto.builder()
             .questionBankId(questionBank.getQuestionBankId())
