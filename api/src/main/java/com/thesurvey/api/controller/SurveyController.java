@@ -1,7 +1,7 @@
 package com.thesurvey.api.controller;
 
-import com.thesurvey.api.dto.AnsweredInfoQuestionDto;
-import com.thesurvey.api.dto.SurveyInfoDto;
+import com.thesurvey.api.dto.response.AnsweredQuestionResponseDto;
+import com.thesurvey.api.dto.response.SurveyResponseDto;
 import com.thesurvey.api.dto.request.AnsweredQuestionRequestDto;
 import com.thesurvey.api.dto.request.SurveyRequestDto;
 import com.thesurvey.api.dto.request.SurveyUpdateRequestDto;
@@ -50,7 +50,7 @@ public class SurveyController {
         @ApiResponse(code = 404, message = "요청한 리소스 찾을 수 없음")
     })
     @GetMapping
-    public ResponseEntity<List<Optional<SurveyInfoDto>>> getAllSurvey() {
+    public ResponseEntity<List<Optional<SurveyResponseDto>>> getAllSurvey() {
         return ResponseEntity.ok(surveyService.getAllSurvey());
     }
 
@@ -63,7 +63,7 @@ public class SurveyController {
         @ApiResponse(code = 404, message = "요청한 리소스 찾을 수 없음")
     })
     @GetMapping("/{surveyId}")
-    public ResponseEntity<SurveyInfoDto> getSurvey(
+    public ResponseEntity<SurveyResponseDto> getSurvey(
         @ApiParam(value = "UUID 형식의 surveyId", required = true)
         @PathVariable UUID surveyId) {
         return ResponseEntity.ok(surveyService.getSurveyBySurveyIdWithRelatedQuestion(surveyId));
@@ -79,7 +79,7 @@ public class SurveyController {
         @ApiResponse(code = 500, message = "서버 내부 오류")
     })
     @PostMapping
-    public ResponseEntity<SurveyInfoDto> createSurvey(Authentication authentication,
+    public ResponseEntity<SurveyResponseDto> createSurvey(Authentication authentication,
         @RequestBody SurveyRequestDto surveyRequestDto) {
         return ResponseEntity.ok(surveyService.createSurvey(authentication, surveyRequestDto));
     }
@@ -95,7 +95,7 @@ public class SurveyController {
         @ApiResponse(code = 500, message = "서버 내부 오류")
     })
     @PutMapping
-    public ResponseEntity<SurveyInfoDto> updateSurvey(
+    public ResponseEntity<SurveyResponseDto> updateSurvey(
         @RequestBody SurveyUpdateRequestDto surveyUpdateRequestDto) {
         return ResponseEntity.ok(surveyService.updateSurvey(surveyUpdateRequestDto));
     }
@@ -115,7 +115,7 @@ public class SurveyController {
     }
 
     @PostMapping("/submit")
-    public ResponseEntity<AnsweredInfoQuestionDto> submitSurvey(Authentication authentication,
+    public ResponseEntity<AnsweredQuestionResponseDto> submitSurvey(Authentication authentication,
         @RequestBody AnsweredQuestionRequestDto answeredQuestionRequestDto) {
         return ResponseEntity.ok(answeredQuestionService.createAnswer(authentication, answeredQuestionRequestDto));
     }

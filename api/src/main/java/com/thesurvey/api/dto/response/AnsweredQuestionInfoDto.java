@@ -1,12 +1,15 @@
-package com.thesurvey.api.dto;
+package com.thesurvey.api.dto.response;
 
 import java.util.List;
+import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
-public class AnsweredQuestionDto {
+public class AnsweredQuestionInfoDto {
+
+    private UUID answeredQuestionId;
 
     private String questionTitle;
 

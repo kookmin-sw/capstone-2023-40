@@ -1,11 +1,11 @@
-package com.thesurvey.api.dto;
+package com.thesurvey.api.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
-public class UserInfoDto {
+public class UserResponseDto {
 
     private Long userId;
 

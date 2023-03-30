@@ -1,7 +1,7 @@
 package com.thesurvey.api.service;
 
 import com.thesurvey.api.domain.Survey;
-import com.thesurvey.api.dto.SurveyInfoDto;
+import com.thesurvey.api.dto.response.SurveyResponseDto;
 import com.thesurvey.api.dto.request.SurveyRequestDto;
 import com.thesurvey.api.dto.request.SurveyUpdateRequestDto;
 import com.thesurvey.api.exception.ErrorMessage;
@@ -36,26 +36,26 @@ public class SurveyService {
     }
 
     @Transactional(readOnly = true)
-    public List<Optional<SurveyInfoDto>> getAllSurvey() {
+    public List<Optional<SurveyResponseDto>> getAllSurvey() {
         return surveyRepository.findAll().stream()
-            .map((survey) -> Optional.ofNullable(surveyMapper.toSurveyInfoDto(survey)))
+            .map((survey) -> Optional.ofNullable(surveyMapper.toSurveyResponseDto(survey)))
             .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public SurveyInfoDto getSurveyBySurveyIdWithRelatedQuestion(UUID surveyId) {
+    public SurveyResponseDto getSurveyBySurveyIdWithRelatedQuestion(UUID surveyId) {
         Survey survey = surveyRepository.findBySurveyId(surveyId)
             .orElseThrow(() -> new ExceptionMapper(ErrorMessage.SURVEY_NOT_FOUND));
-        return surveyMapper.toSurveyInfoDto(survey);
+        return surveyMapper.toSurveyResponseDto(survey);
     }
 
     @Transactional
-    public SurveyInfoDto createSurvey(Authentication authentication,
+    public SurveyResponseDto createSurvey(Authentication authentication,
         SurveyRequestDto surveyRequestDto) {
         Survey survey = surveyRepository.save(surveyMapper.toSurvey(surveyRequestDto));
         questionService.createQuestion(surveyRequestDto, survey);
         participationService.createParticipation(authentication, surveyRequestDto, survey);
-        return surveyMapper.toSurveyInfoDto(survey);
+        return surveyMapper.toSurveyResponseDto(survey);
     }
 
     @Transactional
@@ -72,7 +72,7 @@ public class SurveyService {
     }
 
     @Transactional
-    public SurveyInfoDto updateSurvey(SurveyUpdateRequestDto surveyUpdateRequestDto) {
+    public SurveyResponseDto updateSurvey(SurveyUpdateRequestDto surveyUpdateRequestDto) {
         Survey survey = surveyRepository.findBySurveyId(surveyUpdateRequestDto.getSurveyId())
             .orElseThrow(
                 () -> new ExceptionMapper(ErrorMessage.SURVEY_NOT_FOUND,
@@ -100,6 +100,6 @@ public class SurveyService {
 
         questionService.updateQuestion(surveyUpdateRequestDto.getQuestions());
         surveyRepository.save(survey);
-        return surveyMapper.toSurveyInfoDto(survey);
+        return surveyMapper.toSurveyResponseDto(survey);
     }
 }

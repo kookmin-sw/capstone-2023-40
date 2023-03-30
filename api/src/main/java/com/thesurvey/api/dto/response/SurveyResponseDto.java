@@ -1,4 +1,4 @@
-package com.thesurvey.api.dto;
+package com.thesurvey.api.dto.response;
 
 import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
 import java.time.LocalDateTime;
@@ -9,7 +9,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class SurveyInfoDto {
+public class SurveyResponseDto {
 
     private UUID surveyId;
 
@@ -21,7 +21,7 @@ public class SurveyInfoDto {
 
     private LocalDateTime endedDate;
 
-    private List<QuestionBankInfoDto> questions;
+    private List<QuestionBankResponseDto> questions;
 
     private List<CertificationType> certificationType;
 

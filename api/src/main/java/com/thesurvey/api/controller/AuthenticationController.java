@@ -1,6 +1,6 @@
 package com.thesurvey.api.controller;
 
-import com.thesurvey.api.dto.UserInfoDto;
+import com.thesurvey.api.dto.response.UserResponseDto;
 import com.thesurvey.api.dto.request.UserLoginRequestDto;
 import com.thesurvey.api.dto.request.UserRegisterRequestDto;
 import com.thesurvey.api.exception.ErrorMessage;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
@@ -38,7 +37,7 @@ public class AuthenticationController {
         @ApiResponse(code = 500, message = "서버 내부 오류")
     })
     @PostMapping("/register")
-    public ResponseEntity<UserInfoDto> register(
+    public ResponseEntity<UserResponseDto> register(
         @RequestBody UserRegisterRequestDto userRegisterRequestDto) {
         try {
             return ResponseEntity.ok(authenticationService.register(userRegisterRequestDto));
@@ -56,10 +55,10 @@ public class AuthenticationController {
         @ApiResponse(code = 404, message = "요청한 리소스 찾을 수 없음")
     })
     @PostMapping("/login")
-    public ResponseEntity<UserInfoDto> login(@RequestBody UserLoginRequestDto userLoginRequestDto) {
+    public ResponseEntity<UserResponseDto> login(@RequestBody UserLoginRequestDto userLoginRequestDto) {
         try {
-            UserInfoDto userInfoDto = authenticationService.login(userLoginRequestDto);
-            return ResponseEntity.ok(userInfoDto);
+            UserResponseDto userResponseDto = authenticationService.login(userLoginRequestDto);
+            return ResponseEntity.ok(userResponseDto);
         } catch (AuthenticationException e) {
             throw new ExceptionMapper(ErrorMessage.UNAUTHORIZED_REQUEST);
         }
