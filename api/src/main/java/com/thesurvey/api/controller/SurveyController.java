@@ -8,7 +8,6 @@ import com.thesurvey.api.dto.request.SurveyUpdateRequestDto;
 import com.thesurvey.api.service.AnsweredQuestionService;
 import com.thesurvey.api.service.SurveyService;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -50,7 +49,7 @@ public class SurveyController {
         @ApiResponse(code = 404, message = "요청한 리소스 찾을 수 없음")
     })
     @GetMapping
-    public ResponseEntity<List<Optional<SurveyResponseDto>>> getAllSurvey() {
+    public ResponseEntity<List<SurveyResponseDto>> getAllSurvey() {
         return ResponseEntity.ok(surveyService.getAllSurvey());
     }
 

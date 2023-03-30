@@ -36,9 +36,12 @@ public class SurveyService {
     }
 
     @Transactional(readOnly = true)
-    public List<Optional<SurveyResponseDto>> getAllSurvey() {
-        return surveyRepository.findAllInDescendingOrder().stream()
-            .map((survey) -> Optional.ofNullable(surveyMapper.toSurveyResponseDto(survey)))
+    public List<SurveyResponseDto> getAllSurvey() {
+        return Optional.ofNullable(
+                surveyRepository.findAllInDescendingOrder())
+            .orElseThrow(() -> new ExceptionMapper(ErrorMessage.SURVEY_NOT_FOUND))
+            .stream()
+            .map(surveyMapper::toSurveyResponseDto)
             .collect(Collectors.toList());
     }
 
