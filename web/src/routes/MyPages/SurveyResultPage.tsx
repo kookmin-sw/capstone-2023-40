@@ -85,13 +85,24 @@ const Form = styled.form`
   flex-direction: column;
 `;
 
-const SurVeyResultPageTitle = styled.span`
+const SurVeyResultPageTitle = styled.div`
+  flex-direction: row;
+  margin-bottom: 2vh;
+`;
+
+const MypageText = styled.span`
   text-align: left;
   font-size: calc(2vh + 2vmin);
   font-weight: 900;
-  margin-bottom: 2vh;
   color: ${(props) => props.theme.colors.default};
   cursor: pointer;
+`;
+
+const SurveyResultText = styled.span`
+  text-align: left;
+  font-size: calc(2vh + 2vmin);
+  font-weight: 900;
+  color: ${(props) => props.theme.colors.default};
 `;
 
 const FontText = styled.span`
@@ -133,8 +144,11 @@ export default function MyPage() {
       <Header theme={theme} toggleTheme={toggleTheme} />
       <SurveyResultContainer theme={theme}>
         <Form onSubmit={handleSubmit}>
-          <SurVeyResultPageTitle style={{ marginBottom: '5vh' }} theme={theme} onClick={() => navigate('../mypage')}>
-            마이페이지 &gt; 설문 결과 조회
+          <SurVeyResultPageTitle style={{ marginBottom: '5vh' }} theme={theme}>
+            <MypageText theme={theme} onClick={() => navigate('../mypage')}>
+              마이페이지
+            </MypageText>
+            <SurveyResultText theme={theme}> &gt; 설문 결과 조회</SurveyResultText>
           </SurVeyResultPageTitle>
           {resultList.map((item) => (
             <ListBoxContainer key={item.id} theme={theme}>

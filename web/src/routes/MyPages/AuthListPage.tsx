@@ -118,13 +118,24 @@ const Form = styled.form`
   flex-direction: column;
 `;
 
-const AuthListTitle = styled.span`
+const AuthListTitle = styled.div`
+  flex-direction: row;
+  margin-bottom: 2vh;
+`;
+
+const MypageText = styled.span`
   text-align: left;
   font-size: calc(2vh + 2vmin);
   font-weight: 900;
-  margin-bottom: 2vh;
   color: ${(props) => props.theme.colors.default};
   cursor: pointer;
+`;
+
+const AuthInformationText = styled.span`
+  text-align: left;
+  font-size: calc(2vh + 2vmin);
+  font-weight: 900;
+  color: ${(props) => props.theme.colors.default};
 `;
 
 const TextType = styled.span`
@@ -243,8 +254,11 @@ export default function MyPage() {
       <Header theme={theme} toggleTheme={toggleTheme} />
       <AuthListContainer theme={theme}>
         <Form onSubmit={handleSubmit}>
-          <AuthListTitle theme={theme} style={{ marginBottom: '4vh' }} onClick={() => navigate('../mypage')}>
-            마이페이지 &gt; 인증정보 목록{' '}
+          <AuthListTitle theme={theme} style={{ marginBottom: '4vh' }}>
+            <MypageText theme={theme} onClick={() => navigate('../mypage')}>
+              마이페이지
+            </MypageText>
+            <AuthInformationText theme={theme}> &gt; 인증정보 목록</AuthInformationText>
           </AuthListTitle>
           {authState.map(({ number, image, title, checkAuth, pageNavigate }) => (
             <ContainerBox key={number} theme={theme} onClick={pageNavigate} disabled={checkAuth}>
