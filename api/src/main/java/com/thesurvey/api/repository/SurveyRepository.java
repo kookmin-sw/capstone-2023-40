@@ -1,6 +1,5 @@
 package com.thesurvey.api.repository;
 
-import com.thesurvey.api.domain.EnumTypeEntity;
 import com.thesurvey.api.domain.Survey;
 import java.util.List;
 import java.util.Optional;

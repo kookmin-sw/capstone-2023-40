@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 public interface QuestionOptionRepository extends JpaRepository<QuestionOption, Long> {
 
     Optional<QuestionOption> findByQuestionOptionId(Long questionOptionId);
+
     @Query("SELECT qo FROM QuestionOption qo WHERE qo.questionBank.questionBankId = :questionBankId")
     List<QuestionOption> findByQuestionBankId(Long questionBankId);
 }

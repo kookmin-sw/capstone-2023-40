@@ -6,11 +6,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface QuestionRepository extends JpaRepository<Question, QuestionId> {
 
-    List<Question> findAllByQuestionIdSurveyId(UUID surveyId);
-    Optional<Question> findByQuestionIdQuestionBankId(Long questionBankId);
+    @Query("SELECT q FROM Question q WHERE q.survey.surveyId = :surveyId")
+    List<Question> findAllBySurveyId(UUID surveyId);
+
+    @Query("SELECT q FROM Question q WHERE q.questionBank.questionBankId = :questionBankId")
+    Optional<Question> findByQuestionBankId(Long questionBankId);
 }

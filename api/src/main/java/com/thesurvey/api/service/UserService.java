@@ -7,8 +7,6 @@ import com.thesurvey.api.exception.ErrorMessage;
 import com.thesurvey.api.exception.ExceptionMapper;
 import com.thesurvey.api.repository.UserRepository;
 import com.thesurvey.api.service.mapper.UserMapper;
-import java.util.List;
-import java.util.Optional;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

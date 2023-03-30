@@ -1,6 +1,5 @@
 package com.thesurvey.api.service;
 
-import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
 import com.thesurvey.api.domain.Participation;
 import com.thesurvey.api.domain.Survey;
 import com.thesurvey.api.domain.User;
@@ -12,7 +11,6 @@ import com.thesurvey.api.repository.UserRepository;
 import com.thesurvey.api.service.mapper.ParticipationMapper;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,7 +46,7 @@ public class ParticipationService {
 
     @Transactional
     public void deleteParticipation(UUID surveyId) {
-        List<Participation> participationList = participationRepository.findAllByParticipationId_surveyId(
+        List<Participation> participationList = participationRepository.findAllBySurveyId(
             surveyId);
         participationRepository.deleteAll(participationList);
     }
