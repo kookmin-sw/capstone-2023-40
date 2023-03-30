@@ -2,12 +2,9 @@ name: SpringBoot CI with Gradle
 
 on:
   push:
-    branches: [ "develop" ]
+    branches: ["develop", "feature/base-api"]
   pull_request:
-    branches: [ "develop" ]
-
-permissions:
-  contents: read
+    branches: ["develop", "feature/base-api"]
 
 jobs:
   build:
@@ -17,14 +14,26 @@ jobs:
     defaults:
       run:
         working-directory: ${{ env.working-directory }}
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_USER: the_survey_dev
+          POSTGRES_PASSWORD: the_survey_dev
+          POSTGRES_DB: the_survey_dev
+          POSTGRES_HOST: localhost
+          POSTGRES_PORT: 5432
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
       - uses: actions/checkout@v3
 
       - name: Set up JDK 11
         uses: actions/setup-java@v3
         with:
-          java-version: '11'
-          distribution: 'temurin'
+          java-version: "11"
+          distribution: "temurin"
 
       - name: Cache gradle
         uses: actions/cache@v3
@@ -39,9 +48,15 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Build without test
-        run: ./gradlew build --exclude-task test
+      - name: Build with Gradle
+        run: ./gradlew clean build
 
-#      - name: Build with Gradle
-#        run: ./gradlew build
-#        working-directory: ${{ env.working-directory }}
+      - name: Run Test
+        run: ./gradlew test
+
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: |
+            api/build/test-results/**/*.xml
