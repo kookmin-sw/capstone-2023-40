@@ -19,19 +19,16 @@ import { useTheme } from '../hooks/useTheme';
 const Container = styled.div`
   width: 100vw;
   height: 130vh;
-  background-color: ${(props) => props.theme.colors.background};
+  background-color: ${(props) => props.theme.colors.container};
 `;
 
 const RegistContainer = styled.div`
   padding: 7vw;
   margin-left: calc(20vw - 5vmin);
   margin-right: calc(20vw - 5vmin);
-  margin-top: calc(7vw - 2vmin);
+  margin-top: calc(2vh - 2vmin);
   min-width: 30vh;
   height: 80vh;
-  border-radius: 20px;
-  background-color: ${(props) => props.theme.colors.container};
-  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
 `;
 
 const ContainerBox = styled.div`
@@ -54,12 +51,14 @@ const Form = styled.form`
 `;
 
 const Input = styled.input`
-  min-width: 5vh;
+  min-width: 4vh;
   padding: 1.7vh;
   margin-top: 10px;
   margin-bottom: 10px;
   border: ${(props) => props.theme.border};
-  border-radius: 16px;
+  border-radius: ${(props) => props.theme.borderRadius};
+  color: ${(props) => props.theme.colors.default};
+  background-color: ${(props) => props.theme.colors.container};
   font-size: 1.5vh;
   font-weight: 600;
   flex: 1;
@@ -97,7 +96,8 @@ const PhoneNumberBox = styled.div`
   font-size: 1.5vh;
   font-weight: 700;
   margin-right: 1vh;
-  background-color: white;
+  color: ${(props) => props.theme.colors.default};
+  background-color: ${(props) => props.theme.colors.container};
   border: ${(props) => props.theme.border};
   border-color: ${(props) => props.theme.borderRadius};
   border-radius: ${(props) => props.theme.borderRadius};

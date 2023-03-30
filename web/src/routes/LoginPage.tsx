@@ -23,10 +23,10 @@ const LoginContainer = styled.div`
   padding: 9vw;
   margin-left: 20vw;
   margin-right: 20vw;
-  margin-top: calc(5vw - 1vmin);
+  margin-top: 2vw;
   min-width: 20vh;
   height: 50vh;
-  border-radius: 20px;
+  border-radius: ${(props) => props.theme.borderRadius};
   background-color: ${(props) => props.theme.colors.container};
   box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
 `;
@@ -41,7 +41,9 @@ const Input = styled.input`
   margin-top: 10px;
   margin-bottom: 10px;
   border: ${(props) => props.theme.border};
-  border-radius: 16px;
+  border-radius: ${(props) => props.theme.borderRadius};
+  color: ${(props) => props.theme.colors.text};
+  background-color: ${(props) => props.theme.colors.container};
   font-size: 1.5vh;
   font-weight: 600;
   flex: 1;

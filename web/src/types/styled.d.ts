@@ -6,7 +6,9 @@ declare module 'styled-components' {
     fontSize?: string | number;
     padding?: string | number;
     border?: string;
+    borderResultList?: string;
     borderRadius?: string | number;
+    themeToggle?: string | number;
 
     colors: {
       default: string;
@@ -19,6 +21,8 @@ declare module 'styled-components' {
       header: string;
       opposite: string;
       background: string;
+      inputBackground: string;
+      placeHolder: string;
     };
   }
 }

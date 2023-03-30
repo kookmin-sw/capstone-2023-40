@@ -1,10 +1,45 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, SyntheticEvent } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { Icons } from '../../assets/svg/index';
 import Header from '../../components/Header';
 import { useTheme } from '../../hooks/useTheme';
+
+const PencilImage = styled(Icons.PENCIL).attrs({
+  width: 25,
+  height: 25,
+})`
+  border: none;
+  width: 25px;
+  height: 100%;
+  padding: 1.5vh;
+  margin-left: 1vh;
+  border-radius: 18px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${(props) => props.theme.colors.inputBackground};
+  }
+`;
+
+const ArrowImage = styled(Icons.ARROW).attrs({
+  width: 30,
+  height: 30,
+})`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  padding: 1.5vh;
+  border-radius: 30px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${(props) => props.theme.colors.inputBackground};
+  }
+`;
 
 const Container = styled.div`
   width: 100vw;
@@ -14,9 +49,6 @@ const Container = styled.div`
 
 const MypageContainer = styled.div`
   padding: 5vw;
-  margin-left: calc(10vh - 5vmin);
-  margin-right: calc(10vh - 5vmin);
-  margin-top: calc(7vw - 2vmin);
   min-width: 40vh;
   height: 80vh;
   background-color: ${(props) => props.theme.colors.container};
@@ -26,7 +58,6 @@ const ContainerBox = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
 `;
 
 const Form = styled.form`
@@ -35,32 +66,28 @@ const Form = styled.form`
 `;
 
 const Input = styled.input`
-  min-width: 5vh;
-  padding: 1.7vh;
+  flex: 1;
+  min-width: 10vw;
+  max-width: 30vw;
+  width: 150px;
+  padding: 1.3vh;
   margin-top: 10px;
   margin-bottom: 10px;
-  border: ${(props) => props.theme.border};
-  border-radius: 16px;
-  font-size: 1.5vh;
-  font-weight: 600;
-  flex: 1;
-
-  &:focus {
-    outline: none;
-  }
-
-  ::placeholder,
-  ::-webkit-input-placeholder {
-    opacity: 0.4;
-  }
-  :-ms-input-placeholder {
-    opacity: 0.4;
-  }
+  border: none;
+  border-radius: 10px;
+  font-size: 1.6vh;
+  font-weight: 700;
+  color: ${(props) => props.theme.colors.default};
+  background-color: ${(props) => props.theme.colors.inputBackground};
+  cursor: auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const MyPageTitle = styled.span`
   text-align: left;
-  font-size: 3vh;
+  font-size: calc(2vh + 2vmin);
   font-weight: 900;
   margin-bottom: 2vh;
   color: ${(props) => props.theme.colors.default};
@@ -68,27 +95,43 @@ const MyPageTitle = styled.span`
 
 const FontText = styled.span`
   text-align: left;
-  font-size: 2vh;
-  font-weight: 700;
+  font-size: calc(1vh + 1.4vmin);
+  font-weight: 900;
+  margin-right: 3vw;
+  min-width: 80px;
+  max-width: 20vw;
+  width: 140px;
   color: ${(props) => props.theme.colors.default};
 `;
 
-const ChangeButton = styled.button`
+const ReplacePagetext = styled.span`
   border: none;
-  min-width: 70px;
-  width: 10vw;
-  height: 100%;
-  padding: 1.9vh;
-  margin-left: 1vh;
-  font-size: 1.4vh;
+  text-align: left;
+  font-size: 2.5vh;
+  font-weight: 900;
+  width: 170px;
+  color: ${(props) => props.theme.colors.default};
+`;
+
+const CompleteButton = styled.div`
+  margin-left: auto;
+  display: flex;
+  padding: 1.5vh;
+  font-size: 1.8vh;
   font-weight: 700;
-  color: ${(props) => props.theme.colors.text};
-  background-color: ${(props) => props.theme.colors.button};
+  color: white;
+  background-color: ${(props) => props.theme.colors.primary};
+  border: none;
   border-radius: ${(props) => props.theme.borderRadius};
   cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   &:hover {
-    background-color: ${(props) => props.theme.colors.btnhover};
+    background-color: ${(props) => props.theme.colors.prhover};
   }
 `;
 
@@ -97,34 +140,72 @@ type State = {
   password: string;
   name: string;
   phoneNumber: string;
+  address: string;
+  emailDisabled: boolean;
+  passwordDisabled: boolean;
+  nameDisabled: boolean;
+  phoneNumberDisabled: boolean;
+  addressDisabled: boolean;
 };
 
 type Action =
-  | { type: 'SET_EMAIL'; payload: string }
-  | { type: 'SET_PASSWORD'; payload: string }
-  | { type: 'SET_NAME'; payload: string }
-  | { type: 'SET_PHONE_NUMBER'; payload: string };
+  | { type: 'CHANGE_EMAIL'; payload: string }
+  | { type: 'CHANGE_PASSWORD'; payload: string }
+  | { type: 'CHANGE_NAME'; payload: string }
+  | { type: 'CHANGE_PHONE_NUMBER'; payload: string }
+  | { type: 'CHANGE_ADDRESS'; payload: string }
+  | { type: 'SET_CHANGE_EMAIL'; payload: boolean }
+  | { type: 'SET_CHANGE_PASSWORD'; payload: boolean }
+  | { type: 'SET_CHANGE_NAME'; payload: boolean }
+  | { type: 'SET_CHANGE_PHONE_NUMBER'; payload: boolean }
+  | { type: 'SET_CHANGE_ADDRESS'; payload: boolean };
 
 const initalState = {
-  email: '',
-  password: '',
-  name: '',
-  phoneNumber: '',
+  email: 'test@gmail.com',
+  password: 'asdf1234!',
+  name: 'jsontest',
+  phoneNumber: '010-1234-5678',
+  address: '서울특별시 성북구 정릉동 국민대학교 기숙사',
+  emailDisabled: false,
+  passwordDisabled: false,
+  nameDisabled: false,
+  phoneNumberDisabled: false,
+  addressDisabled: false,
 };
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
-    case 'SET_EMAIL':
+    case 'CHANGE_EMAIL':
       return { ...state, email: action.payload };
-    case 'SET_PASSWORD':
+    case 'CHANGE_PASSWORD':
       return { ...state, password: action.payload };
-    case 'SET_NAME':
+    case 'CHANGE_NAME':
       return { ...state, name: action.payload };
-    case 'SET_PHONE_NUMBER':
+    case 'CHANGE_PHONE_NUMBER':
       return { ...state, phoneNumber: action.payload };
+    case 'CHANGE_ADDRESS':
+      return { ...state, address: action.payload };
+    case 'SET_CHANGE_EMAIL':
+      return { ...state, emailDisabled: action.payload };
+    case 'SET_CHANGE_PASSWORD':
+      return { ...state, passwordDisabled: action.payload };
+    case 'SET_CHANGE_NAME':
+      return { ...state, nameDisabled: action.payload };
+    case 'SET_CHANGE_PHONE_NUMBER':
+      return { ...state, phoneNumberDisabled: action.payload };
+    case 'SET_CHANGE_ADDRESS':
+      return { ...state, addressDisabled: action.payload };
     default:
       return state;
   }
+};
+
+const formatPhoneNumber = (value: string): string => {
+  const phone = value.replace(/[^0-9]/g, '');
+  if (phone.length >= 10) {
+    return phone.replace(/(\d{3})(\d{3,4})(\d{4})/, '$1-$2-$3');
+  }
+  return phone;
 };
 
 export default function MyPage() {
@@ -134,23 +215,42 @@ export default function MyPage() {
   const [state, dispatch] = useReducer(reducer, initalState);
 
   // Input Data list
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    switch (name) {
-      case 'email':
-        dispatch({ type: 'SET_EMAIL', payload: value });
-        break;
-      case 'password':
-        dispatch({ type: 'SET_PASSWORD', payload: value });
-        break;
-      case 'name':
-        dispatch({ type: 'SET_NAME', payload: value });
-        break;
-      case 'phoneNumber':
-        dispatch({ type: 'SET_PHONE_NUMBER', payload: value });
-        break;
-      default:
-        break;
+  const handleInputChange = (e: SyntheticEvent<HTMLInputElement>) => {
+    const { name, value } = e.currentTarget;
+    if (e.type === 'change' || e.type === 'Enter' || e.type === 'blur') {
+      switch (name) {
+        case 'email':
+          dispatch({ type: 'CHANGE_EMAIL', payload: value });
+          break;
+        case 'password':
+          dispatch({ type: 'CHANGE_PASSWORD', payload: value });
+          break;
+        case 'name':
+          dispatch({ type: 'CHANGE_NAME', payload: value });
+          break;
+        case 'phoneNumber':
+          dispatch({ type: 'CHANGE_PHONE_NUMBER', payload: formatPhoneNumber(value) });
+          break;
+        case 'address':
+          dispatch({ type: 'CHANGE_ADDRESS', payload: value });
+          break;
+        default:
+          break;
+      }
+    }
+  };
+
+  const pencilClick = (text: string) => {
+    if (text === 'email') {
+      dispatch({ type: 'SET_CHANGE_EMAIL', payload: !state.emailDisabled });
+    } else if (text === 'password') {
+      dispatch({ type: 'SET_CHANGE_PASSWORD', payload: !state.passwordDisabled });
+    } else if (text === 'name') {
+      dispatch({ type: 'SET_CHANGE_NAME', payload: !state.nameDisabled });
+    } else if (text === 'phoneNumber') {
+      dispatch({ type: 'SET_CHANGE_PHONE_NUMBER', payload: !state.phoneNumberDisabled });
+    } else if (text === 'address') {
+      dispatch({ type: 'SET_CHANGE_ADDRESS', payload: !state.addressDisabled });
     }
   };
 
@@ -158,7 +258,43 @@ export default function MyPage() {
     event.preventDefault();
   };
 
-  // Clicked Complete UserRegist Button. so We need to do the last check required for registration.
+  // containerBox list
+  const myProfileInformation = [
+    {
+      number: 1,
+      title: '이메일',
+      name: 'email',
+      type: 'email',
+      information: state.email,
+      isdisabled: state.emailDisabled,
+    },
+    { number: 2, title: '이름', name: 'name', type: 'text', information: state.name, disabled: state.nameDisabled },
+    {
+      number: 3,
+      title: '비밀번호',
+      name: 'password',
+      type: state.passwordDisabled ? 'text' : 'password',
+      information: state.password,
+      isdisabled: state.passwordDisabled,
+    },
+
+    {
+      number: 4,
+      title: '전화번호',
+      name: 'phoneNumber',
+      type: 'text',
+      information: state.phoneNumber,
+      isdisabled: state.phoneNumberDisabled,
+    },
+    {
+      number: 5,
+      title: '주소',
+      name: 'address',
+      type: 'text',
+      information: state.address,
+      isdisabled: state.addressDisabled,
+    },
+  ];
 
   return (
     <Container theme={theme}>
@@ -166,23 +302,36 @@ export default function MyPage() {
       <MypageContainer theme={theme}>
         <Form onSubmit={handleSubmit}>
           <MyPageTitle theme={theme}>마이페이지</MyPageTitle>
-
-          <ContainerBox>
-            <FontText theme={theme}>이메일</FontText>
-            <Input type="email" name="email" value={state.email} onChange={handleInputChange} theme={theme} />
-            <ChangeButton type="submit" theme={theme} />
+          {myProfileInformation.map(({ number, title, name, type, information, isdisabled }) => (
+            <ContainerBox key={number} theme={theme}>
+              <FontText theme={theme}>{title}</FontText>
+              <Input
+                type={type}
+                name={name}
+                value={information}
+                onChange={handleInputChange}
+                onKeyDown={handleInputChange}
+                onBlur={handleInputChange}
+                theme={theme}
+                disabled={!isdisabled}
+              />
+              <PencilImage
+                type="submit"
+                theme={theme}
+                title={!isdisabled ? '수정하기' : '수정완료'}
+                onClick={() => pencilClick(name)}
+              />
+            </ContainerBox>
+          ))}
+          <ContainerBox style={{ marginTop: '10vh' }}>
+            <ReplacePagetext theme={theme}>인증정보 목록</ReplacePagetext>
+            <ArrowImage theme={theme} onClick={() => navigate('../mypage/auth-list')} />
           </ContainerBox>
 
-          <ContainerBox>
-            <FontText theme={theme}>비밀번호</FontText>
-            <Input type="password" name="password" value={state.password} onChange={handleInputChange} theme={theme} />
-            <ChangeButton type="submit" theme={theme} />
-          </ContainerBox>
-
-          <ContainerBox>
-            <FontText theme={theme}>이름</FontText>
-            <Input type="text" name="name" value={state.name} theme={theme} />
-            <ChangeButton type="submit" theme={theme} />
+          <ContainerBox style={{ marginTop: '20px' }}>
+            <ReplacePagetext theme={theme}>설문 결과 조회</ReplacePagetext>
+            <ArrowImage theme={theme} onClick={() => navigate('../mypage/survey-result/:id')} />
+            <CompleteButton onClick={() => navigate('../')}>개인정보 저장하기</CompleteButton>
           </ContainerBox>
         </Form>
       </MypageContainer>

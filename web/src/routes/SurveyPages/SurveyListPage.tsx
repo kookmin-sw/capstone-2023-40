@@ -10,6 +10,7 @@ import Header from '../../components/Header';
 import Pagination from '../../components/Pagination';
 import SurveyListSkeleton from '../../components/Skeleton/SurveyListSkeleton';
 import { useTheme } from '../../hooks/useTheme';
+import { AuthLabel } from '../../types/enums';
 
 const Container = styled.div`
   width: 100vw;
@@ -79,8 +80,7 @@ const EndDate = styled(Item)`
 
   @media screen and (max-width: 900px) {
     display: none;
-    }
-  } 
+  }
 `;
 
 const HeadTitle = styled(HeadItem)`
@@ -96,11 +96,10 @@ const HeadAuthList = styled(HeadItem)`
 const HeadEndDate = styled(HeadItem)`
   min-width: 150px;
   width: 13vw;
-  
+
   @media screen and (max-width: 900px) {
     display: none;
-    }
-  } 
+  }
 `;
 
 const Auth = styled.label`
@@ -151,8 +150,7 @@ const Label = styled.label`
 
   @media screen and (max-width: 700px) {
     font-size: 30px;
-    }
-  } 
+  }
 `;
 
 const Button = styled.button`
@@ -176,8 +174,7 @@ const Button = styled.button`
   }
   @media screen and (max-width: 700px) {
     font-size: 18px;
-    }
-  } 
+  }
 `;
 
 interface SurveyItem {
@@ -215,22 +212,22 @@ export default function SurveyListPage() {
     }
   };
 
-  const makeAuthLabel = (auth: string) => {
-    switch (auth) {
+  const makeAuthLabel = (label: string) => {
+    switch (label) {
       case 'KAKAO':
-        return <Kakao key={auth}>카카오계정</Kakao>;
+        return <Kakao key={label}>{AuthLabel.KAKAO}</Kakao>;
       case 'GOOGLE':
-        return <Google key={auth}>구글계정</Google>;
+        return <Google key={label}>{AuthLabel.GOOGLE}</Google>;
       case 'WEBMAIL':
-        return <Webmail key={auth}>학교인증</Webmail>;
+        return <Webmail key={label}>{AuthLabel.WEBMAIL}</Webmail>;
       case 'ID':
-        return <Id key={auth}>신분증</Id>;
+        return <Id key={label}>{AuthLabel.ID}</Id>;
       case 'MOBILE_PHONE':
-        return <MobilePhone key={auth}>휴대폰인증</MobilePhone>;
+        return <MobilePhone key={label}>{AuthLabel.MOBILE_PHONE}</MobilePhone>;
       case 'DRIVER_LICENSE':
-        return <DriverLicense key={auth}>운전면허</DriverLicense>;
+        return <DriverLicense key={label}>{AuthLabel.DRIVER_LICENSE}</DriverLicense>;
       default:
-        return <AuthNone key={auth}>제한없음</AuthNone>;
+        return <AuthNone key={label}>{AuthLabel.NULL}</AuthNone>;
     }
   };
 
@@ -279,7 +276,7 @@ export default function SurveyListPage() {
                 <Authlist theme={theme}>
                   {survey.required_authentications.length === 0
                     ? makeAuthLabel('')
-                    : survey.required_authentications.slice(0, 2).map((auth) => makeAuthLabel(auth))}
+                    : survey.required_authentications.slice(0, 2).map((label) => makeAuthLabel(label))}
                   {survey.required_authentications.length > 2 ? (
                     <AuthSummary>{` ... +${survey.required_authentications.length - 2}`}</AuthSummary>
                   ) : null}

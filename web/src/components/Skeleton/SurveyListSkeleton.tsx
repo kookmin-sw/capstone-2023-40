@@ -57,8 +57,7 @@ const EndDate = styled(Item)`
 
   @media screen and (max-width: 900px) {
     display: none;
-    }
-  } 
+  }
 `;
 
 const HeadTitle = styled(HeadItem)`
@@ -74,11 +73,10 @@ const HeadAuthList = styled(HeadItem)`
 const HeadEndDate = styled(HeadItem)`
   min-width: 150px;
   width: 13vw;
-  
+
   @media screen and (max-width: 900px) {
     display: none;
-    }
-  } 
+  }
 `;
 
 interface SkeletonProps {
