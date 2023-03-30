@@ -1,4 +1,4 @@
-package com.thesurvey.api.dto;
+package com.thesurvey.api.dto.response;
 
 import com.thesurvey.api.domain.EnumTypeEntity.QuestionType;
 import java.util.List;
@@ -7,7 +7,9 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class QuestionBankInfoDto {
+public class QuestionBankResponseDto {
+
+    private Long questionBankId;
 
     private String title;
 
@@ -15,6 +17,6 @@ public class QuestionBankInfoDto {
 
     private QuestionType questionType;
 
-    private List<QuestionOptionInfoDto> questionOptions;
+    private List<QuestionOptionResponseDto> questionOptions;
 
 }
