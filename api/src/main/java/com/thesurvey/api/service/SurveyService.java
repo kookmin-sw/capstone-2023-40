@@ -35,6 +35,7 @@ public class SurveyService {
         this.participationService = participationService;
     }
 
+    @Transactional(readOnly = true)
     public List<Optional<SurveyInfoDto>> getAllSurvey() {
         List<Survey> surveyList = surveyRepository.findAll();
         List<Optional<SurveyInfoDto>> surveyDtoList = new ArrayList<>();
@@ -44,6 +45,7 @@ public class SurveyService {
         return surveyDtoList;
     }
 
+    @Transactional(readOnly = true)
     public SurveyInfoDto getSurveyBySurveyIdWithRelatedQuestion(UUID surveyId) {
         Survey survey = surveyRepository.findBySurveyId(surveyId)
             .orElseThrow(() -> new ExceptionMapper(ErrorMessage.SURVEY_NOT_FOUND));
@@ -72,6 +74,7 @@ public class SurveyService {
 //        answeredQuestionRepository.deleteAll(answeredQuestionList);
     }
 
+    @Transactional
     public SurveyInfoDto updateSurvey(SurveyUpdateRequestDto surveyUpdateRequestDto) {
         Survey survey = surveyRepository.findBySurveyId(surveyUpdateRequestDto.getSurveyId())
             .orElseThrow(

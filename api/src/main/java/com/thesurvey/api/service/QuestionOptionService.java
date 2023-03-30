@@ -36,6 +36,7 @@ public class QuestionOptionService {
         questionOptionRepository.saveAll(options);
     }
 
+    @Transactional
     public void updateQuestionOption(
         List<QuestionOptionUpdateRequestDto> questionOptionUpdateRequestDtoList) {
 

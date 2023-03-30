@@ -57,6 +57,7 @@ public class AuthenticationService {
         return userMapper.toUserInfoDto(user);
     }
 
+    @Transactional(readOnly = true)
     public UserInfoDto login(UserLoginRequestDto userLoginRequestDto) {
         Authentication authentication = new UsernamePasswordAuthenticationToken(
             userLoginRequestDto.getEmail(), userLoginRequestDto.getPassword());
@@ -69,7 +70,6 @@ public class AuthenticationService {
             throw new ExceptionMapper(ErrorMessage.UNAUTHORIZED_REQUEST);
         }
     }
-
 
     private PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
