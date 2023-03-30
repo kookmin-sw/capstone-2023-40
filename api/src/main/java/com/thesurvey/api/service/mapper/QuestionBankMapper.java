@@ -47,6 +47,8 @@ public class QuestionBankMapper {
             .description(questionBank.getDescription())
             .questionType(questionBank.getQuestionType())
             .questionOptions(questionOptionResponseDtoList)
+            .createdDate(questionBank.getCreatedDate())
+            .modifiedDate(questionBank.getModifiedDate())
             .build();
     }
 

@@ -1,10 +1,11 @@
-import React, { useState, ReactNode } from 'react';
+import React, { useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
 
-import { ReactComponent as LogoDark } from '../assets/svg/logo-dark.svg';
-import { ReactComponent as LogoLight } from '../assets/svg/logo-light.svg';
+import DarkModeIcon from '../assets/darkmode.webp';
+import LightModeIcon from '../assets/lightmode.webp';
+import { Icons } from '../assets/svg';
 
 const HeaderContainer = styled.header<{ isTransitionEnabled: boolean }>`
   position: sticky;
@@ -20,18 +21,44 @@ const HeaderContainer = styled.header<{ isTransitionEnabled: boolean }>`
   -ms-transition: ${(props) => (props.isTransitionEnabled ? 'background-color 300ms linear' : 'none')};
 `;
 
-const LogoLightContainer = styled(LogoLight)`
+const LogoLightContainer = styled(Icons.LIGHT_LOGO)`
   margin-left: 2vw;
   width: 150px;
   height: fit-content;
   cursor: pointer;
+
+  @media only screen and (max-width: 700px) {
+    display: none;
+  }
 `;
 
-const LogoDarkContainer = styled(LogoDark)`
+const LogoDarkContainer = styled(Icons.DARK_LOGO)`
   margin-left: 2vw;
   width: 150px;
   height: fit-content;
   cursor: pointer;
+
+  @media only screen and (max-width: 700px) {
+    display: none;
+  }
+`;
+
+const FaviconContainer = styled(Icons.FAVICON)`
+  margin: 1vw;
+  margin-left: 3vw;
+  width: 40px;
+  height: fit-content;
+  cursor: pointer;
+
+  @media only screen and (min-width: 700px) {
+    display: none;
+  }
+`;
+
+const CheckBoxContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const CheckBoxWrapper = styled.div`
@@ -40,23 +67,24 @@ const CheckBoxWrapper = styled.div`
 
 const CheckBoxLabel = styled.label`
   position: absolute;
+  margin: 2px;
   top: 0;
   left: 0;
-  width: 42px;
-  height: 26px;
-  margin-top: 2.5vh;
-  border-radius: 15px;
-  background: #f8f8f8;
+  width: 60px;
+  height: 30px;
+  border-radius: ${(props) => props.theme.borderRadius};
+  background-color: ${(props) => props.theme.colors.button};
   cursor: pointer;
+
   &::after {
     content: '';
     display: block;
     border-radius: 50%;
-    width: 18px;
-    height: 18px;
-    margin: 3px;
-    background-color: ${(props) => props.theme.colors.opposite};
-    box-shadow: 1px 3px 3px 1px rgba(0, 0, 0, 0.2);
+    width: 25px;
+    height: 25px;
+    margin: 2px;
+    background-image: url(${(props) => (props.theme.alt === 'light' ? LightModeIcon : DarkModeIcon)});
+    background-size: cover;
     transition: 0.2s;
   }
 `;
@@ -64,18 +92,22 @@ const CheckBoxLabel = styled.label`
 const CheckBox = styled.input`
   opacity: 0;
   z-index: 1;
-  border-radius: 15px;
-  width: 42px;
-  height: 26px;
+  border-radius: ${(props) => props.theme.borderRadius};
+  width: 60px;
+  height: 30px;
+
   &:checked + ${CheckBoxLabel} {
-    background: #ebeff7;
+    background-color: ${(props) => props.theme.colors.button};
+
     &::after {
       content: '';
       display: block;
       border-radius: 50%;
-      width: 18px;
-      height: 18px;
-      margin-left: 21px;
+      width: 25px;
+      height: 25px;
+      background-image: url(${(props) => (props.theme.alt === 'light' ? LightModeIcon : DarkModeIcon)});
+      background-size: cover;
+      margin-left: calc(60px / 2);
       transition: 0.2s;
       cursor: pointer;
     }
@@ -149,22 +181,30 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
   return (
     <HeaderContainer theme={theme} isTransitionEnabled={isTransitionEnabled}>
       {theme.alt === 'light' ? (
-        <LogoLightContainer onClick={() => navigate('/')} title="logo" />
+        <>
+          <LogoLightContainer onClick={() => navigate('/')} title="logo" />
+          <FaviconContainer onClick={() => navigate('/')} title="logo" />
+        </>
       ) : (
-        <LogoDarkContainer onClick={() => navigate('/')} title="logo" />
+        <>
+          <LogoDarkContainer onClick={() => navigate('/')} title="logo" />
+          <FaviconContainer onClick={() => navigate('/')} title="logo" />
+        </>
       )}
       <NavigatorContainer theme={theme}>
         <Navigator onClick={() => navigate('/survey')}>설문</Navigator>
         <Navigator onClick={() => navigate('/report')}>리포트</Navigator>
       </NavigatorContainer>
       <ButtonContainer>
-        <CheckBoxWrapper>
-          <CheckBox id="checkbox" type="checkbox" theme={theme} onClick={handleClick} />
-          <CheckBoxLabel htmlFor="checkbox" theme={theme} />
-        </CheckBoxWrapper>
-        <LoginInformation onClick={() => navigate('/login')} theme={theme}>
-          로그인/회원가입{' '}
-        </LoginInformation>
+        <CheckBoxContainer>
+          <CheckBoxWrapper>
+            <CheckBox id="checkbox" type="checkbox" theme={theme} onClick={handleClick} />
+            <CheckBoxLabel htmlFor="checkbox" theme={theme} />
+          </CheckBoxWrapper>
+          <LoginInformation onClick={() => navigate('/login')} theme={theme}>
+            로그인/회원가입
+          </LoginInformation>
+        </CheckBoxContainer>
       </ButtonContainer>
     </HeaderContainer>
   );

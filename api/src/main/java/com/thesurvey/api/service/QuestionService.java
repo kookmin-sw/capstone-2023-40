@@ -41,8 +41,7 @@ public class QuestionService {
 
     @Transactional(readOnly = true)
     public List<QuestionBankResponseDto> getQuestionBankInfoDtoListBySurveyId(UUID surveyId) {
-        List<QuestionBank> questionBankList = questionBankRepository.findAllBySurveyId(surveyId);
-        return questionBankList
+        return questionBankRepository.findAllBySurveyId(surveyId)
             .stream()
             .map(questionBankMapper::toQuestionBankResponseDto)
             .collect(Collectors.toList());
@@ -65,9 +64,7 @@ public class QuestionService {
         for (QuestionBankUpdateRequestDto questionBankUpdateRequestDto : questionBankUpdateRequestDtoList) {
             QuestionBank questionBank = questionBankRepository.findByQuestionBankId(
                     questionBankUpdateRequestDto.getQuestionBankId())
-                .orElseThrow(() -> new ExceptionMapper(
-                    ErrorMessage.QUESTION_BANK_NOT_FOUND,
-                    questionBankUpdateRequestDto.getQuestionBankId()));
+                .orElseThrow(() -> new ExceptionMapper(ErrorMessage.QUESTION_BANK_NOT_FOUND));
 
             if (questionBankUpdateRequestDto.getTitle() != null) {
                 questionBank.changeTitle(questionBankUpdateRequestDto.getTitle());
