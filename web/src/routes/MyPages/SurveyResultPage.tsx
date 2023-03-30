@@ -38,6 +38,9 @@ const ListBoxContainer = styled.div`
   position: relative;
   margin-bottom: 1vh;
   background-color: ${(props) => props.theme.colors.container};
+  border: ${(props) => props.theme.borderResultList};
+  border-radius: ${(props) => props.theme.borderRadius};
+  background-color: ${(props) => props.theme.colors.opposite};
 `;
 
 const SurveyResultContainer = styled.div`
@@ -66,11 +69,15 @@ const ResultBox = styled.div`
   height: 40vh;
   width: 100%;
   align-items: center;
+  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+  margin-top: 1.5vh;
+  transition: opacity 0.4s ease-in-out;
+  position: absolute;
+  top: 100%;
   border: ${(props) => props.theme.borderResultList};
   border-radius: ${(props) => props.theme.borderRadius};
   background-color: ${(props) => props.theme.colors.opposite};
-  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.4);
-  pointer-events: none;
 `;
 
 const Form = styled.form`
@@ -109,12 +116,17 @@ export default function MyPage() {
   };
 
   const handleClick = (ClickNumber: number) => {
-    if (ClickNumber === 1) {
+    if (ClickNumber === 1 && !resultClickSecond) {
       setResultClickFirst(!resultClickFirst);
-    } else if (ClickNumber === 2) {
+    } else if (ClickNumber === 2 && !resultClickFirst) {
       setResultClickSecond(!resultClickSecond);
     }
   };
+
+  const resultList = [
+    { id: 1, title: 'test1', resultClick: resultClickFirst },
+    { id: 2, title: 'test2', resultClick: resultClickSecond },
+  ];
 
   return (
     <Container theme={theme}>
@@ -124,58 +136,24 @@ export default function MyPage() {
           <SurVeyResultPageTitle style={{ marginBottom: '5vh' }} theme={theme} onClick={() => navigate('../mypage')}>
             마이페이지 &gt; 설문 결과 조회
           </SurVeyResultPageTitle>
+          {resultList.map((item) => (
+            <ListBoxContainer key={item.id} theme={theme}>
+              <ListBox theme={theme} onClick={() => handleClick(item.id)}>
+                <FontText theme={theme}>{item.title}</FontText>
+                <TwoArrow style={{ transform: item.resultClick ? 'rotate(90deg)' : 'rotate(0deg)' }} />
+              </ListBox>
 
-          <ListBoxContainer theme={theme}>
-            <ListBox
-              theme={theme}
-              onClick={() => handleClick(1)}
-              style={{
-                zIndex: resultClickFirst ? 1 : 'auto',
-              }}
-            >
-              <FontText theme={theme}>test1</FontText>
-              <TwoArrow style={{ transform: resultClickFirst ? 'rotate(90deg)' : 'rotate(0deg)' }} />
-            </ListBox>
-            <ResultBox
-              style={{
-                marginTop: '1.5vh',
-                opacity: resultClickFirst ? 1 : 0,
-                transition: 'opacity 0.4s ease-in-out',
-                position: 'absolute',
-                top: '100%',
-                zIndex: resultClickFirst ? 1 : -1,
-              }}
-              theme={theme}
-            >
-              <ChartImage />
-            </ResultBox>
-          </ListBoxContainer>
-
-          <ListBoxContainer theme={theme}>
-            <ListBox
-              theme={theme}
-              style={{
-                cursor: resultClickFirst ? 'auto' : 'pointer',
-              }}
-              onClick={!resultClickFirst ? () => handleClick(2) : undefined}
-            >
-              <FontText theme={theme}>test2</FontText>
-              <TwoArrow theme={theme} style={{ transform: resultClickSecond ? 'rotate(90deg)' : 'rotate(0deg)' }} />
-            </ListBox>
-            <ResultBox
-              style={{
-                marginTop: '1.5vh',
-                opacity: resultClickSecond ? 1 : 0,
-                transition: 'opacity 0.4s ease-in-out',
-                position: 'absolute',
-                top: '100%',
-                zIndex: resultClickSecond ? 1 : -1,
-              }}
-              theme={theme}
-            >
-              <ChartImage theme={theme} />
-            </ResultBox>
-          </ListBoxContainer>
+              <ResultBox
+                theme={theme}
+                style={{
+                  opacity: item.resultClick ? 1 : 0,
+                  zIndex: item.resultClick ? 1 : -1,
+                }}
+              >
+                <ChartImage />
+              </ResultBox>
+            </ListBoxContainer>
+          ))}
         </Form>
       </SurveyResultContainer>
     </Container>
