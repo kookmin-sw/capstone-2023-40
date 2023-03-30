@@ -1,4 +1,4 @@
-package com.thesurvey.api.dto;
+package com.thesurvey.api.dto.request;
 
 import java.util.List;
 import lombok.Builder;

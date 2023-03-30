@@ -3,7 +3,7 @@ package com.thesurvey.api.service.mapper;
 import com.thesurvey.api.domain.EnumTypeEntity.Role;
 import com.thesurvey.api.domain.User;
 import com.thesurvey.api.dto.request.UserRegisterRequestDto;
-import com.thesurvey.api.dto.UserInfoDto;
+import com.thesurvey.api.dto.response.UserResponseDto;
 import java.util.Optional;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -38,8 +38,8 @@ public class UserMapper {
             .build();
     }
 
-    public Optional<UserInfoDto> toUserInfoDto(Optional<User> user) {
-        return user.map(value -> UserInfoDto.builder()
+    public Optional<UserResponseDto> toUserInfoDto(Optional<User> user) {
+        return user.map(value -> UserResponseDto.builder()
             .userId(value.getUserId())
             .name(value.getName())
             .email(value.getEmail())
@@ -49,8 +49,8 @@ public class UserMapper {
             .build());
     }
 
-    public UserInfoDto toUserInfoDto(User user) {
-        return UserInfoDto
+    public UserResponseDto toUserInfoDto(User user) {
+        return UserResponseDto
             .builder()
             .userId(user.getUserId())
             .name(user.getName())

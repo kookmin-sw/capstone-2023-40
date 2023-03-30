@@ -3,7 +3,7 @@ package com.thesurvey.api.service;
 import com.thesurvey.api.domain.Question;
 import com.thesurvey.api.domain.QuestionBank;
 import com.thesurvey.api.domain.Survey;
-import com.thesurvey.api.dto.QuestionBankInfoDto;
+import com.thesurvey.api.dto.response.QuestionBankResponseDto;
 import com.thesurvey.api.dto.request.QuestionBankUpdateRequestDto;
 import com.thesurvey.api.dto.request.QuestionRequestDto;
 import com.thesurvey.api.dto.request.SurveyRequestDto;
@@ -13,7 +13,6 @@ import com.thesurvey.api.repository.QuestionBankRepository;
 import com.thesurvey.api.repository.QuestionRepository;
 import com.thesurvey.api.service.mapper.QuestionBankMapper;
 import com.thesurvey.api.service.mapper.QuestionMapper;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -41,7 +40,7 @@ public class QuestionService {
     }
 
     @Transactional(readOnly = true)
-    public List<QuestionBankInfoDto> getQuestionBankInfoDtoListBySurveyId(UUID surveyId) {
+    public List<QuestionBankResponseDto> getQuestionBankInfoDtoListBySurveyId(UUID surveyId) {
         List<QuestionBank> questionBankList = questionBankRepository.findAllBySurveyId(surveyId);
         return questionBankList
             .stream()

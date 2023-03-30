@@ -3,7 +3,7 @@ package com.thesurvey.api.service;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import com.thesurvey.api.domain.EnumTypeEntity.Role;
 import com.thesurvey.api.domain.User;
-import com.thesurvey.api.dto.UserInfoDto;
+import com.thesurvey.api.dto.response.UserResponseDto;
 import com.thesurvey.api.dto.request.UserRegisterRequestDto;
 import com.thesurvey.api.repository.UserRepository;
 import com.thesurvey.api.service.mapper.UserMapper;
@@ -48,7 +48,7 @@ public class UserServiceTest {
 
     @Test
     void testJoin() {
-        UserInfoDto result = authenticationService.register(userRegisterRequestDto);
+        UserResponseDto result = authenticationService.register(userRegisterRequestDto);
         assertThat(result.getName()).isEqualTo(name);
         assertThat(result.getPhoneNumber()).isEqualTo(phoneNumber);
         assertThat(result.getUserId()).isEqualTo(userService.getUserByName(name).getUserId());
@@ -56,7 +56,7 @@ public class UserServiceTest {
 
     @Test
     void testLogin() {
-        UserInfoDto userInfoDto = authenticationService.register(userRegisterRequestDto);
+        UserResponseDto userResponseDto = authenticationService.register(userRegisterRequestDto);
         Authentication authentication = new UsernamePasswordAuthenticationToken(
             userRegisterRequestDto.getEmail(), userRegisterRequestDto.getPassword());
 
@@ -64,7 +64,7 @@ public class UserServiceTest {
         SecurityContextHolder.getContext().setAuthentication(result);
 
         assertThat(result.isAuthenticated()).isTrue();
-        assertThat(userInfoDto.getName()).isEqualTo(result.getName());
+        assertThat(userResponseDto.getName()).isEqualTo(result.getName());
     }
 
 //

@@ -1,11 +1,13 @@
-package com.thesurvey.api.dto;
+package com.thesurvey.api.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;
 
 @Builder
 @Getter
-public class QuestionOptionInfoDto {
+public class QuestionOptionResponseDto {
+
+    private Long questionOptionId;
 
     private String option;
 

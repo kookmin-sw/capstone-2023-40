@@ -1,7 +1,7 @@
 package com.thesurvey.api.service;
 
 import com.thesurvey.api.domain.User;
-import com.thesurvey.api.dto.UserInfoDto;
+import com.thesurvey.api.dto.response.UserResponseDto;
 import com.thesurvey.api.dto.request.UserUpdateRequestDto;
 import com.thesurvey.api.exception.ErrorMessage;
 import com.thesurvey.api.exception.ExceptionMapper;
@@ -24,26 +24,26 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public UserInfoDto getUserByName(String name) {
+    public UserResponseDto getUserByName(String name) {
         return userMapper.toUserInfoDto(userRepository.findByName(name))
             .orElseThrow(() -> new ExceptionMapper(ErrorMessage.USER_NAME_NOT_FOUND, name));
     }
 
     @Transactional(readOnly = true)
-    public UserInfoDto getUserByEmail(String email) {
+    public UserResponseDto getUserByEmail(String email) {
         return userMapper.toUserInfoDto(userRepository.findByEmail(email))
             .orElseThrow(() -> new ExceptionMapper(ErrorMessage.USER_EMAIL_NOT_FOUND, email));
     }
 
     @Transactional(readOnly = true)
-    public UserInfoDto getUserProfile(Authentication authentication) {
+    public UserResponseDto getUserProfile(Authentication authentication) {
         return userMapper.toUserInfoDto(userRepository.findByName(authentication.getName()))
             .orElseThrow(() -> new ExceptionMapper(ErrorMessage.USER_NAME_NOT_FOUND,
                 authentication.getName()));
     }
 
     @Transactional
-    public UserInfoDto updateUserProfile(Authentication authentication,
+    public UserResponseDto updateUserProfile(Authentication authentication,
         UserUpdateRequestDto userUpdateRequestDto) {
         User user = getUserFromAuthentication(authentication);
 

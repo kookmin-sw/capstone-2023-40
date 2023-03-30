@@ -1,11 +1,10 @@
 package com.thesurvey.api.controller;
 
-import com.thesurvey.api.dto.UserInfoDto;
+import com.thesurvey.api.dto.response.UserResponseDto;
 import com.thesurvey.api.dto.request.UserUpdateRequestDto;
 import com.thesurvey.api.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +37,7 @@ public class UserController {
         @ApiResponse(code = 404, message = "요청한 리소스 찾을 수 없음")
     })
     @GetMapping("/profile")
-    public ResponseEntity<UserInfoDto> getUserProfile(Authentication authentication) {
+    public ResponseEntity<UserResponseDto> getUserProfile(Authentication authentication) {
         return ResponseEntity.ok(userService.getUserProfile(authentication));
     }
 
@@ -51,7 +50,7 @@ public class UserController {
         @ApiResponse(code = 404, message = "요청한 리소스 찾을 수 없음")
     })
     @PutMapping("/profile")
-    public ResponseEntity<UserInfoDto> updateUserProfile(Authentication authentication,
+    public ResponseEntity<UserResponseDto> updateUserProfile(Authentication authentication,
         @RequestBody UserUpdateRequestDto userUpdateRequestDto) {
         return ResponseEntity.ok(
             userService.updateUserProfile(authentication, userUpdateRequestDto));
