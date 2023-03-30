@@ -25,6 +25,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
@@ -171,4 +172,28 @@ public class SurveyServiceTest {
         assertEquals("My name is Jin", survey.getTitle());
     }
 
+    // FIXME: needs to implement
+    @Test
+    public void testRetrievingSurveyInOrder() {
+        Survey oldSurvey = Survey.builder()
+            .title("Old survey title")
+            .startedDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")))
+            .endedDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")).plusWeeks(1))
+            .build();
+
+        Survey latestSurvey = Survey.builder()
+            .title("Latest survey title")
+            .startedDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")))
+            .endedDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")).plusWeeks(1))
+            .build();
+
+        oldSurvey = surveyRepository.save(oldSurvey);
+        latestSurvey = surveyRepository.save(latestSurvey);
+
+        Optional<Survey> foundOldSurvey = surveyRepository.findBySurveyId(oldSurvey.getSurveyId());
+        Optional<Survey> foundLatestSurvey = surveyRepository.findBySurveyId(latestSurvey.getSurveyId());
+
+        assertNotNull(foundOldSurvey);
+        assertNotNull(foundLatestSurvey);
+    }
 }
