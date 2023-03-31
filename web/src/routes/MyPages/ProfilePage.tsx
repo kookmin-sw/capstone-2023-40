@@ -8,15 +8,15 @@ import Header from '../../components/Header';
 import { useTheme } from '../../hooks/useTheme';
 
 const PencilImage = styled(Icons.PENCIL).attrs({
-  width: 25,
-  height: 25,
+  width: 30,
+  height: 30,
 })`
   border: none;
   width: 25px;
   height: 100%;
-  padding: 1.5vh;
+  padding: 1vh;
   margin-left: 1vh;
-  border-radius: 18px;
+  border-radius: 14px;
   cursor: pointer;
 
   &:hover {
@@ -67,16 +67,14 @@ const Form = styled.form`
 
 const Input = styled.input`
   flex: 1;
-  min-width: 10vw;
   max-width: 30vw;
-  width: 150px;
   padding: 1.3vh;
   margin-top: 10px;
   margin-bottom: 10px;
   border: none;
   border-radius: 10px;
-  font-size: 1.6vh;
-  font-weight: 700;
+  font-size: 1.8vh;
+  font-weight: 600;
   color: ${(props) => props.theme.colors.default};
   background-color: ${(props) => props.theme.colors.inputBackground};
   cursor: auto;
@@ -95,7 +93,7 @@ const MyPageTitle = styled.span`
 
 const FontText = styled.span`
   text-align: left;
-  font-size: calc(1vh + 1.4vmin);
+  font-size: 2.4vh;
   font-weight: 900;
   margin-right: 3vw;
   min-width: 80px;
@@ -117,7 +115,7 @@ const CompleteButton = styled.div`
   margin-left: auto;
   display: flex;
   padding: 1.5vh;
-  font-size: 1.8vh;
+  font-size: 2vh;
   font-weight: 700;
   color: white;
   background-color: ${(props) => props.theme.colors.primary};
@@ -241,11 +239,7 @@ export default function MyPage() {
   };
 
   const pencilClick = (text: string) => {
-    if (text === 'email') {
-      dispatch({ type: 'SET_CHANGE_EMAIL', payload: !state.emailDisabled });
-    } else if (text === 'password') {
-      dispatch({ type: 'SET_CHANGE_PASSWORD', payload: !state.passwordDisabled });
-    } else if (text === 'name') {
+    if (text === 'name') {
       dispatch({ type: 'SET_CHANGE_NAME', payload: !state.nameDisabled });
     } else if (text === 'phoneNumber') {
       dispatch({ type: 'SET_CHANGE_PHONE_NUMBER', payload: !state.phoneNumberDisabled });
@@ -262,15 +256,21 @@ export default function MyPage() {
   const myProfileInformation = [
     {
       number: 1,
+      title: '포인트',
+      name: 'point',
+      type: 'point',
+    },
+    {
+      number: 2,
       title: '이메일',
       name: 'email',
       type: 'email',
       information: state.email,
       isdisabled: state.emailDisabled,
     },
-    { number: 2, title: '이름', name: 'name', type: 'text', information: state.name, disabled: state.nameDisabled },
+    { number: 3, title: '이름', name: 'name', type: 'text', information: state.name, disabled: state.nameDisabled },
     {
-      number: 3,
+      number: 4,
       title: '비밀번호',
       name: 'password',
       type: state.passwordDisabled ? 'text' : 'password',
@@ -279,7 +279,7 @@ export default function MyPage() {
     },
 
     {
-      number: 4,
+      number: 5,
       title: '전화번호',
       name: 'phoneNumber',
       type: 'text',
@@ -287,7 +287,7 @@ export default function MyPage() {
       isdisabled: state.phoneNumberDisabled,
     },
     {
-      number: 5,
+      number: 6,
       title: '주소',
       name: 'address',
       type: 'text',
@@ -315,12 +315,14 @@ export default function MyPage() {
                 theme={theme}
                 disabled={!isdisabled}
               />
-              <PencilImage
-                type="submit"
-                theme={theme}
-                title={!isdisabled ? '수정하기' : '수정완료'}
-                onClick={() => pencilClick(name)}
-              />
+              {!(title === '포인트' || title === '이메일' || title === '이름') ? (
+                <PencilImage
+                  type="submit"
+                  theme={theme}
+                  title={!isdisabled ? '수정하기' : '수정완료'}
+                  onClick={() => pencilClick(name)}
+                />
+              ) : undefined}
             </ContainerBox>
           ))}
           <ContainerBox style={{ marginTop: '10vh' }}>
