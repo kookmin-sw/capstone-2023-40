@@ -60,8 +60,7 @@ public class AnsweredQuestionMapper {
             .build();
     }
 
-    public AnsweredQuestion toAnsweredQuestionWithMultipleChoices(
-        AnsweredQuestionDto answeredQuestionRequestDto, User user, Survey survey,
+    public AnsweredQuestion toAnsweredQuestionWithMultipleChoices(User user, Survey survey,
         QuestionBank questionBank, String multipleChoice) {
         return AnsweredQuestion
             .builder()

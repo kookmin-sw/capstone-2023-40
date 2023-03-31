@@ -64,7 +64,7 @@ public class AnsweredQuestionService {
                 List<AnsweredQuestion> answeredQuestionList = answeredQuestionDto.getMultipleChoices()
                     .stream()
                     .map(choice -> answeredQuestionMapper.toAnsweredQuestionWithMultipleChoices(
-                        answeredQuestionDto, user, survey, questionBank, choice))
+                        user, survey, questionBank, choice))
                     .collect(Collectors.toList());
 
                 List<AnsweredQuestion> savedAnsweredQuestionList = answeredQuestionRepository.saveAll(
