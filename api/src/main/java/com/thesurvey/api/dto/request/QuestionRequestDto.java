@@ -11,8 +11,10 @@ import lombok.Getter;
 @Builder
 public class QuestionRequestDto {
 
+    @NotBlank
     private String title;
 
+    @NotBlank
     private String description;
 
     private QuestionType questionType;
