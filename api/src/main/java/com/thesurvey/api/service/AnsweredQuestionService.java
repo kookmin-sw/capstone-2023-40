@@ -60,11 +60,11 @@ public class AnsweredQuestionService {
                     survey.getSurveyId(), answeredQuestionDto.getQuestionTitle())
                 .orElseThrow(() -> new ExceptionMapper(ErrorMessage.QUESTION_BANK_NOT_FOUND));
 
-            if (answeredQuestionDto.getMultipleChoices() != null) {
+            if (answeredQuestionDto.getMultipleChoices() != null && answeredQuestionDto.getMultipleChoices().size() != 0) {
                 List<AnsweredQuestion> answeredQuestionList = answeredQuestionDto.getMultipleChoices()
                     .stream()
-                    .map(choice -> answeredQuestionMapper.toAnsweredQuestion(
-                        answeredQuestionDto, user, survey, questionBank, choice))
+                    .map(choice -> answeredQuestionMapper.toAnsweredQuestionWithMultipleChoices(
+                        user, survey, questionBank, choice))
                     .collect(Collectors.toList());
 
                 List<AnsweredQuestion> savedAnsweredQuestionList = answeredQuestionRepository.saveAll(
@@ -74,7 +74,7 @@ public class AnsweredQuestionService {
                     answeredQuestion -> answeredQuestion.getMultipleChoices()).collect(Collectors.toList());
 
                 savedAnsweredQuestionInfoDtoList.add(
-                    answeredQuestionMapper.toAnsweredInfoQuestionDto(
+                    answeredQuestionMapper.toAnsweredInfoQuestionDtoWithMultipleChoices(
                         savedAnsweredQuestionList.get(0),
                         questionBank, multipleChoice));
             } else {

@@ -43,7 +43,7 @@ public class QuestionService {
     public List<QuestionBankResponseDto> getQuestionBankInfoDtoListBySurveyId(UUID surveyId) {
         return questionBankRepository.findAllBySurveyId(surveyId)
             .stream()
-            .map(questionBankMapper::toQuestionBankInfoDto)
+            .map(questionBankMapper::toQuestionBankResponseDto)
             .collect(Collectors.toList());
     }
 

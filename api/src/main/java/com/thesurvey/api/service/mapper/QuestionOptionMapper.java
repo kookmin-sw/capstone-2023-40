@@ -17,7 +17,7 @@ public class QuestionOptionMapper {
             .build();
     }
 
-    public QuestionOptionResponseDto toQuestionOptionInfoDto(QuestionOption questionOption) {
+    public QuestionOptionResponseDto toQuestionOptionResponseDto(QuestionOption questionOption) {
         return QuestionOptionResponseDto.builder()
             .questionOptionId(questionOption.getQuestionOptionId())
             .option(questionOption.getOption())
