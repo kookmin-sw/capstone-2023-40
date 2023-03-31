@@ -8,8 +8,6 @@ import com.thesurvey.api.exception.ErrorMessage;
 import com.thesurvey.api.exception.ExceptionMapper;
 import com.thesurvey.api.repository.SurveyRepository;
 import com.thesurvey.api.service.mapper.SurveyMapper;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -80,13 +78,6 @@ public class SurveyService {
             .orElseThrow(
                 () -> new ExceptionMapper(ErrorMessage.SURVEY_NOT_FOUND,
                     surveyUpdateRequestDto.getSurveyId()));
-
-        /* If client tries to modify the survey already started,
-            Can't update survey.
-         */
-        if (LocalDateTime.now(ZoneId.of("Asia/Seoul")).isAfter(survey.getStartedDate())) {
-            throw new ExceptionMapper(ErrorMessage.SURVEY_ALREADY_STARTED);
-        }
 
         if (surveyUpdateRequestDto.getTitle() != null) {
             survey.changeTitle(surveyUpdateRequestDto.getTitle());
