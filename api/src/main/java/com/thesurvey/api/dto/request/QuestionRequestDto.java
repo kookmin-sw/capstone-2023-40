@@ -20,8 +20,7 @@ public class QuestionRequestDto {
     private QuestionType questionType;
     @NotBlank
     private int questionNo;
-
-    @NotBlank
+    
     private boolean isRequired;
 
     private List<QuestionOptionResponseDto> questionOptions;

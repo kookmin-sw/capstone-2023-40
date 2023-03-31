@@ -1,9 +1,11 @@
 package com.thesurvey.api.exception;
 
 import javax.validation.ConstraintViolationException;
+import javax.validation.UnexpectedTypeException;
 import org.postgresql.util.PSQLException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -43,7 +45,21 @@ public class GlobalAPIExceptionHandler {
             .body("이미 존재하는 " + e.getServerErrorMessage().getTable() + " 입니다.");
     }
 
+    /*
+        @handleMethodArgumentNotValidException handles the exception thrown by MethodArgumentNotValidException.
+    */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<String> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        return ResponseEntity.badRequest().body("유효하지 않은 메소드 인자 입니다.");
+    }
 
+    /*
+        @handleUnexpectedTypeException handles the exception thrown by UnexpectedTypeException.
+    */
+    @ExceptionHandler(UnexpectedTypeException.class)
+    public ResponseEntity<String> handleUnexpectedTypeException(UnexpectedTypeException e) {
+        return ResponseEntity.badRequest().body("유효하지 않은 타입입니다.");
+    }
 
 }
 

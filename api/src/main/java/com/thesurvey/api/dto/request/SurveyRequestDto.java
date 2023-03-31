@@ -7,7 +7,6 @@ import java.util.List;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -30,7 +29,6 @@ public class SurveyRequestDto {
 
     private List<CertificationType> certificationType;
 
-    @NotBlank
     private List<QuestionRequestDto> questions;
 
 }

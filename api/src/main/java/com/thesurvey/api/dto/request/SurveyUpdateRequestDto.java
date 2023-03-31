@@ -13,7 +13,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class SurveyUpdateRequestDto {
-    @NotBlank
+
     private UUID surveyId;
 
     @NotBlank
@@ -27,7 +27,6 @@ public class SurveyUpdateRequestDto {
 
     private List<CertificationType> certificationType;
 
-    @NotBlank
     private List<QuestionBankUpdateRequestDto> questions;
 
 }

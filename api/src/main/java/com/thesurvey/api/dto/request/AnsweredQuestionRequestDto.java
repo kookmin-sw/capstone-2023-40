@@ -9,7 +9,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class AnsweredQuestionRequestDto {
-    @NotBlank
+
     private UUID surveyId;
 
     @NotBlank
