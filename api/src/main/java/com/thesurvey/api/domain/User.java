@@ -1,6 +1,8 @@
 package com.thesurvey.api.domain;
 
 import com.thesurvey.api.domain.EnumTypeEntity.Role;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -18,6 +20,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -62,7 +65,10 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    @Column(name = "email", nullable = false)
+    /**
+     * email should be unique. This will be used when login user during authentication
+     */
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @Column(name = "password", nullable = false)
@@ -108,6 +114,8 @@ public class User extends BaseTimeEntity implements UserDetails {
         this.phoneNumber = phoneNumber;
         this.address = address;
         this.profileImage = profileImage;
+        this.createdDate = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+        this.modifiedDate = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
     }
 
     @Enumerated(EnumType.STRING)
