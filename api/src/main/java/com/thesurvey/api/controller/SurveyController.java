@@ -1,6 +1,5 @@
 package com.thesurvey.api.controller;
 
-import com.thesurvey.api.dto.response.AnsweredQuestionResponseDto;
 import com.thesurvey.api.dto.response.SurveyResponseDto;
 import com.thesurvey.api.dto.request.AnsweredQuestionRequestDto;
 import com.thesurvey.api.dto.request.SurveyRequestDto;
@@ -9,8 +8,10 @@ import com.thesurvey.api.service.AnsweredQuestionService;
 import com.thesurvey.api.service.SurveyService;
 import java.util.List;
 import java.util.UUID;
+import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +28,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 @Api(tags = "설문조사")
+@Validated
 @RestController
 @RequestMapping("/surveys")
 public class SurveyController {
@@ -78,9 +80,9 @@ public class SurveyController {
         @ApiResponse(code = 500, message = "서버 내부 오류")
     })
     @PostMapping
-    public ResponseEntity<SurveyResponseDto> createSurvey(Authentication authentication,
-        @RequestBody SurveyRequestDto surveyRequestDto) {
-        return ResponseEntity.ok(surveyService.createSurvey(authentication, surveyRequestDto));
+    public ResponseEntity<?> createSurvey(Authentication authentication,
+        @Valid @RequestBody SurveyRequestDto surveyRequestDto) {
+            return ResponseEntity.ok(surveyService.createSurvey(authentication, surveyRequestDto));
     }
 
     @ApiOperation(value = "설문조사 수정", notes = "설문조사 내용을 수정합니다. 아래의 모든 필드를 담아 전송해야 합니다.")
@@ -93,8 +95,8 @@ public class SurveyController {
         @ApiResponse(code = 500, message = "서버 내부 오류")
     })
     @PutMapping
-    public ResponseEntity<SurveyResponseDto> updateSurvey(
-        @RequestBody SurveyUpdateRequestDto surveyUpdateRequestDto) {
+    public ResponseEntity<?> updateSurvey(
+        @Valid @RequestBody SurveyUpdateRequestDto surveyUpdateRequestDto) {
         return ResponseEntity.ok(surveyService.updateSurvey(surveyUpdateRequestDto));
     }
 
@@ -120,10 +122,12 @@ public class SurveyController {
         @ApiResponse(code = 403, message = "접근 권한 없음"),
         @ApiResponse(code = 404, message = "요청한 리소스 찾을 수 없음")
     })
+
     @PostMapping("/submit")
-    public ResponseEntity<AnsweredQuestionResponseDto> submitSurvey(Authentication authentication,
-        @RequestBody AnsweredQuestionRequestDto answeredQuestionRequestDto) {
+    public ResponseEntity<?> submitSurvey(Authentication authentication,
+        @Valid @RequestBody AnsweredQuestionRequestDto answeredQuestionRequestDto) {
         return ResponseEntity.ok(
             answeredQuestionService.createAnswer(authentication, answeredQuestionRequestDto));
     }
+
 }
