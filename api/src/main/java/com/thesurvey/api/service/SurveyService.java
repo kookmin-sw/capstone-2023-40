@@ -25,14 +25,16 @@ public class SurveyService {
     private final SurveyMapper surveyMapper;
     private final QuestionService questionService;
     private final ParticipationService participationService;
+    private final AnsweredQuestionService answeredQuestionService;
 
     public SurveyService(SurveyRepository surveyRepository, SurveyMapper surveyMapper,
         QuestionService questionService,
-        ParticipationService participationService) {
+        ParticipationService participationService, AnsweredQuestionService answeredQuestionService) {
         this.surveyRepository = surveyRepository;
         this.surveyMapper = surveyMapper;
         this.questionService = questionService;
         this.participationService = participationService;
+        this.answeredQuestionService = answeredQuestionService;
     }
 
     @Transactional(readOnly = true)
@@ -66,12 +68,10 @@ public class SurveyService {
         Survey survey = surveyRepository.findById(surveyId)
             .orElseThrow(() -> new ExceptionMapper(ErrorMessage.SURVEY_NOT_FOUND, surveyId));
 
+        answeredQuestionService.deleteAnswer(surveyId);
         surveyRepository.delete(survey);
         participationService.deleteParticipation(surveyId);
         questionService.deleteQuestion(surveyId);
-        // Need to implement.
-//        List<AnsweredQuestion> answeredQuestionList = answeredQuestionRepository.findAllById_surveyId(surveyId);
-//        answeredQuestionRepository.deleteAll(answeredQuestionList);
     }
 
     @Transactional
