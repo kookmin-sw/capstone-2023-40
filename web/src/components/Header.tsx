@@ -55,6 +55,15 @@ const FaviconContainer = styled(Icons.FAVICON)`
   }
 `;
 
+const UserImage = styled(Icons.USERIMAGE)`
+  margin: 1vw;
+  width: 40px;
+  height: fit-content;
+  cursor: pointer;
+  border: none;
+  border-radius: 30px;
+`;
+
 const CheckBoxContainer = styled.div`
   display: flex;
   align-items: center;
@@ -164,6 +173,42 @@ const LoginInformation = styled.div`
   }
 `;
 
+const SubPageContainer = styled.div`
+  display: flex;
+  transition: opacity 0.4s ease-in-out;
+  position: absolute;
+  top: 100%;
+  right: 1%;
+  flex-direction: column;
+  background-color: ${(props) => props.theme.colors.header};
+  z-index: 10;
+  padding: 10px;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+  height: auto;
+  overflow-y: auto;
+  border: ${(props) => props.theme.borderResultList};
+  border-radius: ${(props) => props.theme.borderRadius};
+  & > * {
+    margin-bottom: 10px;
+  }
+`;
+
+const SubPageButton = styled.button`
+  margin-top: 1vh;
+  border: none;
+  padding: 1.5vh;
+  border-radius: ${(props) => props.theme.borderRadius};
+  font-size: 2vh;
+  font-weight: 700;
+  color: ${(props) => props.theme.colors.text};
+  background-color: ${(props) => props.theme.colors.button};
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${(props) => props.theme.colors.btnhover};
+  }
+`;
+
 interface HeaderProps {
   theme: DefaultTheme;
   toggleTheme: () => void;
@@ -172,6 +217,8 @@ interface HeaderProps {
 export default function Header({ theme, toggleTheme }: HeaderProps) {
   const navigate = useNavigate();
   const [isTransitionEnabled, setIsTransitionEnabled] = useState<boolean>(false);
+  const [isLogin, setIsLogin] = useState<boolean>(false);
+  const [isSubPageOpen, setIsSubPageOpen] = useState<boolean>(false);
 
   const handleClick = () => {
     setIsTransitionEnabled(true);
@@ -201,11 +248,26 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
             <CheckBox id="checkbox" type="checkbox" theme={theme} onClick={handleClick} />
             <CheckBoxLabel htmlFor="checkbox" theme={theme} />
           </CheckBoxWrapper>
-          <LoginInformation onClick={() => navigate('/login')} theme={theme}>
-            로그인/회원가입
-          </LoginInformation>
+          {!isLogin ? (
+            <UserImage onClick={() => setIsSubPageOpen(!isSubPageOpen)} />
+          ) : (
+            <LoginInformation onClick={() => navigate('/login')} theme={theme}>
+              로그인/회원가입
+            </LoginInformation>
+          )}
         </CheckBoxContainer>
       </ButtonContainer>
+
+      {isSubPageOpen && (
+        <SubPageContainer theme={theme}>
+          <SubPageButton onClick={() => navigate('../mypage')} theme={theme}>
+            마이페이지
+          </SubPageButton>
+          <SubPageButton onClick={() => navigate('../../../')} theme={theme}>
+            로그아웃
+          </SubPageButton>
+        </SubPageContainer>
+      )}
     </HeaderContainer>
   );
 }
