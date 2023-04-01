@@ -6,6 +6,7 @@ import styled from 'styled-components';
 
 import axios from '../../api/axios';
 import requests from '../../api/request';
+import { Icons } from '../../assets/svg/index';
 import Header from '../../components/Header';
 import Pagination from '../../components/Pagination';
 import SurveyListSkeleton from '../../components/Skeleton/SurveyListSkeleton';
@@ -44,6 +45,9 @@ const Item = styled.td`
   border-radius: 5px;
   color: ${(props) => props.theme.colors.default};
   background-color: ${(props) => props.theme.colors.background};
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const HeadItem = styled.th`
@@ -58,9 +62,6 @@ const HeadItem = styled.th`
 const Title = styled(Item)`
   min-width: 15vh;
   flex: 1;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   cursor: pointer;
 
   &:hover {
@@ -110,30 +111,53 @@ const Auth = styled.label`
   margin: 3px;
 `;
 
-const Kakao = styled(Auth)`
-  background-color: #f7e600;
-`;
-const Google = styled(Auth)`
-  background-color: #ea4335;
-`;
-const Webmail = styled(Auth)`
-  background-color: #f3943e;
-`;
-const Id = styled(Auth)`
-  background-color: #edd8d3;
-`;
-const MobilePhone = styled(Auth)`
-  background-color: #a1daf7;
-`;
-const DriverLicense = styled(Auth)`
-  background-color: #34a853;
-`;
-const AuthNone = styled(Auth)`
-  background-color: #b3b2b2;
+const Kakao = styled(Icons.KAKAO).attrs({
+  width: 30,
+  height: 30,
+})`
+  margin-right: 5px;
 `;
 
-const AuthSummary = styled.span`
-  font-size: 13px;
+const Google = styled(Icons.GOOGLE).attrs({
+  width: 30,
+  height: 30,
+})`
+  margin-right: 5px;
+`;
+
+const Webmail = styled(Icons.WEBMAIL).attrs({
+  width: 30,
+  height: 30,
+})`
+  margin-right: 5px;
+`;
+
+const Id = styled(Icons.ID).attrs({
+  width: 30,
+  height: 30,
+})`
+  margin-right: 5px;
+`;
+
+const MobilePhone = styled(Icons.MOBILE_PHONE).attrs({
+  width: 30,
+  height: 30,
+})`
+  margin-right: 5px;
+`;
+
+const DriverLicense = styled(Icons.DRIVER_LICENSE).attrs({
+  width: 30,
+  height: 30,
+})`
+  margin-right: 5px;
+`;
+
+const AuthNone = styled(Icons.FREE).attrs({
+  width: 30,
+  height: 30,
+})`
+  margin-right: 5px;
 `;
 
 const Notification = styled.div`
@@ -276,10 +300,7 @@ export default function SurveyListPage() {
                 <Authlist theme={theme}>
                   {survey.required_authentications.length === 0
                     ? makeAuthLabel('')
-                    : survey.required_authentications.slice(0, 2).map((label) => makeAuthLabel(label))}
-                  {survey.required_authentications.length > 2 ? (
-                    <AuthSummary>{` ... +${survey.required_authentications.length - 2}`}</AuthSummary>
-                  ) : null}
+                    : survey.required_authentications.map((label) => makeAuthLabel(label))}
                 </Authlist>
                 <EndDate theme={theme}>{survey.ended_date.substring(0, 10)}</EndDate>
               </ListRow>
