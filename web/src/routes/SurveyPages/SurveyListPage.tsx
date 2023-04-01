@@ -33,14 +33,14 @@ const ListBody = styled.tbody``;
 const ListRow = styled.tr`
   display: flex;
   flex-direction: row;
-  justify-content: center;
 `;
 
 const Item = styled.td`
   height: 22px;
   margin: 2px;
-  padding: 2vh;
-  font-size: 1.7vh;
+  padding: 18px;
+  padding-bottom: 19px;
+  font-size: 17px;
   font-weight: bold;
   border-radius: 5px;
   color: ${(props) => props.theme.colors.default};
@@ -52,8 +52,8 @@ const Item = styled.td`
 
 const HeadItem = styled.th`
   margin: 2px;
-  padding: 2vh;
-  font-size: 2vh;
+  padding: 18px;
+  font-size: 17px;
   font-weight: bold;
   text-align: center;
   color: ${(props) => props.theme.colors.default};
@@ -70,7 +70,7 @@ const Title = styled(Item)`
 `;
 
 const Authlist = styled(Item)`
-  min-width: 160px;
+  min-width: 100px;
   width: 20vw;
 `;
 
@@ -90,7 +90,7 @@ const HeadTitle = styled(HeadItem)`
 `;
 
 const HeadAuthList = styled(HeadItem)`
-  min-width: 160px;
+  min-width: 100px;
   width: 20vw;
 `;
 
@@ -103,59 +103,51 @@ const HeadEndDate = styled(HeadItem)`
   }
 `;
 
-const Auth = styled.label`
-  font-size: 11px;
-  color: black;
-  padding: 5px;
-  border-radius: 7px;
-  margin: 3px;
-`;
-
 const Kakao = styled(Icons.KAKAO).attrs({
-  width: 30,
-  height: 30,
+  width: 27,
+  height: 27,
 })`
   margin-right: 5px;
 `;
 
 const Google = styled(Icons.GOOGLE).attrs({
-  width: 30,
-  height: 30,
+  width: 27,
+  height: 27,
 })`
   margin-right: 5px;
 `;
 
 const Webmail = styled(Icons.WEBMAIL).attrs({
-  width: 30,
-  height: 30,
+  width: 27,
+  height: 27,
 })`
   margin-right: 5px;
 `;
 
 const Id = styled(Icons.ID).attrs({
-  width: 30,
-  height: 30,
+  width: 27,
+  height: 27,
 })`
   margin-right: 5px;
 `;
 
 const MobilePhone = styled(Icons.MOBILE_PHONE).attrs({
-  width: 30,
-  height: 30,
+  width: 27,
+  height: 27,
 })`
   margin-right: 5px;
 `;
 
 const DriverLicense = styled(Icons.DRIVER_LICENSE).attrs({
-  width: 30,
-  height: 30,
+  width: 27,
+  height: 27,
 })`
   margin-right: 5px;
 `;
 
 const AuthNone = styled(Icons.FREE).attrs({
-  width: 30,
-  height: 30,
+  width: 27,
+  height: 27,
 })`
   margin-right: 5px;
 `;
