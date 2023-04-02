@@ -1,7 +1,6 @@
 package com.thesurvey.api.dto.request;
 
 import java.util.List;
-import javax.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -9,7 +8,6 @@ import lombok.Getter;
 @Builder
 public class AnsweredQuestionDto {
 
-    @NotBlank
     private String questionTitle;
 
     private String questionDescription;

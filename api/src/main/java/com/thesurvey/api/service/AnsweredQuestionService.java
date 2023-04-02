@@ -51,6 +51,10 @@ public class AnsweredQuestionService {
             .orElseThrow(() -> new ExceptionMapper(ErrorMessage.USER_NAME_NOT_FOUND,
                 authentication.getName()));
 
+        if (answeredQuestionRepository.existsByUserId(user.getUserId())) {
+            throw new ExceptionMapper(ErrorMessage.ANSWER_ALREADY_SUBMITED);
+        }
+
         Survey survey = surveyRepository.findBySurveyId(answeredQuestionRequestDto.getSurveyId())
             .orElseThrow(() -> new ExceptionMapper(ErrorMessage.SURVEY_NOT_FOUND));
 

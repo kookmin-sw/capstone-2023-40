@@ -55,6 +55,10 @@ public class SurveyService {
     @Transactional
     public SurveyResponseDto createSurvey(Authentication authentication,
         SurveyRequestDto surveyRequestDto) {
+        if (surveyRequestDto.getStartedDate().isAfter(surveyRequestDto.getEndedDate())) {
+            throw new ExceptionMapper(ErrorMessage.STARTEDDATE_ISAFTER_ENDEDDATE);
+        }
+
         Survey survey = surveyRepository.save(surveyMapper.toSurvey(surveyRequestDto));
         questionService.createQuestion(surveyRequestDto, survey);
         participationService.createParticipation(authentication, surveyRequestDto, survey);
