@@ -47,7 +47,7 @@ const Title = styled(Item)`
 `;
 
 const Authlist = styled(Item)`
-  min-width: 160px;
+  min-width: 100px;
   width: 20vw;
 `;
 
@@ -67,7 +67,7 @@ const HeadTitle = styled(HeadItem)`
 `;
 
 const HeadAuthList = styled(HeadItem)`
-  min-width: 160px;
+  min-width: 100px;
   width: 20vw;
 `;
 
