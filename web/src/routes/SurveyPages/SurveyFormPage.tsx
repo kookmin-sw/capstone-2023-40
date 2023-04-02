@@ -41,42 +41,31 @@ const ItemContainer = styled.div`
 
 const SurveyDataContainer = styled(ItemContainer)``;
 
-const SurveyTitleInput = styled.input`
-  width: 76vw;
+const Input = styled.input`
   padding: 1.2vh 1.5vw 1.2vh 1.5vw;
+  border: ${(props) => props.theme.border};
+  border-radius: ${(props) => props.theme.borderRadius};
+  font-size: 18px;
+  font-weight: 900;
+  color: ${(props) => props.theme.colors.default};
+  background-color: ${(props) => props.theme.colors.container};
+`;
+
+const SurveyTitleInput = styled(Input)`
+  width: 76vw;
   margin-top: 7px;
   margin-bottom: 25px;
-  border: ${(props) => props.theme.border};
-  border-radius: ${(props) => props.theme.borderRadius};
-  font-size: 18px;
-  font-weight: 900;
-  color: ${(props) => props.theme.colors.default};
-  background-color: ${(props) => props.theme.colors.container};
 `;
 
-const SurveyDescriptionInput = styled.input`
+const SurveyDescriptionInput = styled(Input)`
   width: 76vw;
-  padding: 1.2vh 1.5vw 1.2vh 1.5vw;
   margin-bottom: 25px;
-  border: ${(props) => props.theme.border};
-  border-radius: ${(props) => props.theme.borderRadius};
-  font-size: 18px;
-  font-weight: 900;
-  color: ${(props) => props.theme.colors.default};
-  background-color: ${(props) => props.theme.colors.container};
 `;
 
-const SurveyEndDateInput = styled.input`
+const SurveyEndDateInput = styled(Input)`
   width: 12vw;
-  padding: 1.2vh 1.5vw 1.2vh 1.5vw;
   margin-bottom: 25px;
   margin-left: 64vw;
-  border: ${(props) => props.theme.border};
-  border-radius: ${(props) => props.theme.borderRadius};
-  font-size: 18px;
-  font-weight: 900;
-  color: ${(props) => props.theme.colors.default};
-  background-color: ${(props) => props.theme.colors.container};
 `;
 
 const SurveyRequireAuthContainer = styled.div`
@@ -112,10 +101,8 @@ const AuthSelectButton = styled.button`
   }
 `;
 
-const AuthList = styled.select`
-  width: 12vw;
+const Select = styled.select`
   padding: 1.2vh 1.5vw 1.2vh 1.5vw;
-  margin-left: 40vw;
   border: ${(props) => props.theme.border};
   border-radius: ${(props) => props.theme.borderRadius};
   font-size: 18px;
@@ -124,11 +111,29 @@ const AuthList = styled.select`
   background-color: ${(props) => props.theme.colors.container};
 `;
 
+const AuthList = styled(Select)`
+  width: 12vw;
+  margin-left: 40vw;
+`;
+
 const Auth = styled.option``;
 
 const QuestionContainer = styled(ItemContainer)``;
 
-const TitleInput = styled.input``;
+const QuestionTypeSelector = styled(Select)`
+  width: 15vw;
+  margin-left: 3vw;
+`;
+
+const QuestionType = styled.option``;
+
+const TitleInput = styled(Input)`
+  width: 57vw;
+  margin-top: 7px;
+  margin-bottom: 25px;
+`;
+
+const Answer = styled.label``;
 
 const RadioAnswerInput = styled.div``;
 
@@ -177,7 +182,7 @@ export default function SurveyFormPage() {
       <BodyContainer theme={theme}>
         <SurveyDataContainer theme={theme}>
           <SurveyTitleInput type="text" value="제목없는 설문" />
-          <SurveyDescriptionInput type="text" value="설문 요약 없음" />
+          <SurveyDescriptionInput type="text" value="설문 설명 없음" />
           <SurveyRequireAuthContainer>
             <SelectedAuthList>
               <SelectedAuth>카카오</SelectedAuth>
