@@ -3,6 +3,7 @@ package com.thesurvey.api.dto.request;
 import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,12 +14,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserLoginRequestDto {
-    @Email(message = "올바르지 않은 이메일 형식입니다.")
-    @NotBlank(message = "이메일을 확인해주세요.")
+
+    @Email
+    @NotBlank
     @ApiModelProperty(name = "이메일", example = "test@gmail.com")
     private String email;
 
-    @NotBlank(message = "비밀번호를 확인해주세요.")
+    @Size(min = 8, max = 25)
+    @NotBlank
     @ApiModelProperty(name = "비밀번호", example = "mypassword")
     private String password;
 

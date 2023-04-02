@@ -52,7 +52,7 @@ public class AnsweredQuestionService {
                 authentication.getName()));
 
         if (answeredQuestionRepository.existsByUserId(user.getUserId())) {
-            throw new ExceptionMapper(ErrorMessage.ANSWER_ALREADY_SUBMITED);
+            throw new ExceptionMapper(ErrorMessage.ANSWER_ALREADY_SUBMITTED);
         }
 
         Survey survey = surveyRepository.findBySurveyId(answeredQuestionRequestDto.getSurveyId())

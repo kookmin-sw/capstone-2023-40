@@ -1,8 +1,8 @@
 package com.thesurvey.api.dto.request;
 
 import io.swagger.annotations.ApiModelProperty;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,12 +13,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserUpdateRequestDto {
+
     @NotBlank
-    @Min(value = 8, message = "비밀번호는 최소 8자 이상이어야 합니다.")
+    @Size(min = 8, max = 25)
     @ApiModelProperty(name = "비밀번호", example = "updatedpassword")
     private String password;
 
-    @NotBlank(message = "휴대폰 번호는 필수 정보입니다.")
+    @NotBlank
     @ApiModelProperty(name = "휴대폰 번호", example = "010-1234-1234")
     private String phoneNumber;
 

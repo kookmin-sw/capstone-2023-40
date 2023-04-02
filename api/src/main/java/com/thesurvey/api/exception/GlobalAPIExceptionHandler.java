@@ -1,5 +1,6 @@
 package com.thesurvey.api.exception;
 
+import java.util.Objects;
 import javax.validation.ConstraintViolationException;
 import javax.validation.UnexpectedTypeException;
 import org.postgresql.util.PSQLException;
@@ -45,7 +46,7 @@ public class GlobalAPIExceptionHandler {
     @ExceptionHandler(PSQLException.class)
     public ResponseEntity<String> handlePSQLException(PSQLException error) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body("이미 존재하는 " + error.getServerErrorMessage().getTable() + " 입니다.");
+            .body("이미 존재하는 " + Objects.requireNonNull(error.getServerErrorMessage()).getTable() + " 입니다.");
     }
 
     /**
@@ -53,9 +54,11 @@ public class GlobalAPIExceptionHandler {
      * thrown when an argument annotated with @Valid fails validation in controller.
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<String> handleMethodArgumentNotValidException(MethodArgumentNotValidException error) {
+    public ResponseEntity<String> handleMethodArgumentNotValidException(
+        MethodArgumentNotValidException error) {
+        String field = Objects.requireNonNull(error.getBindingResult().getFieldError()).getField();
         String errorMessage = error.getAllErrors().get(0).getDefaultMessage();
-        return ResponseEntity.badRequest().body(errorMessage);
+        return ResponseEntity.badRequest().body(field + " : " + errorMessage);
     }
 
     /**

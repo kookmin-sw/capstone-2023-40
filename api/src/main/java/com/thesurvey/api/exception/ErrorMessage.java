@@ -17,7 +17,7 @@ public enum ErrorMessage {
     SURVEY_UPDATE_FAILED("설문조사 수정을 실패하였습니다."),
     SURVEY_DELETE_FAILED("설문조사 삭제를 실패하였습니다."),
     SURVEY_ANSWER_FAILED("설문조사 응답 제출을 실패하였습니다."),
-    ANSWER_ALREADY_SUBMITED("이미 완료한 설문조사 입니다."),
+    ANSWER_ALREADY_SUBMITTED("이미 완료한 설문조사 입니다."),
     STARTEDDATE_ISAFTER_ENDEDDATE("설문조사 시작 시간이 종료 시간보다 앞설 수 없습니다."),
     INVALID_REQUEST("유효하지 않은 요청입니다");
 

@@ -4,9 +4,11 @@ import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import javax.validation.Valid;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,20 +16,29 @@ import lombok.Getter;
 @Getter
 @Builder
 public class SurveyUpdateRequestDto {
+
     @NotNull
     private UUID surveyId;
 
-    @NotBlank(message = "제목은 필수 정보입니다.")
+    @NotBlank
     private String title;
 
+    @NotBlank
     private String description;
-    @FutureOrPresent(message = "설문조사 시작일은 현재 시간 이후로 설정해야 합니다.")
+
+    @NotNull
+    @FutureOrPresent
     private LocalDateTime startedDate;
-    @Future(message = "설문조사 종료일은 설문조사 시작일 이후로 설정해야 합니다.")
+
+    @NotNull
+    @Future
     private LocalDateTime endedDate;
 
     private List<CertificationType> certificationType;
 
+    @Valid
+    @NotNull
+    @NotEmpty
     private List<QuestionBankUpdateRequestDto> questions;
 
 }

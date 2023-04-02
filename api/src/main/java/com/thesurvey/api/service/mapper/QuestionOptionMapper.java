@@ -2,18 +2,19 @@ package com.thesurvey.api.service.mapper;
 
 import com.thesurvey.api.domain.QuestionBank;
 import com.thesurvey.api.domain.QuestionOption;
+import com.thesurvey.api.dto.request.QuestionOptionRequestDto;
 import com.thesurvey.api.dto.response.QuestionOptionResponseDto;
 import org.springframework.stereotype.Component;
 
 @Component
 public class QuestionOptionMapper {
 
-    public QuestionOption toQuestionOption(QuestionOptionResponseDto questionOptionResponseDto,
+    public QuestionOption toQuestionOption(QuestionOptionRequestDto questionOptionRequestDto,
         QuestionBank questionBank) {
         return QuestionOption.builder()
             .questionBank(questionBank)
-            .description(questionOptionResponseDto.getDescription())
-            .option(questionOptionResponseDto.getOption())
+            .option(questionOptionRequestDto.getOption())
+            .description(questionOptionRequestDto.getDescription())
             .build();
     }
 
