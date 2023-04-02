@@ -172,6 +172,38 @@ export default function SurveyFormPage() {
   const [questions, setQuestions] = useState<SurveyQuestion[]>([]);
   const [surveyData, setSurveyData] = useState<SurveyData>();
 
+  const makeQuestionTypeSelector = () => {
+    return (
+      <QuestionTypeSelector>
+        <QuestionType>단답형 질문</QuestionType>
+        <QuestionType>장문형 질문</QuestionType>
+        <QuestionType>객관식 질문</QuestionType>
+      </QuestionTypeSelector>
+    );
+  };
+
+  const makeLongAnswerForm = () => {
+    return (
+      <QuestionContainer>
+        <TitleInput />
+        {makeQuestionTypeSelector()}
+        <Answer>장문형 텍스트</Answer>
+      </QuestionContainer>
+    );
+  };
+
+  const makeShortAnswerForm = () => {
+    return (
+      <QuestionContainer>
+        <TitleInput />
+        {makeQuestionTypeSelector()}
+        <Answer>단답형 텍스트</Answer>
+      </QuestionContainer>
+    );
+  };
+
+  const makeMultipleChoiceForm = () => {};
+
   return (
     <Container theme={theme}>
       <Header theme={theme} toggleTheme={toggleTheme} />
@@ -197,6 +229,7 @@ export default function SurveyFormPage() {
           </SurveyRequireAuthContainer>
           <SurveyEndDateInput type="date" />
         </SurveyDataContainer>
+        {makeLongAnswerForm()}
       </BodyContainer>
     </Container>
   );
