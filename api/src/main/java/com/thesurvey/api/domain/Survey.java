@@ -1,7 +1,6 @@
 package com.thesurvey.api.domain;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.List;
 import java.util.UUID;
 import javax.persistence.CascadeType;
@@ -34,6 +33,7 @@ public class Survey extends BaseTimeEntity {
         orphanRemoval = true
     )
     private List<Participation> participations;
+
     @OneToMany(
         mappedBy = "survey",
         cascade = CascadeType.PERSIST,
@@ -63,8 +63,6 @@ public class Survey extends BaseTimeEntity {
         this.description = description;
         this.startedDate = startedDate;
         this.endedDate = endedDate;
-        this.createdDate = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
-        this.modifiedDate = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
     }
 
     public void changeTitle(String title) { this.title = title; }

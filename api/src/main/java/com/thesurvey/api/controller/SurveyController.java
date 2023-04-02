@@ -1,5 +1,6 @@
 package com.thesurvey.api.controller;
 
+import com.thesurvey.api.dto.response.AnsweredQuestionResponseDto;
 import com.thesurvey.api.dto.response.SurveyResponseDto;
 import com.thesurvey.api.dto.request.AnsweredQuestionRequestDto;
 import com.thesurvey.api.dto.request.SurveyRequestDto;
@@ -11,7 +12,6 @@ import java.util.UUID;
 import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -28,7 +27,6 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 @Api(tags = "설문조사")
-@Validated
 @RestController
 @RequestMapping("/surveys")
 public class SurveyController {
@@ -80,7 +78,7 @@ public class SurveyController {
         @ApiResponse(code = 500, message = "서버 내부 오류")
     })
     @PostMapping
-    public ResponseEntity<?> createSurvey(Authentication authentication,
+    public ResponseEntity<SurveyResponseDto> createSurvey(Authentication authentication,
         @Valid @RequestBody SurveyRequestDto surveyRequestDto) {
             return ResponseEntity.ok(surveyService.createSurvey(authentication, surveyRequestDto));
     }
@@ -95,7 +93,7 @@ public class SurveyController {
         @ApiResponse(code = 500, message = "서버 내부 오류")
     })
     @PutMapping
-    public ResponseEntity<?> updateSurvey(
+    public ResponseEntity<SurveyResponseDto> updateSurvey(
         @Valid @RequestBody SurveyUpdateRequestDto surveyUpdateRequestDto) {
         return ResponseEntity.ok(surveyService.updateSurvey(surveyUpdateRequestDto));
     }
@@ -124,7 +122,7 @@ public class SurveyController {
     })
 
     @PostMapping("/submit")
-    public ResponseEntity<?> submitSurvey(Authentication authentication,
+    public ResponseEntity<AnsweredQuestionResponseDto> submitSurvey(Authentication authentication,
         @Valid @RequestBody AnsweredQuestionRequestDto answeredQuestionRequestDto) {
         return ResponseEntity.ok(
             answeredQuestionService.createAnswer(authentication, answeredQuestionRequestDto));

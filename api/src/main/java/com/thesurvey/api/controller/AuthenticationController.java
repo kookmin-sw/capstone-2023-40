@@ -6,19 +6,16 @@ import com.thesurvey.api.dto.request.UserRegisterRequestDto;
 import com.thesurvey.api.service.AuthenticationService;
 import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 @Api(tags = "인증")
-@Validated
 @RestController
 @RequestMapping("/auth")
 public class AuthenticationController {
@@ -37,7 +34,7 @@ public class AuthenticationController {
         @ApiResponse(code = 500, message = "서버 내부 오류")
     })
     @PostMapping("/register")
-    public ResponseEntity<?> register(
+    public ResponseEntity<UserResponseDto> register(
         @Valid @RequestBody UserRegisterRequestDto userRegisterRequestDto) {
         return ResponseEntity.ok(authenticationService.register(userRegisterRequestDto));
     }
@@ -50,7 +47,7 @@ public class AuthenticationController {
         @ApiResponse(code = 404, message = "요청한 리소스 찾을 수 없음")
     })
     @PostMapping("/login")
-    public ResponseEntity<?> login(
+    public ResponseEntity<UserResponseDto> login(
         @Valid @RequestBody UserLoginRequestDto userLoginRequestDto) {
         UserResponseDto userResponseDto = authenticationService.login(userLoginRequestDto);
         return ResponseEntity.ok(userResponseDto);
