@@ -4,17 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Header from '../components/Header';
-import {
-  isEmptyString,
-  checkEmail,
-  checkPassword,
-  checkPhoneNumber,
-  modalReuest,
-  modalCheck,
-  modalIsEmpty,
-  modalAll,
-} from '../components/RegistCheck';
 import { useTheme } from '../hooks/useTheme';
+import { isEmptyString, validateEmail, validatePassword, validatePhoneNumber } from '../utils/validate';
 
 const Container = styled.div`
   width: 100vw;
@@ -38,7 +29,7 @@ const ContainerBox = styled.div`
   justify-content: center;
 `;
 
-const AgreeBox = styled.div`
+const AgreementCheckBox = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -122,7 +113,7 @@ const RequestButton = styled.button`
   }
 `;
 
-const UserAgree = styled.input`
+const CheckBox = styled.input`
   appearance: none;
   border: 1.5px solid gainsboro;
   border-radius: 0.35rem;
@@ -150,29 +141,54 @@ const CompleteButton = styled.button`
   background-color: ${(props) => (props.disabled ? props.theme.colors.prhover : props.theme.colors.primary)};
   border: none;
   border-radius: ${(props) => props.theme.borderRadius};
-  cursor: ${(props) => (props.disabled ? 'auto' : 'pointer')};
+  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
 
   &:hover {
     background-color: ${(props) => props.theme.colors.prhover};
   }
 `;
 
-type State = {
+interface FormState {
+  /**
+   * Initial state for inputs.
+   */
   email: string;
   password: string;
-  passwordConfirm: string;
+  confirmPassword: string;
   name: string;
   phoneNumber: string;
   key: string;
-  emailAuth: boolean;
-  passwordOverlap: boolean;
-  keyRequest: boolean;
-  keyAuth: boolean;
-  agreeService: boolean;
-  agreeInformation: boolean;
+  /**
+   * Markers for inputs if filled and checked.
+   */
+  isEmailChecked: boolean;
+  isPasswordChecked: boolean;
+  isKeyChecked: boolean;
+  isServiceAgreementChecked: boolean;
+  isUserInfoConsentChecked: boolean;
+}
+
+const initialFormState: FormState = {
+  /**
+   * Initial state for inputs.
+   */
+  email: '',
+  password: '',
+  confirmPassword: '',
+  name: '',
+  phoneNumber: '',
+  key: '',
+  /**
+   * Markers for inputs if filled and checked.
+   */
+  isEmailChecked: false,
+  isPasswordChecked: false,
+  isKeyChecked: false,
+  isServiceAgreementChecked: false,
+  isUserInfoConsentChecked: false,
 };
 
-type Action =
+type FormAction =
   | { type: 'SET_EMAIL'; payload: string }
   | { type: 'SET_PASSWORD'; payload: string }
   | { type: 'SET_CONFIRM_PASSWORD'; payload: string }
@@ -180,35 +196,19 @@ type Action =
   | { type: 'SET_PHONE_NUMBER'; payload: string }
   | { type: 'SET_AUTH_KEY'; payload: string }
   | { type: 'AUTH_EMAIL'; payload: boolean }
-  | { type: 'OVERLAP_PASSWORD'; payload: boolean }
-  | { type: 'REQUEST_KEY'; payload: boolean }
+  | { type: 'CONFIRM_PASSWORD'; payload: boolean }
   | { type: 'AUTH_KEY'; payload: boolean }
   | { type: 'AGREE_SERVICE'; payload: boolean }
   | { type: 'AGREE_INFORMATION'; payload: boolean };
 
-const initalState = {
-  email: '',
-  password: '',
-  passwordConfirm: '',
-  name: '',
-  phoneNumber: '',
-  key: '',
-  emailAuth: false,
-  passwordOverlap: false,
-  keyRequest: false,
-  keyAuth: false,
-  agreeService: false,
-  agreeInformation: false,
-};
-
-const reducer = (state: State, action: Action): State => {
+const reducer = (state: FormState, action: FormAction): FormState => {
   switch (action.type) {
     case 'SET_EMAIL':
       return { ...state, email: action.payload };
     case 'SET_PASSWORD':
       return { ...state, password: action.payload };
     case 'SET_CONFIRM_PASSWORD':
-      return { ...state, passwordConfirm: action.payload };
+      return { ...state, confirmPassword: action.payload };
     case 'SET_NAME':
       return { ...state, name: action.payload };
     case 'SET_PHONE_NUMBER':
@@ -216,35 +216,15 @@ const reducer = (state: State, action: Action): State => {
     case 'SET_AUTH_KEY':
       return { ...state, key: action.payload };
     case 'AUTH_EMAIL':
-      return {
-        ...state,
-        emailAuth: action.payload,
-      };
-    case 'OVERLAP_PASSWORD':
-      return {
-        ...state,
-        passwordOverlap: action.payload,
-      };
-    case 'REQUEST_KEY':
-      return {
-        ...state,
-        keyRequest: action.payload,
-      };
+      return { ...state, isEmailChecked: action.payload };
+    case 'CONFIRM_PASSWORD':
+      return { ...state, isPasswordChecked: action.payload };
     case 'AUTH_KEY':
-      return {
-        ...state,
-        keyAuth: action.payload,
-      };
+      return { ...state, isKeyChecked: action.payload };
     case 'AGREE_SERVICE':
-      return {
-        ...state,
-        agreeService: action.payload,
-      };
+      return { ...state, isServiceAgreementChecked: action.payload };
     case 'AGREE_INFORMATION':
-      return {
-        ...state,
-        agreeInformation: action.payload,
-      };
+      return { ...state, isUserInfoConsentChecked: action.payload };
     default:
       return state;
   }
@@ -253,12 +233,9 @@ const reducer = (state: State, action: Action): State => {
 export default function RegisterPage() {
   const [theme, toggleTheme] = useTheme();
   const navigate = useNavigate();
+  const [state, dispatch] = useReducer(reducer, initialFormState);
 
-  const [state, dispatch] = useReducer(reducer, initalState);
-
-  // Input Data list
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+  const setInputValue = (name: string, value: string) => {
     switch (name) {
       case 'email':
         dispatch({ type: 'SET_EMAIL', payload: value });
@@ -283,63 +260,92 @@ export default function RegisterPage() {
     }
   };
 
-  // Test AuthKey production(인증번호) = 1234
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setInputValue(name, value);
+  };
+
+  // FIXME: Test AuthKey production(인증번호) = 1234
   const testNumber = 1234;
 
-  // It will have to Add connect User DataBase - Email
-  const emailAuth = (email: string) => {
+  // FIXME: It will have to Add connect User DataBase - Email
+  const emailAuth = (email: string): void => {
     if (isEmptyString(email)) {
-      modalIsEmpty('이메일');
-    } else if (!checkEmail(email)) {
-      modalCheck('이메일');
+      alert('이메일을 입력해주세요.');
+    } else if (!validateEmail(email)) {
+      alert('이메일을 다시 확인해주세요.');
     } else {
       dispatch({ type: 'AUTH_EMAIL', payload: true });
-      modalAll('해당 이메일에 인증요청을 보냈습니다(test).');
+      alert('해당 이메일에 인증요청을 보냈습니다.');
     }
   };
 
   // Checking Password - isEmpty, Regex, Correction
-  const passwordChecked = (password: string, checkpassword: string) => {
+  const checkPassword = (password: string, confirmPassword: string) => {
     if (isEmptyString(password)) {
-      modalIsEmpty('비밀번호');
-    } else if (!checkPassword(password)) {
-      modalCheck('비밀번호');
-    } else if (isEmptyString(checkpassword)) {
-      modalIsEmpty('중복 확인할 비밀번호');
-    } else if (password !== checkpassword) {
-      modalAll('비밀번호가 서로 다릅니다.');
-    } else {
-      dispatch({ type: 'OVERLAP_PASSWORD', payload: true });
-      modalAll('비밀번호가 일치합니다!');
+      alert('비밀번호를 입력해주세요.');
+      return false;
     }
+
+    if (!validatePassword(password)) {
+      alert('비밀번호를 다시 확인해주세요.');
+      return false;
+    }
+
+    if (isEmptyString(confirmPassword)) {
+      alert('비밀번호를 한 번 더 입력해주세요.');
+      return false;
+    }
+
+    if (password !== confirmPassword) {
+      alert('비밀번호가 일치하지 않습니다.');
+      return false;
+    }
+
+    dispatch({ type: 'CONFIRM_PASSWORD', payload: true });
+    alert('비밀번호가 일치합니다!');
+    return true;
+  };
+
+  const checkUserInput = () => {
+    if (!state.isEmailChecked || !state.isPasswordChecked) {
+      alert('이메일 또는 비밀번호를 다시 확인해주세요');
+      return false;
+    }
+
+    if (!checkPassword(state.password, state.confirmPassword)) {
+      alert('## 비번 체크하셈!');
+      return false;
+    }
+
+    if (isEmptyString(state.name)) {
+      alert('이름을 입력해주세요.');
+      return false;
+    }
+
+    if (!validatePhoneNumber(state.phoneNumber)) {
+      alert('휴대폰 번호를 입력해주세요');
+      return false;
+    }
+
+    return true;
   };
 
   // Get a phone number and request an authentication number.
-  const passingNumber = (phoneNum: string) => {
-    if (isEmptyString(phoneNum)) {
-      modalIsEmpty('전화번호');
-    } else if (!state.emailAuth || !state.passwordOverlap) {
-      modalIsEmpty('이메일 또는 비밀번호');
-    } else if (isEmptyString(state.name)) {
-      modalIsEmpty('이름');
-    } else if (!checkPhoneNumber(phoneNum)) {
-      modalCheck('전화번호');
-    } else {
-      dispatch({ type: 'REQUEST_KEY', payload: true });
-      modalAll('해당 번호에 인증번호를 보냈습니다! (1234)');
-    }
+  const passingNumber = () => {
+    dispatch({ type: 'AUTH_KEY', payload: true });
+    alert('해당 번호에 인증번호를 보냈습니다! (ex. 1234)');
   };
 
   // Check Authentication number matches Requested authentication number
   const correspondNumber = () => {
-    // Request AuthKey & Compared inputNumber
-    if (!state.keyRequest) {
-      modalAll('인증번호를 먼저 보내세요');
+    if (!state.key) {
+      alert('먼저 인증번호를 보내주세요.');
     } else if (Number(state.key) !== testNumber) {
-      modalCheck('인증번호');
+      alert('인증번호가 일치하지 않습니다');
     } else {
       dispatch({ type: 'AUTH_KEY', payload: true });
-      modalAll('인증되었습니다!');
+      alert('인증되었습니다!');
     }
   };
 
@@ -347,20 +353,9 @@ export default function RegisterPage() {
     event.preventDefault();
   };
 
-  // Last Checking Web flow for Complete UserRegist.
-  const handleClick = () => {
-    if (!state.emailAuth) {
-      modalReuest('이메일 인증요청');
-    } else if (!state.passwordOverlap) {
-      modalReuest('중복 비밀번호 확인');
-    } else if (isEmptyString(state.name)) {
-      modalIsEmpty('이름');
-    } else if (!state.keyAuth) {
-      modalReuest('인증번호로 인증');
-    } else if (isEmptyString(state.phoneNumber)) {
-      modalIsEmpty('휴대폰번호');
-    } else {
-      modalAll('회원가입이 완료되었습니다.');
+  const handleOnSubmit = () => {
+    if (checkUserInput()) {
+      alert('회원가입이 완료되었습니다.');
       navigate('../login');
     }
   };
@@ -371,7 +366,6 @@ export default function RegisterPage() {
       <RegistContainer theme={theme}>
         <Form onSubmit={handleSubmit}>
           <RegisterTitle theme={theme}>회원가입</RegisterTitle>
-
           <FontText theme={theme}>이메일</FontText>
           <ContainerBox>
             <Input
@@ -396,26 +390,24 @@ export default function RegisterPage() {
             theme={theme}
             placeholder="비밀번호를 입력하세요."
           />
-
           <FontText theme={theme}>비밀번호 확인</FontText>
           <ContainerBox>
             <Input
               type="password"
               name="passwordConfirm"
-              value={state.passwordConfirm}
+              value={state.confirmPassword}
               onChange={handleInputChange}
               theme={theme}
               placeholder="비밀번호를 한번 더 입력하세요."
             />
             <RequestButton
-              onClick={() => passwordChecked(state.password, state.passwordConfirm)}
+              onClick={() => checkPassword(state.password, state.confirmPassword)}
               type="submit"
               theme={theme}
             >
-              중복확인
+              비밀번호 확인
             </RequestButton>
           </ContainerBox>
-
           <FontText theme={theme}>이름</FontText>
           <Input
             type="text"
@@ -425,7 +417,6 @@ export default function RegisterPage() {
             theme={theme}
             placeholder="이름을 입력하세요."
           />
-
           <FontText theme={theme}>휴대폰 번호</FontText>
           <ContainerBox>
             <PhoneNumberBox theme={theme}>+82</PhoneNumberBox>
@@ -438,11 +429,10 @@ export default function RegisterPage() {
               maxLength={11}
               placeholder="- 빼고 입력하세요."
             />
-            <RequestButton onClick={() => passingNumber(state.phoneNumber)} type="submit" theme={theme}>
+            <RequestButton onClick={() => passingNumber()} type="submit" theme={theme}>
               인증요청
             </RequestButton>
           </ContainerBox>
-
           <FontText theme={theme}>인증코드</FontText>
           <ContainerBox>
             <Input
@@ -459,30 +449,28 @@ export default function RegisterPage() {
               인증하기
             </RequestButton>
           </ContainerBox>
-
-          <AgreeBox>
-            <UserAgree
+          <AgreementCheckBox>
+            <CheckBox
               type="checkbox"
               name="agree_Service"
-              onChange={() => dispatch({ type: 'AGREE_SERVICE', payload: !state.agreeService })}
+              onChange={() => dispatch({ type: 'AGREE_SERVICE', payload: !state.isServiceAgreementChecked })}
             />
             <FontText theme={theme}>[필수] 서비스 이용약관 </FontText>
-          </AgreeBox>
-          <AgreeBox>
-            <UserAgree
+          </AgreementCheckBox>
+          <AgreementCheckBox>
+            <CheckBox
               type="checkbox"
-              name="agree_Information"
-              onChange={() => dispatch({ type: 'AGREE_INFORMATION', payload: !state.agreeInformation })}
+              name="agree_information"
+              onChange={() => dispatch({ type: 'AGREE_INFORMATION', payload: !state.isUserInfoConsentChecked })}
             />
             <FontText theme={theme}>[필수] 개인정보 수집동의</FontText>
-          </AgreeBox>
+          </AgreementCheckBox>
           <FontText theme={theme}>※ 서비스 이용약관 및 개인정보 수집에 동의해주세요.</FontText>
-
           <CompleteButton
-            onClick={handleClick}
+            onClick={handleOnSubmit}
             type="submit"
             theme={theme}
-            disabled={!(state.agreeService && state.agreeInformation)}
+            disabled={!(state.isServiceAgreementChecked && state.isUserInfoConsentChecked)}
           >
             회원가입 완료하기
           </CompleteButton>
