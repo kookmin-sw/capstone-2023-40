@@ -6,6 +6,8 @@ import styled from 'styled-components';
 import { Icons } from '../../assets/svg/index';
 import Header from '../../components/Header';
 import { useTheme } from '../../hooks/useTheme';
+import { authReducer } from '../../reducers';
+import { AuthState } from '../../types/auth';
 
 const KakaoImage = styled(Icons.KAKAO).attrs({
   width: 30,
@@ -117,7 +119,7 @@ const Form = styled.form`
 
 const AuthListTitle = styled.div`
   flex-direction: row;
-  margin-bottom: 2vh;
+  margin-bottom: 4vh;
 `;
 
 const MypageText = styled.span`
@@ -148,24 +150,7 @@ const TextType = styled.span`
   text-overflow: ellipsis;
 `;
 
-type State = {
-  kakao: boolean;
-  naver: boolean;
-  google: boolean;
-  identityCard: boolean;
-  driverCard: boolean;
-  schoolMail: boolean;
-};
-
-type Action =
-  | { type: 'AUTH_KAKAO'; payload: boolean }
-  | { type: 'AUTH_NAVER'; payload: boolean }
-  | { type: 'AUTH_GOOGLE'; payload: boolean }
-  | { type: 'AUTH_IDENTITY'; payload: boolean }
-  | { type: 'AUTH_DRIVER'; payload: boolean }
-  | { type: 'AUTH_SCHOOLMAIL'; payload: boolean };
-
-const initialState = {
+const initialState: AuthState = {
   kakao: false,
   naver: false,
   google: false,
@@ -174,32 +159,13 @@ const initialState = {
   schoolMail: false,
 };
 
-const reducer = (state: State, action: Action): State => {
-  switch (action.type) {
-    case 'AUTH_KAKAO':
-      return { ...state, kakao: action.payload };
-    case 'AUTH_NAVER':
-      return { ...state, naver: action.payload };
-    case 'AUTH_GOOGLE':
-      return { ...state, google: action.payload };
-    case 'AUTH_IDENTITY':
-      return { ...state, identityCard: action.payload };
-    case 'AUTH_DRIVER':
-      return { ...state, driverCard: action.payload };
-    case 'AUTH_SCHOOLMAIL':
-      return { ...state, schoolMail: action.payload };
-    default:
-      return state;
-  }
-};
-
 export default function MyPage() {
   const [theme, toggleTheme] = useTheme();
   const navigate = useNavigate();
 
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(authReducer, initialState);
 
-  // containerBox list
+  // FIXME: To API data
   const authState = [
     {
       number: 1,
@@ -254,7 +220,7 @@ export default function MyPage() {
       <Header theme={theme} toggleTheme={toggleTheme} />
       <AuthListContainer theme={theme}>
         <Form onSubmit={handleSubmit}>
-          <AuthListTitle theme={theme} style={{ marginBottom: '4vh' }}>
+          <AuthListTitle theme={theme}>
             <MypageText theme={theme} onClick={() => navigate('../mypage')}>
               마이페이지
             </MypageText>
