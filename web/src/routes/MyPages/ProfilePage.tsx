@@ -108,28 +108,6 @@ const ReplacePagetext = styled.span`
   color: ${(props) => props.theme.colors.default};
 `;
 
-const CompleteButton = styled.div`
-  margin-left: auto;
-  display: flex;
-  padding: 1.5vh;
-  font-size: 2vh;
-  font-weight: 700;
-  color: white;
-  background-color: ${(props) => props.theme.colors.primary};
-  border: none;
-  border-radius: ${(props) => props.theme.borderRadius};
-  cursor: pointer;
-  align-items: center;
-  justify-content: center;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-
-  &:hover {
-    background-color: ${(props) => props.theme.colors.prhover};
-  }
-`;
-
 type State = {
   point: string;
   email: string;
@@ -332,7 +310,6 @@ export default function MyPage() {
           <ContainerBox style={{ marginTop: '20px' }}>
             <ReplacePagetext theme={theme}>설문 결과 조회</ReplacePagetext>
             <ArrowImage theme={theme} onClick={() => navigate('../mypage/survey-result/:id')} />
-            <CompleteButton onClick={() => navigate('../')}>개인정보 저장하기</CompleteButton>
           </ContainerBox>
         </Form>
       </MypageContainer>

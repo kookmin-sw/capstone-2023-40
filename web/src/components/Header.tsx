@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
 
 import DarkModeIcon from '../assets/darkmode.webp';
@@ -141,20 +141,20 @@ const NavigatorContainer = styled.ul`
   flex: 1;
 `;
 
-const Navigator = styled.li`
+const Navigator = styled.li<{ currentLocation: string }>`
   font-size: calc(1.5vh + 0.5vmin);
   font-weight: 600;
-  cursor: pointer;
+  cursor: ${(props) => (props.currentLocation === '/' ? 'pointer' : 'hand')};
   padding: 1vw;
 
   &:hover {
-    opacity: 0.5;
+    opacity: ${(props) => (props.currentLocation === '/' ? 0.5 : 1)};
     transition: all 0.15s ease-in-out;
   }
 `;
 
 const LoginInformation = styled.div`
-  display: flex;
+  display: flex;z
   align-items: center;
   justify-content: center;
   font-size: calc(1.5vh + 0.5vmin);
@@ -209,6 +209,24 @@ const SubPageButton = styled.button`
   }
 `;
 
+const CompleteButton = styled.div`
+  margin: 2vw;
+  display: flex;
+  padding: 1vh;
+  font-size: 1.8vh;
+  font-weight: 700;
+  color: white;
+  background-color: ${(props) => props.theme.colors.primary};
+  border: none;
+  border-radius: ${(props) => props.theme.borderRadius};
+  cursor: pointer;
+  align-items: center;
+
+  &:hover {
+    background-color: ${(props) => props.theme.colors.prhover};
+  }
+`;
+
 interface HeaderProps {
   theme: DefaultTheme;
   toggleTheme: () => void;
@@ -216,6 +234,8 @@ interface HeaderProps {
 
 export default function Header({ theme, toggleTheme }: HeaderProps) {
   const navigate = useNavigate();
+  const currentLocation = useLocation().pathname;
+
   const [isTransitionEnabled, setIsTransitionEnabled] = useState<boolean>(false);
   const [isLogin, setIsLogin] = useState<boolean>(false);
   const [isSubPageOpen, setIsSubPageOpen] = useState<boolean>(false);
@@ -223,6 +243,18 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
   const handleClick = () => {
     setIsTransitionEnabled(true);
     toggleTheme();
+  };
+
+  const logoutClick = () => {
+    setIsLogin(!isLogin);
+    setIsSubPageOpen(!isSubPageOpen);
+    console.log('isLogin : ', isLogin);
+    navigate('../../../login');
+  };
+
+  const navigateMypage = () => {
+    navigate('../../../mypage');
+    setIsSubPageOpen(!isSubPageOpen);
   };
 
   return (
@@ -239,8 +271,18 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
         </>
       )}
       <NavigatorContainer theme={theme}>
-        <Navigator onClick={() => navigate('/survey')}>설문</Navigator>
-        <Navigator onClick={() => navigate('/report')}>리포트</Navigator>
+        <Navigator
+          currentLocation={currentLocation}
+          onClick={currentLocation === '/' ? () => navigate('/survey') : undefined}
+        >
+          설문
+        </Navigator>
+        <Navigator
+          currentLocation={currentLocation}
+          onClick={currentLocation === '/' ? () => navigate('/report') : undefined}
+        >
+          리포트
+        </Navigator>
       </NavigatorContainer>
       <ButtonContainer>
         <CheckBoxContainer>
@@ -248,7 +290,8 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
             <CheckBox id="checkbox" type="checkbox" theme={theme} onClick={handleClick} />
             <CheckBoxLabel htmlFor="checkbox" theme={theme} />
           </CheckBoxWrapper>
-          {!isLogin ? (
+          {currentLocation === '/mypage' ? <CompleteButton theme={theme}>개인정보 저장하기</CompleteButton> : undefined}
+          {isLogin ? (
             <UserImage onClick={() => setIsSubPageOpen(!isSubPageOpen)} />
           ) : (
             <LoginInformation onClick={() => navigate('/login')} theme={theme}>
@@ -260,10 +303,10 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
 
       {isSubPageOpen && (
         <SubPageContainer theme={theme}>
-          <SubPageButton onClick={() => navigate('../mypage')} theme={theme}>
+          <SubPageButton onClick={navigateMypage} theme={theme}>
             마이페이지
           </SubPageButton>
-          <SubPageButton onClick={() => navigate('../../../')} theme={theme}>
+          <SubPageButton onClick={logoutClick} theme={theme}>
             로그아웃
           </SubPageButton>
         </SubPageContainer>
