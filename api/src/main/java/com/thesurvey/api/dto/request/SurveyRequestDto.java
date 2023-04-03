@@ -35,7 +35,6 @@ public class SurveyRequestDto {
     @ApiModelProperty(name = "설문조사 종료일", example = "2023-04-08T00:00:00")
     private LocalDateTime endedDate;
 
-    @Valid
     private List<CertificationType> certificationType;
 
     @Valid
