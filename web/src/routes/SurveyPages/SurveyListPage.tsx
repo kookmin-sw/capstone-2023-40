@@ -10,7 +10,7 @@ import Header from '../../components/Header';
 import Pagination from '../../components/Pagination';
 import SurveyListSkeleton from '../../components/Skeleton/SurveyListSkeleton';
 import { useTheme } from '../../hooks/useTheme';
-import { AuthLabel } from '../../types/enums';
+import { AuthLabel } from '../../types/labels';
 
 const Container = styled.div`
   width: 100vw;
