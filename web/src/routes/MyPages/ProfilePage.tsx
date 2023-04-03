@@ -66,8 +66,7 @@ const Form = styled.form`
 `;
 
 const Input = styled.input`
-  flex: 1;
-  max-width: 30vw;
+  max-width: 50vw;
   padding: 1.3vh;
   margin-top: 10px;
   margin-bottom: 10px;
@@ -78,8 +77,6 @@ const Input = styled.input`
   color: ${(props) => props.theme.colors.default};
   background-color: ${(props) => props.theme.colors.inputBackground};
   cursor: auto;
-  white-space: nowrap;
-  overflow: hidden;
   text-overflow: ellipsis;
 `;
 
@@ -134,6 +131,7 @@ const CompleteButton = styled.div`
 `;
 
 type State = {
+  point: string;
   email: string;
   password: string;
   name: string;
@@ -147,6 +145,7 @@ type State = {
 };
 
 type Action =
+  | { type: 'CHANGE_POINT'; payload: string }
   | { type: 'CHANGE_EMAIL'; payload: string }
   | { type: 'CHANGE_PASSWORD'; payload: string }
   | { type: 'CHANGE_NAME'; payload: string }
@@ -159,6 +158,7 @@ type Action =
   | { type: 'SET_CHANGE_ADDRESS'; payload: boolean };
 
 const initalState = {
+  point: '0P',
   email: 'test@gmail.com',
   password: 'asdf1234!',
   name: 'jsontest',
@@ -173,6 +173,8 @@ const initalState = {
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
+    case 'CHANGE_POINT':
+      return { ...state, point: action.payload };
     case 'CHANGE_EMAIL':
       return { ...state, email: action.payload };
     case 'CHANGE_PASSWORD':
@@ -217,14 +219,8 @@ export default function MyPage() {
     const { name, value } = e.currentTarget;
     if (e.type === 'change' || e.type === 'Enter' || e.type === 'blur') {
       switch (name) {
-        case 'email':
-          dispatch({ type: 'CHANGE_EMAIL', payload: value });
-          break;
         case 'password':
           dispatch({ type: 'CHANGE_PASSWORD', payload: value });
-          break;
-        case 'name':
-          dispatch({ type: 'CHANGE_NAME', payload: value });
           break;
         case 'phoneNumber':
           dispatch({ type: 'CHANGE_PHONE_NUMBER', payload: formatPhoneNumber(value) });
@@ -239,8 +235,8 @@ export default function MyPage() {
   };
 
   const pencilClick = (text: string) => {
-    if (text === 'name') {
-      dispatch({ type: 'SET_CHANGE_NAME', payload: !state.nameDisabled });
+    if (text === 'password') {
+      dispatch({ type: 'SET_CHANGE_PASSWORD', payload: !state.passwordDisabled });
     } else if (text === 'phoneNumber') {
       dispatch({ type: 'SET_CHANGE_PHONE_NUMBER', payload: !state.phoneNumberDisabled });
     } else if (text === 'address') {
@@ -259,6 +255,8 @@ export default function MyPage() {
       title: '포인트',
       name: 'point',
       type: 'point',
+      information: state.point,
+      isdisabled: false,
     },
     {
       number: 2,
@@ -314,6 +312,7 @@ export default function MyPage() {
                 onBlur={handleInputChange}
                 theme={theme}
                 disabled={!isdisabled}
+                style={{ width: `${(information.length + 1) * 10}px` }}
               />
               {!(title === '포인트' || title === '이메일' || title === '이름') ? (
                 <PencilImage
