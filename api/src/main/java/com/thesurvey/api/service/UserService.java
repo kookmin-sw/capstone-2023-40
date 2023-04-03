@@ -25,21 +25,25 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public UserResponseDto getUserByName(String name) {
-        return userMapper.toUserInfoDto(userRepository.findByName(name))
+        User user = userRepository.findByName(name)
             .orElseThrow(() -> new ExceptionMapper(ErrorMessage.USER_NAME_NOT_FOUND, name));
+        return userMapper.toUserResponseDto(user);
     }
 
     @Transactional(readOnly = true)
     public UserResponseDto getUserByEmail(String email) {
-        return userMapper.toUserInfoDto(userRepository.findByEmail(email))
+        User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new ExceptionMapper(ErrorMessage.USER_EMAIL_NOT_FOUND, email));
+        return userMapper.toUserResponseDto(user);
+
     }
 
     @Transactional(readOnly = true)
     public UserResponseDto getUserProfile(Authentication authentication) {
-        return userMapper.toUserInfoDto(userRepository.findByName(authentication.getName()))
+        User user = userRepository.findByName(authentication.getName())
             .orElseThrow(() -> new ExceptionMapper(ErrorMessage.USER_NAME_NOT_FOUND,
                 authentication.getName()));
+        return userMapper.toUserResponseDto(user);
     }
 
     @Transactional
@@ -63,7 +67,7 @@ public class UserService {
             user.changeAddress(userUpdateRequestDto.getAddress());
         }
 
-        return userMapper.toUserInfoDto(userRepository.save(user));
+        return userMapper.toUserResponseDto(userRepository.save(user));
     }
 
     @Transactional

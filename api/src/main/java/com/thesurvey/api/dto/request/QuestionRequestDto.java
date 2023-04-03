@@ -1,8 +1,10 @@
 package com.thesurvey.api.dto.request;
 
 import com.thesurvey.api.domain.EnumTypeEntity.QuestionType;
-import com.thesurvey.api.dto.response.QuestionOptionResponseDto;
 import java.util.List;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -10,15 +12,22 @@ import lombok.Getter;
 @Builder
 public class QuestionRequestDto {
 
+    @NotBlank
     private String title;
 
+    @NotBlank
     private String description;
 
+    @Valid
+    @NotNull
     private QuestionType questionType;
 
-    private int questionNo;
+    @NotNull
+    private Integer questionNo;
 
+    @NotNull
     private boolean isRequired;
 
-    private List<QuestionOptionResponseDto> questionOptions;
+    @Valid
+    private List<QuestionOptionRequestDto> questionOptions;
 }

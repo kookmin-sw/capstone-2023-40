@@ -17,6 +17,7 @@ import com.thesurvey.api.repository.UserRepository;
 import com.thesurvey.api.service.mapper.AnsweredQuestionMapper;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -50,6 +51,10 @@ public class AnsweredQuestionService {
             .orElseThrow(() -> new ExceptionMapper(ErrorMessage.USER_NAME_NOT_FOUND,
                 authentication.getName()));
 
+        if (answeredQuestionRepository.existsByUserId(user.getUserId())) {
+            throw new ExceptionMapper(ErrorMessage.ANSWER_ALREADY_SUBMITTED);
+        }
+
         Survey survey = surveyRepository.findBySurveyId(answeredQuestionRequestDto.getSurveyId())
             .orElseThrow(() -> new ExceptionMapper(ErrorMessage.SURVEY_NOT_FOUND));
 
@@ -71,7 +76,7 @@ public class AnsweredQuestionService {
                     answeredQuestionList);
 
                 List<String> multipleChoice = savedAnsweredQuestionList.stream().map(
-                    answeredQuestion -> answeredQuestion.getMultipleChoices()).collect(Collectors.toList());
+                    AnsweredQuestion::getMultipleChoices).collect(Collectors.toList());
 
                 savedAnsweredQuestionInfoDtoList.add(
                     answeredQuestionMapper.toAnsweredInfoQuestionDtoWithMultipleChoices(
@@ -89,6 +94,12 @@ public class AnsweredQuestionService {
         }
         return answeredQuestionMapper.toAnsweredQuestionResponseDto(survey,
             savedAnsweredQuestionInfoDtoList);
+    }
+
+    @Transactional
+    public void deleteAnswer(UUID surveyId) {
+        List<AnsweredQuestion> answeredQuestionList = answeredQuestionRepository.findAllBySurveyId(surveyId);
+        answeredQuestionRepository.deleteAll(answeredQuestionList);
     }
 
 }

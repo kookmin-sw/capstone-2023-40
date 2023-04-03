@@ -54,7 +54,7 @@ public class AuthenticationService {
     @Transactional
     public UserResponseDto register(UserRegisterRequestDto userRegisterRequestDto) {
         User user = userRepository.save(userMapper.toUser(userRegisterRequestDto));
-        return userMapper.toUserInfoDto(user);
+        return userMapper.toUserResponseDto(user);
     }
 
     @Transactional(readOnly = true)

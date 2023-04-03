@@ -9,6 +9,7 @@ import com.thesurvey.api.service.AnsweredQuestionService;
 import com.thesurvey.api.service.SurveyService;
 import java.util.List;
 import java.util.UUID;
+import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -79,8 +79,8 @@ public class SurveyController {
     })
     @PostMapping
     public ResponseEntity<SurveyResponseDto> createSurvey(Authentication authentication,
-        @RequestBody SurveyRequestDto surveyRequestDto) {
-        return ResponseEntity.ok(surveyService.createSurvey(authentication, surveyRequestDto));
+        @Valid @RequestBody SurveyRequestDto surveyRequestDto) {
+            return ResponseEntity.ok(surveyService.createSurvey(authentication, surveyRequestDto));
     }
 
     @ApiOperation(value = "설문조사 수정", notes = "설문조사 내용을 수정합니다. 아래의 모든 필드를 담아 전송해야 합니다.")
@@ -94,7 +94,7 @@ public class SurveyController {
     })
     @PutMapping
     public ResponseEntity<SurveyResponseDto> updateSurvey(
-        @RequestBody SurveyUpdateRequestDto surveyUpdateRequestDto) {
+        @Valid @RequestBody SurveyUpdateRequestDto surveyUpdateRequestDto) {
         return ResponseEntity.ok(surveyService.updateSurvey(surveyUpdateRequestDto));
     }
 
@@ -120,10 +120,12 @@ public class SurveyController {
         @ApiResponse(code = 403, message = "접근 권한 없음"),
         @ApiResponse(code = 404, message = "요청한 리소스 찾을 수 없음")
     })
+
     @PostMapping("/submit")
     public ResponseEntity<AnsweredQuestionResponseDto> submitSurvey(Authentication authentication,
-        @RequestBody AnsweredQuestionRequestDto answeredQuestionRequestDto) {
+        @Valid @RequestBody AnsweredQuestionRequestDto answeredQuestionRequestDto) {
         return ResponseEntity.ok(
             answeredQuestionService.createAnswer(authentication, answeredQuestionRequestDto));
     }
+
 }
