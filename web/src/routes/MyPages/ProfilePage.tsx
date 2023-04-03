@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { Icons } from '../../assets/svg/index';
 import Header from '../../components/Header';
 import { useTheme } from '../../hooks/useTheme';
+import { userInfoReducer } from '../../reducers';
 
 const PencilImage = styled(Icons.PENCIL).attrs({
   width: 25,
@@ -135,31 +136,7 @@ const CompleteButton = styled.div`
   }
 `;
 
-type State = {
-  email: string;
-  password: string;
-  name: string;
-  phoneNumber: string;
-  address: string;
-  emailDisabled: boolean;
-  passwordDisabled: boolean;
-  nameDisabled: boolean;
-  phoneNumberDisabled: boolean;
-  addressDisabled: boolean;
-};
-
-type Action =
-  | { type: 'CHANGE_EMAIL'; payload: string }
-  | { type: 'CHANGE_PASSWORD'; payload: string }
-  | { type: 'CHANGE_NAME'; payload: string }
-  | { type: 'CHANGE_PHONE_NUMBER'; payload: string }
-  | { type: 'CHANGE_ADDRESS'; payload: string }
-  | { type: 'SET_CHANGE_EMAIL'; payload: boolean }
-  | { type: 'SET_CHANGE_PASSWORD'; payload: boolean }
-  | { type: 'SET_CHANGE_NAME'; payload: boolean }
-  | { type: 'SET_CHANGE_PHONE_NUMBER'; payload: boolean }
-  | { type: 'SET_CHANGE_ADDRESS'; payload: boolean };
-
+// FIXME: To API data
 const initalState = {
   email: 'test@gmail.com',
   password: 'asdf1234!',
@@ -171,33 +148,6 @@ const initalState = {
   nameDisabled: false,
   phoneNumberDisabled: false,
   addressDisabled: false,
-};
-
-const reducer = (state: State, action: Action): State => {
-  switch (action.type) {
-    case 'CHANGE_EMAIL':
-      return { ...state, email: action.payload };
-    case 'CHANGE_PASSWORD':
-      return { ...state, password: action.payload };
-    case 'CHANGE_NAME':
-      return { ...state, name: action.payload };
-    case 'CHANGE_PHONE_NUMBER':
-      return { ...state, phoneNumber: action.payload };
-    case 'CHANGE_ADDRESS':
-      return { ...state, address: action.payload };
-    case 'SET_CHANGE_EMAIL':
-      return { ...state, emailDisabled: action.payload };
-    case 'SET_CHANGE_PASSWORD':
-      return { ...state, passwordDisabled: action.payload };
-    case 'SET_CHANGE_NAME':
-      return { ...state, nameDisabled: action.payload };
-    case 'SET_CHANGE_PHONE_NUMBER':
-      return { ...state, phoneNumberDisabled: action.payload };
-    case 'SET_CHANGE_ADDRESS':
-      return { ...state, addressDisabled: action.payload };
-    default:
-      return state;
-  }
 };
 
 const formatPhoneNumber = (value: string): string => {
@@ -212,7 +162,7 @@ export default function MyPage() {
   const [theme, toggleTheme] = useTheme();
   const navigate = useNavigate();
 
-  const [state, dispatch] = useReducer(reducer, initalState);
+  const [state, dispatch] = useReducer(userInfoReducer, initalState);
 
   // Input Data list
   const handleInputChange = (e: SyntheticEvent<HTMLInputElement>) => {
