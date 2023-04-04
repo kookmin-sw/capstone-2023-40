@@ -118,7 +118,9 @@ const TitleInput = styled(Input)`
 
 const Answer = styled.label``;
 
-const RadioAnswerInput = styled.div``;
+const MultipleChoiceContainer = styled.div``;
+
+const MultipleChoiceInput = styled.input``;
 
 const Button = styled.button``;
 
@@ -174,8 +176,19 @@ export default function SurveyFormPage() {
   ) => {
     const { name, value } = event.target;
     questions[questionId] = { ...questions[questionId], [name]: value };
-    // FIXME: it may cause too much calc
+    // FIXME: it may cause too much compute
     setQuestions([...questions]);
+  };
+
+  const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>, questionId: number, optionId: number) => {
+    const { name, value } = event.target;
+    const newOptions = questions[questionId].options;
+    if (newOptions) {
+      newOptions[optionId] = { ...newOptions[optionId], [name]: value };
+    }
+    const newQuestions = [...questions];
+    newQuestions[questionId] = { ...newQuestions[questionId], options: newOptions };
+    setQuestions(newQuestions);
   };
 
   const handleRequiredAuthentications = (value: string, isChecked: boolean) => {
@@ -227,11 +240,47 @@ export default function SurveyFormPage() {
     setQuestions(newQuestions);
   };
 
-  // TODO: make and delete with index mechanism
-  const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>, index: number) => {
+  const addOptionBottom = (questionId: number) => {
+    let newOptions = questions[questionId].options;
+    if (newOptions) {
+      const newOption: QuestionOption = {
+        option_number: newOptions.length,
+        text: '',
+      };
+      newOptions = [...newOptions, newOption];
+    } else {
+      const newOption: QuestionOption = {
+        option_number: 0,
+        text: '',
+      };
+      newOptions = [newOption];
+    }
+
+    const newQuestions = [...questions];
+    newQuestions[questionId] = { ...newQuestions[questionId], options: newOptions };
+    setQuestions(newQuestions);
+  };
+
+  const deleteOptionInIndex = (questionId: number, optionId: number) => {
+    const newOptions = questions[questionId].options;
+    if (newOptions) {
+      for (let i = optionId + 1; i < newOptions.length; i += 1) {
+        newOptions[i] = { ...newOptions[i], option_number: i - 1 };
+      }
+      newOptions.splice(optionId, 1);
+    }
+
+    const newQuestions = [...questions];
+    newQuestions[questionId] = { ...newQuestions[questionId], options: newOptions };
+    setQuestions(newQuestions);
+  };
+
+  const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>, questionId: number, optionId?: number) => {
     const { name } = event.target as HTMLInputElement;
-    if (name === 'add') makeQuestionUnderIndex(index);
-    else deleteQuestionInIndex(index);
+    if (name === 'addQuestion') makeQuestionUnderIndex(questionId);
+    else if (name === 'deleteQuestion') deleteQuestionInIndex(questionId);
+    else if (name === 'addOption') addOptionBottom(questionId);
+    else if (typeof optionId !== 'undefined') deleteOptionInIndex(questionId, optionId);
   };
 
   const questionTypeSelector = (selected: string, questionId: number) => {
@@ -255,10 +304,10 @@ export default function SurveyFormPage() {
         />
         {questionTypeSelector('LONG_ANSWER', questionId)}
         <Answer>장문형 텍스트</Answer>
-        <AddButton name="add" onClick={(event) => handleButtonClick(event, questionId)}>
+        <AddButton name="addQuestion" onClick={(event) => handleButtonClick(event, questionId)}>
           +
         </AddButton>
-        <DeleteButton name="delete" onClick={(event) => handleButtonClick(event, questionId)}>
+        <DeleteButton name="deleteQuestion" onClick={(event) => handleButtonClick(event, questionId)}>
           -
         </DeleteButton>
       </QuestionContainer>
@@ -276,10 +325,10 @@ export default function SurveyFormPage() {
         />
         {questionTypeSelector('SHORT_ANSWER', questionId)}
         <Answer>단답형 텍스트</Answer>
-        <AddButton name="add" onClick={(event) => handleButtonClick(event, questionId)}>
+        <AddButton name="addQuestion" onClick={(event) => handleButtonClick(event, questionId)}>
           +
         </AddButton>
-        <DeleteButton name="delete" onClick={(event) => handleButtonClick(event, questionId)}>
+        <DeleteButton name="deleteQuestion" onClick={(event) => handleButtonClick(event, questionId)}>
           -
         </DeleteButton>
       </QuestionContainer>
@@ -287,11 +336,47 @@ export default function SurveyFormPage() {
   };
 
   const multipleChoiceForm = (questionId: number) => {
-    return <div key={questionId}>a</div>;
+    return (
+      <QuestionContainer key={questionId}>
+        <TitleInput
+          onChange={(event) => handleQuestionChange(event, questionId)}
+          name="title"
+          type="text"
+          value={questions[questionId].title || ''}
+        />
+        {questionTypeSelector('MULTIPLE_CHOICE', questionId)}
+
+        {questions[questionId].options?.map((option: QuestionOption) => (
+          <MultipleChoiceContainer key={option.option_number}>
+            <MultipleChoiceInput
+              onChange={(event) => handleOptionChange(event, questionId, option.option_number)}
+              name="text"
+              type="text"
+              value={option.text || ''}
+            />
+            <DeleteButton
+              name="deleteOption"
+              onClick={(event) => handleButtonClick(event, questionId, option.option_number)}
+            >
+              -
+            </DeleteButton>
+          </MultipleChoiceContainer>
+        ))}
+        <AddButton name="addOption" onClick={(event) => handleButtonClick(event, questionId)}>
+          +
+        </AddButton>
+        <br />
+        <AddButton name="addQuestion" onClick={(event) => handleButtonClick(event, questionId)}>
+          +
+        </AddButton>
+        <DeleteButton name="deleteQuestion" onClick={(event) => handleButtonClick(event, questionId)}>
+          -
+        </DeleteButton>
+      </QuestionContainer>
+    );
   };
 
   const showQuestionForm = (questionType: string, questionId: number) => {
-    console.log(questionType);
     switch (questionType) {
       case 'LONG_ANSWER':
         return longAnswerForm(questionId);
@@ -311,14 +396,6 @@ export default function SurveyFormPage() {
     };
     setSurveyData(initialSurveyData);
   }, []);
-
-  useEffect(() => {
-    console.log(surveyData);
-  }, [surveyData]);
-
-  useEffect(() => {
-    console.log(requiredAuthentications);
-  }, [requiredAuthentications]);
 
   useEffect(() => {
     console.log(questions);
@@ -368,7 +445,7 @@ export default function SurveyFormPage() {
             name="ended_date"
             value={surveyData?.ended_date || ''}
           />
-          <AddButton name="add" onClick={(event) => handleButtonClick(event, -1)}>
+          <AddButton name="addQuestion" onClick={(event) => handleButtonClick(event, -1)}>
             +
           </AddButton>
         </SurveyDataContainer>
