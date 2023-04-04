@@ -27,8 +27,8 @@ public abstract class BaseControllerTest {
 
     String globalPassword = "Password123@";
 
-    // Image size: 605 kB;
-    String globalProfileImage = "https://www.nasa.gov/sites/default/files/styles/full_width_feature/public/thumbnails/image/hubble_m14_wfc3_1flat_cont_final.jpg";
+    // Image size: 4.2 MB;
+    String globalProfileImage = "https://images2.alphacoders.com/130/1306410.png";
 
     UserRegisterRequestDto globalRegisterDto = UserRegisterRequestDto.builder()
         .name(globalName)
