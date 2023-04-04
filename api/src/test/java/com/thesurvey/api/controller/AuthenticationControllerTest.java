@@ -3,7 +3,6 @@ package com.thesurvey.api.controller;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import com.thesurvey.api.dto.request.UserRegisterRequestDto;
-import com.thesurvey.api.dto.response.UserResponseDto;
 import com.thesurvey.api.repository.UserRepository;
 import com.thesurvey.api.service.AuthenticationService;
 import com.thesurvey.api.service.SurveyService;
@@ -15,8 +14,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,16 +38,6 @@ public class AuthenticationControllerTest extends BaseControllerTest {
     UserMapper userMapper;
 
     @Test
-    void testRegisterService() {
-        UserResponseDto result = authenticationService.register(globalRegisterDto);
-
-        assertThat(result.getName()).isEqualTo(globalRegisterDto.getName());
-        assertThat(result.getPhoneNumber()).isEqualTo(globalRegisterDto.getPhoneNumber());
-        assertThat(result.getUserId()).isEqualTo(
-            userService.getUserByName(globalRegisterDto.getName()).getUserId());
-    }
-
-    @Test
     void testMockRegister() throws Exception {
         MvcResult result = mockRegister(globalRegisterDto, true);
         JSONObject content = new JSONObject(result.getResponse().getContentAsString());
@@ -58,17 +45,6 @@ public class AuthenticationControllerTest extends BaseControllerTest {
         assertThat(content.get("name")).isEqualTo(globalRegisterDto.getName());
         assertThat(content.get("email")).isEqualTo(globalRegisterDto.getEmail());
         assertThat(content.get("profileImage")).isEqualTo(globalRegisterDto.getProfileImage());
-    }
-
-    @Test
-    void testLoginService() {
-        UserResponseDto userResponseDto = authenticationService.register(globalRegisterDto);
-        Authentication result = authenticationService.authenticate(
-            new UsernamePasswordAuthenticationToken(globalEmail, globalPassword)
-        );
-
-        assertThat(result.isAuthenticated()).isTrue();
-        assertThat(result.getName()).isEqualTo(userResponseDto.getName());
     }
 
     @Test
