@@ -10,7 +10,7 @@ import Header from '../../components/Header';
 import Pagination from '../../components/Pagination';
 import SurveyListSkeleton from '../../components/Skeleton/SurveyListSkeleton';
 import { useTheme } from '../../hooks/useTheme';
-import { AuthLabel } from '../../types/enums';
+import { AuthLabel } from '../../types/labels';
 
 const Container = styled.div`
   width: 100vw;
@@ -198,7 +198,7 @@ export default function SurveyListPage() {
   const fetchSurveyList = async (abortSignal: AbortSignal): Promise<void> => {
     setIsLoading(true);
     try {
-      const request: AxiosResponse<SurveyItem[]> = await axios.get<SurveyItem[]>(requests.fetchSurveyListPage + page, {
+      const request: AxiosResponse<SurveyItem[]> = await axios.get<SurveyItem[]>(requests.getSurvey + page, {
         signal: abortSignal,
       });
       setSurveys(request.data);

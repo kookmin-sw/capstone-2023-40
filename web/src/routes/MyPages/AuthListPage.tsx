@@ -6,6 +6,8 @@ import styled from 'styled-components';
 import { Icons } from '../../assets/svg/index';
 import Header from '../../components/Header';
 import { useTheme } from '../../hooks/useTheme';
+import { authReducer } from '../../reducers';
+import { AuthState } from '../../types/auth';
 
 const KakaoImage = styled(Icons.KAKAO).attrs({
   width: 30,
@@ -43,7 +45,7 @@ const IdCardImage = styled(Icons.ID).attrs({
   border-radius: 20px;
 `;
 
-const DriverCardImage = styled(Icons.DRIVER_LICENSE).attrs({
+const DriverLicenseImage = styled(Icons.DRIVER_LICENSE).attrs({
   width: 30,
   height: 30,
 })`
@@ -52,7 +54,7 @@ const DriverCardImage = styled(Icons.DRIVER_LICENSE).attrs({
   border-radius: 20px;
 `;
 
-const SchoolImage = styled(Icons.WEBMAIL).attrs({
+const WebmailImage = styled(Icons.WEBMAIL).attrs({
   width: 30,
   height: 30,
 })`
@@ -117,7 +119,7 @@ const Form = styled.form`
 
 const AuthListTitle = styled.div`
   flex-direction: row;
-  margin-bottom: 2vh;
+  margin-bottom: 4vh;
 `;
 
 const MypageText = styled.span`
@@ -148,58 +150,22 @@ const TextType = styled.span`
   text-overflow: ellipsis;
 `;
 
-type State = {
-  kakao: boolean;
-  naver: boolean;
-  google: boolean;
-  identityCard: boolean;
-  driverCard: boolean;
-  schoolMail: boolean;
-};
-
-type Action =
-  | { type: 'AUTH_KAKAO'; payload: boolean }
-  | { type: 'AUTH_NAVER'; payload: boolean }
-  | { type: 'AUTH_GOOGLE'; payload: boolean }
-  | { type: 'AUTH_IDENTITY'; payload: boolean }
-  | { type: 'AUTH_DRIVER'; payload: boolean }
-  | { type: 'AUTH_SCHOOLMAIL'; payload: boolean };
-
-const initialState = {
+const initialState: AuthState = {
   kakao: false,
   naver: false,
   google: false,
   identityCard: false,
-  driverCard: false,
-  schoolMail: false,
-};
-
-const reducer = (state: State, action: Action): State => {
-  switch (action.type) {
-    case 'AUTH_KAKAO':
-      return { ...state, kakao: action.payload };
-    case 'AUTH_NAVER':
-      return { ...state, naver: action.payload };
-    case 'AUTH_GOOGLE':
-      return { ...state, google: action.payload };
-    case 'AUTH_IDENTITY':
-      return { ...state, identityCard: action.payload };
-    case 'AUTH_DRIVER':
-      return { ...state, driverCard: action.payload };
-    case 'AUTH_SCHOOLMAIL':
-      return { ...state, schoolMail: action.payload };
-    default:
-      return state;
-  }
+  driverLicense: false,
+  webmail: false,
 };
 
 export default function MyPage() {
   const [theme, toggleTheme] = useTheme();
   const navigate = useNavigate();
 
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(authReducer, initialState);
 
-  // containerBox list
+  // FIXME: To API data
   const authState = [
     {
       number: 1,
@@ -231,16 +197,17 @@ export default function MyPage() {
     },
     {
       number: 5,
-      image: <DriverCardImage />,
+
+      image: <DriverLicenseImage />,
       title: '운전면허',
-      checkAuth: state.driverCard,
+      checkAuth: state.driverLicense,
       pageNavigate: () => navigate('../mypage/auth-list'),
     },
     {
       number: 6,
-      image: <SchoolImage />,
+      image: <WebmailImage />,
       title: '웹메일',
-      checkAuth: state.schoolMail,
+      checkAuth: state.webmail,
       pageNavigate: () => navigate('../mypage/auth-list'),
     },
   ];
@@ -254,7 +221,7 @@ export default function MyPage() {
       <Header theme={theme} toggleTheme={toggleTheme} />
       <AuthListContainer theme={theme}>
         <Form onSubmit={handleSubmit}>
-          <AuthListTitle theme={theme} style={{ marginBottom: '4vh' }}>
+          <AuthListTitle theme={theme}>
             <MypageText theme={theme} onClick={() => navigate('../mypage')}>
               마이페이지
             </MypageText>

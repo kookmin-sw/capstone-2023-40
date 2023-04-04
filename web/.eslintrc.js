@@ -26,6 +26,8 @@ module.exports = {
     '@typescript-eslint/no-var-requires': 'off',
     'no-underscore-dangle': 'off',
     'object-shorthand': 'off',
+    'react/jsx-props-no-spreading': 'warn',
+    'react/destructuring-assignment': 'warn',
     '@typescript-eslint/no-unused-expressions': 'warn',
     '@typescript-eslint/naming-convention': 'warn',
     'react/require-default-props': 'warn',

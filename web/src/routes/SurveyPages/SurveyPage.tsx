@@ -212,7 +212,7 @@ export default function SurveyPage() {
   const fetchSurveyData = async () => {
     setIsLoading(true);
     try {
-      const request: AxiosResponse<SurveyData> = await axios.get<SurveyData>(requests.fetchSurvey + id);
+      const request: AxiosResponse<SurveyData> = await axios.get<SurveyData>(requests.getSurvey + id);
       setSurveyData(request.data);
       setIsLoading(false);
     } catch (error) {

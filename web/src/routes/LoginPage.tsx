@@ -5,8 +5,8 @@ import styled from 'styled-components';
 
 import BackgroundImage from '../assets/main-page.webp';
 import Header from '../components/Header';
-import { isEmptyString, modalIsEmpty } from '../components/RegistCheck';
 import { useTheme } from '../hooks/useTheme';
+import { isEmptyString } from '../utils/validate';
 
 const Container = styled.div`
   width: 100vw;
@@ -106,7 +106,7 @@ export default function LoginPage() {
   // It will have to Add connect User DataBase - Email & Password
   const checkLogin = (email: string, password: string) => {
     if (isEmptyString(email) || isEmptyString(password)) {
-      modalIsEmpty('아이디 또는 비밀번호');
+      alert('아이디 또는 비밀번호를 확인해주세요.');
     } else {
       alert('로그인에 성공했습니다.');
       navigate('./survey');
@@ -128,7 +128,6 @@ export default function LoginPage() {
             placeholder="이메일을 입력하세요."
           />
           <FontText theme={theme}>비밀번호</FontText>
-
           <Input
             type="password"
             value={inputPassword}
@@ -139,7 +138,6 @@ export default function LoginPage() {
           <Button onClick={() => checkLogin(inputEmail, inputPassword)} theme={theme}>
             로그인
           </Button>
-
           <FontText style={{ display: 'flex', flexDirection: 'row' }}>
             <hr style={{ border: `${theme.colors.default}` }} />
             <FontText theme={theme}>or</FontText>
