@@ -1,10 +1,15 @@
 import React, { useReducer } from 'react';
 
+import { AxiosError, AxiosResponse } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
 
+import axios from '../api/axios';
+import requests from '../api/request';
 import { formReducer } from '../reducers';
 import { FormState } from '../types/form';
+import { UserRegisterRequest } from '../types/request/Authentication';
+import { UserResponse } from '../types/response/User';
 import { isEmptyString, validateEmail, validatePassword, validatePhoneNumber } from '../utils/validate';
 import InputContainer from './InputContainer';
 
@@ -222,10 +227,23 @@ export default function RegisterForm(props: RegisterFormProps) {
     event.preventDefault();
   };
 
-  const handleOnSubmit = () => {
+  const handleOnSubmit = async () => {
     if (checkUserInput()) {
-      alert('회원가입이 완료되었습니다.');
-      navigate('../login');
+      const body: UserRegisterRequest = {
+        name: state.name,
+        email: state.email,
+        password: state.password,
+        role: 'USER',
+        phoneNumber: state.phoneNumber,
+      };
+
+      const response: AxiosResponse<UserResponse> = await axios.post<UserResponse>(requests.register, body);
+      if (response.status === 200) {
+        alert('회원가입이 완료되었습니다.');
+        navigate('../login');
+      } else {
+        // TODO: would this be necessary?
+      }
     }
   };
 

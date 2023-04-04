@@ -198,7 +198,7 @@ export default function SurveyListPage() {
   const fetchSurveyList = async (abortSignal: AbortSignal): Promise<void> => {
     setIsLoading(true);
     try {
-      const request: AxiosResponse<SurveyItem[]> = await axios.get<SurveyItem[]>(requests.fetchSurveyListPage + page, {
+      const request: AxiosResponse<SurveyItem[]> = await axios.get<SurveyItem[]>(requests.getSurvey + page, {
         signal: abortSignal,
       });
       setSurveys(request.data);

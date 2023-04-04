@@ -113,7 +113,7 @@ interface InputContainerProps {
 export default function InputContainer(props: InputContainerProps) {
   return (
     <Container>
-      <InputTitle>{props.title}</InputTitle>
+      <InputTitle theme={props.inputOptions?.theme}>{props.title}</InputTitle>
       <InputWrapper>
         {props.prefixOptions ? <PrefixBox {...props.prefixOptions}>{props.prefixOptions.title}</PrefixBox> : null}
         <Input {...props.inputOptions} />

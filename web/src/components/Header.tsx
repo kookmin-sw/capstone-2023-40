@@ -248,7 +248,7 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
             <CheckBox id="checkbox" type="checkbox" theme={theme} onClick={handleClick} />
             <CheckBoxLabel htmlFor="checkbox" theme={theme} />
           </CheckBoxWrapper>
-          {!isLogin ? (
+          {isLogin ? (
             <UserImage onClick={() => setIsSubPageOpen(!isSubPageOpen)} />
           ) : (
             <LoginInformation onClick={() => navigate('/login')} theme={theme}>
