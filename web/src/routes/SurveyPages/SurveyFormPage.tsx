@@ -168,7 +168,10 @@ export default function SurveyFormPage() {
     }
   };
 
-  const handleQuestionTitleChange = (event: React.ChangeEvent<HTMLInputElement>, questionId: number) => {
+  const handleQuestionChange = (
+    event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>,
+    questionId: number
+  ) => {
     const { name, value } = event.target;
     questions[questionId] = { ...questions[questionId], [name]: value };
     // FIXME: it may cause too much calc
@@ -231,12 +234,12 @@ export default function SurveyFormPage() {
     else deleteQuestionInIndex(index);
   };
 
-  const questionTypeSelector = () => {
+  const questionTypeSelector = (selected: string, questionId: number) => {
     return (
-      <QuestionTypeSelector>
-        <QuestionType>장문형 질문</QuestionType>
-        <QuestionType>단답형 질문</QuestionType>
-        <QuestionType>객관식 질문</QuestionType>
+      <QuestionTypeSelector name="type" onChange={(event) => handleQuestionChange(event, questionId)} value={selected}>
+        <QuestionType value="LONG_ANSWER">장문형 질문</QuestionType>
+        <QuestionType value="SHORT_ANSWER">단답형 질문</QuestionType>
+        <QuestionType value="MULTIPLE_CHOICE">객관식 질문</QuestionType>
       </QuestionTypeSelector>
     );
   };
@@ -245,12 +248,12 @@ export default function SurveyFormPage() {
     return (
       <QuestionContainer key={questionId}>
         <TitleInput
-          onChange={(event) => handleQuestionTitleChange(event, questionId)}
+          onChange={(event) => handleQuestionChange(event, questionId)}
           name="title"
           type="text"
           value={questions[questionId].title || ''}
         />
-        {questionTypeSelector()}
+        {questionTypeSelector('LONG_ANSWER', questionId)}
         <Answer>장문형 텍스트</Answer>
         <AddButton name="add" onClick={(event) => handleButtonClick(event, questionId)}>
           +
@@ -266,19 +269,19 @@ export default function SurveyFormPage() {
     return (
       <QuestionContainer key={questionId}>
         <TitleInput
-          onChange={(event) => handleQuestionTitleChange(event, questionId)}
+          onChange={(event) => handleQuestionChange(event, questionId)}
           name="title"
           type="text"
           value={questions[questionId].title || ''}
         />
-        {questionTypeSelector()}
+        {questionTypeSelector('SHORT_ANSWER', questionId)}
+        <Answer>단답형 텍스트</Answer>
         <AddButton name="add" onClick={(event) => handleButtonClick(event, questionId)}>
           +
         </AddButton>
         <DeleteButton name="delete" onClick={(event) => handleButtonClick(event, questionId)}>
           -
         </DeleteButton>
-        <Answer>단답형 텍스트</Answer>
       </QuestionContainer>
     );
   };
@@ -288,6 +291,7 @@ export default function SurveyFormPage() {
   };
 
   const showQuestionForm = (questionType: string, questionId: number) => {
+    console.log(questionType);
     switch (questionType) {
       case 'LONG_ANSWER':
         return longAnswerForm(questionId);
