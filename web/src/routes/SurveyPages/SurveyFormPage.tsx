@@ -136,7 +136,7 @@ interface SurveyQuestion {
   type: string;
   title: string;
   description: string;
-  options: Array<QuestionOption>;
+  options: Array<QuestionOption> | null;
 }
 
 interface SurveyData {
@@ -168,7 +168,7 @@ export default function SurveyFormPage() {
     }
   };
 
-  const handleCheckInputChange = (value: string, isChecked: boolean) => {
+  const handleRequiredAuthentications = (value: string, isChecked: boolean) => {
     if (isChecked) {
       setRequiredAuthentications((prev) => [...prev, value]);
     } else {
@@ -176,42 +176,86 @@ export default function SurveyFormPage() {
     }
   };
 
-  const handelCheck = (event: React.ChangeEvent<HTMLInputElement>, value: string) => {
+  const handleCheckInputChange = (event: React.ChangeEvent<HTMLInputElement>, value: string) => {
     setAuthIsChecked(!authIsChecked);
-    handleCheckInputChange(value, event.target.checked);
+    handleRequiredAuthentications(value, event.target.checked);
   };
 
-  const makeQuestionTypeSelector = () => {
+  const handleSubmit = () => {
+    // TODO: put questions and requiredAuth to SurveyData
+    if (typeof surveyData !== 'undefined') {
+      setSurveyData({
+        ...surveyData,
+        required_authentications: requiredAuthentications,
+      });
+    }
+  };
+
+  const makeQuestion = (index: number) => {
+    const newQuestion = {
+      question_id: index,
+      type: 'LONG_ANSWER',
+      title: '',
+      description: '',
+      options: null,
+    };
+    setQuestions([...questions, newQuestion]);
+  };
+
+  const deleteQuestion = (index: number) => {
+    setQuestions([...questions.filter((question) => question.question_id !== index)]);
+  };
+
+  const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const { name } = event.target as HTMLInputElement;
+    if (name === 'add') makeQuestion(questions.length);
+    else deleteQuestion(1);
+  };
+
+  const questionTypeSelector = () => {
     return (
       <QuestionTypeSelector>
-        <QuestionType>단답형 질문</QuestionType>
         <QuestionType>장문형 질문</QuestionType>
+        <QuestionType>단답형 질문</QuestionType>
         <QuestionType>객관식 질문</QuestionType>
       </QuestionTypeSelector>
     );
   };
 
-  const makeLongAnswerForm = () => {
+  const longAnswerForm = (questionId: number) => {
     return (
-      <QuestionContainer>
+      <QuestionContainer key={questionId}>
         <TitleInput />
-        {makeQuestionTypeSelector()}
+        {questionTypeSelector()}
         <Answer>장문형 텍스트</Answer>
       </QuestionContainer>
     );
   };
 
-  const makeShortAnswerForm = () => {
+  const shortAnswerForm = (questionId: number) => {
     return (
-      <QuestionContainer>
+      <QuestionContainer key={questionId}>
         <TitleInput />
-        {makeQuestionTypeSelector()}
+        {questionTypeSelector()}
         <Answer>단답형 텍스트</Answer>
       </QuestionContainer>
     );
   };
 
-  const makeMultipleChoiceForm = () => {};
+  const multipleChoiceForm = (questionId: number) => {
+    return <div key={questionId}>a</div>;
+  };
+
+  const showQuestionForm = (questionType: string, questionId: number) => {
+    switch (questionType) {
+      case 'LONG_ANSWER':
+        return longAnswerForm(questionId);
+      case 'SHORT_ANSWER':
+        return shortAnswerForm(questionId);
+      default:
+        return multipleChoiceForm(questionId);
+    }
+  };
 
   useEffect(() => {
     const initialSurveyData = {
@@ -228,13 +272,12 @@ export default function SurveyFormPage() {
   }, [surveyData]);
 
   useEffect(() => {
-    if (typeof surveyData !== 'undefined') {
-      setSurveyData({
-        ...surveyData,
-        required_authentications: requiredAuthentications,
-      });
-    }
+    console.log(requiredAuthentications);
   }, [requiredAuthentications]);
+
+  useEffect(() => {
+    console.log(questions);
+  }, [questions]);
 
   return (
     <Container theme={theme}>
@@ -268,7 +311,7 @@ export default function SurveyFormPage() {
                 <AuthCheckBox
                   type="checkbox"
                   checked={requiredAuthentications.includes(auth)}
-                  onChange={(e) => handelCheck(e, auth)}
+                  onChange={(e) => handleCheckInputChange(e, auth)}
                 />
                 <AuthLabel>{auth}</AuthLabel>
               </AuthList>
@@ -281,6 +324,14 @@ export default function SurveyFormPage() {
             value={surveyData?.ended_date || ''}
           />
         </SurveyDataContainer>
+        <AddButton name="add" onClick={handleButtonClick}>
+          +
+        </AddButton>
+        <DeleteButton name="delete" onClick={handleButtonClick}>
+          -
+        </DeleteButton>
+
+        {questions.map((question: SurveyQuestion) => showQuestionForm(question.type, question.question_id))}
       </BodyContainer>
     </Container>
   );
