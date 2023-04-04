@@ -45,7 +45,7 @@ const IdCardImage = styled(Icons.ID).attrs({
   border-radius: 20px;
 `;
 
-const DriverCardImage = styled(Icons.DRIVER_LICENSE).attrs({
+const DriverLicenseImage = styled(Icons.DRIVER_LICENSE).attrs({
   width: 30,
   height: 30,
 })`
@@ -54,7 +54,7 @@ const DriverCardImage = styled(Icons.DRIVER_LICENSE).attrs({
   border-radius: 20px;
 `;
 
-const SchoolImage = styled(Icons.WEBMAIL).attrs({
+const WebmailImage = styled(Icons.WEBMAIL).attrs({
   width: 30,
   height: 30,
 })`
@@ -155,8 +155,8 @@ const initialState: AuthState = {
   naver: false,
   google: false,
   identityCard: false,
-  driverCard: false,
-  schoolMail: false,
+  driverLicense: false,
+  webmail: false,
 };
 
 export default function MyPage() {
@@ -197,16 +197,17 @@ export default function MyPage() {
     },
     {
       number: 5,
-      image: <DriverCardImage />,
+
+      image: <DriverLicenseImage />,
       title: '운전면허',
-      checkAuth: state.driverCard,
+      checkAuth: state.driverLicense,
       pageNavigate: () => navigate('../mypage/auth-list'),
     },
     {
       number: 6,
-      image: <SchoolImage />,
+      image: <WebmailImage />,
       title: '웹메일',
-      checkAuth: state.schoolMail,
+      checkAuth: state.webmail,
       pageNavigate: () => navigate('../mypage/auth-list'),
     },
   ];

@@ -42,9 +42,9 @@ export const authReducer = (state: AuthState, action: AuthAction): AuthState => 
     case 'AUTH_IDENTITY':
       return { ...state, identityCard: action.payload };
     case 'AUTH_DRIVER':
-      return { ...state, driverCard: action.payload };
-    case 'AUTH_SCHOOLMAIL':
-      return { ...state, schoolMail: action.payload };
+      return { ...state, driverLicense: action.payload };
+    case 'AUTH_WEBMAIL':
+      return { ...state, webmail: action.payload };
     default:
       return state;
   }
