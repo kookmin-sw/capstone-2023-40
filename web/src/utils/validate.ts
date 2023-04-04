@@ -20,7 +20,8 @@ export const validateEmail = (email: string): boolean => {
 };
 
 /**
- * Validate password format. It **should contain** special character.
+ * Validate password format. It **should contain** numeric string with Capital letter
+ * and special character included.
  * From minimum 8 to maximum 25 characters.
  *
  * @param {string} password Password text
