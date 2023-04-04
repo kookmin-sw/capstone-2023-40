@@ -168,6 +168,13 @@ export default function SurveyFormPage() {
     }
   };
 
+  const handleQuestionTitleChange = (event: React.ChangeEvent<HTMLInputElement>, questionId: number) => {
+    const { name, value } = event.target;
+    questions[questionId] = { ...questions[questionId], [name]: value };
+    // FIXME: it may cause too much calc
+    setQuestions([...questions]);
+  };
+
   const handleRequiredAuthentications = (value: string, isChecked: boolean) => {
     if (isChecked) {
       setRequiredAuthentications((prev) => [...prev, value]);
@@ -205,7 +212,7 @@ export default function SurveyFormPage() {
   const deleteQuestion = (index: number) => {
     setQuestions([...questions.filter((question) => question.question_id !== index)]);
   };
-
+  // TODO: make and delete with index mechanism
   const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const { name } = event.target as HTMLInputElement;
     if (name === 'add') makeQuestion(questions.length);
@@ -225,7 +232,12 @@ export default function SurveyFormPage() {
   const longAnswerForm = (questionId: number) => {
     return (
       <QuestionContainer key={questionId}>
-        <TitleInput />
+        <TitleInput
+          onChange={(event) => handleQuestionTitleChange(event, questionId)}
+          name="title"
+          type="text"
+          value={questions[questionId].title || ''}
+        />
         {questionTypeSelector()}
         <Answer>장문형 텍스트</Answer>
       </QuestionContainer>
@@ -235,7 +247,12 @@ export default function SurveyFormPage() {
   const shortAnswerForm = (questionId: number) => {
     return (
       <QuestionContainer key={questionId}>
-        <TitleInput />
+        <TitleInput
+          onChange={(event) => handleQuestionTitleChange(event, questionId)}
+          name="title"
+          type="text"
+          value={questions[questionId].title || ''}
+        />
         {questionTypeSelector()}
         <Answer>단답형 텍스트</Answer>
       </QuestionContainer>
