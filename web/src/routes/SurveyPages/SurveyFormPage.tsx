@@ -227,7 +227,12 @@ export default function SurveyFormPage() {
   };
 
   const deleteQuestionInIndex = (index: number) => {
-    setQuestions([...questions.filter((question) => question.question_id !== index)]);
+    for (let i = index + 1; i < questions.length; i += 1) {
+      questions[i] = { ...questions[i], question_id: i - 1 };
+    }
+    const newQuestions = [...questions];
+    newQuestions.splice(index, 1);
+    setQuestions(newQuestions);
   };
 
   // TODO: make and delete with index mechanism
