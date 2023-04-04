@@ -95,12 +95,11 @@ const Select = styled.select`
   background-color: ${(props) => props.theme.colors.container};
 `;
 
-const AuthList = styled(Select)`
-  width: 12vw;
-  margin-left: 40vw;
-`;
+const AuthList = styled.div``;
 
-const Auth = styled.option``;
+const AuthCheckBox = styled.input``;
+
+const AuthLabel = styled.label``;
 
 const QuestionContainer = styled(ItemContainer)``;
 
@@ -147,7 +146,7 @@ interface SurveyData {
   description: string;
   // created_date: string;
   ended_date: string;
-  // required_authentications: Array<string>;
+  required_authentications: Array<string>;
   // questions: Array<SurveyQuestion>;
 }
 
@@ -156,6 +155,7 @@ export default function SurveyFormPage() {
   const [theme, toggleTheme] = useTheme();
   const [questions, setQuestions] = useState<SurveyQuestion[]>([]);
   const [requiredAuthentications, setRequiredAuthentications] = useState<string[]>([]);
+  const [authIsChecked, setAuthIsChecked] = useState<boolean>(false);
   const [surveyData, setSurveyData] = useState<SurveyData>();
 
   const handleStringInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -166,6 +166,19 @@ export default function SurveyFormPage() {
         [name]: value,
       });
     }
+  };
+
+  const handleCheckInputChange = (value: string, isChecked: boolean) => {
+    if (isChecked) {
+      setRequiredAuthentications((prev) => [...prev, value]);
+    } else {
+      setRequiredAuthentications(requiredAuthentications.filter((item) => item !== value));
+    }
+  };
+
+  const handelCheck = (event: React.ChangeEvent<HTMLInputElement>, value: string) => {
+    setAuthIsChecked(!authIsChecked);
+    handleCheckInputChange(value, event.target.checked);
   };
 
   const makeQuestionTypeSelector = () => {
@@ -205,6 +218,7 @@ export default function SurveyFormPage() {
       title: '제목 없는 설문',
       description: '설문지 설명',
       ended_date: '',
+      required_authentications: requiredAuthentications,
     };
     setSurveyData(initialSurveyData);
   }, []);
@@ -212,6 +226,15 @@ export default function SurveyFormPage() {
   useEffect(() => {
     console.log(surveyData);
   }, [surveyData]);
+
+  useEffect(() => {
+    if (typeof surveyData !== 'undefined') {
+      setSurveyData({
+        ...surveyData,
+        required_authentications: requiredAuthentications,
+      });
+    }
+  }, [requiredAuthentications]);
 
   return (
     <Container theme={theme}>
@@ -240,6 +263,16 @@ export default function SurveyFormPage() {
                 <SelectedAuth key={auth}>{auth}</SelectedAuth>
               ))}
             </SelectedAuthList>
+            {authList.map((auth: string, index: number) => (
+              <AuthList key={auth}>
+                <AuthCheckBox
+                  type="checkbox"
+                  checked={requiredAuthentications.includes(auth)}
+                  onChange={(e) => handelCheck(e, auth)}
+                />
+                <AuthLabel>{auth}</AuthLabel>
+              </AuthList>
+            ))}
           </SurveyRequireAuthContainer>
           <SurveyEndDateInput
             type="date"
