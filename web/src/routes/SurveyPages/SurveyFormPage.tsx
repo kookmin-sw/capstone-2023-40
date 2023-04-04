@@ -199,31 +199,20 @@ export default function SurveyFormPage() {
   };
 
   const makeQuestionUnderIndex = (index: number) => {
-    if (questions.length === 0) {
-      const newQuestion: SurveyQuestion = {
-        question_id: 0,
-        type: 'LONG_ANSWER',
-        title: '',
-        description: '',
-        options: null,
-      };
-      setQuestions([newQuestion]);
-    } else {
-      for (let i = index + 1; i < questions.length; i += 1) {
-        questions[i] = { ...questions[i], question_id: i + 1 };
-      }
-      const newQuestions = [...questions];
-      const newQuestion = {
-        question_id: index + 1,
-        type: 'LONG_ANSWER',
-        title: '',
-        description: '',
-        options: null,
-      };
-
-      newQuestions.splice(index + 1, 0, newQuestion);
-      setQuestions(newQuestions);
+    for (let i = index + 1; i < questions.length; i += 1) {
+      questions[i] = { ...questions[i], question_id: i + 1 };
     }
+    const newQuestions = [...questions];
+    const newQuestion = {
+      question_id: index + 1,
+      type: 'LONG_ANSWER',
+      title: '',
+      description: '',
+      options: null,
+    };
+
+    newQuestions.splice(index + 1, 0, newQuestion);
+    setQuestions(newQuestions);
   };
 
   const deleteQuestionInIndex = (index: number) => {
@@ -375,7 +364,7 @@ export default function SurveyFormPage() {
             name="ended_date"
             value={surveyData?.ended_date || ''}
           />
-          <AddButton name="add" onClick={(event) => handleButtonClick(event, 0)}>
+          <AddButton name="add" onClick={(event) => handleButtonClick(event, -1)}>
             +
           </AddButton>
         </SurveyDataContainer>
