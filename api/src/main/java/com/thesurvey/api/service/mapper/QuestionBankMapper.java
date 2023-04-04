@@ -2,8 +2,8 @@ package com.thesurvey.api.service.mapper;
 
 import com.thesurvey.api.domain.QuestionBank;
 import com.thesurvey.api.domain.QuestionOption;
-import com.thesurvey.api.dto.QuestionBankInfoDto;
-import com.thesurvey.api.dto.QuestionOptionInfoDto;
+import com.thesurvey.api.dto.response.QuestionBankResponseDto;
+import com.thesurvey.api.dto.response.QuestionOptionResponseDto;
 import com.thesurvey.api.dto.request.QuestionRequestDto;
 import com.thesurvey.api.repository.QuestionOptionRepository;
 import java.util.List;
@@ -30,19 +30,25 @@ public class QuestionBankMapper {
             .build();
     }
 
-    public QuestionBankInfoDto toQuestionBankInfoDto(QuestionBank questionBank) {
+    public QuestionBankResponseDto toQuestionBankResponseDto(QuestionBank questionBank) {
         List<QuestionOption> questionOptionList = questionOptionRepository.findByQuestionBankId(
             questionBank.getQuestionBankId());
-        List<QuestionOptionInfoDto> questionOptionInfoDtoList = questionOptionList
-            .stream()
-            .map(questionOptionMapper::toQuestionOptionInfoDto)
-            .collect(Collectors.toList());
+        List<QuestionOptionResponseDto> questionOptionResponseDtoList = null;
+        if (questionOptionList != null && questionOptionList.size() != 0) {
+            questionOptionResponseDtoList = questionOptionList
+                .stream()
+                .map(questionOptionMapper::toQuestionOptionResponseDto)
+                .collect(Collectors.toList());
+        }
 
-        return QuestionBankInfoDto.builder()
+        return QuestionBankResponseDto.builder()
+            .questionBankId(questionBank.getQuestionBankId())
             .title(questionBank.getTitle())
             .description(questionBank.getDescription())
             .questionType(questionBank.getQuestionType())
-            .questionOptions(questionOptionInfoDtoList)
+            .questionOptions(questionOptionResponseDtoList)
+            .createdDate(questionBank.getCreatedDate())
+            .modifiedDate(questionBank.getModifiedDate())
             .build();
     }
 

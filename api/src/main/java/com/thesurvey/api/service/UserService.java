@@ -1,7 +1,7 @@
 package com.thesurvey.api.service;
 
 import com.thesurvey.api.domain.User;
-import com.thesurvey.api.dto.UserInfoDto;
+import com.thesurvey.api.dto.response.UserResponseDto;
 import com.thesurvey.api.dto.request.UserUpdateRequestDto;
 import com.thesurvey.api.exception.ErrorMessage;
 import com.thesurvey.api.exception.ExceptionMapper;
@@ -24,26 +24,30 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public UserInfoDto getUserByName(String name) {
-        return userMapper.toUserInfoDto(userRepository.findByName(name))
+    public UserResponseDto getUserByName(String name) {
+        User user = userRepository.findByName(name)
             .orElseThrow(() -> new ExceptionMapper(ErrorMessage.USER_NAME_NOT_FOUND, name));
+        return userMapper.toUserResponseDto(user);
     }
 
     @Transactional(readOnly = true)
-    public UserInfoDto getUserByEmail(String email) {
-        return userMapper.toUserInfoDto(userRepository.findByEmail(email))
+    public UserResponseDto getUserByEmail(String email) {
+        User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new ExceptionMapper(ErrorMessage.USER_EMAIL_NOT_FOUND, email));
+        return userMapper.toUserResponseDto(user);
+
     }
 
     @Transactional(readOnly = true)
-    public UserInfoDto getUserProfile(Authentication authentication) {
-        return userMapper.toUserInfoDto(userRepository.findByName(authentication.getName()))
+    public UserResponseDto getUserProfile(Authentication authentication) {
+        User user = userRepository.findByName(authentication.getName())
             .orElseThrow(() -> new ExceptionMapper(ErrorMessage.USER_NAME_NOT_FOUND,
                 authentication.getName()));
+        return userMapper.toUserResponseDto(user);
     }
 
     @Transactional
-    public UserInfoDto updateUserProfile(Authentication authentication,
+    public UserResponseDto updateUserProfile(Authentication authentication,
         UserUpdateRequestDto userUpdateRequestDto) {
         User user = getUserFromAuthentication(authentication);
 
@@ -63,7 +67,7 @@ public class UserService {
             user.changeAddress(userUpdateRequestDto.getAddress());
         }
 
-        return userMapper.toUserInfoDto(userRepository.save(user));
+        return userMapper.toUserResponseDto(userRepository.save(user));
     }
 
     @Transactional

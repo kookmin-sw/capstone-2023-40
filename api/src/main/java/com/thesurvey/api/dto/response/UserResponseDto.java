@@ -1,11 +1,12 @@
-package com.thesurvey.api.dto;
+package com.thesurvey.api.dto.response;
 
+import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
-public class UserInfoDto {
+public class UserResponseDto {
 
     private Long userId;
 
@@ -18,5 +19,9 @@ public class UserInfoDto {
     private String address;
 
     private String profileImage;
+
+    private LocalDateTime createdDate;
+
+    private LocalDateTime modifiedDate;
 
 }

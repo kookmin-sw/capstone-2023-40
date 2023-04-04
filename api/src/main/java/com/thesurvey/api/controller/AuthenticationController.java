@@ -1,21 +1,17 @@
 package com.thesurvey.api.controller;
 
-import com.thesurvey.api.dto.UserInfoDto;
+import com.thesurvey.api.dto.response.UserResponseDto;
 import com.thesurvey.api.dto.request.UserLoginRequestDto;
 import com.thesurvey.api.dto.request.UserRegisterRequestDto;
-import com.thesurvey.api.exception.ErrorMessage;
-import com.thesurvey.api.exception.ExceptionMapper;
 import com.thesurvey.api.service.AuthenticationService;
+import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
@@ -38,14 +34,9 @@ public class AuthenticationController {
         @ApiResponse(code = 500, message = "서버 내부 오류")
     })
     @PostMapping("/register")
-    public ResponseEntity<UserInfoDto> register(
-        @RequestBody UserRegisterRequestDto userRegisterRequestDto) {
-        try {
-            return ResponseEntity.ok(authenticationService.register(userRegisterRequestDto));
-        } catch (Exception e) {
-            // FIXME: To global API exception handler, duplicated registration
-            throw new ExceptionMapper(ErrorMessage.INTERNAL_ERROR, e.getMessage());
-        }
+    public ResponseEntity<UserResponseDto> register(
+        @Valid @RequestBody UserRegisterRequestDto userRegisterRequestDto) {
+        return ResponseEntity.ok(authenticationService.register(userRegisterRequestDto));
     }
 
     @ApiOperation(value = "로그인", notes = "로그인을 요청합니다.")
@@ -56,12 +47,9 @@ public class AuthenticationController {
         @ApiResponse(code = 404, message = "요청한 리소스 찾을 수 없음")
     })
     @PostMapping("/login")
-    public ResponseEntity<UserInfoDto> login(@RequestBody UserLoginRequestDto userLoginRequestDto) {
-        try {
-            UserInfoDto userInfoDto = authenticationService.login(userLoginRequestDto);
-            return ResponseEntity.ok(userInfoDto);
-        } catch (AuthenticationException e) {
-            throw new ExceptionMapper(ErrorMessage.UNAUTHORIZED_REQUEST);
-        }
+    public ResponseEntity<UserResponseDto> login(
+        @Valid @RequestBody UserLoginRequestDto userLoginRequestDto) {
+        UserResponseDto userResponseDto = authenticationService.login(userLoginRequestDto);
+        return ResponseEntity.ok(userResponseDto);
     }
 }

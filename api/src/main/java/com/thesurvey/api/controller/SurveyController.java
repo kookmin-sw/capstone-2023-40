@@ -1,15 +1,15 @@
 package com.thesurvey.api.controller;
 
-import com.thesurvey.api.dto.AnsweredInfoQuestionDto;
-import com.thesurvey.api.dto.SurveyInfoDto;
+import com.thesurvey.api.dto.response.AnsweredQuestionResponseDto;
+import com.thesurvey.api.dto.response.SurveyResponseDto;
 import com.thesurvey.api.dto.request.AnsweredQuestionRequestDto;
 import com.thesurvey.api.dto.request.SurveyRequestDto;
 import com.thesurvey.api.dto.request.SurveyUpdateRequestDto;
 import com.thesurvey.api.service.AnsweredQuestionService;
 import com.thesurvey.api.service.SurveyService;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
+import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -50,7 +49,7 @@ public class SurveyController {
         @ApiResponse(code = 404, message = "요청한 리소스 찾을 수 없음")
     })
     @GetMapping
-    public ResponseEntity<List<Optional<SurveyInfoDto>>> getAllSurvey() {
+    public ResponseEntity<List<SurveyResponseDto>> getAllSurvey() {
         return ResponseEntity.ok(surveyService.getAllSurvey());
     }
 
@@ -63,7 +62,7 @@ public class SurveyController {
         @ApiResponse(code = 404, message = "요청한 리소스 찾을 수 없음")
     })
     @GetMapping("/{surveyId}")
-    public ResponseEntity<SurveyInfoDto> getSurvey(
+    public ResponseEntity<SurveyResponseDto> getSurvey(
         @ApiParam(value = "UUID 형식의 surveyId", required = true)
         @PathVariable UUID surveyId) {
         return ResponseEntity.ok(surveyService.getSurveyBySurveyIdWithRelatedQuestion(surveyId));
@@ -79,11 +78,10 @@ public class SurveyController {
         @ApiResponse(code = 500, message = "서버 내부 오류")
     })
     @PostMapping
-    public ResponseEntity<SurveyInfoDto> createSurvey(Authentication authentication,
-        @RequestBody SurveyRequestDto surveyRequestDto) {
-        return ResponseEntity.ok(surveyService.createSurvey(authentication, surveyRequestDto));
+    public ResponseEntity<SurveyResponseDto> createSurvey(Authentication authentication,
+        @Valid @RequestBody SurveyRequestDto surveyRequestDto) {
+            return ResponseEntity.ok(surveyService.createSurvey(authentication, surveyRequestDto));
     }
-
 
     @ApiOperation(value = "설문조사 수정", notes = "설문조사 내용을 수정합니다. 아래의 모든 필드를 담아 전송해야 합니다.")
     @ApiResponses(value = {
@@ -95,8 +93,8 @@ public class SurveyController {
         @ApiResponse(code = 500, message = "서버 내부 오류")
     })
     @PutMapping
-    public ResponseEntity<SurveyInfoDto> updateSurvey(
-        @RequestBody SurveyUpdateRequestDto surveyUpdateRequestDto) {
+    public ResponseEntity<SurveyResponseDto> updateSurvey(
+        @Valid @RequestBody SurveyUpdateRequestDto surveyUpdateRequestDto) {
         return ResponseEntity.ok(surveyService.updateSurvey(surveyUpdateRequestDto));
     }
 
@@ -114,9 +112,20 @@ public class SurveyController {
         return ResponseEntity.ok().build();
     }
 
+    @ApiOperation(value = "설문조사 응답 제출", notes = "설문조사 응답을 제출합니다.")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "요청 성공"),
+        @ApiResponse(code = 400, message = "잘못된 요청"),
+        @ApiResponse(code = 401, message = "사용자 인증 실패"),
+        @ApiResponse(code = 403, message = "접근 권한 없음"),
+        @ApiResponse(code = 404, message = "요청한 리소스 찾을 수 없음")
+    })
+
     @PostMapping("/submit")
-    public ResponseEntity<AnsweredInfoQuestionDto> submitSurvey(Authentication authentication,
-        @RequestBody AnsweredQuestionRequestDto answeredQuestionRequestDto) {
-        return ResponseEntity.ok(answeredQuestionService.createAnswer(authentication, answeredQuestionRequestDto));
+    public ResponseEntity<AnsweredQuestionResponseDto> submitSurvey(Authentication authentication,
+        @Valid @RequestBody AnsweredQuestionRequestDto answeredQuestionRequestDto) {
+        return ResponseEntity.ok(
+            answeredQuestionService.createAnswer(authentication, answeredQuestionRequestDto));
     }
+
 }

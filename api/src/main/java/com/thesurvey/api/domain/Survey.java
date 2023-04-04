@@ -33,6 +33,7 @@ public class Survey extends BaseTimeEntity {
         orphanRemoval = true
     )
     private List<Participation> participations;
+
     @OneToMany(
         mappedBy = "survey",
         cascade = CascadeType.PERSIST,

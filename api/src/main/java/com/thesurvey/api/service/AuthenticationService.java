@@ -1,7 +1,7 @@
 package com.thesurvey.api.service;
 
 import com.thesurvey.api.domain.User;
-import com.thesurvey.api.dto.UserInfoDto;
+import com.thesurvey.api.dto.response.UserResponseDto;
 import com.thesurvey.api.dto.request.UserLoginRequestDto;
 import com.thesurvey.api.dto.request.UserRegisterRequestDto;
 import com.thesurvey.api.exception.ErrorMessage;
@@ -52,13 +52,13 @@ public class AuthenticationService {
     }
 
     @Transactional
-    public UserInfoDto register(UserRegisterRequestDto userRegisterRequestDto) {
+    public UserResponseDto register(UserRegisterRequestDto userRegisterRequestDto) {
         User user = userRepository.save(userMapper.toUser(userRegisterRequestDto));
-        return userMapper.toUserInfoDto(user);
+        return userMapper.toUserResponseDto(user);
     }
 
     @Transactional(readOnly = true)
-    public UserInfoDto login(UserLoginRequestDto userLoginRequestDto) {
+    public UserResponseDto login(UserLoginRequestDto userLoginRequestDto) {
         Authentication authentication = new UsernamePasswordAuthenticationToken(
             userLoginRequestDto.getEmail(), userLoginRequestDto.getPassword());
 

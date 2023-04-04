@@ -1,8 +1,8 @@
 package com.thesurvey.api.service.mapper;
 
 import com.thesurvey.api.domain.Survey;
-import com.thesurvey.api.dto.QuestionBankInfoDto;
-import com.thesurvey.api.dto.SurveyInfoDto;
+import com.thesurvey.api.dto.response.QuestionBankResponseDto;
+import com.thesurvey.api.dto.response.SurveyResponseDto;
 import com.thesurvey.api.dto.request.SurveyRequestDto;
 import com.thesurvey.api.repository.SurveyRepository;
 import com.thesurvey.api.service.QuestionService;
@@ -24,19 +24,21 @@ public class SurveyMapper {
         this.questionService = questionService;
     }
 
-    public SurveyInfoDto toSurveyInfoDto(Survey survey) {
-        List<QuestionBankInfoDto> questionBankInfoDtoList = questionService.getQuestionBankInfoDtoListBySurveyId(
+    public SurveyResponseDto toSurveyResponseDto(Survey survey) {
+        List<QuestionBankResponseDto> questionBankResponseDtoList = questionService.getQuestionBankInfoDtoListBySurveyId(
             survey.getSurveyId());
 
-        return SurveyInfoDto.builder()
+        return SurveyResponseDto.builder()
             .surveyId(survey.getSurveyId())
             .title(survey.getTitle())
             .description(survey.getDescription())
             .startedDate(survey.getStartedDate())
             .endedDate(survey.getEndedDate())
+            .createdDate(survey.getCreatedDate())
+            .modifiedDate(survey.getModifiedDate())
             .certificationType(certificationTypeConverter.toCertificationTypeList(
                 surveyRepository.findCertificationTypeBySurveyId(survey.getSurveyId())))
-            .questions(questionBankInfoDtoList)
+            .questions(questionBankResponseDtoList)
             .build();
     }
 

@@ -62,7 +62,10 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    @Column(name = "email", nullable = false)
+    /**
+     * email should be unique. This will be used when login user during authentication
+     */
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @Column(name = "password", nullable = false)
