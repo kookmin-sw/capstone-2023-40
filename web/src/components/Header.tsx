@@ -141,20 +141,20 @@ const NavigatorContainer = styled.ul`
   flex: 1;
 `;
 
-const Navigator = styled.li`
+const Navigator = styled.li<{ currentLocation: string }>`
   font-size: calc(1.5vh + 0.5vmin);
   font-weight: 600;
-  cursor: pointer;
+  cursor: ${(props) => (props.currentLocation === '/' ? 'pointer' : 'hand')};
   padding: 1vw;
 
   &:hover {
-    opacity: 0.5;
+    opacity: ${(props) => (props.currentLocation === '/' ? 0.5 : 1)};
     transition: all 0.15s ease-in-out;
   }
 `;
 
 const LoginInformation = styled.div`
-  display: flex;
+  display: flex;z
   align-items: center;
   justify-content: center;
   font-size: calc(1.5vh + 0.5vmin);
@@ -244,6 +244,18 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
     toggleTheme();
   };
 
+  const logoutClick = () => {
+    setIsLogin(!isLogin);
+    setIsSubPageOpen(!isSubPageOpen);
+    console.log('isLogin : ', isLogin);
+    navigate('../../../login');
+  };
+
+  const navigateMypage = () => {
+    navigate('../../../mypage');
+    setIsSubPageOpen(!isSubPageOpen);
+  };
+
   return (
     <HeaderContainer theme={theme} isTransitionEnabled={isTransitionEnabled}>
       {theme.alt === 'light' ? (
@@ -258,8 +270,18 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
         </>
       )}
       <NavigatorContainer theme={theme}>
-        <Navigator onClick={() => navigate('/survey')}>설문</Navigator>
-        <Navigator onClick={() => navigate('/report')}>리포트</Navigator>
+        <Navigator
+          currentLocation={currentLocation}
+          onClick={currentLocation === '/' ? () => navigate('/survey') : undefined}
+        >
+          설문
+        </Navigator>
+        <Navigator
+          currentLocation={currentLocation}
+          onClick={currentLocation === '/' ? () => navigate('/report') : undefined}
+        >
+          리포트
+        </Navigator>
       </NavigatorContainer>
       <ButtonContainer>
         <CheckBoxContainer>
@@ -284,7 +306,7 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
 
       {isSubPageOpen && (
         <SubPageContainer theme={theme}>
-          <SubPageButton onClick={() => navigate('../mypage')} theme={theme}>
+          <SubPageButton onClick={navigateMypage} theme={theme}>
             마이페이지
           </SubPageButton>
           <SubPageButton onClick={() => navigate('../')} theme={theme}>

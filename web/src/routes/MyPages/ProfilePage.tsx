@@ -113,8 +113,6 @@ const PurchaseButton = styled.div`
   margin: 2vw;
   display: flex;
   padding: 1.3vh;
-  margin-top: 10px;
-  margin-bottom: 10px;
   border: none;
   border-radius: 10px;
   font-size: 1.8vh;
