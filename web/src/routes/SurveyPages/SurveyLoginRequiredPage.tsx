@@ -14,13 +14,6 @@ export default function SurveyLoginRequiredPage() {
   return (
     <Container>
       <Header theme={theme} toggleTheme={toggleTheme} />
-      // FIXME: Need to implement
-      <RequiredAuthModal
-      // theme={theme}
-      // title="해당 설문에 참여하기 위해서는 아래의 인증이 필요합니다."
-      // level="INFO"
-      // text="설문 목록으로 돌아가기"
-      />
     </Container>
   );
 }

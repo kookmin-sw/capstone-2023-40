@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
 
 import DarkModeIcon from '../assets/darkmode.webp';
@@ -209,6 +209,24 @@ const SubPageButton = styled.button`
   }
 `;
 
+const SaveUserInformationButton = styled.div`
+  margin: 2vw;
+  display: flex;
+  padding: 1vh;
+  font-size: 1.7vh;
+  font-weight: 700;
+  color: white;
+  background-color: ${(props) => props.theme.colors.primary};
+  border: none;
+  border-radius: ${(props) => props.theme.borderRadius};
+  cursor: pointer;
+  align-items: center;
+
+  &:hover {
+    background-color: ${(props) => props.theme.colors.prhover};
+  }
+`;
+
 interface HeaderProps {
   theme: DefaultTheme;
   toggleTheme: () => void;
@@ -216,8 +234,9 @@ interface HeaderProps {
 
 export default function Header({ theme, toggleTheme }: HeaderProps) {
   const navigate = useNavigate();
+  const currentLocation = useLocation().pathname;
   const [isTransitionEnabled, setIsTransitionEnabled] = useState<boolean>(false);
-  const [isLogin, setIsLogin] = useState<boolean>(false);
+  const [isLogin, setIsLogin] = useState(true);
   const [isSubPageOpen, setIsSubPageOpen] = useState<boolean>(false);
 
   const handleClick = () => {
@@ -248,6 +267,11 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
             <CheckBox id="checkbox" type="checkbox" theme={theme} onClick={handleClick} />
             <CheckBoxLabel htmlFor="checkbox" theme={theme} />
           </CheckBoxWrapper>
+          {currentLocation === '/mypage' ? (
+            <SaveUserInformationButton theme={theme} onClick={() => navigate('../mypage')}>
+              개인정보 저장하기
+            </SaveUserInformationButton>
+          ) : undefined}
           {isLogin ? (
             <UserImage onClick={() => setIsSubPageOpen(!isSubPageOpen)} />
           ) : (
@@ -263,7 +287,7 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
           <SubPageButton onClick={() => navigate('../mypage')} theme={theme}>
             마이페이지
           </SubPageButton>
-          <SubPageButton onClick={() => navigate('../../../')} theme={theme}>
+          <SubPageButton onClick={() => navigate('../')} theme={theme}>
             로그아웃
           </SubPageButton>
         </SubPageContainer>
