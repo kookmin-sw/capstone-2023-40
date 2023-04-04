@@ -198,25 +198,43 @@ export default function SurveyFormPage() {
     }
   };
 
-  const makeQuestion = (index: number) => {
-    const newQuestion = {
-      question_id: index,
-      type: 'LONG_ANSWER',
-      title: '',
-      description: '',
-      options: null,
-    };
-    setQuestions([...questions, newQuestion]);
+  const makeQuestionUnderIndex = (index: number) => {
+    if (questions.length === 0) {
+      const newQuestion: SurveyQuestion = {
+        question_id: 0,
+        type: 'LONG_ANSWER',
+        title: '',
+        description: '',
+        options: null,
+      };
+      setQuestions([newQuestion]);
+    } else {
+      for (let i = index + 1; i < questions.length; i += 1) {
+        questions[i] = { ...questions[i], question_id: i + 1 };
+      }
+      const newQuestions = [...questions];
+      const newQuestion = {
+        question_id: index + 1,
+        type: 'LONG_ANSWER',
+        title: '',
+        description: '',
+        options: null,
+      };
+
+      newQuestions.splice(index + 1, 0, newQuestion);
+      setQuestions(newQuestions);
+    }
   };
 
-  const deleteQuestion = (index: number) => {
+  const deleteQuestionInIndex = (index: number) => {
     setQuestions([...questions.filter((question) => question.question_id !== index)]);
   };
+
   // TODO: make and delete with index mechanism
-  const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>, index: number) => {
     const { name } = event.target as HTMLInputElement;
-    if (name === 'add') makeQuestion(questions.length);
-    else deleteQuestion(1);
+    if (name === 'add') makeQuestionUnderIndex(index);
+    else deleteQuestionInIndex(index);
   };
 
   const questionTypeSelector = () => {
@@ -240,6 +258,12 @@ export default function SurveyFormPage() {
         />
         {questionTypeSelector()}
         <Answer>장문형 텍스트</Answer>
+        <AddButton name="add" onClick={(event) => handleButtonClick(event, questionId)}>
+          +
+        </AddButton>
+        <DeleteButton name="delete" onClick={(event) => handleButtonClick(event, questionId)}>
+          -
+        </DeleteButton>
       </QuestionContainer>
     );
   };
@@ -254,6 +278,12 @@ export default function SurveyFormPage() {
           value={questions[questionId].title || ''}
         />
         {questionTypeSelector()}
+        <AddButton name="add" onClick={(event) => handleButtonClick(event, questionId)}>
+          +
+        </AddButton>
+        <DeleteButton name="delete" onClick={(event) => handleButtonClick(event, questionId)}>
+          -
+        </DeleteButton>
         <Answer>단답형 텍스트</Answer>
       </QuestionContainer>
     );
@@ -340,15 +370,13 @@ export default function SurveyFormPage() {
             name="ended_date"
             value={surveyData?.ended_date || ''}
           />
+          <AddButton name="add" onClick={(event) => handleButtonClick(event, 0)}>
+            +
+          </AddButton>
         </SurveyDataContainer>
-        <AddButton name="add" onClick={handleButtonClick}>
-          +
-        </AddButton>
-        <DeleteButton name="delete" onClick={handleButtonClick}>
-          -
-        </DeleteButton>
-
-        {questions.map((question: SurveyQuestion) => showQuestionForm(question.type, question.question_id))}
+        {questions.map((question: SurveyQuestion, index: number) =>
+          showQuestionForm(question.type, question.question_id)
+        )}
       </BodyContainer>
     </Container>
   );
