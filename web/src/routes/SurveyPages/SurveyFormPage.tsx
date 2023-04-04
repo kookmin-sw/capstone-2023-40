@@ -85,22 +85,6 @@ const SelectedAuth = styled.label`
   background-color: red;
 `;
 
-const AuthSelectButton = styled.button`
-  width: 5vw;
-  padding: 1.2vh 1.5vw 1.2vh 1.5vw;
-  margin-left: 1vw;
-  border: ${(props) => props.theme.border};
-  border-radius: ${(props) => props.theme.borderRadius};
-  font-size: 18px;
-  font-weight: 900;
-  color: ${(props) => props.theme.colors.default};
-  background-color: ${(props) => props.theme.colors.primary};
-
-  &:hover {
-    background-color: ${(props) => props.theme.colors.prhover};
-  }
-`;
-
 const Select = styled.select`
   padding: 1.2vh 1.5vw 1.2vh 1.5vw;
   border: ${(props) => props.theme.border};
@@ -157,20 +141,32 @@ interface SurveyQuestion {
 }
 
 interface SurveyData {
-  survey_id: string;
-  author: number;
+  // survey_id: string;
+  // author: number;
   title: string;
   description: string;
-  created_date: string;
+  // created_date: string;
   ended_date: string;
-  required_authentications: Array<string>;
-  questions: Array<SurveyQuestion>;
+  // required_authentications: Array<string>;
+  // questions: Array<SurveyQuestion>;
 }
 
 export default function SurveyFormPage() {
+  const authList = ['카카오', '구글', '운전면허', '웹메일'];
   const [theme, toggleTheme] = useTheme();
   const [questions, setQuestions] = useState<SurveyQuestion[]>([]);
+  const [requiredAuthentications, setRequiredAuthentications] = useState<string[]>([]);
   const [surveyData, setSurveyData] = useState<SurveyData>();
+
+  const handleStringInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    if (typeof surveyData !== 'undefined') {
+      setSurveyData({
+        ...surveyData,
+        [name]: value,
+      });
+    }
+  };
 
   const makeQuestionTypeSelector = () => {
     return (
@@ -204,6 +200,19 @@ export default function SurveyFormPage() {
 
   const makeMultipleChoiceForm = () => {};
 
+  useEffect(() => {
+    const initialSurveyData = {
+      title: '제목 없는 설문',
+      description: '설문지 설명',
+      ended_date: '',
+    };
+    setSurveyData(initialSurveyData);
+  }, []);
+
+  useEffect(() => {
+    console.log(surveyData);
+  }, [surveyData]);
+
   return (
     <Container theme={theme}>
       <Header theme={theme} toggleTheme={toggleTheme} />
@@ -213,23 +222,32 @@ export default function SurveyFormPage() {
 
       <BodyContainer theme={theme}>
         <SurveyDataContainer theme={theme}>
-          <SurveyTitleInput type="text" value="제목없는 설문" />
-          <SurveyDescriptionInput type="text" value="설문 설명 없음" />
+          <SurveyTitleInput
+            onChange={handleStringInputChange}
+            name="title"
+            type="text"
+            value={surveyData?.title || ''}
+          />
+          <SurveyDescriptionInput
+            onChange={handleStringInputChange}
+            name="description"
+            type="text"
+            value={surveyData?.description || ''}
+          />
           <SurveyRequireAuthContainer>
             <SelectedAuthList>
-              <SelectedAuth>카카오</SelectedAuth>
-              <SelectedAuth>구글</SelectedAuth>
+              {requiredAuthentications.map((auth: string) => (
+                <SelectedAuth key={auth}>{auth}</SelectedAuth>
+              ))}
             </SelectedAuthList>
-            <AuthList>
-              <Auth>카카오</Auth>
-              <Auth>구글</Auth>
-              <Auth>휴대폰</Auth>
-            </AuthList>
-            <AuthSelectButton>+</AuthSelectButton>
           </SurveyRequireAuthContainer>
-          <SurveyEndDateInput type="date" />
+          <SurveyEndDateInput
+            type="date"
+            onChange={handleStringInputChange}
+            name="ended_date"
+            value={surveyData?.ended_date || ''}
+          />
         </SurveyDataContainer>
-        {makeLongAnswerForm()}
       </BodyContainer>
     </Container>
   );
