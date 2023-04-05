@@ -14,7 +14,7 @@ const GuideLabel = styled.label`
   color: ${(props) => props.theme.colors.default};
 `;
 
-const TextInput = styled.input.attrs({ type: 'text' })`
+const TextInput = styled.input.attrs({ type: 'text', maxLength: 100 })`
   padding: 1.2vh 1.5vw 1.2vh 1.5vw;
   border: ${(props) => props.theme.border};
   border-radius: ${(props) => props.theme.borderRadius};
