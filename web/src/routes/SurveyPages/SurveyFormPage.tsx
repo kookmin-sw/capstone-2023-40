@@ -6,6 +6,7 @@ import styled from 'styled-components';
 // import requests from '../../api/request';
 import Header from '../../components/Header';
 import SurveyPageResultModal from '../../components/Modal/SurveyPageResultModal';
+import ChoiceAnswerForm from '../../components/SurveyForm/ChoiceAnswerForm';
 import SubjectiveAnswerForm from '../../components/SurveyForm/SubjectiveAnswerForm';
 import SurveyDataForm from '../../components/SurveyForm/SurveyDataForm';
 import { useTheme } from '../../hooks/useTheme';
@@ -63,35 +64,6 @@ const TextInput = styled.input.attrs({ type: 'text' })`
 
 const QuestionContainer = styled(ItemContainer)``;
 
-const QuestionTypeSelector = styled.select`
-  padding: 1.2vh 1.5vw 1.2vh 1.5vw;
-  border: ${(props) => props.theme.border};
-  border-radius: ${(props) => props.theme.borderRadius};
-  font-size: 14px;
-  font-weight: 900;
-  color: ${(props) => props.theme.colors.default};
-  background-color: ${(props) => props.theme.colors.container};
-  width: 10vw;
-  margin-left: 2vw;
-  cursor: pointer;
-`;
-
-const QuestionTypeOption = styled.option``;
-
-const QuestionTitleInput = styled(TextInput).attrs({ type: 'text' })`
-  font-size: 18px;
-  width: 57vw;
-  margin-top: 7px;
-`;
-
-const QuestionDescriptionInput = styled(TextInput).attrs({ type: 'text' })`
-  font-size: 15px;
-  width: 57vw;
-  margin-top: 7px;
-  margin-bottom: 23px;
-  margin-right: 18vw;
-`;
-
 const AnswerLable = styled.label`
   padding: 1.2vh 1.5vw 1.2vh 1.5vw;
   font-size: 15px;
@@ -111,9 +83,11 @@ const OptionInput = styled(TextInput).attrs({ type: 'text' })`
   margin: 5px;
 `;
 
-const Button = styled.button`
+const DeleteOptionButton = styled.button`
   font-weight: 900;
   text-align: center;
+  color: ${(props) => props.theme.colors.text};
+  margin-left: 3px;
   padding: 10px;
   background-color: ${(props) => props.theme.colors.button};
   width: 35px;
@@ -125,37 +99,6 @@ const Button = styled.button`
   &:hover {
     opacity: 0.8;
   }
-`;
-
-const AddQuestionButton = styled(Button)`
-  color: ${(props) => props.theme.colors.text};
-  margin-left: 37vw;
-`;
-
-const DeleteQuestionButton = styled(Button)`
-  color: #cd5c5c;
-  margin-left: 2vw;
-`;
-
-const AddOptionButton = styled.button`
-  font-weight: 900;
-  text-align: center;
-  padding: 10px;
-  color: ${(props) => props.theme.colors.text};
-  background-color: ${(props) => props.theme.colors.button};
-  border: ${(props) => props.theme.border};
-  border-radius: ${(props) => props.theme.borderRadius};
-  margin: 5px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: ${(props) => props.theme.colors.btnhover};
-  }
-`;
-
-const DeleteOptionButton = styled(Button)`
-  color: ${(props) => props.theme.colors.text};
-  margin-left: 3px;
 `;
 
 const SubmitButton = styled.button.attrs({ type: 'submit' })`
@@ -300,7 +243,7 @@ export default function SurveyFormPage() {
     editRequiredCertificationList(value, event.target.checked);
   };
 
-  // update surveyData title, description, startedDate, endedDate
+  // Update surveyData title | description | startedDate | endedDate
   const handleChangeSurveyData = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     if (typeof surveyData !== 'undefined') {
@@ -311,14 +254,14 @@ export default function SurveyFormPage() {
     }
   };
 
-  // update questionList[questionId] title, description
+  // Update questionList[questionId] title | description
   const handleChangeQuestion = (event: React.ChangeEvent<HTMLInputElement>, questionId: number) => {
     const { name, value } = event.target;
     questionList[questionId] = { ...questionList[questionId], [name]: value };
     setQuestionList([...questionList]);
   };
 
-  // update questionList[questionId] type
+  // Update questionList[questionId] type
   const handleChangeQuestionType = (event: React.ChangeEvent<HTMLSelectElement>, questionId: number) => {
     const { name, value } = event.target;
     questionList[questionId] = { ...questionList[questionId], [name]: +value };
@@ -343,27 +286,6 @@ export default function SurveyFormPage() {
     else if (name === 'deleteQuestion') deleteQuestionAtId(questionId);
     else if (name === 'addOption') addOptionAtBottom(questionId);
     else if (typeof optionId !== 'undefined') deleteOptionAtId(questionId, optionId);
-  };
-
-  const questionTypeSelector = (selected: number, questionId: number) => {
-    return (
-      <QuestionTypeSelector
-        theme={theme}
-        name="questionType"
-        onChange={(event) => handleChangeQuestionType(event, questionId)}
-        value={selected}
-      >
-        <QuestionTypeOption theme={theme} value={QuestionType.LONG_ANSWER}>
-          장문형
-        </QuestionTypeOption>
-        <QuestionTypeOption theme={theme} value={QuestionType.SHORT_ANSWER}>
-          단답형
-        </QuestionTypeOption>
-        <QuestionTypeOption theme={theme} value={QuestionType.SINGLE_CHOICE}>
-          객관식
-        </QuestionTypeOption>
-      </QuestionTypeSelector>
-    );
   };
 
   const makeSubjectiveAnswerForm = (questionId: number, selected: number) => {
@@ -412,7 +334,7 @@ export default function SurveyFormPage() {
     return <AnswerLable theme={theme}>옵션을 추가해 주세요</AnswerLable>;
   };
 
-  const choiceForm = (questionId: number) => {
+  const makeChoiceForm = (questionId: number, selected: number) => {
     return (
       <QuestionContainer
         ref={(element) => {
@@ -421,37 +343,16 @@ export default function SurveyFormPage() {
         theme={theme}
         key={questionId}
       >
-        <QuestionTitleInput
-          theme={theme}
-          onChange={(event) => handleChangeQuestion(event, questionId)}
-          name="title"
-          value={questionList[questionId].title || ''}
-        />
-        {questionTypeSelector(QuestionType.SINGLE_CHOICE, questionId)}
-        <DeleteQuestionButton
-          theme={theme}
-          name="deleteQuestion"
-          onClick={(event) => handleClickButton(event, questionId)}
-        >
-          X
-        </DeleteQuestionButton>
-
-        <QuestionDescriptionInput
-          theme={theme}
-          onChange={(event) => handleChangeQuestion(event, questionId)}
-          name="description"
-          value={questionList[questionId].description || ''}
-        />
-
-        {optionsForm(questionId)}
-        <AddOptionButton theme={theme} name="addOption" onClick={(event) => handleClickButton(event, questionId)}>
-          문항 추가하기
-        </AddOptionButton>
-        <br />
-
-        <AddQuestionButton theme={theme} name="addQuestion" onClick={(event) => handleClickButton(event, questionId)}>
-          +
-        </AddQuestionButton>
+        {ChoiceAnswerForm({
+          selected,
+          questionId,
+          handleChangeQuestion,
+          handleChangeQuestionType,
+          questionList,
+          handleClickButton,
+          optionsForm,
+          theme,
+        })}
       </QuestionContainer>
     );
   };
@@ -463,7 +364,7 @@ export default function SurveyFormPage() {
       case QuestionType.SHORT_ANSWER:
         return makeSubjectiveAnswerForm(questionId, questionType);
       default:
-        return choiceForm(questionId);
+        return makeChoiceForm(questionId, questionType);
     }
   };
 
