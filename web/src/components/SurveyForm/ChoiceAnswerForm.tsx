@@ -80,7 +80,7 @@ interface ChoiceAnswerFormProps {
   handleChangeQuestionType: (event: React.ChangeEvent<HTMLSelectElement>, questionId: number) => void;
   questionList: QuestionCreateRequest[];
   handleClickButton: (event: React.MouseEvent<HTMLButtonElement>, questionId: number, optionId?: number) => void;
-  optionsForm: (questionId: number) => JSX.Element | JSX.Element[];
+  makeoptionsForm: (questionId: number) => JSX.Element | JSX.Element[];
   theme: DefaultTheme;
 }
 
@@ -91,7 +91,7 @@ export default function ChoiceAnswerForm({
   handleChangeQuestionType,
   questionList,
   handleClickButton,
-  optionsForm,
+  makeoptionsForm,
   theme,
 }: ChoiceAnswerFormProps) {
   return (
@@ -118,7 +118,7 @@ export default function ChoiceAnswerForm({
         value={questionList[questionId].description || ''}
       />
 
-      {optionsForm(questionId)}
+      {makeoptionsForm(questionId)}
       <AddOptionButton theme={theme} name="addOption" onClick={(event) => handleClickButton(event, questionId)}>
         문항 추가하기
       </AddOptionButton>

@@ -46,7 +46,10 @@ export default function QuestionTypeSelect({
         단답형
       </QuestionTypeOption>
       <QuestionTypeOption theme={theme} value={QuestionType.SINGLE_CHOICE}>
-        객관식
+        단일선택
+      </QuestionTypeOption>
+      <QuestionTypeOption theme={theme} value={QuestionType.MULTIPLE_CHOICE}>
+        다중선택
       </QuestionTypeOption>
     </QuestionTypeSelector>
   );

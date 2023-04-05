@@ -310,7 +310,7 @@ export default function SurveyFormPage() {
     );
   };
 
-  const optionsForm = (questionId: number) => {
+  const makeoptionsForm = (questionId: number) => {
     const tmpOptions = questionList[questionId].questionOptions;
     if (typeof tmpOptions !== 'undefined') {
       return NumberUtils.range(0, tmpOptions.length).map((index: number) => (
@@ -350,7 +350,7 @@ export default function SurveyFormPage() {
           handleChangeQuestionType,
           questionList,
           handleClickButton,
-          optionsForm,
+          makeoptionsForm,
           theme,
         })}
       </QuestionContainer>
@@ -359,9 +359,7 @@ export default function SurveyFormPage() {
 
   const showQuestionForm = (questionType: number, questionId: number) => {
     switch (questionType) {
-      case QuestionType.LONG_ANSWER:
-        return makeSubjectiveAnswerForm(questionId, questionType);
-      case QuestionType.SHORT_ANSWER:
+      case QuestionType.LONG_ANSWER || QuestionType.SHORT_ANSWER:
         return makeSubjectiveAnswerForm(questionId, questionType);
       default:
         return makeChoiceForm(questionId, questionType);
