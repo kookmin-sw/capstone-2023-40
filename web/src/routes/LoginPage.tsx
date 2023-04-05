@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { Navigate, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import BackgroundImage from '../assets/main-page.webp';
 import Header from '../components/Header';
+import AlertModal from '../components/Modal/AlertModal';
 import { useTheme } from '../hooks/useTheme';
 import { isEmptyString } from '../utils/validate';
 
@@ -98,6 +99,9 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const [inputEmail, setInputEmail] = useState('');
   const [inputPassword, setInputPassword] = useState('');
+  const [isAlertModal, setIsAlertModal] = useState<boolean>(false);
+  const [title, setTitle] = useState('');
+  const [text, setText] = useState('');
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -106,11 +110,18 @@ export default function LoginPage() {
   // It will have to Add connect User DataBase - Email & Password
   const checkLogin = (email: string, password: string) => {
     if (isEmptyString(email) || isEmptyString(password)) {
-      alert('아이디 또는 비밀번호를 확인해주세요.');
+      setTitle('로그인 오류');
+      setText('아이디 또는 비밀번호를 확인해주세요.');
     } else {
-      alert('로그인에 성공했습니다.');
+      setTitle('로그인 성공');
+      setText('로그인에 성공했습니다!');
       navigate('./survey');
     }
+    setIsAlertModal(true);
+  };
+
+  const closeAlertModal = () => {
+    setIsAlertModal(false);
   };
 
   return (
@@ -138,7 +149,17 @@ export default function LoginPage() {
           <Button onClick={() => checkLogin(inputEmail, inputPassword)} theme={theme}>
             로그인
           </Button>
-          <FontText style={{ display: 'flex', flexDirection: 'row' }}>
+          {isAlertModal && (
+            <AlertModal
+              theme={theme}
+              title={title}
+              level="INFO"
+              text={text}
+              buttonText="확인"
+              onClose={closeAlertModal}
+            />
+          )}
+          <FontText theme={theme} style={{ display: 'flex', flexDirection: 'row' }}>
             <hr style={{ border: `${theme.colors.default}` }} />
             <FontText theme={theme}>or</FontText>
             <hr style={{ border: `${theme.colors.default}` }} />

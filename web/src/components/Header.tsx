@@ -210,7 +210,7 @@ const SubPageButton = styled.button`
 `;
 
 const SaveUserInformationButton = styled.div`
-  margin: 2vw;
+  margin: 1vw;
   display: flex;
   padding: 1vh;
   font-size: 1.7vh;
@@ -309,7 +309,7 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
           <SubPageButton onClick={navigateMypage} theme={theme}>
             마이페이지
           </SubPageButton>
-          <SubPageButton onClick={() => navigate('../')} theme={theme}>
+          <SubPageButton onClick={logoutClick} theme={theme}>
             로그아웃
           </SubPageButton>
         </SubPageContainer>
