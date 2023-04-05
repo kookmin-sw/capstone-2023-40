@@ -266,7 +266,9 @@ export default function SurveyListPage() {
           <Notification theme={theme}>
             <Label theme={theme}>😥 참여가능한 설문이 없습니다...</Label>
             <br />
-            <Button theme={theme}>설문 만들러 가기</Button>
+            <Button theme={theme} onClick={() => navigate('/survey/form')}>
+              설문 만들러 가기
+            </Button>
           </Notification>
         </Container>
       );
