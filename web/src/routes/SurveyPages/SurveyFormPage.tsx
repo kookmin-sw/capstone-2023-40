@@ -6,6 +6,10 @@ import axios from '../../api/axios';
 import requests from '../../api/request';
 import Header from '../../components/Header';
 import { useTheme } from '../../hooks/useTheme';
+import { QuestionCreateRequest, QuestionType } from '../../types/request/Question';
+import { QuestionOptionCreateRequest } from '../../types/request/QuestionOption';
+import { SurveyCreateRequest, CertificationType } from '../../types/request/Survey';
+import { NumberUtils } from '../../utils/NumberUtils';
 
 const Container = styled.div`
   width: 100vw;
@@ -63,9 +67,9 @@ const SurveyDescriptionInput = styled(Input)`
 `;
 
 const SurveyEndDateInput = styled(Input)`
-  width: 12vw;
+  width: 32vw;
   margin-bottom: 25px;
-  margin-left: 64vw;
+  margin-left: 10vw;
 `;
 
 const SurveyRequireAuthContainer = styled.div`
@@ -108,7 +112,7 @@ const QuestionTypeSelector = styled(Select)`
   margin-left: 3vw;
 `;
 
-const QuestionType = styled.option``;
+const QuestionTyp = styled.option``;
 
 const TitleInput = styled(Input)`
   width: 57vw;
@@ -128,37 +132,43 @@ const AddButton = styled(Button)``;
 
 const DeleteButton = styled(Button)``;
 
-interface QuestionOption {
-  option_number: number;
-  text: string;
-}
-
-interface SurveyQuestion {
-  question_id: number;
-  type: string;
-  title: string;
-  description: string;
-  options: Array<QuestionOption> | null;
-}
-
-interface SurveyData {
-  // survey_id: string;
-  // author: number;
-  title: string;
-  description: string;
-  // created_date: string;
-  ended_date: string;
-  required_authentications: Array<string>;
-  // questions: Array<SurveyQuestion>;
-}
-
 export default function SurveyFormPage() {
-  const authList = ['카카오', '구글', '운전면허', '웹메일'];
   const [theme, toggleTheme] = useTheme();
-  const [questions, setQuestions] = useState<SurveyQuestion[]>([]);
-  const [requiredAuthentications, setRequiredAuthentications] = useState<string[]>([]);
+  const [questionList, setQuestionList] = useState<QuestionCreateRequest[]>([]);
+  const [requiredAuthentications, setRequiredAuthentications] = useState<CertificationType[]>([]);
   const [authIsChecked, setAuthIsChecked] = useState<boolean>(false);
-  const [surveyData, setSurveyData] = useState<SurveyData>();
+  const [surveyData, setSurveyData] = useState<SurveyCreateRequest>({
+    title: '제목 없는 설문',
+    description: '설문지 설명',
+    startedDate: '2023-04-04T20:31',
+    endedDate: '2023-04-04T20:31',
+    certificationTypes: [],
+    questions: [],
+  });
+
+  useEffect(() => {
+    if (typeof surveyData !== 'undefined') {
+      setSurveyData({
+        ...surveyData,
+        certificationTypes: requiredAuthentications,
+        questions: questionList,
+      });
+    }
+  }, [questionList]);
+
+  useEffect(() => {
+    if (typeof surveyData !== 'undefined') {
+      setSurveyData({
+        ...surveyData,
+        certificationTypes: requiredAuthentications,
+        questions: questionList,
+      });
+    }
+  }, [requiredAuthentications]);
+
+  useEffect(() => {
+    console.log(surveyData);
+  }, [surveyData]);
 
   const handleStringInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -175,23 +185,31 @@ export default function SurveyFormPage() {
     questionId: number
   ) => {
     const { name, value } = event.target;
-    questions[questionId] = { ...questions[questionId], [name]: value };
-    // FIXME: it may cause too much compute
-    setQuestions([...questions]);
+    questionList[questionId] = { ...questionList[questionId], [name]: value };
+    setQuestionList([...questionList]);
+  };
+
+  const handleQuestionTypeChange = (
+    event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>,
+    questionId: number
+  ) => {
+    const { name, value } = event.target;
+    questionList[questionId] = { ...questionList[questionId], [name]: +value };
+    setQuestionList([...questionList]);
   };
 
   const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>, questionId: number, optionId: number) => {
     const { name, value } = event.target;
-    const newOptions = questions[questionId].options;
+    const newOptions = questionList[questionId].questionOptions;
     if (newOptions) {
       newOptions[optionId] = { ...newOptions[optionId], [name]: value };
     }
-    const newQuestions = [...questions];
-    newQuestions[questionId] = { ...newQuestions[questionId], options: newOptions };
-    setQuestions(newQuestions);
+    const newQuestionList = [...questionList];
+    newQuestionList[questionId] = { ...newQuestionList[questionId], questionOptions: newOptions };
+    setQuestionList(newQuestionList);
   };
 
-  const handleRequiredAuthentications = (value: string, isChecked: boolean) => {
+  const handleRequiredAuthentications = (value: number, isChecked: boolean) => {
     if (isChecked) {
       setRequiredAuthentications((prev) => [...prev, value]);
     } else {
@@ -199,80 +217,70 @@ export default function SurveyFormPage() {
     }
   };
 
-  const handleCheckInputChange = (event: React.ChangeEvent<HTMLInputElement>, value: string) => {
+  const handleCheckInputChange = (event: React.ChangeEvent<HTMLInputElement>, value: number) => {
     setAuthIsChecked(!authIsChecked);
     handleRequiredAuthentications(value, event.target.checked);
   };
 
   const handleSubmit = () => {
-    // TODO: put questions and requiredAuth to SurveyData
-    if (typeof surveyData !== 'undefined') {
-      setSurveyData({
-        ...surveyData,
-        required_authentications: requiredAuthentications,
-      });
-    }
+    // TODO: put questionList and requiredAuth to SurveyData
+
+    console.log(surveyData);
   };
 
   const makeQuestionUnderIndex = (index: number) => {
-    for (let i = index + 1; i < questions.length; i += 1) {
-      questions[i] = { ...questions[i], question_id: i + 1 };
+    for (let i = index + 1; i < questionList.length; i += 1) {
+      questionList[i] = { ...questionList[i], questionNo: i + 1 };
     }
-    const newQuestions = [...questions];
-    const newQuestion = {
-      question_id: index + 1,
-      type: 'LONG_ANSWER',
+    const newQuestionList = [...questionList];
+    const newQuestion: QuestionCreateRequest = {
       title: '',
       description: '',
-      options: null,
+      questionType: QuestionType.LONG_ANSWER,
+      questionNo: index + 1,
+      isRequired: true,
     };
 
-    newQuestions.splice(index + 1, 0, newQuestion);
-    setQuestions(newQuestions);
+    newQuestionList.splice(index + 1, 0, newQuestion);
+    setQuestionList(newQuestionList);
   };
 
   const deleteQuestionInIndex = (index: number) => {
-    for (let i = index + 1; i < questions.length; i += 1) {
-      questions[i] = { ...questions[i], question_id: i - 1 };
+    for (let i = index + 1; i < questionList.length; i += 1) {
+      questionList[i] = { ...questionList[i], questionNo: i - 1 };
     }
-    const newQuestions = [...questions];
-    newQuestions.splice(index, 1);
-    setQuestions(newQuestions);
+    const newQuestionList = [...questionList];
+    newQuestionList.splice(index, 1);
+    setQuestionList(newQuestionList);
   };
 
   const addOptionBottom = (questionId: number) => {
-    let newOptions = questions[questionId].options;
+    let newOptions = questionList[questionId].questionOptions;
+    const newOption: QuestionOptionCreateRequest = {
+      option: '',
+      description: '',
+    };
+
     if (newOptions) {
-      const newOption: QuestionOption = {
-        option_number: newOptions.length,
-        text: '',
-      };
       newOptions = [...newOptions, newOption];
     } else {
-      const newOption: QuestionOption = {
-        option_number: 0,
-        text: '',
-      };
       newOptions = [newOption];
     }
 
-    const newQuestions = [...questions];
-    newQuestions[questionId] = { ...newQuestions[questionId], options: newOptions };
-    setQuestions(newQuestions);
+    const newQuestionList = [...questionList];
+    newQuestionList[questionId] = { ...newQuestionList[questionId], questionOptions: newOptions };
+    setQuestionList(newQuestionList);
   };
 
   const deleteOptionInIndex = (questionId: number, optionId: number) => {
-    const newOptions = questions[questionId].options;
+    const newOptions = questionList[questionId].questionOptions;
     if (newOptions) {
-      for (let i = optionId + 1; i < newOptions.length; i += 1) {
-        newOptions[i] = { ...newOptions[i], option_number: i - 1 };
-      }
       newOptions.splice(optionId, 1);
     }
 
-    const newQuestions = [...questions];
-    newQuestions[questionId] = { ...newQuestions[questionId], options: newOptions };
-    setQuestions(newQuestions);
+    const newQuestionList = [...questionList];
+    newQuestionList[questionId] = { ...newQuestionList[questionId], questionOptions: newOptions };
+    setQuestionList(newQuestionList);
   };
 
   const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>, questionId: number, optionId?: number) => {
@@ -283,12 +291,16 @@ export default function SurveyFormPage() {
     else if (typeof optionId !== 'undefined') deleteOptionInIndex(questionId, optionId);
   };
 
-  const questionTypeSelector = (selected: string, questionId: number) => {
+  const questionTypeSelector = (selected: number, questionId: number) => {
     return (
-      <QuestionTypeSelector name="type" onChange={(event) => handleQuestionChange(event, questionId)} value={selected}>
-        <QuestionType value="LONG_ANSWER">장문형 질문</QuestionType>
-        <QuestionType value="SHORT_ANSWER">단답형 질문</QuestionType>
-        <QuestionType value="MULTIPLE_CHOICE">객관식 질문</QuestionType>
+      <QuestionTypeSelector
+        name="questionType"
+        onChange={(event) => handleQuestionTypeChange(event, questionId)}
+        value={selected}
+      >
+        <QuestionTyp value={QuestionType.LONG_ANSWER}>장문형 질문</QuestionTyp>
+        <QuestionTyp value={QuestionType.SHORT_ANSWER}>단답형 질문</QuestionTyp>
+        <QuestionTyp value={QuestionType.SINGLE_CHOICE}>객관식 질문</QuestionTyp>
       </QuestionTypeSelector>
     );
   };
@@ -300,9 +312,9 @@ export default function SurveyFormPage() {
           onChange={(event) => handleQuestionChange(event, questionId)}
           name="title"
           type="text"
-          value={questions[questionId].title || ''}
+          value={questionList[questionId].title || ''}
         />
-        {questionTypeSelector('LONG_ANSWER', questionId)}
+        {questionTypeSelector(QuestionType.LONG_ANSWER, questionId)}
         <Answer>장문형 텍스트</Answer>
         <AddButton name="addQuestion" onClick={(event) => handleButtonClick(event, questionId)}>
           +
@@ -321,9 +333,9 @@ export default function SurveyFormPage() {
           onChange={(event) => handleQuestionChange(event, questionId)}
           name="title"
           type="text"
-          value={questions[questionId].title || ''}
+          value={questionList[questionId].title || ''}
         />
-        {questionTypeSelector('SHORT_ANSWER', questionId)}
+        {questionTypeSelector(QuestionType.SHORT_ANSWER, questionId)}
         <Answer>단답형 텍스트</Answer>
         <AddButton name="addQuestion" onClick={(event) => handleButtonClick(event, questionId)}>
           +
@@ -335,6 +347,26 @@ export default function SurveyFormPage() {
     );
   };
 
+  const showOptions = (questionId: number) => {
+    const tmpOptions = questionList[questionId].questionOptions;
+    if (typeof tmpOptions !== 'undefined') {
+      return NumberUtils.range(0, tmpOptions.length).map((index: number) => (
+        <MultipleChoiceContainer key={index}>
+          <MultipleChoiceInput
+            onChange={(event) => handleOptionChange(event, questionId, index)}
+            name="option"
+            type="text"
+            value={tmpOptions[index].option || ''}
+          />
+          <DeleteButton name="deleteOption" onClick={(event) => handleButtonClick(event, questionId, index)}>
+            -
+          </DeleteButton>
+        </MultipleChoiceContainer>
+      ));
+    }
+    return <div>옵션을 추가해 주세요</div>;
+  };
+
   const multipleChoiceForm = (questionId: number) => {
     return (
       <QuestionContainer key={questionId}>
@@ -342,26 +374,11 @@ export default function SurveyFormPage() {
           onChange={(event) => handleQuestionChange(event, questionId)}
           name="title"
           type="text"
-          value={questions[questionId].title || ''}
+          value={questionList[questionId].title || ''}
         />
-        {questionTypeSelector('MULTIPLE_CHOICE', questionId)}
+        {questionTypeSelector(QuestionType.SINGLE_CHOICE, questionId)}
 
-        {questions[questionId].options?.map((option: QuestionOption) => (
-          <MultipleChoiceContainer key={option.option_number}>
-            <MultipleChoiceInput
-              onChange={(event) => handleOptionChange(event, questionId, option.option_number)}
-              name="text"
-              type="text"
-              value={option.text || ''}
-            />
-            <DeleteButton
-              name="deleteOption"
-              onClick={(event) => handleButtonClick(event, questionId, option.option_number)}
-            >
-              -
-            </DeleteButton>
-          </MultipleChoiceContainer>
-        ))}
+        {showOptions(questionId)}
         <AddButton name="addOption" onClick={(event) => handleButtonClick(event, questionId)}>
           +
         </AddButton>
@@ -376,30 +393,16 @@ export default function SurveyFormPage() {
     );
   };
 
-  const showQuestionForm = (questionType: string, questionId: number) => {
+  const showQuestionForm = (questionType: number, questionId: number) => {
     switch (questionType) {
-      case 'LONG_ANSWER':
+      case QuestionType.LONG_ANSWER:
         return longAnswerForm(questionId);
-      case 'SHORT_ANSWER':
+      case QuestionType.SHORT_ANSWER:
         return shortAnswerForm(questionId);
       default:
         return multipleChoiceForm(questionId);
     }
   };
-
-  useEffect(() => {
-    const initialSurveyData = {
-      title: '제목 없는 설문',
-      description: '설문지 설명',
-      ended_date: '',
-      required_authentications: requiredAuthentications,
-    };
-    setSurveyData(initialSurveyData);
-  }, []);
-
-  useEffect(() => {
-    console.log(questions);
-  }, [questions]);
 
   return (
     <Container theme={theme}>
@@ -424,35 +427,44 @@ export default function SurveyFormPage() {
           />
           <SurveyRequireAuthContainer>
             <SelectedAuthList>
-              {requiredAuthentications.map((auth: string) => (
-                <SelectedAuth key={auth}>{auth}</SelectedAuth>
+              {requiredAuthentications.map((auth: number) => (
+                <SelectedAuth key={auth}>{CertificationType[auth]}</SelectedAuth>
               ))}
             </SelectedAuthList>
-            {authList.map((auth: string, index: number) => (
-              <AuthList key={auth}>
+            {NumberUtils.range(0, 6).map((index: number) => (
+              <AuthList key={index}>
                 <AuthCheckBox
                   type="checkbox"
-                  checked={requiredAuthentications.includes(auth)}
-                  onChange={(e) => handleCheckInputChange(e, auth)}
+                  checked={requiredAuthentications.includes(index)}
+                  onChange={(e) => handleCheckInputChange(e, index)}
                 />
-                <AuthLabel>{auth}</AuthLabel>
+                <AuthLabel>{CertificationType[index]}</AuthLabel>
               </AuthList>
             ))}
           </SurveyRequireAuthContainer>
           <SurveyEndDateInput
-            type="date"
+            type="datetime-local"
             onChange={handleStringInputChange}
-            name="ended_date"
-            value={surveyData?.ended_date || ''}
+            name="startedDate"
+            value={`${surveyData?.startedDate}` || ''}
+          />
+          <SurveyEndDateInput
+            type="datetime-local"
+            onChange={handleStringInputChange}
+            name="endedDate"
+            value={`${surveyData?.endedDate}` || ''}
           />
           <AddButton name="addQuestion" onClick={(event) => handleButtonClick(event, -1)}>
             +
           </AddButton>
         </SurveyDataContainer>
-        {questions.map((question: SurveyQuestion, index: number) =>
-          showQuestionForm(question.type, question.question_id)
+        {questionList.map((question: QuestionCreateRequest) =>
+          showQuestionForm(question.questionType, question.questionNo)
         )}
       </BodyContainer>
+      <Button type="submit" onClick={handleSubmit}>
+        완료하기
+      </Button>
     </Container>
   );
 }
