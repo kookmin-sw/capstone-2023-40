@@ -65,7 +65,7 @@ const AddOptionButton = styled.button`
   background-color: ${(props) => props.theme.colors.button};
   border: ${(props) => props.theme.border};
   border-radius: ${(props) => props.theme.borderRadius};
-  margin: 5px;
+  margin-top: 25px;
   cursor: pointer;
 
   &:hover {
@@ -119,6 +119,7 @@ export default function ChoiceAnswerForm({
       />
 
       {makeoptionsForm(questionId)}
+      <br />
       <AddOptionButton theme={theme} name="addOption" onClick={(event) => handleClickButton(event, questionId)}>
         문항 추가하기
       </AddOptionButton>

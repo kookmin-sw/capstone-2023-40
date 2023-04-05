@@ -65,8 +65,8 @@ const TextInput = styled.input.attrs({ type: 'text' })`
 const QuestionContainer = styled(ItemContainer)``;
 
 const AnswerLable = styled.label`
+  font-size: 13px;
   padding: 1.2vh 1.5vw 1.2vh 1.5vw;
-  font-size: 15px;
   color: ${(props) => props.theme.colors.text};
   text-decoration: underline;
   text-decoration-style: dotted;
@@ -80,7 +80,7 @@ const OptionContainer = styled.div``;
 const OptionInput = styled(TextInput).attrs({ type: 'text' })`
   width: 30vw;
   font-size: 13px;
-  margin: 5px;
+  margin-top: 3px;
 `;
 
 const DeleteOptionButton = styled.button`
