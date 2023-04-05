@@ -366,31 +366,7 @@ export default function SurveyFormPage() {
     );
   };
 
-  const longAnswerForm = (questionId: number) => {
-    const selected = QuestionType.LONG_ANSWER;
-    return (
-      <QuestionContainer
-        ref={(element) => {
-          questionRefs.current[questionId] = element as HTMLDivElement;
-        }}
-        theme={theme}
-        key={questionId}
-      >
-        {SubjectiveAnswerForm({
-          selected,
-          questionId,
-          handleChangeQuestion,
-          handleChangeQuestionType,
-          questionList,
-          handleClickButton,
-          theme,
-        })}
-      </QuestionContainer>
-    );
-  };
-
-  const shortAnswerForm = (questionId: number) => {
-    const selected = QuestionType.SHORT_ANSWER;
+  const makeSubjectiveAnswerForm = (questionId: number, selected: number) => {
     return (
       <QuestionContainer
         ref={(element) => {
@@ -483,9 +459,9 @@ export default function SurveyFormPage() {
   const showQuestionForm = (questionType: number, questionId: number) => {
     switch (questionType) {
       case QuestionType.LONG_ANSWER:
-        return longAnswerForm(questionId);
+        return makeSubjectiveAnswerForm(questionId, questionType);
       case QuestionType.SHORT_ANSWER:
-        return shortAnswerForm(questionId);
+        return makeSubjectiveAnswerForm(questionId, questionType);
       default:
         return choiceForm(questionId);
     }
