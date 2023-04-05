@@ -6,6 +6,8 @@ import styled from 'styled-components';
 // import requests from '../../api/request';
 import Header from '../../components/Header';
 import SurveyPageResultModal from '../../components/Modal/SurveyPageResultModal';
+import SubjectiveAnswerForm from '../../components/SurveyForm/SubjectiveAnswerForm';
+import SurveyDataForm from '../../components/SurveyForm/SurveyDataForm';
 import { useTheme } from '../../hooks/useTheme';
 import { QuestionCreateRequest, QuestionType } from '../../types/request/Question';
 import { QuestionOptionCreateRequest } from '../../types/request/QuestionOption';
@@ -49,13 +51,6 @@ const SurveyDataContainer = styled(ItemContainer)`
   border-left: 16px solid ${(props) => props.theme.colors.primary};
 `;
 
-const GuideLabel = styled.label`
-  margin-left: 10px;
-  margin-right: 10px;
-  font-weight: 900;
-  color: ${(props) => props.theme.colors.default};
-`;
-
 const TextInput = styled.input.attrs({ type: 'text' })`
   padding: 1.2vh 1.5vw 1.2vh 1.5vw;
   border: ${(props) => props.theme.border};
@@ -65,75 +60,6 @@ const TextInput = styled.input.attrs({ type: 'text' })`
   background-color: ${(props) => props.theme.colors.container};
   cursor: text;
 `;
-
-const SurveyTitleInput = styled(TextInput)`
-  width: 74vw;
-  margin-top: 7px;
-  margin-bottom: 10px;
-  font-size: 23px;
-`;
-
-const SurveyDescriptionInput = styled(TextInput)`
-  width: 74vw;
-  margin-bottom: 25px;
-  font-size: 18px;
-`;
-
-const SurveyDateContainer = styled.div``;
-
-const SurveyDateInput = styled.input.attrs({ type: 'datetime-local' })`
-  padding: 1.2vh 1.5vw 1.2vh 1.5vw;
-  border: ${(props) => props.theme.border};
-  border-radius: ${(props) => props.theme.borderRadius};
-  font-weight: 900;
-  color: ${(props) => props.theme.colors.default};
-  background-color: ${(props) => props.theme.colors.container};
-  width: 21vw;
-  margin-left: 2vw;
-  margin-right: 2vw;
-  margin-bottom: 25px;
-`;
-
-const SurveyCertificationsContainer = styled.div`
-  width: 76vw;
-  padding-bottom: 15px;
-`;
-
-const SelectedCertificationsContainer = styled.div`
-  width: 76vw;
-  height: 45px;
-`;
-
-const SelectedCertification = styled.label`
-  margin: 5px;
-  border-radius: ${(props) => props.theme.borderRadius};
-  padding: 1.2vh 1.5vw 1.2vh 1.5vw;
-  background-color: red;
-`;
-
-const CertificationPicker = styled.label`
-  display: flex;
-  align-items: center;
-`;
-
-const CheckBox = styled.input.attrs({ type: 'checkbox' })`
-  appearance: none;
-  width: 20px;
-  height: 20px;
-  border: ${(props) => props.theme.border};
-  border-radius: 0.35rem;
-
-  &:checked {
-    border-color: transparent;
-    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M5.707 7.293a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.414 0l4-4a1 1 0 0 0-1.414-1.414L7 8.586 5.707 7.293z'/%3e%3c/svg%3e");
-    background-size: 100% 100%;
-    background-position: 50%;
-    background-repeat: no-repeat;
-    background-color: limegreen;
-  }
-`;
-
-const CertificationLabel = styled.span``;
 
 const QuestionContainer = styled(ItemContainer)``;
 
@@ -386,20 +312,14 @@ export default function SurveyFormPage() {
   };
 
   // update questionList[questionId] title, description
-  const handleChangeQuestion = (
-    event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>,
-    questionId: number
-  ) => {
+  const handleChangeQuestion = (event: React.ChangeEvent<HTMLInputElement>, questionId: number) => {
     const { name, value } = event.target;
     questionList[questionId] = { ...questionList[questionId], [name]: value };
     setQuestionList([...questionList]);
   };
 
   // update questionList[questionId] type
-  const handleChangeQuestionType = (
-    event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>,
-    questionId: number
-  ) => {
+  const handleChangeQuestionType = (event: React.ChangeEvent<HTMLSelectElement>, questionId: number) => {
     const { name, value } = event.target;
     questionList[questionId] = { ...questionList[questionId], [name]: +value };
     setQuestionList([...questionList]);
@@ -447,6 +367,7 @@ export default function SurveyFormPage() {
   };
 
   const longAnswerForm = (questionId: number) => {
+    const selected = QuestionType.LONG_ANSWER;
     return (
       <QuestionContainer
         ref={(element) => {
@@ -455,38 +376,21 @@ export default function SurveyFormPage() {
         theme={theme}
         key={questionId}
       >
-        <QuestionTitleInput
-          theme={theme}
-          onChange={(event) => handleChangeQuestion(event, questionId)}
-          name="title"
-          value={questionList[questionId].title || ''}
-        />
-        {questionTypeSelector(QuestionType.LONG_ANSWER, questionId)}
-        <DeleteQuestionButton
-          theme={theme}
-          name="deleteQuestion"
-          onClick={(event) => handleClickButton(event, questionId)}
-        >
-          X
-        </DeleteQuestionButton>
-        <QuestionDescriptionInput
-          theme={theme}
-          onChange={(event) => handleChangeQuestion(event, questionId)}
-          name="description"
-          value={questionList[questionId].description || ''}
-        />
-
-        <AnswerLable theme={theme}>장문형 답변이 입력됩니다</AnswerLable>
-        <br />
-
-        <AddQuestionButton theme={theme} name="addQuestion" onClick={(event) => handleClickButton(event, questionId)}>
-          +
-        </AddQuestionButton>
+        {SubjectiveAnswerForm({
+          selected,
+          questionId,
+          handleChangeQuestion,
+          handleChangeQuestionType,
+          questionList,
+          handleClickButton,
+          theme,
+        })}
       </QuestionContainer>
     );
   };
 
   const shortAnswerForm = (questionId: number) => {
+    const selected = QuestionType.SHORT_ANSWER;
     return (
       <QuestionContainer
         ref={(element) => {
@@ -495,33 +399,15 @@ export default function SurveyFormPage() {
         theme={theme}
         key={questionId}
       >
-        <QuestionTitleInput
-          theme={theme}
-          onChange={(event) => handleChangeQuestion(event, questionId)}
-          name="title"
-          value={questionList[questionId].title || ''}
-        />
-        {questionTypeSelector(QuestionType.SHORT_ANSWER, questionId)}
-        <DeleteQuestionButton
-          theme={theme}
-          name="deleteQuestion"
-          onClick={(event) => handleClickButton(event, questionId)}
-        >
-          X
-        </DeleteQuestionButton>
-        <QuestionDescriptionInput
-          theme={theme}
-          onChange={(event) => handleChangeQuestion(event, questionId)}
-          name="description"
-          value={questionList[questionId].description || ''}
-        />
-
-        <AnswerLable theme={theme}>단답형 답변이 입력됩니다</AnswerLable>
-        <br />
-
-        <AddQuestionButton theme={theme} name="addQuestion" onClick={(event) => handleClickButton(event, questionId)}>
-          +
-        </AddQuestionButton>
+        {SubjectiveAnswerForm({
+          selected,
+          questionId,
+          handleChangeQuestion,
+          handleChangeQuestionType,
+          questionList,
+          handleClickButton,
+          theme,
+        })}
       </QuestionContainer>
     );
   };
@@ -614,66 +500,25 @@ export default function SurveyFormPage() {
 
       <BodyContainer theme={theme}>
         <SurveyDataContainer theme={theme}>
-          <SurveyTitleInput
-            theme={theme}
-            onChange={handleChangeSurveyData}
-            name="title"
-            value={surveyData?.title || ''}
-          />
-          <SurveyDescriptionInput
-            theme={theme}
-            onChange={handleChangeSurveyData}
-            name="description"
-            value={surveyData?.description || ''}
-          />
-          <SurveyCertificationsContainer theme={theme}>
-            <SelectedCertificationsContainer theme={theme}>
-              <GuideLabel>필수 인증 목록 : </GuideLabel>
-              {requiredCertificationList.map((auth: number) => (
-                <SelectedCertification theme={theme} key={auth}>
-                  {CertificationType[auth]}
-                </SelectedCertification>
-              ))}
-            </SelectedCertificationsContainer>
-            {NumberUtils.range(0, 6).map((index: number) => (
-              <CertificationPicker theme={theme} key={index} htmlFor={`${index}`}>
-                <CheckBox
-                  id={`${index}`}
-                  checked={requiredCertificationList.includes(index)}
-                  onChange={(e) => handleChangeCheck(e, index)}
-                />
-                <CertificationLabel theme={theme}>{CertificationType[index]}</CertificationLabel>
-              </CertificationPicker>
-            ))}
-          </SurveyCertificationsContainer>
-          <SurveyDateContainer>
-            <GuideLabel>설문조사 기간 : </GuideLabel>
-            <SurveyDateInput
-              theme={theme}
-              onChange={handleChangeSurveyData}
-              name="startedDate"
-              value={`${surveyData?.startedDate}` || ''}
-            />
-            <GuideLabel> ~ </GuideLabel>
-            <SurveyDateInput
-              theme={theme}
-              onChange={handleChangeSurveyData}
-              name="endedDate"
-              value={`${surveyData?.endedDate}` || ''}
-            />
-          </SurveyDateContainer>
-
-          <AddQuestionButton theme={theme} name="addQuestion" onClick={(event) => handleClickButton(event, -1)}>
-            +
-          </AddQuestionButton>
+          {SurveyDataForm({
+            surveyData,
+            handleChangeSurveyData,
+            requiredCertificationList,
+            handleChangeCheck,
+            handleClickButton,
+            theme,
+          })}
         </SurveyDataContainer>
+
         {questionList.map((question: QuestionCreateRequest) =>
           showQuestionForm(question.questionType, question.questionNo)
         )}
+
         <SubmitButton theme={theme} onClick={handleSubmit}>
           완료하기
         </SubmitButton>
       </BodyContainer>
+
       {resultModalOpen && <SurveyPageResultModal theme={theme} />}
     </Container>
   );
