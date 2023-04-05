@@ -5,6 +5,7 @@ import styled from 'styled-components';
 // import axios from '../../api/axios';
 // import requests from '../../api/request';
 import Header from '../../components/Header';
+import SurveyPageResultModal from '../../components/Modal/SurveyPageResultModal';
 import { useTheme } from '../../hooks/useTheme';
 import { QuestionCreateRequest, QuestionType } from '../../types/request/Question';
 import { QuestionOptionCreateRequest } from '../../types/request/QuestionOption';
@@ -255,6 +256,7 @@ export default function SurveyFormPage() {
   const [theme, toggleTheme] = useTheme();
   const questionRefs = useRef<HTMLDivElement[]>([]);
   const [recentCreate, setRecentCreate] = useState<number>();
+  const [resultModalOpen, setResultModalOpen] = useState<boolean>(false);
   const [questionList, setQuestionList] = useState<QuestionCreateRequest[]>([]);
   const [requiredCertificationList, setRequiredCertificationList] = useState<CertificationType[]>([]);
   const [certificationIsChecked, setCertificationIsChecked] = useState<boolean>(false);
@@ -274,7 +276,6 @@ export default function SurveyFormPage() {
   };
 
   useEffect(() => {
-    console.log(recentCreate);
     scrollToRecentCreateQuestion();
   }, [recentCreate]);
 
@@ -300,6 +301,7 @@ export default function SurveyFormPage() {
     // TODO: Check surveyData is valid
     // TODO: submit surveyData to server
     console.log(surveyData);
+    setResultModalOpen(true);
   };
 
   const addQuestionUnderId = (questionId: number) => {
@@ -672,6 +674,7 @@ export default function SurveyFormPage() {
           완료하기
         </SubmitButton>
       </BodyContainer>
+      {resultModalOpen && <SurveyPageResultModal theme={theme} />}
     </Container>
   );
 }
