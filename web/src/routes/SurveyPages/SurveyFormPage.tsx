@@ -274,6 +274,7 @@ export default function SurveyFormPage() {
   };
 
   useEffect(() => {
+    console.log(recentCreate);
     scrollToRecentCreateQuestion();
   }, [recentCreate]);
 
@@ -326,6 +327,7 @@ export default function SurveyFormPage() {
     const newQuestionList = [...questionList];
     newQuestionList.splice(questionId, 1);
     setQuestionList(newQuestionList);
+    setRecentCreate(newQuestionList.length === 0 ? undefined : newQuestionList.length - 1);
   };
 
   const addOptionAtBottom = (questionId: number) => {
