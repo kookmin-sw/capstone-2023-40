@@ -141,11 +141,12 @@ const DeleteOptionButton = styled(Button)``;
 
 const SubmitButton = styled(Button).attrs({ type: 'submit' })``;
 
+// TODO: Drag and drop questions order
 export default function SurveyFormPage() {
   const [theme, toggleTheme] = useTheme();
   const [questionList, setQuestionList] = useState<QuestionCreateRequest[]>([]);
-  const [requiredAuthentications, setRequiredAuthentications] = useState<CertificationType[]>([]);
-  const [authIsChecked, setAuthIsChecked] = useState<boolean>(false);
+  const [requiredCertificationList, setRequiredCertificationList] = useState<CertificationType[]>([]);
+  const [certificationIsChecked, setCertificationIsChecked] = useState<boolean>(false);
   const [surveyData, setSurveyData] = useState<SurveyCreateRequest>({
     title: '제목 없는 설문',
     description: '설문지 설명',
@@ -159,7 +160,6 @@ export default function SurveyFormPage() {
     if (typeof surveyData !== 'undefined') {
       setSurveyData({
         ...surveyData,
-        certificationTypes: requiredAuthentications,
         questions: questionList,
       });
     }
@@ -169,76 +169,19 @@ export default function SurveyFormPage() {
     if (typeof surveyData !== 'undefined') {
       setSurveyData({
         ...surveyData,
-        certificationTypes: requiredAuthentications,
-        questions: questionList,
+        certificationTypes: requiredCertificationList,
       });
     }
-  }, [requiredAuthentications]);
-
-  useEffect(() => {
-    console.log(surveyData);
-  }, [surveyData]);
-
-  const handleStringInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    if (typeof surveyData !== 'undefined') {
-      setSurveyData({
-        ...surveyData,
-        [name]: value,
-      });
-    }
-  };
-
-  const handleQuestionChange = (
-    event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>,
-    questionId: number
-  ) => {
-    const { name, value } = event.target;
-    questionList[questionId] = { ...questionList[questionId], [name]: value };
-    setQuestionList([...questionList]);
-  };
-
-  const handleQuestionTypeChange = (
-    event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>,
-    questionId: number
-  ) => {
-    const { name, value } = event.target;
-    questionList[questionId] = { ...questionList[questionId], [name]: +value };
-    setQuestionList([...questionList]);
-  };
-
-  const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>, questionId: number, optionId: number) => {
-    const { name, value } = event.target;
-    const newOptions = questionList[questionId].questionOptions;
-    if (newOptions) {
-      newOptions[optionId] = { ...newOptions[optionId], [name]: value };
-    }
-    const newQuestionList = [...questionList];
-    newQuestionList[questionId] = { ...newQuestionList[questionId], questionOptions: newOptions };
-    setQuestionList(newQuestionList);
-  };
-
-  const handleRequiredAuthentications = (value: number, isChecked: boolean) => {
-    if (isChecked) {
-      setRequiredAuthentications((prev) => [...prev, value]);
-    } else {
-      setRequiredAuthentications(requiredAuthentications.filter((item) => item !== value));
-    }
-  };
-
-  const handleCheckInputChange = (event: React.ChangeEvent<HTMLInputElement>, value: number) => {
-    setAuthIsChecked(!authIsChecked);
-    handleRequiredAuthentications(value, event.target.checked);
-  };
+  }, [requiredCertificationList]);
 
   const handleSubmit = () => {
-    // TODO: put questionList and requiredAuth to SurveyData
-
+    // TODO: Check surveyData is valid
+    // TODO: submit surveyData to server
     console.log(surveyData);
   };
 
-  const makeQuestionUnderIndex = (index: number) => {
-    for (let i = index + 1; i < questionList.length; i += 1) {
+  const addQuestionUnderId = (questionId: number) => {
+    for (let i = questionId + 1; i < questionList.length; i += 1) {
       questionList[i] = { ...questionList[i], questionNo: i + 1 };
     }
     const newQuestionList = [...questionList];
@@ -246,24 +189,24 @@ export default function SurveyFormPage() {
       title: '',
       description: '',
       questionType: QuestionType.LONG_ANSWER,
-      questionNo: index + 1,
+      questionNo: questionId + 1,
       isRequired: true,
     };
 
-    newQuestionList.splice(index + 1, 0, newQuestion);
+    newQuestionList.splice(questionId + 1, 0, newQuestion);
     setQuestionList(newQuestionList);
   };
 
-  const deleteQuestionInIndex = (index: number) => {
-    for (let i = index + 1; i < questionList.length; i += 1) {
+  const deleteQuestionAtId = (questionId: number) => {
+    for (let i = questionId + 1; i < questionList.length; i += 1) {
       questionList[i] = { ...questionList[i], questionNo: i - 1 };
     }
     const newQuestionList = [...questionList];
-    newQuestionList.splice(index, 1);
+    newQuestionList.splice(questionId, 1);
     setQuestionList(newQuestionList);
   };
 
-  const addOptionBottom = (questionId: number) => {
+  const addOptionAtBottom = (questionId: number) => {
     let newOptions = questionList[questionId].questionOptions;
     const newOption: QuestionOptionCreateRequest = {
       option: '',
@@ -281,7 +224,7 @@ export default function SurveyFormPage() {
     setQuestionList(newQuestionList);
   };
 
-  const deleteOptionInIndex = (questionId: number, optionId: number) => {
+  const deleteOptionAtId = (questionId: number, optionId: number) => {
     const newOptions = questionList[questionId].questionOptions;
     if (newOptions) {
       newOptions.splice(optionId, 1);
@@ -292,19 +235,75 @@ export default function SurveyFormPage() {
     setQuestionList(newQuestionList);
   };
 
-  const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>, questionId: number, optionId?: number) => {
+  const editRequiredCertificationList = (value: number, isChecked: boolean) => {
+    if (isChecked) {
+      setRequiredCertificationList((prev) => [...prev, value]);
+    } else {
+      setRequiredCertificationList(requiredCertificationList.filter((item) => item !== value));
+    }
+  };
+
+  const handleChangeCheck = (event: React.ChangeEvent<HTMLInputElement>, value: number) => {
+    setCertificationIsChecked(!certificationIsChecked);
+    editRequiredCertificationList(value, event.target.checked);
+  };
+
+  // update surveyData title, description, startedDate, endedDate
+  const handleChangeSurveyData = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    if (typeof surveyData !== 'undefined') {
+      setSurveyData({
+        ...surveyData,
+        [name]: value,
+      });
+    }
+  };
+
+  // update questionList[questionId] title, description
+  const handleChangeQuestion = (
+    event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>,
+    questionId: number
+  ) => {
+    const { name, value } = event.target;
+    questionList[questionId] = { ...questionList[questionId], [name]: value };
+    setQuestionList([...questionList]);
+  };
+
+  // update questionList[questionId] type
+  const handleChangeQuestionType = (
+    event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>,
+    questionId: number
+  ) => {
+    const { name, value } = event.target;
+    questionList[questionId] = { ...questionList[questionId], [name]: +value };
+    setQuestionList([...questionList]);
+  };
+
+  // update questionList[questionId][optionId] option
+  const handleChangeOption = (event: React.ChangeEvent<HTMLInputElement>, questionId: number, optionId: number) => {
+    const { name, value } = event.target;
+    const newOptions = questionList[questionId].questionOptions;
+    if (newOptions) {
+      newOptions[optionId] = { ...newOptions[optionId], [name]: value };
+    }
+    const newQuestionList = [...questionList];
+    newQuestionList[questionId] = { ...newQuestionList[questionId], questionOptions: newOptions };
+    setQuestionList(newQuestionList);
+  };
+
+  const handleClickButton = (event: React.MouseEvent<HTMLButtonElement>, questionId: number, optionId?: number) => {
     const { name } = event.target as HTMLInputElement;
-    if (name === 'addQuestion') makeQuestionUnderIndex(questionId);
-    else if (name === 'deleteQuestion') deleteQuestionInIndex(questionId);
-    else if (name === 'addOption') addOptionBottom(questionId);
-    else if (typeof optionId !== 'undefined') deleteOptionInIndex(questionId, optionId);
+    if (name === 'addQuestion') addQuestionUnderId(questionId);
+    else if (name === 'deleteQuestion') deleteQuestionAtId(questionId);
+    else if (name === 'addOption') addOptionAtBottom(questionId);
+    else if (typeof optionId !== 'undefined') deleteOptionAtId(questionId, optionId);
   };
 
   const questionTypeSelector = (selected: number, questionId: number) => {
     return (
       <QuestionTypeSelector
         name="questionType"
-        onChange={(event) => handleQuestionTypeChange(event, questionId)}
+        onChange={(event) => handleChangeQuestionType(event, questionId)}
         value={selected}
       >
         <QuestionTypeOption value={QuestionType.LONG_ANSWER}>장문형 질문</QuestionTypeOption>
@@ -318,21 +317,21 @@ export default function SurveyFormPage() {
     return (
       <QuestionContainer key={questionId}>
         <QuestionTitleInput
-          onChange={(event) => handleQuestionChange(event, questionId)}
+          onChange={(event) => handleChangeQuestion(event, questionId)}
           name="title"
           value={questionList[questionId].title || ''}
         />
         <QuestionDescriptionInput
-          onChange={(event) => handleQuestionChange(event, questionId)}
+          onChange={(event) => handleChangeQuestion(event, questionId)}
           name="description"
           value={questionList[questionId].description || ''}
         />
         {questionTypeSelector(QuestionType.LONG_ANSWER, questionId)}
         <AnswerLable>장문형 텍스트</AnswerLable>
-        <AddQuestionButton name="addQuestion" onClick={(event) => handleButtonClick(event, questionId)}>
+        <AddQuestionButton name="addQuestion" onClick={(event) => handleClickButton(event, questionId)}>
           +
         </AddQuestionButton>
-        <DeleteQuestionButton name="deleteQuestion" onClick={(event) => handleButtonClick(event, questionId)}>
+        <DeleteQuestionButton name="deleteQuestion" onClick={(event) => handleClickButton(event, questionId)}>
           -
         </DeleteQuestionButton>
       </QuestionContainer>
@@ -343,21 +342,21 @@ export default function SurveyFormPage() {
     return (
       <QuestionContainer key={questionId}>
         <QuestionTitleInput
-          onChange={(event) => handleQuestionChange(event, questionId)}
+          onChange={(event) => handleChangeQuestion(event, questionId)}
           name="title"
           value={questionList[questionId].title || ''}
         />
         <QuestionDescriptionInput
-          onChange={(event) => handleQuestionChange(event, questionId)}
+          onChange={(event) => handleChangeQuestion(event, questionId)}
           name="description"
           value={questionList[questionId].description || ''}
         />
         {questionTypeSelector(QuestionType.SHORT_ANSWER, questionId)}
         <AnswerLable>단답형 텍스트</AnswerLable>
-        <AddQuestionButton name="addQuestion" onClick={(event) => handleButtonClick(event, questionId)}>
+        <AddQuestionButton name="addQuestion" onClick={(event) => handleClickButton(event, questionId)}>
           +
         </AddQuestionButton>
-        <DeleteQuestionButton name="deleteQuestion" onClick={(event) => handleButtonClick(event, questionId)}>
+        <DeleteQuestionButton name="deleteQuestion" onClick={(event) => handleClickButton(event, questionId)}>
           -
         </DeleteQuestionButton>
       </QuestionContainer>
@@ -370,11 +369,11 @@ export default function SurveyFormPage() {
       return NumberUtils.range(0, tmpOptions.length).map((index: number) => (
         <OptionContainer key={index}>
           <OptionInput
-            onChange={(event) => handleOptionChange(event, questionId, index)}
+            onChange={(event) => handleChangeOption(event, questionId, index)}
             name="option"
             value={tmpOptions[index].option || ''}
           />
-          <DeleteOptionButton name="deleteOption" onClick={(event) => handleButtonClick(event, questionId, index)}>
+          <DeleteOptionButton name="deleteOption" onClick={(event) => handleClickButton(event, questionId, index)}>
             -
           </DeleteOptionButton>
         </OptionContainer>
@@ -387,26 +386,26 @@ export default function SurveyFormPage() {
     return (
       <QuestionContainer key={questionId}>
         <QuestionTitleInput
-          onChange={(event) => handleQuestionChange(event, questionId)}
+          onChange={(event) => handleChangeQuestion(event, questionId)}
           name="title"
           value={questionList[questionId].title || ''}
         />
         <QuestionDescriptionInput
-          onChange={(event) => handleQuestionChange(event, questionId)}
+          onChange={(event) => handleChangeQuestion(event, questionId)}
           name="description"
           value={questionList[questionId].description || ''}
         />
         {questionTypeSelector(QuestionType.SINGLE_CHOICE, questionId)}
 
         {showOptions(questionId)}
-        <AddOptionButton name="addOption" onClick={(event) => handleButtonClick(event, questionId)}>
+        <AddOptionButton name="addOption" onClick={(event) => handleClickButton(event, questionId)}>
           +
         </AddOptionButton>
         <br />
-        <AddQuestionButton name="addQuestion" onClick={(event) => handleButtonClick(event, questionId)}>
+        <AddQuestionButton name="addQuestion" onClick={(event) => handleClickButton(event, questionId)}>
           +
         </AddQuestionButton>
-        <DeleteQuestionButton name="deleteQuestion" onClick={(event) => handleButtonClick(event, questionId)}>
+        <DeleteQuestionButton name="deleteQuestion" onClick={(event) => handleClickButton(event, questionId)}>
           -
         </DeleteQuestionButton>
       </QuestionContainer>
@@ -433,39 +432,39 @@ export default function SurveyFormPage() {
 
       <BodyContainer theme={theme}>
         <SurveyDataContainer theme={theme}>
-          <SurveyTitleInput onChange={handleStringInputChange} name="title" value={surveyData?.title || ''} />
+          <SurveyTitleInput onChange={handleChangeSurveyData} name="title" value={surveyData?.title || ''} />
           <SurveyDescriptionInput
-            onChange={handleStringInputChange}
+            onChange={handleChangeSurveyData}
             name="description"
             value={surveyData?.description || ''}
           />
           <SurveyCertificationsContainer>
             <SelectedCertificationsContainer>
-              {requiredAuthentications.map((auth: number) => (
+              {requiredCertificationList.map((auth: number) => (
                 <SelectedCertification key={auth}>{CertificationType[auth]}</SelectedCertification>
               ))}
             </SelectedCertificationsContainer>
             {NumberUtils.range(0, 6).map((index: number) => (
               <CertificationPicker key={index}>
                 <CheckBox
-                  checked={requiredAuthentications.includes(index)}
-                  onChange={(e) => handleCheckInputChange(e, index)}
+                  checked={requiredCertificationList.includes(index)}
+                  onChange={(e) => handleChangeCheck(e, index)}
                 />
                 <CertificationLabel>{CertificationType[index]}</CertificationLabel>
               </CertificationPicker>
             ))}
           </SurveyCertificationsContainer>
           <SurveyDateInput
-            onChange={handleStringInputChange}
+            onChange={handleChangeSurveyData}
             name="startedDate"
             value={`${surveyData?.startedDate}` || ''}
           />
           <SurveyDateInput
-            onChange={handleStringInputChange}
+            onChange={handleChangeSurveyData}
             name="endedDate"
             value={`${surveyData?.endedDate}` || ''}
           />
-          <AddQuestionButton name="addQuestion" onClick={(event) => handleButtonClick(event, -1)}>
+          <AddQuestionButton name="addQuestion" onClick={(event) => handleClickButton(event, -1)}>
             +
           </AddQuestionButton>
         </SurveyDataContainer>
