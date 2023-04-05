@@ -3,8 +3,8 @@ export type AuthState = {
   naver: boolean;
   google: boolean;
   identityCard: boolean;
-  driverCard: boolean;
-  schoolMail: boolean;
+  driverLicense: boolean;
+  webmail: boolean;
 };
 
 export type AuthAction =
@@ -13,4 +13,4 @@ export type AuthAction =
   | { type: 'AUTH_GOOGLE'; payload: boolean }
   | { type: 'AUTH_IDENTITY'; payload: boolean }
   | { type: 'AUTH_DRIVER'; payload: boolean }
-  | { type: 'AUTH_SCHOOLMAIL'; payload: boolean };
+  | { type: 'AUTH_WEBMAIL'; payload: boolean };
