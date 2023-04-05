@@ -18,12 +18,12 @@ const Container = styled.div`
 `;
 
 const HeadContainer = styled.div`
-  padding: 6vh 8vw 0vh 8vw;
+  padding: 3vh 8vw 0vh 8vw;
   background-color: ${(props) => props.theme.colors.container};
 `;
 
 const Title = styled.label`
-  font-size: 40px;
+  font-size: 30px;
   font-weight: 600;
   color: ${(props) => props.theme.colors.default};
 `;
@@ -35,9 +35,9 @@ const BodyContainer = styled.div`
 `;
 
 const ItemContainer = styled.div`
-  margin-top: 23px;
+  margin-top: 15px;
   border-radius: ${(props) => props.theme.borderRadius};
-  border-left: 10px solid ${(props) => props.theme.colors.primary};
+  border-left: 16px solid ${(props) => props.theme.colors.primary};
   padding: 1.2vh 2vw 1.2vh 2vw;
   color: ${(props) => props.theme.colors.default};
   background-color: ${(props) => props.theme.colors.background};
@@ -49,21 +49,23 @@ const TextInput = styled.input.attrs({ type: 'text' })`
   padding: 1.2vh 1.5vw 1.2vh 1.5vw;
   border: ${(props) => props.theme.border};
   border-radius: ${(props) => props.theme.borderRadius};
-  font-size: 18px;
+
   font-weight: 900;
   color: ${(props) => props.theme.colors.default};
   background-color: ${(props) => props.theme.colors.container};
 `;
 
 const SurveyTitleInput = styled(TextInput)`
-  width: 76vw;
+  width: 74vw;
   margin-top: 7px;
-  margin-bottom: 25px;
+  margin-bottom: 10px;
+  font-size: 23px;
 `;
 
 const SurveyDescriptionInput = styled(TextInput)`
-  width: 76vw;
+  width: 74vw;
   margin-bottom: 25px;
+  font-size: 18px;
 `;
 
 const SurveyDateInput = styled.input.attrs({ type: 'datetime-local' })`
@@ -302,37 +304,50 @@ export default function SurveyFormPage() {
   const questionTypeSelector = (selected: number, questionId: number) => {
     return (
       <QuestionTypeSelector
+        theme={theme}
         name="questionType"
         onChange={(event) => handleChangeQuestionType(event, questionId)}
         value={selected}
       >
-        <QuestionTypeOption value={QuestionType.LONG_ANSWER}>장문형 질문</QuestionTypeOption>
-        <QuestionTypeOption value={QuestionType.SHORT_ANSWER}>단답형 질문</QuestionTypeOption>
-        <QuestionTypeOption value={QuestionType.SINGLE_CHOICE}>객관식 질문</QuestionTypeOption>
+        <QuestionTypeOption theme={theme} value={QuestionType.LONG_ANSWER}>
+          장문형 질문
+        </QuestionTypeOption>
+        <QuestionTypeOption theme={theme} value={QuestionType.SHORT_ANSWER}>
+          단답형 질문
+        </QuestionTypeOption>
+        <QuestionTypeOption theme={theme} value={QuestionType.SINGLE_CHOICE}>
+          객관식 질문
+        </QuestionTypeOption>
       </QuestionTypeSelector>
     );
   };
 
   const longAnswerForm = (questionId: number) => {
     return (
-      <QuestionContainer key={questionId}>
+      <QuestionContainer theme={theme} key={questionId}>
         <QuestionTitleInput
+          theme={theme}
           onChange={(event) => handleChangeQuestion(event, questionId)}
           name="title"
           value={questionList[questionId].title || ''}
         />
         <QuestionDescriptionInput
+          theme={theme}
           onChange={(event) => handleChangeQuestion(event, questionId)}
           name="description"
           value={questionList[questionId].description || ''}
         />
         {questionTypeSelector(QuestionType.LONG_ANSWER, questionId)}
-        <AnswerLable>장문형 텍스트</AnswerLable>
-        <AddQuestionButton name="addQuestion" onClick={(event) => handleClickButton(event, questionId)}>
-          +
+        <AnswerLable theme={theme}>장문형 텍스트</AnswerLable>
+        <AddQuestionButton theme={theme} name="addQuestion" onClick={(event) => handleClickButton(event, questionId)}>
+          ➕
         </AddQuestionButton>
-        <DeleteQuestionButton name="deleteQuestion" onClick={(event) => handleClickButton(event, questionId)}>
-          -
+        <DeleteQuestionButton
+          theme={theme}
+          name="deleteQuestion"
+          onClick={(event) => handleClickButton(event, questionId)}
+        >
+          🗑️
         </DeleteQuestionButton>
       </QuestionContainer>
     );
@@ -340,73 +355,86 @@ export default function SurveyFormPage() {
 
   const shortAnswerForm = (questionId: number) => {
     return (
-      <QuestionContainer key={questionId}>
+      <QuestionContainer theme={theme} key={questionId}>
         <QuestionTitleInput
+          theme={theme}
           onChange={(event) => handleChangeQuestion(event, questionId)}
           name="title"
           value={questionList[questionId].title || ''}
         />
         <QuestionDescriptionInput
+          theme={theme}
           onChange={(event) => handleChangeQuestion(event, questionId)}
           name="description"
           value={questionList[questionId].description || ''}
         />
         {questionTypeSelector(QuestionType.SHORT_ANSWER, questionId)}
-        <AnswerLable>단답형 텍스트</AnswerLable>
-        <AddQuestionButton name="addQuestion" onClick={(event) => handleClickButton(event, questionId)}>
-          +
+        <AnswerLable theme={theme}>단답형 텍스트</AnswerLable>
+        <AddQuestionButton theme={theme} name="addQuestion" onClick={(event) => handleClickButton(event, questionId)}>
+          ➕
         </AddQuestionButton>
-        <DeleteQuestionButton name="deleteQuestion" onClick={(event) => handleClickButton(event, questionId)}>
-          -
+        <DeleteQuestionButton
+          theme={theme}
+          name="deleteQuestion"
+          onClick={(event) => handleClickButton(event, questionId)}
+        >
+          🗑️
         </DeleteQuestionButton>
       </QuestionContainer>
     );
   };
 
-  const showOptions = (questionId: number) => {
+  const optionsForm = (questionId: number) => {
     const tmpOptions = questionList[questionId].questionOptions;
     if (typeof tmpOptions !== 'undefined') {
       return NumberUtils.range(0, tmpOptions.length).map((index: number) => (
-        <OptionContainer key={index}>
+        <OptionContainer theme={theme} key={index}>
           <OptionInput
+            theme={theme}
             onChange={(event) => handleChangeOption(event, questionId, index)}
             name="option"
             value={tmpOptions[index].option || ''}
           />
-          <DeleteOptionButton name="deleteOption" onClick={(event) => handleClickButton(event, questionId, index)}>
-            -
+          <DeleteOptionButton
+            theme={theme}
+            name="deleteOption"
+            onClick={(event) => handleClickButton(event, questionId, index)}
+          >
+            🗑️
           </DeleteOptionButton>
         </OptionContainer>
       ));
     }
-    return <div>옵션을 추가해 주세요</div>;
+    return <AnswerLable theme={theme}>옵션을 추가해 주세요</AnswerLable>;
   };
 
-  const multipleChoiceForm = (questionId: number) => {
+  const choiceForm = (questionId: number) => {
     return (
-      <QuestionContainer key={questionId}>
+      <QuestionContainer theme={theme} key={questionId}>
         <QuestionTitleInput
+          theme={theme}
           onChange={(event) => handleChangeQuestion(event, questionId)}
           name="title"
           value={questionList[questionId].title || ''}
         />
         <QuestionDescriptionInput
+          theme={theme}
           onChange={(event) => handleChangeQuestion(event, questionId)}
           name="description"
           value={questionList[questionId].description || ''}
         />
         {questionTypeSelector(QuestionType.SINGLE_CHOICE, questionId)}
 
-        {showOptions(questionId)}
+        {optionsForm(questionId)}
         <AddOptionButton name="addOption" onClick={(event) => handleClickButton(event, questionId)}>
-          +
+          ➕
         </AddOptionButton>
         <br />
         <AddQuestionButton name="addQuestion" onClick={(event) => handleClickButton(event, questionId)}>
-          +
+          ➕
         </AddQuestionButton>
         <DeleteQuestionButton name="deleteQuestion" onClick={(event) => handleClickButton(event, questionId)}>
-          -
+          🗑️
         </DeleteQuestionButton>
       </QuestionContainer>
     );
@@ -419,7 +447,7 @@ export default function SurveyFormPage() {
       case QuestionType.SHORT_ANSWER:
         return shortAnswerForm(questionId);
       default:
-        return multipleChoiceForm(questionId);
+        return choiceForm(questionId);
     }
   };
 
@@ -427,52 +455,64 @@ export default function SurveyFormPage() {
     <Container theme={theme}>
       <Header theme={theme} toggleTheme={toggleTheme} />
       <HeadContainer theme={theme}>
-        <Title>설문조사 작성</Title>
+        <Title theme={theme}>설문조사 작성</Title>
       </HeadContainer>
 
       <BodyContainer theme={theme}>
         <SurveyDataContainer theme={theme}>
-          <SurveyTitleInput onChange={handleChangeSurveyData} name="title" value={surveyData?.title || ''} />
+          <SurveyTitleInput
+            theme={theme}
+            onChange={handleChangeSurveyData}
+            name="title"
+            value={surveyData?.title || ''}
+          />
           <SurveyDescriptionInput
+            theme={theme}
             onChange={handleChangeSurveyData}
             name="description"
             value={surveyData?.description || ''}
           />
-          <SurveyCertificationsContainer>
-            <SelectedCertificationsContainer>
+          <SurveyCertificationsContainer theme={theme}>
+            <SelectedCertificationsContainer theme={theme}>
               {requiredCertificationList.map((auth: number) => (
-                <SelectedCertification key={auth}>{CertificationType[auth]}</SelectedCertification>
+                <SelectedCertification theme={theme} key={auth}>
+                  {CertificationType[auth]}
+                </SelectedCertification>
               ))}
             </SelectedCertificationsContainer>
             {NumberUtils.range(0, 6).map((index: number) => (
-              <CertificationPicker key={index}>
+              <CertificationPicker theme={theme} key={index}>
                 <CheckBox
                   checked={requiredCertificationList.includes(index)}
                   onChange={(e) => handleChangeCheck(e, index)}
                 />
-                <CertificationLabel>{CertificationType[index]}</CertificationLabel>
+                <CertificationLabel theme={theme}>{CertificationType[index]}</CertificationLabel>
               </CertificationPicker>
             ))}
           </SurveyCertificationsContainer>
           <SurveyDateInput
+            theme={theme}
             onChange={handleChangeSurveyData}
             name="startedDate"
             value={`${surveyData?.startedDate}` || ''}
           />
           <SurveyDateInput
+            theme={theme}
             onChange={handleChangeSurveyData}
             name="endedDate"
             value={`${surveyData?.endedDate}` || ''}
           />
-          <AddQuestionButton name="addQuestion" onClick={(event) => handleClickButton(event, -1)}>
-            +
+          <AddQuestionButton theme={theme} name="addQuestion" onClick={(event) => handleClickButton(event, -1)}>
+            ➕
           </AddQuestionButton>
         </SurveyDataContainer>
         {questionList.map((question: QuestionCreateRequest) =>
           showQuestionForm(question.questionType, question.questionNo)
         )}
       </BodyContainer>
-      <SubmitButton onClick={handleSubmit}>완료하기</SubmitButton>
+      <SubmitButton theme={theme} onClick={handleSubmit}>
+        완료하기
+      </SubmitButton>
     </Container>
   );
 }
