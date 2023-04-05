@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import styled from 'styled-components';
 
@@ -38,13 +38,15 @@ const BodyContainer = styled.div`
 const ItemContainer = styled.div`
   margin-top: 15px;
   border-radius: ${(props) => props.theme.borderRadius};
-  border-left: 16px solid ${(props) => props.theme.colors.primary};
+  border-left: 16px solid transparent;
   padding: 1.2vh 2vw 1.2vh 2vw;
   color: ${(props) => props.theme.colors.default};
   background-color: ${(props) => props.theme.colors.background};
 `;
 
-const SurveyDataContainer = styled(ItemContainer)``;
+const SurveyDataContainer = styled(ItemContainer)`
+  border-left: 16px solid ${(props) => props.theme.colors.primary};
+`;
 
 const GuideLabel = styled.label`
   margin-left: 10px;
@@ -251,6 +253,8 @@ const SubmitButton = styled.button.attrs({ type: 'submit' })`
 // TODO: Drag and drop questions order
 export default function SurveyFormPage() {
   const [theme, toggleTheme] = useTheme();
+  const questionRefs = useRef<HTMLDivElement[]>([]);
+  const [recentCreate, setRecentCreate] = useState<number>();
   const [questionList, setQuestionList] = useState<QuestionCreateRequest[]>([]);
   const [requiredCertificationList, setRequiredCertificationList] = useState<CertificationType[]>([]);
   const [certificationIsChecked, setCertificationIsChecked] = useState<boolean>(false);
@@ -262,6 +266,16 @@ export default function SurveyFormPage() {
     certificationTypes: [],
     questions: [],
   });
+
+  const scrollToRecentCreateQuestion = () => {
+    if (typeof recentCreate !== 'undefined') {
+      questionRefs.current[recentCreate].scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'smooth' });
+    }
+  };
+
+  useEffect(() => {
+    scrollToRecentCreateQuestion();
+  }, [recentCreate]);
 
   useEffect(() => {
     if (typeof surveyData !== 'undefined') {
@@ -302,6 +316,7 @@ export default function SurveyFormPage() {
 
     newQuestionList.splice(questionId + 1, 0, newQuestion);
     setQuestionList(newQuestionList);
+    setRecentCreate(questionId + 1);
   };
 
   const deleteQuestionAtId = (questionId: number) => {
@@ -429,7 +444,13 @@ export default function SurveyFormPage() {
 
   const longAnswerForm = (questionId: number) => {
     return (
-      <QuestionContainer theme={theme} key={questionId}>
+      <QuestionContainer
+        ref={(element) => {
+          questionRefs.current[questionId] = element as HTMLDivElement;
+        }}
+        theme={theme}
+        key={questionId}
+      >
         <QuestionTitleInput
           theme={theme}
           onChange={(event) => handleChangeQuestion(event, questionId)}
@@ -463,7 +484,13 @@ export default function SurveyFormPage() {
 
   const shortAnswerForm = (questionId: number) => {
     return (
-      <QuestionContainer theme={theme} key={questionId}>
+      <QuestionContainer
+        ref={(element) => {
+          questionRefs.current[questionId] = element as HTMLDivElement;
+        }}
+        theme={theme}
+        key={questionId}
+      >
         <QuestionTitleInput
           theme={theme}
           onChange={(event) => handleChangeQuestion(event, questionId)}
@@ -521,7 +548,13 @@ export default function SurveyFormPage() {
 
   const choiceForm = (questionId: number) => {
     return (
-      <QuestionContainer theme={theme} key={questionId}>
+      <QuestionContainer
+        ref={(element) => {
+          questionRefs.current[questionId] = element as HTMLDivElement;
+        }}
+        theme={theme}
+        key={questionId}
+      >
         <QuestionTitleInput
           theme={theme}
           onChange={(event) => handleChangeQuestion(event, questionId)}
