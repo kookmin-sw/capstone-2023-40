@@ -264,7 +264,7 @@ export default function SurveyFormPage() {
   // Update questionList[questionId] type
   const handleChangeQuestionType = (event: React.ChangeEvent<HTMLSelectElement>, questionId: number) => {
     const { name, value } = event.target;
-    questionList[questionId] = { ...questionList[questionId], [name]: +value };
+    questionList[questionId] = { ...questionList[questionId], [name]: +value, questionOptions: undefined };
     setQuestionList([...questionList]);
   };
 
