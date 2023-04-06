@@ -121,25 +121,30 @@ describe('[LoginPage Test]', () => {
     expect(screen.getByText('회원가입')).toHaveTextContent('회원가입');
   });
 
-  // // FIXME: should be modified to API call
-  // /**
-  //  * If Click the '로그인'Button at LoginPage,
-  //  * Checking translated SurveyListPage location Path.
-  //  */
-  // it('clicks to navigate to survey page', async () => {
-  //   render(
-  //     <MemoryRouter initialEntries={['/login']}>
-  //       <Routes>
-  //         <Route path="/login" element={<LoginPage />} />
-  //         <Route path="/survey" element={<SurveyListPage />} />
-  //       </Routes>
-  //     </MemoryRouter>
-  //   );
-  //   const navigateToRegisterButton = await waitFor(() => screen.getByRole('button', { name: '로그인' }));
-  //   await act(async () => {
-  //     fireEvent.click(navigateToRegisterButton);
-  //   });
+  // FIXME: should be modified to API call
+  /**
+   * If Click the '로그인'Button at LoginPage,
+   * Checking translated SurveyListPage location Path.
+   */
+  it('clicks to navigate to survey page', async () => {
+    const { container } = render(
+      <MemoryRouter initialEntries={['/login']}>
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/survey" element={<SurveyListPage />} />
+        </Routes>
+      </MemoryRouter>
+    );
+    const email = () => container.querySelector('input[name="email"]') as HTMLInputElement;
+    const password = () => container.querySelector('input[name="password"]') as HTMLInputElement;
+    fireEvent.change(email(), { target: { value: 'user@test.com' } });
+    fireEvent.change(password(), { target: { value: 'test1234!' } });
 
-  //   expect(screen.getByText('설문 제목')).toHaveTextContent('설문 제목');
-  // });
+    const navigateToRegisterButton = await waitFor(() => screen.getByRole('button', { name: '로그인' }));
+    await act(async () => {
+      fireEvent.click(navigateToRegisterButton);
+    });
+
+    expect(screen.getByText('설문 제목')).toHaveTextContent('설문 제목');
+  });
 });

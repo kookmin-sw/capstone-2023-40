@@ -115,7 +115,7 @@ export default function LoginPage() {
     } else {
       setTitle('로그인 성공');
       setText('로그인에 성공했습니다!');
-      navigate('./survey');
+      navigate('../survey');
     }
     setIsAlertModal(true);
   };
