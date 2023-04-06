@@ -26,7 +26,7 @@ describe('[MainPage Test]', () => {
    * Checking translated LoginPage location Path.
    */
   it('clicks to navigate to login page if NOT logged in', async () => {
-    render(
+    const { container } = render(
       <MemoryRouter initialEntries={['/']}>
         <Routes>
           <Route path="/" element={<MainPage />} />
@@ -39,9 +39,7 @@ describe('[MainPage Test]', () => {
       fireEvent.click(navigateToSurveyButton);
     });
 
-    // FIXME: do not translate location path.
-    // expect(window.location.pathname).toBe('/login');
-    expect(screen.getByText('이메일')).toHaveTextContent('이메일');
+    expect(container).toHaveTextContent('로그인');
     expect(screen.getByPlaceholderText('이메일을 입력하세요.')).toBeInTheDocument();
   });
 

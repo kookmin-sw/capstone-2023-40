@@ -47,7 +47,7 @@ describe('[LoginPage Test]', () => {
    * Click the '로그인'Button at LoginPage, If emailInput & PasswordInput isEmpty,
    * Checking LoginError Message.
    */
-  it('check LoginError Message if emailInput & PasswordInput isEmpty', async () => {
+  it('check LoginError Message if emailInput isEmpty', async () => {
     const { container } = render(
       <MemoryRouter initialEntries={['/login']}>
         <Routes>
@@ -58,10 +58,35 @@ describe('[LoginPage Test]', () => {
     const email = () => container.querySelector('input[name="email"]') as HTMLInputElement;
     const password = () => container.querySelector('input[name="password"]') as HTMLInputElement;
     const isEmpty = !email().value || !password().value;
-
-    // select what you want slash
-    // fireEvent.change(email(), { target: { value: 'user@test.com' } });
     fireEvent.change(password(), { target: { value: 'Test1234' } });
+    fireEvent.change(email(), { target: { value: '' } });
+    fireEvent.blur(email());
+
+    const loginButton = await waitFor(() => screen.getByRole('button', { name: '로그인' }));
+    await act(async () => {
+      fireEvent.click(loginButton);
+    });
+
+    if (isEmpty) {
+      const error = await screen.getByText('로그인 오류');
+      expect(error).toBeInTheDocument();
+    }
+  });
+
+  it('check LoginError Message if PasswordInput isEmpty', async () => {
+    const { container } = render(
+      <MemoryRouter initialEntries={['/login']}>
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+        </Routes>
+      </MemoryRouter>
+    );
+    const email = () => container.querySelector('input[name="email"]') as HTMLInputElement;
+    const password = () => container.querySelector('input[name="password"]') as HTMLInputElement;
+    const isEmpty = !email().value || !password().value;
+    fireEvent.change(email(), { target: { value: 'user@test.com' } });
+    fireEvent.change(password(), { target: { value: '' } });
+    fireEvent.blur(password());
 
     const loginButton = await waitFor(() => screen.getByRole('button', { name: '로그인' }));
     await act(async () => {
