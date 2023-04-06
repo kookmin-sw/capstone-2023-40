@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { act } from 'react-dom/test-utils';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 
 import MainPage from '../routes/MainPage';
@@ -138,48 +137,49 @@ describe('[RegisterPage Test]', () => {
     expect(samePassword).toBeInTheDocument();
   });
 
-  //   it('check LoginError Message if PasswordInput isEmpty', async () => {
-  //     const { container } = render(
-  //       <MemoryRouter initialEntries={['/login']}>
-  //         <Routes>
-  //           <Route path="/login" element={<RegisterPage />} />
-  //         </Routes>
-  //       </MemoryRouter>
-  //     );
-  //     const email = () => container.querySelector('input[name="email"]') as HTMLInputElement;
-  //     const password = () => container.querySelector('input[name="password"]') as HTMLInputElement;
-  //     const isEmpty = !email().value || !password().value;
-  //     fireEvent.change(email(), { target: { value: 'user@test.com' } });
+  /**
+   * Checking phoneNumber InputValue has matching phoneNumber Regex.
+   */
+  it('checking phoneNumber InputValue has matching phoneNumber Regex', async () => {
+    const { container } = render(
+      <MemoryRouter initialEntries={['/register']}>
+        <Routes>
+          <Route path="/register" element={<RegisterPage />} />
+        </Routes>
+      </MemoryRouter>
+    );
+    const phoneNumber = () => container.querySelector('input[name="phoneNumber"]') as HTMLInputElement;
+    const phoneNumberRegex = /^01(?:0|1|[6-9])(?:\d{3}|\d{4})\d{4}$/;
 
-  //     const loginButton = await waitFor(() => screen.getByRole('button', { name: '로그인' }));
-  //     await act(async () => {
-  //       fireEvent.click(loginButton);
-  //     });
+    // False-Test) value : '전화번호에 문자넣어버리기~'
+    fireEvent.change(phoneNumber(), { target: { value: '전화번호에 문자넣어버리기~' } });
+    expect(phoneNumberRegex.test(phoneNumber().value)).toBe(false);
 
-  //     if (isEmpty) {
-  //       const error = await screen.getByText('로그인 오류');
-  //       expect(error).toBeInTheDocument();
-  //     }
-  //   });
+    // True-Test) value : '01012345678'
+    fireEvent.change(phoneNumber(), { target: { value: '01012345678' } });
+    expect(phoneNumberRegex.test(phoneNumber().value)).toBe(true);
+  });
 
-  //   /**
-  //    * If Click the '회원가입'Button at LoginPage,
-  //    * Checking translated RegisterPage location Path.
-  //    */
-  //   it('clicks to navigate to register page', async () => {
-  //     render(
-  //       <MemoryRouter initialEntries={['/login']}>
-  //         <Routes>
-  //           <Route path="/register" element={<RegisterPage />} />
-  //         </Routes>
-  //       </MemoryRouter>
-  //     );
+  /**
+   * Checking CheckBox [Agree Using Service & User Information]
+   * Checking isEnabled Regist Complete Button
+   */
+  it('checking isEnabled Regist Complete Button', async () => {
+    const { container } = render(
+      <MemoryRouter initialEntries={['/register']}>
+        <Routes>
+          <Route path="/register" element={<RegisterPage />} />
+        </Routes>
+      </MemoryRouter>
+    );
+    const agreeServiceButton = container.querySelector('input[name="agreeService"]') as HTMLInputElement;
+    const agreeInformationButton = container.querySelector('input[name="agreeInformation"]') as HTMLInputElement;
+    const completeButton = screen.getByRole('button', { name: '회원가입 완료하기' });
 
-  //     const navigateToRegisterButton = await waitFor(() => screen.getByRole('button', { name: '회원가입' }));
-  //     await act(async () => {
-  //       fireEvent.click(navigateToRegisterButton);
-  //     });
+    fireEvent.click(agreeServiceButton);
+    expect(completeButton).toBeDisabled();
 
-  //     expect(screen.getByText('회원가입')).toHaveTextContent('회원가입');
-  //   });
+    fireEvent.click(agreeInformationButton);
+    expect(completeButton).toBeEnabled;
+  });
 });

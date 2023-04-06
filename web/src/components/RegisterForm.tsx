@@ -226,10 +226,16 @@ export default function RegisterForm(props: RegisterFormProps) {
   };
 
   const sendAuthenticationNumber = () => {
-    dispatch({ type: 'AUTH_KEY', payload: true });
-    setTitle('회원가입 알림');
-    setText('해당 번호에 인증번호를 보냈습니다! (ex. 1234)');
-    setIsAlertModal(true);
+    if (isEmptyString(state.phoneNumber) || validatePhoneNumber(state.phoneNumber)) {
+      setTitle('회원가입 오류');
+      setText('휴대폰 번호를 확인해주세요.');
+      setIsAlertModal(true);
+    } else {
+      dispatch({ type: 'AUTH_KEY', payload: true });
+      setTitle('회원가입 알림');
+      setText('해당 번호에 인증번호를 보냈습니다! (ex. 1234)');
+      setIsAlertModal(true);
+    }
   };
 
   const authenticatePhoneNumber = () => {
