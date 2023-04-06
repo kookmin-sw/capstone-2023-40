@@ -1,6 +1,5 @@
 package com.thesurvey.api.controller;
 
-
 import com.thesurvey.api.domain.EnumTypeEntity.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -21,9 +20,9 @@ public abstract class BaseControllerTest {
 
     String globalAddress = "test address";
 
-    Role globalRole = Role.valueOf("USER");
-
     String globalPhoneNumber = "01012345678";
+
+    String globalRole = String.valueOf(Role.USER);
 
     String globalPassword = "Password123@";
 
@@ -35,7 +34,6 @@ public abstract class BaseControllerTest {
         .email(globalEmail)
         .password(globalPassword)
         .phoneNumber(globalPhoneNumber)
-        .role(globalRole)
         .profileImage(globalProfileImage)
         .address(globalAddress)
         .build();
