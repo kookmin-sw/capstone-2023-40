@@ -98,7 +98,7 @@ public class User extends BaseTimeEntity implements UserDetails {
 
     @Builder
     public User(List<Participation> participations, List<AnsweredQuestion> answeredQuestions,
-        List<PointHistory> pointHistories, String email, String name, Role role, String password,
+        List<PointHistory> pointHistories, String email, String name, String password,
         String phoneNumber, String address,
         String profileImage) {
         this.participations = participations;
@@ -106,7 +106,6 @@ public class User extends BaseTimeEntity implements UserDetails {
         this.pointHistories = pointHistories;
         this.email = email;
         this.name = name;
-        this.role = role;
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.address = address;
@@ -114,7 +113,7 @@ public class User extends BaseTimeEntity implements UserDetails {
     }
 
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private Role role = Role.USER;
 
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
