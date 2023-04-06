@@ -132,6 +132,7 @@ export default function LoginPage() {
           <LoginTitle theme={theme}>로그인</LoginTitle>
           <FontText theme={theme}>이메일</FontText>
           <Input
+            name="email"
             type="email"
             value={inputEmail}
             onChange={(e) => setInputEmail(e.target.value)}
@@ -140,6 +141,7 @@ export default function LoginPage() {
           />
           <FontText theme={theme}>비밀번호</FontText>
           <Input
+            name="password"
             type="password"
             value={inputPassword}
             onChange={(e) => setInputPassword(e.target.value)}

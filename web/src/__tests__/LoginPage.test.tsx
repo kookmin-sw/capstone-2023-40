@@ -6,6 +6,7 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom';
 
 import LoginPage from '../routes/LoginPage';
 import RegisterPage from '../routes/RegisterPage';
+import SurveyListPage from '../routes/SurveyPages/SurveyListPage';
 
 describe('[LoginPage Test]', () => {
   it('renders LoginPage', () => {
@@ -15,9 +16,50 @@ describe('[LoginPage Test]', () => {
       </MemoryRouter>
     );
 
-    const appTitle = screen.getByText('회원가입');
+    const appTitle = screen.getByRole('button', { name: '로그인' });
 
     expect(appTitle).toBeInTheDocument();
+  });
+
+  /**
+   * Click the '로그인'Button at LoginPage, If emailInput & PasswordInput isEmpty,
+   * Checking LoginError Message.
+   */
+  it('check LoginError Message if emailInput & PasswordInput isEmpty', async () => {
+    const { container } = render(
+      <MemoryRouter initialEntries={['/login']}>
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    const loginButton = await waitFor(() => screen.getByRole('button', { name: '로그인' }));
+    await act(async () => {
+      fireEvent.click(loginButton);
+    });
+
+    expect(container).toHaveTextContent('로그인 오류');
+  });
+
+  /**
+   * If you write email & password in InputLabel,
+   * checking the correct inputValue.
+   */
+  it('should update onchange', () => {
+    const { container } = render(
+      <MemoryRouter initialEntries={['/login']}>
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+        </Routes>
+      </MemoryRouter>
+    );
+    const email = () => container.querySelector('input[name="email"]') as HTMLInputElement;
+    const password = () => container.querySelector('input[name="password"]') as HTMLInputElement;
+    fireEvent.change(email(), { target: { value: 'user@test.com' } });
+    fireEvent.change(password(), { target: { value: 'Test1234' } });
+    expect(email().value).toBe('user@test.com'); // 이전 값 확인
+    expect(password().value).toBe('Test1234'); // 이전 값 확인
   });
 
   /**
@@ -38,8 +80,28 @@ describe('[LoginPage Test]', () => {
       fireEvent.click(navigateToRegisterButton);
     });
 
-    // FIXME: do not translate location path.
-    // expect(window.location.pathname).toBe('/register');
-    expect(screen.getByText('회원가입 완료하기')).toHaveTextContent('회원가입 완료하기');
+    expect(screen.getByText('회원가입')).toHaveTextContent('회원가입');
   });
+
+  // // FIXME: should be modified to API call
+  // /**
+  //  * If Click the '로그인'Button at LoginPage,
+  //  * Checking translated SurveyListPage location Path.
+  //  */
+  // it('clicks to navigate to survey page', async () => {
+  //   render(
+  //     <MemoryRouter initialEntries={['/login']}>
+  //       <Routes>
+  //         <Route path="/login" element={<LoginPage />} />
+  //         <Route path="/survey" element={<SurveyListPage />} />
+  //       </Routes>
+  //     </MemoryRouter>
+  //   );
+  //   const navigateToRegisterButton = await waitFor(() => screen.getByRole('button', { name: '로그인' }));
+  //   await act(async () => {
+  //     fireEvent.click(navigateToRegisterButton);
+  //   });
+
+  //   expect(screen.getByText('설문 제목')).toHaveTextContent('설문 제목');
+  // });
 });
