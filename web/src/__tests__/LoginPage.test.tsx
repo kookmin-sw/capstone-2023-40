@@ -22,27 +22,6 @@ describe('[LoginPage Test]', () => {
   });
 
   /**
-   * Click the '로그인'Button at LoginPage, If emailInput & PasswordInput isEmpty,
-   * Checking LoginError Message.
-   */
-  it('check LoginError Message if emailInput & PasswordInput isEmpty', async () => {
-    const { container } = render(
-      <MemoryRouter initialEntries={['/login']}>
-        <Routes>
-          <Route path="/login" element={<LoginPage />} />
-        </Routes>
-      </MemoryRouter>
-    );
-
-    const loginButton = await waitFor(() => screen.getByRole('button', { name: '로그인' }));
-    await act(async () => {
-      fireEvent.click(loginButton);
-    });
-
-    expect(container).toHaveTextContent('로그인 오류');
-  });
-
-  /**
    * If you write email & password in InputLabel,
    * checking the correct inputValue.
    */
@@ -56,10 +35,43 @@ describe('[LoginPage Test]', () => {
     );
     const email = () => container.querySelector('input[name="email"]') as HTMLInputElement;
     const password = () => container.querySelector('input[name="password"]') as HTMLInputElement;
+
     fireEvent.change(email(), { target: { value: 'user@test.com' } });
     fireEvent.change(password(), { target: { value: 'Test1234' } });
-    expect(email().value).toBe('user@test.com'); // 이전 값 확인
-    expect(password().value).toBe('Test1234'); // 이전 값 확인
+
+    expect(email().value).toBe('user@test.com');
+    expect(password().value).toBe('Test1234');
+  });
+
+  /**
+   * Click the '로그인'Button at LoginPage, If emailInput & PasswordInput isEmpty,
+   * Checking LoginError Message.
+   */
+  it('check LoginError Message if emailInput & PasswordInput isEmpty', async () => {
+    const { container } = render(
+      <MemoryRouter initialEntries={['/login']}>
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+        </Routes>
+      </MemoryRouter>
+    );
+    const email = () => container.querySelector('input[name="email"]') as HTMLInputElement;
+    const password = () => container.querySelector('input[name="password"]') as HTMLInputElement;
+    const isEmpty = !email().value || !password().value;
+
+    // select what you want slash
+    // fireEvent.change(email(), { target: { value: 'user@test.com' } });
+    fireEvent.change(password(), { target: { value: 'Test1234' } });
+
+    const loginButton = await waitFor(() => screen.getByRole('button', { name: '로그인' }));
+    await act(async () => {
+      fireEvent.click(loginButton);
+    });
+
+    if (isEmpty) {
+      const error = await screen.getByText('로그인 오류');
+      expect(error).toBeInTheDocument();
+    }
   });
 
   /**
@@ -75,6 +87,7 @@ describe('[LoginPage Test]', () => {
         </Routes>
       </MemoryRouter>
     );
+
     const navigateToRegisterButton = await waitFor(() => screen.getByRole('button', { name: '회원가입' }));
     await act(async () => {
       fireEvent.click(navigateToRegisterButton);
