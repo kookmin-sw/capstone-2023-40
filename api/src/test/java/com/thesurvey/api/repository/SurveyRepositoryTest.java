@@ -96,7 +96,7 @@ public class SurveyRepositoryTest {
         Survey savedSurvey = surveyRepository.save(testSurvey);
 
         //then
-        Optional<Survey> resultSurvey = surveyRepository.findBySurveyId(savedSurvey.getSurveyId()).is;
+        Optional<Survey> resultSurvey = surveyRepository.findBySurveyId(savedSurvey.getSurveyId());
         assertEquals(resultSurvey.get().getTitle(), testSurvey.getTitle());
     }
 }
