@@ -19,7 +19,6 @@ import lombok.Getter;
 public class SurveyUpdateRequestDto {
 
     @NotNull
-    @Size(max = 255)
     private UUID surveyId;
 
     @NotBlank
