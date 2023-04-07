@@ -19,6 +19,7 @@ public enum ErrorMessage {
     SURVEY_ANSWER_FAILED("설문조사 응답 제출을 실패하였습니다."),
     ANSWER_ALREADY_SUBMITTED("이미 완료한 설문조사 입니다."),
     STARTEDDATE_ISAFTER_ENDEDDATE("설문조사 시작 시간이 종료 시간보다 앞설 수 없습니다."),
+    REQUEST_TIMEOUT("요청 시간이 만료되었습니다."),
     INVALID_REQUEST("유효하지 않은 요청입니다");
 
     private final String message;
