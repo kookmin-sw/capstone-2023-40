@@ -1,6 +1,5 @@
 package com.thesurvey.api.dto.request;
 
-import com.thesurvey.api.domain.EnumTypeEntity.Role;
 import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -32,9 +31,6 @@ public class UserRegisterRequestDto {
     @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[~!@#$%^&*()_+=])\\S{8,25}$")
     @ApiModelProperty(name = "비밀번호", example = "Mypassword123@")
     private String password;
-
-    @ApiModelProperty(name = "권한", example = "USER")
-    private Role role;
 
     @NotBlank
     @Pattern(regexp = "^01[016-9]\\d{7,8}$")

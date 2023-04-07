@@ -1,5 +1,6 @@
 package com.thesurvey.api.dto.response;
 
+import com.thesurvey.api.domain.EnumTypeEntity.Role;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,6 +18,8 @@ public class UserResponseDto {
     private String phoneNumber;
 
     private String address;
+
+    private Role role;
 
     private String profileImage;
 

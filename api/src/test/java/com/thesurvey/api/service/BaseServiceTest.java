@@ -1,6 +1,5 @@
 package com.thesurvey.api.service;
 
-import com.thesurvey.api.domain.EnumTypeEntity.Role;
 import com.thesurvey.api.dto.request.UserLoginRequestDto;
 import com.thesurvey.api.dto.request.UserRegisterRequestDto;
 
@@ -11,8 +10,6 @@ public abstract class BaseServiceTest {
     String globalEmail = "test@gmail.com";
 
     String globalAddress = "test address";
-
-    Role globalRole = Role.valueOf("USER");
 
     String globalPhoneNumber = "01012345678";
 
@@ -26,7 +23,6 @@ public abstract class BaseServiceTest {
         .email(globalEmail)
         .password(globalPassword)
         .phoneNumber(globalPhoneNumber)
-        .role(globalRole)
         .profileImage(globalProfileImage)
         .address(globalAddress)
         .build();
