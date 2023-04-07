@@ -31,7 +31,7 @@ public class SurveyServiceTest extends BaseServiceTest {
     SurveyService surveyService;
 
     @Test
-    public void testgetAllSurveyWithRetrievingInOrder() {
+    public void testGetAllSurveyWithRetrievingInOrder() {
         // given
         Survey oldSurvey = Survey.builder()
             .title("Old survey title")
