@@ -358,12 +358,10 @@ export default function SurveyFormPage() {
   };
 
   const showQuestionForm = (questionType: number, questionId: number) => {
-    switch (questionType) {
-      case QuestionType.LONG_ANSWER || QuestionType.SHORT_ANSWER:
-        return makeSubjectiveAnswerForm(questionId, questionType);
-      default:
-        return makeChoiceForm(questionId, questionType);
+    if (questionType === QuestionType.LONG_ANSWER || questionType === QuestionType.SHORT_ANSWER) {
+      return makeSubjectiveAnswerForm(questionId, questionType);
     }
+    return makeChoiceForm(questionId, questionType);
   };
 
   return (
