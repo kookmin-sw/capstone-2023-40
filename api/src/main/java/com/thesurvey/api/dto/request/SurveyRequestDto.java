@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Future;
-import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -29,7 +28,6 @@ public class SurveyRequestDto {
     private String description;
 
     @NotNull
-    @FutureOrPresent
     @ApiModelProperty(name = "설문조사 시작일", example = "2023-04-01T00:00:00")
     private LocalDateTime startedDate;
 

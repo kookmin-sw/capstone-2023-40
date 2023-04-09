@@ -8,6 +8,8 @@ import com.thesurvey.api.exception.ErrorMessage;
 import com.thesurvey.api.exception.ExceptionMapper;
 import com.thesurvey.api.repository.SurveyRepository;
 import com.thesurvey.api.service.mapper.SurveyMapper;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -55,9 +57,8 @@ public class SurveyService {
     @Transactional
     public SurveyResponseDto createSurvey(Authentication authentication,
         SurveyRequestDto surveyRequestDto) {
-        if (surveyRequestDto.getStartedDate().isAfter(surveyRequestDto.getEndedDate())) {
-            throw new ExceptionMapper(ErrorMessage.STARTEDDATE_ISAFTER_ENDEDDATE);
-        }
+        validateRequestedSurveyDate(surveyRequestDto.getStartedDate(),
+            surveyRequestDto.getEndedDate());
 
         Survey survey = surveyRepository.save(surveyMapper.toSurvey(surveyRequestDto));
         questionService.createQuestion(surveyRequestDto, survey);
@@ -78,6 +79,8 @@ public class SurveyService {
 
     @Transactional
     public SurveyResponseDto updateSurvey(SurveyUpdateRequestDto surveyUpdateRequestDto) {
+        validateRequestedSurveyDate(surveyUpdateRequestDto.getStartedDate(), surveyUpdateRequestDto.getEndedDate());
+
         Survey survey = surveyRepository.findBySurveyId(surveyUpdateRequestDto.getSurveyId())
             .orElseThrow(
                 () -> new ExceptionMapper(ErrorMessage.SURVEY_NOT_FOUND,
@@ -102,5 +105,14 @@ public class SurveyService {
         questionService.updateQuestion(surveyUpdateRequestDto.getQuestions());
         surveyRepository.save(survey);
         return surveyMapper.toSurveyResponseDto(survey);
+    }
+
+    public void validateRequestedSurveyDate(LocalDateTime startedDate, LocalDateTime endedDate) {
+        if (startedDate.isBefore(LocalDateTime.now(ZoneId.of("Asia/Seoul")).minusSeconds(5))) {
+            throw new ExceptionMapper(ErrorMessage.REQUEST_TIMEOUT);
+        }
+        if (startedDate.isAfter(endedDate)) {
+            throw new ExceptionMapper(ErrorMessage.STARTEDDATE_ISAFTER_ENDEDDATE);
+        }
     }
 }

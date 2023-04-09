@@ -60,12 +60,14 @@ public class AnsweredQuestionService {
 
         List<AnsweredQuestionInfoDto> savedAnsweredQuestionInfoDtoList = new ArrayList<>();
         for (AnsweredQuestionDto answeredQuestionDto : answeredQuestionRequestDto.getQuestionList()) {
+            validateNoAnswerToQuestion(answeredQuestionDto);
 
             QuestionBank questionBank = questionBankRepository.findBySurveyIdAndTitle(
                     survey.getSurveyId(), answeredQuestionDto.getQuestionTitle())
                 .orElseThrow(() -> new ExceptionMapper(ErrorMessage.QUESTION_BANK_NOT_FOUND));
 
-            if (answeredQuestionDto.getMultipleChoices() != null && answeredQuestionDto.getMultipleChoices().size() != 0) {
+            if (answeredQuestionDto.getMultipleChoices() != null
+                && answeredQuestionDto.getMultipleChoices().size() != 0) {
                 List<AnsweredQuestion> answeredQuestionList = answeredQuestionDto.getMultipleChoices()
                     .stream()
                     .map(choice -> answeredQuestionMapper.toAnsweredQuestionWithMultipleChoices(
@@ -98,8 +100,18 @@ public class AnsweredQuestionService {
 
     @Transactional
     public void deleteAnswer(UUID surveyId) {
-        List<AnsweredQuestion> answeredQuestionList = answeredQuestionRepository.findAllBySurveyId(surveyId);
+        List<AnsweredQuestion> answeredQuestionList = answeredQuestionRepository.findAllBySurveyId(
+            surveyId);
         answeredQuestionRepository.deleteAll(answeredQuestionList);
+    }
+
+    public void validateNoAnswerToQuestion(AnsweredQuestionDto answeredQuestionDto) {
+        if (answeredQuestionDto.getLongAnswer() == null
+            && answeredQuestionDto.getShortAnswer() == null
+            && answeredQuestionDto.getMultipleChoices() == null
+            && answeredQuestionDto.getSingleChoice() == null) {
+            throw new ExceptionMapper(ErrorMessage.NO_ANSWER_TO_QUESTION);
+        }
     }
 
 }

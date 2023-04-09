@@ -1,6 +1,7 @@
 package com.thesurvey.api.controller;
 
 import com.thesurvey.api.domain.EnumTypeEntity.Role;
+import com.thesurvey.api.dto.request.SurveyRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -11,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 public abstract class BaseControllerTest {
 
@@ -68,4 +70,14 @@ public abstract class BaseControllerTest {
         return isSuccess ? resultActions.andExpect(status().isOk()).andReturn()
             : resultActions.andExpect(status().isBadRequest()).andReturn();
     }
+
+    protected MvcResult mockCreateSurvey(SurveyRequestDto surveyRequestDto)
+        throws Exception {
+        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/surveys")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(surveyRequestDto)));
+
+        return resultActions.andExpect(status().isOk()).andReturn();
+    }
+
 }

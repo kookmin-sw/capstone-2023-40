@@ -13,7 +13,7 @@ public class QuestionMapper {
         QuestionBank questionBank) {
         return Question
             .builder()
-            .isRequired(questionRequestDto.isRequired())
+            .isRequired(questionRequestDto.getIsRequired())
             .questionNo(questionRequestDto.getQuestionNo())
             .survey(survey)
             .questionBank(questionBank)
