@@ -57,7 +57,7 @@ const DeleteQuestionButton = styled(Button)`
   margin-left: 2vw;
 `;
 
-const AnswerLable = styled.label`
+const AnswerLabel = styled.label`
   padding: 1.2vh 1.5vw 1.2vh 1.5vw;
   font-size: 15px;
   color: ${(props) => props.theme.colors.text};
@@ -116,7 +116,7 @@ export default function SubjectiveAnswerForm({
         value={questionList[questionId].description || ''}
       />
 
-      <AnswerLable theme={theme}>{answerLabel}</AnswerLable>
+      <AnswerLabel theme={theme}>{answerLabel}</AnswerLabel>
       <br />
 
       <AddQuestionButton theme={theme} name="addQuestion" onClick={(event) => handleClickButton(event, questionId)}>
