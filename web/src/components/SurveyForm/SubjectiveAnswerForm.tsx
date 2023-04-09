@@ -2,7 +2,8 @@ import React from 'react';
 
 import styled, { DefaultTheme } from 'styled-components';
 
-import { QuestionCreateRequest, QuestionType } from '../../types/request/Question';
+import { QuestionType } from '../../types/request/Question';
+import { SurveyCreateRequest } from '../../types/request/Survey';
 import QuestionTypeSelect from './QuestionTypeSelect';
 
 const Container = styled.div``;
@@ -69,21 +70,21 @@ const AnswerLabel = styled.label`
 `;
 
 interface SubjectiveAnswerFormProps {
+  surveyData: SurveyCreateRequest;
   selected: number;
   questionId: number;
   handleChangeQuestion: (event: React.ChangeEvent<HTMLInputElement>, questionId: number) => void;
   handleChangeQuestionType: (event: React.ChangeEvent<HTMLSelectElement>, questionId: number) => void;
-  questionList: QuestionCreateRequest[];
   handleClickButton: (event: React.MouseEvent<HTMLButtonElement>, questionId: number, optionId?: number) => void;
   theme: DefaultTheme;
 }
 
 export default function SubjectiveAnswerForm({
+  surveyData,
   selected,
   questionId,
   handleChangeQuestion,
   handleChangeQuestionType,
-  questionList,
   handleClickButton,
   theme,
 }: SubjectiveAnswerFormProps) {
@@ -99,7 +100,7 @@ export default function SubjectiveAnswerForm({
         theme={theme}
         onChange={(event) => handleChangeQuestion(event, questionId)}
         name="title"
-        value={questionList[questionId].title || ''}
+        value={surveyData.questions[questionId].title || ''}
       />
       {QuestionTypeSelect({ selected, questionId, handleChangeQuestionType, theme })}
       <DeleteQuestionButton
@@ -113,7 +114,7 @@ export default function SubjectiveAnswerForm({
         theme={theme}
         onChange={(event) => handleChangeQuestion(event, questionId)}
         name="description"
-        value={questionList[questionId].description || ''}
+        value={surveyData.questions[questionId].description || ''}
       />
 
       <AnswerLabel theme={theme}>{answerLabel}</AnswerLabel>

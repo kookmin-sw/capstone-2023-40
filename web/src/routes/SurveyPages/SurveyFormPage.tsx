@@ -126,8 +126,8 @@ export default function SurveyFormPage() {
   const questionRefs = useRef<HTMLDivElement[]>([]);
   const [recentCreate, setRecentCreate] = useState<number>();
   const [resultModalOpen, setResultModalOpen] = useState<boolean>(false);
-  const [questionList, setQuestionList] = useState<QuestionCreateRequest[]>([]);
-  const [requiredCertificationList, setRequiredCertificationList] = useState<CertificationType[]>([]);
+  // const [questionList, setQuestionList] = useState<QuestionCreateRequest[]>([]);
+  // const [requiredCertificationList, setRequiredCertificationList] = useState<CertificationType[]>([]);
   const [certificationIsChecked, setCertificationIsChecked] = useState<boolean>(false);
   const [surveyData, setSurveyData] = useState<SurveyCreateRequest>({
     title: '제목 없는 설문',
@@ -148,36 +148,18 @@ export default function SurveyFormPage() {
     scrollToRecentCreateQuestion();
   }, [recentCreate]);
 
-  useEffect(() => {
-    if (typeof surveyData !== 'undefined') {
-      setSurveyData({
-        ...surveyData,
-        questions: questionList,
-      });
-    }
-  }, [questionList]);
-
-  useEffect(() => {
-    if (typeof surveyData !== 'undefined') {
-      setSurveyData({
-        ...surveyData,
-        certificationTypes: requiredCertificationList,
-      });
-    }
-  }, [requiredCertificationList]);
-
   const handleSubmit = () => {
     // TODO: Check surveyData is valid
     // TODO: submit surveyData to server
     console.log(surveyData);
-    setResultModalOpen(true);
+    // setResultModalOpen(true);
   };
 
   const addQuestionUnderId = (questionId: number) => {
-    for (let i = questionId + 1; i < questionList.length; i += 1) {
-      questionList[i] = { ...questionList[i], questionNo: i + 1 };
+    for (let i = questionId + 1; i < surveyData.questions.length; i += 1) {
+      surveyData.questions[i] = { ...surveyData.questions[i], questionNo: i + 1 };
     }
-    const newQuestionList = [...questionList];
+    const newQuestions = [...surveyData.questions];
     const newQuestion: QuestionCreateRequest = {
       title: '설문 제목',
       description: '설문 설명',
@@ -186,23 +168,23 @@ export default function SurveyFormPage() {
       isRequired: true,
     };
 
-    newQuestionList.splice(questionId + 1, 0, newQuestion);
-    setQuestionList(newQuestionList);
+    newQuestions.splice(questionId + 1, 0, newQuestion);
+    setSurveyData({ ...surveyData, questions: newQuestions });
     setRecentCreate(questionId + 1);
   };
 
   const deleteQuestionAtId = (questionId: number) => {
-    for (let i = questionId + 1; i < questionList.length; i += 1) {
-      questionList[i] = { ...questionList[i], questionNo: i - 1 };
+    for (let i = questionId + 1; i < surveyData.questions.length; i += 1) {
+      surveyData.questions[i] = { ...surveyData.questions[i], questionNo: i - 1 };
     }
-    const newQuestionList = [...questionList];
-    newQuestionList.splice(questionId, 1);
-    setQuestionList(newQuestionList);
-    setRecentCreate(newQuestionList.length === 0 ? undefined : newQuestionList.length - 1);
+    const newQuestions = [...surveyData.questions];
+    newQuestions.splice(questionId, 1);
+    setSurveyData({ ...surveyData, questions: newQuestions });
+    setRecentCreate(newQuestions.length === 0 ? undefined : newQuestions.length - 1);
   };
 
   const addOptionAtBottom = (questionId: number) => {
-    let newOptions = questionList[questionId].questionOptions;
+    let newOptions = surveyData.questions[questionId].questionOptions;
     const newOption: QuestionOptionCreateRequest = {
       option: '객관식 문항',
       description: '',
@@ -214,27 +196,32 @@ export default function SurveyFormPage() {
       newOptions = [newOption];
     }
 
-    const newQuestionList = [...questionList];
-    newQuestionList[questionId] = { ...newQuestionList[questionId], questionOptions: newOptions };
-    setQuestionList(newQuestionList);
+    const newQuestions = [...surveyData.questions];
+    newQuestions[questionId] = { ...newQuestions[questionId], questionOptions: newOptions };
+    setSurveyData({ ...surveyData, questions: newQuestions });
   };
 
   const deleteOptionAtId = (questionId: number, optionId: number) => {
-    const newOptions = questionList[questionId].questionOptions;
+    const newOptions = surveyData.questions[questionId].questionOptions;
     if (newOptions) {
       newOptions.splice(optionId, 1);
     }
 
-    const newQuestionList = [...questionList];
-    newQuestionList[questionId] = { ...newQuestionList[questionId], questionOptions: newOptions };
-    setQuestionList(newQuestionList);
+    const newQuestions = [...surveyData.questions];
+    newQuestions[questionId] = { ...newQuestions[questionId], questionOptions: newOptions };
+    setSurveyData({ ...surveyData, questions: newQuestions });
   };
 
   const editRequiredCertificationList = (value: number, isChecked: boolean) => {
-    if (isChecked) {
-      setRequiredCertificationList((prev) => [...prev, value]);
-    } else {
-      setRequiredCertificationList(requiredCertificationList.filter((item) => item !== value));
+    if (typeof surveyData.certificationTypes !== 'undefined') {
+      if (isChecked) {
+        setSurveyData({ ...surveyData, certificationTypes: [...surveyData.certificationTypes, value] });
+      } else {
+        setSurveyData({
+          ...surveyData,
+          certificationTypes: surveyData.certificationTypes.filter((item) => item !== value),
+        });
+      }
     }
   };
 
@@ -257,27 +244,31 @@ export default function SurveyFormPage() {
   // Update questionList[questionId] title | description
   const handleChangeQuestion = (event: React.ChangeEvent<HTMLInputElement>, questionId: number) => {
     const { name, value } = event.target;
-    questionList[questionId] = { ...questionList[questionId], [name]: value };
-    setQuestionList([...questionList]);
+    surveyData.questions[questionId] = { ...surveyData.questions[questionId], [name]: value };
+    setSurveyData({ ...surveyData });
   };
 
   // Update questionList[questionId] type
   const handleChangeQuestionType = (event: React.ChangeEvent<HTMLSelectElement>, questionId: number) => {
     const { name, value } = event.target;
-    questionList[questionId] = { ...questionList[questionId], [name]: +value, questionOptions: undefined };
-    setQuestionList([...questionList]);
+    surveyData.questions[questionId] = {
+      ...surveyData.questions[questionId],
+      [name]: +value,
+      questionOptions: undefined,
+    };
+    setSurveyData({ ...surveyData });
   };
 
   // update questionList[questionId][optionId] option
   const handleChangeOption = (event: React.ChangeEvent<HTMLInputElement>, questionId: number, optionId: number) => {
     const { name, value } = event.target;
-    const newOptions = questionList[questionId].questionOptions;
+    const newOptions = surveyData.questions[questionId].questionOptions;
     if (newOptions) {
       newOptions[optionId] = { ...newOptions[optionId], [name]: value };
     }
-    const newQuestionList = [...questionList];
-    newQuestionList[questionId] = { ...newQuestionList[questionId], questionOptions: newOptions };
-    setQuestionList(newQuestionList);
+    const newQuestions = [...surveyData.questions];
+    newQuestions[questionId] = { ...newQuestions[questionId], questionOptions: newOptions };
+    setSurveyData({ ...surveyData, questions: newQuestions });
   };
 
   const handleClickButton = (event: React.MouseEvent<HTMLButtonElement>, questionId: number, optionId?: number) => {
@@ -298,11 +289,11 @@ export default function SurveyFormPage() {
         key={questionId}
       >
         {SubjectiveAnswerForm({
+          surveyData,
           selected,
           questionId,
           handleChangeQuestion,
           handleChangeQuestionType,
-          questionList,
           handleClickButton,
           theme,
         })}
@@ -311,7 +302,7 @@ export default function SurveyFormPage() {
   };
 
   const makeOptionsForm = (questionId: number) => {
-    const tmpOptions = questionList[questionId].questionOptions;
+    const tmpOptions = surveyData.questions[questionId].questionOptions;
     if (typeof tmpOptions !== 'undefined') {
       return NumberUtils.range(0, tmpOptions.length).map((index: number) => (
         <OptionContainer theme={theme} key={index}>
@@ -344,11 +335,11 @@ export default function SurveyFormPage() {
         key={questionId}
       >
         {ChoiceAnswerForm({
+          surveyData,
           selected,
           questionId,
           handleChangeQuestion,
           handleChangeQuestionType,
-          questionList,
           handleClickButton,
           makeOptionsForm,
           theme,
@@ -376,14 +367,13 @@ export default function SurveyFormPage() {
           {SurveyDataForm({
             surveyData,
             handleChangeSurveyData,
-            requiredCertificationList,
             handleChangeCheck,
             handleClickButton,
             theme,
           })}
         </SurveyDataContainer>
 
-        {questionList.map((question: QuestionCreateRequest) =>
+        {surveyData.questions.map((question: QuestionCreateRequest) =>
           showQuestionForm(question.questionType, question.questionNo)
         )}
 

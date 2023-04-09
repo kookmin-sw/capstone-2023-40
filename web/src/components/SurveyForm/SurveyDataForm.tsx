@@ -117,7 +117,6 @@ const AddQuestionButton = styled(Button)`
 interface SurveyDataFormProps {
   surveyData: SurveyCreateRequest;
   handleChangeSurveyData: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  requiredCertificationList: CertificationType[];
   handleChangeCheck: (event: React.ChangeEvent<HTMLInputElement>, value: number) => void;
   handleClickButton: (event: React.MouseEvent<HTMLButtonElement>, questionId: number, optionId?: number) => void;
   theme: DefaultTheme;
@@ -126,7 +125,6 @@ interface SurveyDataFormProps {
 export default function SurveyDataForm({
   surveyData,
   handleChangeSurveyData,
-  requiredCertificationList,
   handleChangeCheck,
   handleClickButton,
   theme,
@@ -143,7 +141,7 @@ export default function SurveyDataForm({
       <SurveyCertificationsContainer theme={theme}>
         <SelectedCertificationsContainer theme={theme}>
           <GuideLabel theme={theme}>필수 인증 목록 : </GuideLabel>
-          {requiredCertificationList.map((auth: number) => (
+          {surveyData.certificationTypes?.map((auth: number) => (
             <SelectedCertification theme={theme} key={auth}>
               {CertificationType[auth]}
             </SelectedCertification>
@@ -153,7 +151,7 @@ export default function SurveyDataForm({
           <CertificationPicker theme={theme} key={index} htmlFor={`${index}`}>
             <CheckBox
               id={`${index}`}
-              checked={requiredCertificationList.includes(index)}
+              checked={surveyData.certificationTypes?.includes(index)}
               onChange={(e) => handleChangeCheck(e, index)}
             />
             <CertificationLabel theme={theme}>{CertificationType[index]}</CertificationLabel>

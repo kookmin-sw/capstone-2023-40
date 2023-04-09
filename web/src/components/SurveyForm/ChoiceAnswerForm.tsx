@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled, { DefaultTheme } from 'styled-components';
 
-import { QuestionCreateRequest } from '../../types/request/Question';
+import { SurveyCreateRequest } from '../../types/request/Survey';
 import QuestionTypeSelect from './QuestionTypeSelect';
 
 const Container = styled.div``;
@@ -74,22 +74,22 @@ const AddOptionButton = styled.button`
 `;
 
 interface ChoiceAnswerFormProps {
+  surveyData: SurveyCreateRequest;
   selected: number;
   questionId: number;
   handleChangeQuestion: (event: React.ChangeEvent<HTMLInputElement>, questionId: number) => void;
   handleChangeQuestionType: (event: React.ChangeEvent<HTMLSelectElement>, questionId: number) => void;
-  questionList: QuestionCreateRequest[];
   handleClickButton: (event: React.MouseEvent<HTMLButtonElement>, questionId: number, optionId?: number) => void;
   makeOptionsForm: (questionId: number) => JSX.Element | JSX.Element[];
   theme: DefaultTheme;
 }
 
 export default function ChoiceAnswerForm({
+  surveyData,
   selected,
   questionId,
   handleChangeQuestion,
   handleChangeQuestionType,
-  questionList,
   handleClickButton,
   makeOptionsForm,
   theme,
@@ -100,7 +100,7 @@ export default function ChoiceAnswerForm({
         theme={theme}
         onChange={(event) => handleChangeQuestion(event, questionId)}
         name="title"
-        value={questionList[questionId].title || ''}
+        value={surveyData.questions[questionId].title || ''}
       />
       {QuestionTypeSelect({ selected, questionId, handleChangeQuestionType, theme })}
       <DeleteQuestionButton
@@ -115,7 +115,7 @@ export default function ChoiceAnswerForm({
         theme={theme}
         onChange={(event) => handleChangeQuestion(event, questionId)}
         name="description"
-        value={questionList[questionId].description || ''}
+        value={surveyData.questions[questionId].description || ''}
       />
 
       {makeOptionsForm(questionId)}
