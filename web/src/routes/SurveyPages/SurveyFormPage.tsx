@@ -310,7 +310,7 @@ export default function SurveyFormPage() {
     );
   };
 
-  const makeoptionsForm = (questionId: number) => {
+  const makeOptionsForm = (questionId: number) => {
     const tmpOptions = questionList[questionId].questionOptions;
     if (typeof tmpOptions !== 'undefined') {
       return NumberUtils.range(0, tmpOptions.length).map((index: number) => (
@@ -350,7 +350,7 @@ export default function SurveyFormPage() {
           handleChangeQuestionType,
           questionList,
           handleClickButton,
-          makeoptionsForm,
+          makeOptionsForm,
           theme,
         })}
       </QuestionContainer>
