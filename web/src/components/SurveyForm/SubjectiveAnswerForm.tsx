@@ -4,6 +4,7 @@ import styled, { DefaultTheme } from 'styled-components';
 
 import { QuestionType } from '../../types/request/Question';
 import { SurveyCreateRequest } from '../../types/request/Survey';
+import EditQuestionButton from './EditQuestionButton';
 import QuestionTypeSelect from './QuestionTypeSelect';
 
 const Container = styled.div``;
@@ -30,32 +31,6 @@ const QuestionDescriptionInput = styled(TextInput).attrs({ type: 'text' })`
   margin-top: 7px;
   margin-bottom: 23px;
   margin-right: 18vw;
-`;
-
-const Button = styled.button`
-  font-weight: 900;
-  text-align: center;
-  padding: 10px;
-  background-color: ${(props) => props.theme.colors.button};
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
-  border: none;
-  cursor: pointer;
-
-  &:hover {
-    opacity: 0.8;
-  }
-`;
-
-const AddQuestionButton = styled(Button)`
-  color: ${(props) => props.theme.colors.text};
-  margin-left: 37vw;
-`;
-
-const DeleteQuestionButton = styled(Button)`
-  color: #cd5c5c;
-  margin-left: 2vw;
 `;
 
 const AnswerLabel = styled.label`
@@ -103,13 +78,7 @@ export default function SubjectiveAnswerForm({
         value={surveyData.questions[questionId].title || ''}
       />
       {QuestionTypeSelect({ selected, questionId, handleChangeQuestionType, theme })}
-      <DeleteQuestionButton
-        theme={theme}
-        name="deleteQuestion"
-        onClick={(event) => handleClickButton(event, questionId)}
-      >
-        X
-      </DeleteQuestionButton>
+      {EditQuestionButton({ editType: 'Delete', questionId, handleClickButton, theme })}
       <QuestionDescriptionInput
         theme={theme}
         onChange={(event) => handleChangeQuestion(event, questionId)}
@@ -120,9 +89,7 @@ export default function SubjectiveAnswerForm({
       <AnswerLabel theme={theme}>{answerLabel}</AnswerLabel>
       <br />
 
-      <AddQuestionButton theme={theme} name="addQuestion" onClick={(event) => handleClickButton(event, questionId)}>
-        +
-      </AddQuestionButton>
+      {EditQuestionButton({ editType: 'Add', questionId, handleClickButton, theme })}
     </Container>
   );
 }

@@ -4,6 +4,7 @@ import styled, { DefaultTheme } from 'styled-components';
 
 import { SurveyCreateRequest, CertificationType } from '../../types/request/Survey';
 import { NumberUtils } from '../../utils/NumberUtils';
+import EditQuestionButton from './EditQuestionButton';
 
 const Container = styled.div``;
 
@@ -93,27 +94,6 @@ const SurveyDateInput = styled.input.attrs({ type: 'datetime-local' })`
 
 const CertificationLabel = styled.span``;
 
-const Button = styled.button`
-  font-weight: 900;
-  text-align: center;
-  padding: 10px;
-  background-color: ${(props) => props.theme.colors.button};
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
-  border: none;
-  cursor: pointer;
-
-  &:hover {
-    opacity: 0.8;
-  }
-`;
-
-const AddQuestionButton = styled(Button)`
-  color: ${(props) => props.theme.colors.text};
-  margin-left: 37vw;
-`;
-
 interface SurveyDataFormProps {
   surveyData: SurveyCreateRequest;
   handleChangeSurveyData: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -175,9 +155,7 @@ export default function SurveyDataForm({
         />
       </SurveyDateContainer>
 
-      <AddQuestionButton theme={theme} name="addQuestion" onClick={(event) => handleClickButton(event, -1)}>
-        +
-      </AddQuestionButton>
+      {EditQuestionButton({ editType: 'Add', questionId: -1, handleClickButton, theme })}
     </Container>
   );
 }
