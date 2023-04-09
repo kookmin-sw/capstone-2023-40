@@ -13,7 +13,6 @@ import lombok.Getter;
 public class AnsweredQuestionRequestDto {
 
     @NotNull
-    @Size(max = 255)
     private UUID surveyId;
 
     @Valid

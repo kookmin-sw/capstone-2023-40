@@ -116,15 +116,6 @@ public class SurveyUpdateRequestDtoValidTest implements CommonTestMethod{
     @Test
     public void testValidateNotBlank() {
         // given
-        QuestionBankUpdateRequestDto questionBankUpdateRequestDto = QuestionBankUpdateRequestDto.builder()
-            .questionBankId(1L)
-            .title("This is test QuestionBankUpdateRequestDto")
-            .description("This is test QuestionBankUpdateRequestDto")
-            .questionType(QuestionType.LONG_ANSWER)
-            .questionNo(1)
-            .isRequired(true)
-            .build();
-
         SurveyUpdateRequestDto surveyUpdateRequestDto = SurveyUpdateRequestDto.builder()
             .surveyId(UUID.fromString("5eaa47c1-cba3-45da-9533-3528e18563c3"))
             .title("")

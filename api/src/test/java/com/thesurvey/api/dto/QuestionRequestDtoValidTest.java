@@ -42,6 +42,7 @@ public class QuestionRequestDtoValidTest implements CommonTestMethod {
     }
 
     @Override
+    @Test
     public void testValidateNullInput() {
         // given
         QuestionRequestDto questionRequestDto = QuestionRequestDto.builder()
@@ -61,6 +62,7 @@ public class QuestionRequestDtoValidTest implements CommonTestMethod {
     }
 
     @Override
+    @Test
     public void testValidateOverMaxStringLength() {
         // given
         StringBuilder maxLengthStringBuilder = new StringBuilder();
@@ -85,6 +87,7 @@ public class QuestionRequestDtoValidTest implements CommonTestMethod {
     }
 
     @Override
+    @Test
     public void testValidateNotBlank() {
         QuestionRequestDto questionRequestDto = QuestionRequestDto.builder()
             .title("")

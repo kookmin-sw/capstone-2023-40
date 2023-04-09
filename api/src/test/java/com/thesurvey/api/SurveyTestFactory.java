@@ -2,6 +2,8 @@ package com.thesurvey.api;
 
 import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
 import com.thesurvey.api.domain.EnumTypeEntity.QuestionType;
+import com.thesurvey.api.dto.request.AnsweredQuestionDto;
+import com.thesurvey.api.dto.request.AnsweredQuestionRequestDto;
 import com.thesurvey.api.dto.request.QuestionBankUpdateRequestDto;
 import com.thesurvey.api.dto.request.QuestionOptionRequestDto;
 import com.thesurvey.api.dto.request.QuestionOptionUpdateRequestDto;
@@ -29,7 +31,7 @@ public class SurveyTestFactory {
             .collect(Collectors.toList());
 
         QuestionRequestDto globalSingleChoiceDto = QuestionRequestDto.builder()
-            .title("A format to be saved to QuestionBank")
+            .title("A format to be saved to QuestionBank1")
             .description("Question1's description")
             .questionType(QuestionType.SINGLE_CHOICE)
             .questionNo(1)
@@ -38,7 +40,7 @@ public class SurveyTestFactory {
             .build();
 
         QuestionRequestDto globalMultipleChoiceDto = QuestionRequestDto.builder()
-            .title("A format to be saved to QuestionBank")
+            .title("A format to be saved to QuestionBank2")
             .description("Question2's description")
             .questionType(QuestionType.MULTIPLE_CHOICE)
             .questionNo(2)
@@ -47,7 +49,7 @@ public class SurveyTestFactory {
             .build();
 
         QuestionRequestDto globalShortAnswerDto = QuestionRequestDto.builder()
-            .title("A format to be saved to QuestionBank")
+            .title("A format to be saved to QuestionBank3")
             .description("Question3's description")
             .questionType(QuestionType.SHORT_ANSWER)
             .questionNo(3)
@@ -55,7 +57,7 @@ public class SurveyTestFactory {
             .build();
 
         QuestionRequestDto globalLongAnswerDto = QuestionRequestDto.builder()
-            .title("A format to be saved to QuestionBank")
+            .title("A format to be saved to QuestionBank4")
             .description("Question4's description")
             .questionType(QuestionType.LONG_ANSWER)
             .questionNo(4)
@@ -91,7 +93,7 @@ public class SurveyTestFactory {
 
         QuestionBankUpdateRequestDto globalSingleChoiceDto = QuestionBankUpdateRequestDto.builder()
             .questionBankId(1L)
-            .title("A format to be saved to QuestionBank")
+            .title("A format to be saved to QuestionBank1")
             .description("Question1's description")
             .questionType(QuestionType.SINGLE_CHOICE)
             .questionOptions(globalQuestionOptionUpdateDtoList)
@@ -101,7 +103,7 @@ public class SurveyTestFactory {
 
         QuestionBankUpdateRequestDto globalMultipleChoiceDto = QuestionBankUpdateRequestDto.builder()
             .questionBankId(2L)
-            .title("A format to be saved to QuestionBank")
+            .title("A format to be saved to QuestionBank2")
             .description("Question2's description")
             .questionType(QuestionType.MULTIPLE_CHOICE)
             .questionOptions(globalQuestionOptionUpdateDtoList)
@@ -111,7 +113,7 @@ public class SurveyTestFactory {
 
         QuestionBankUpdateRequestDto globalShortAnswerDto = QuestionBankUpdateRequestDto.builder()
             .questionBankId(3L)
-            .title("A format to be saved to QuestionBank")
+            .title("A format to be saved to QuestionBank3")
             .description("Question3's description")
             .questionType(QuestionType.SHORT_ANSWER)
             .isRequired(true)
@@ -120,7 +122,7 @@ public class SurveyTestFactory {
 
         QuestionBankUpdateRequestDto globalLongAnswerDto = QuestionBankUpdateRequestDto.builder()
             .questionBankId(4L)
-            .title("A format to be saved to QuestionBank")
+            .title("A format to be saved to QuestionBank4")
             .description("Question4's description")
             .questionType(QuestionType.LONG_ANSWER)
             .isRequired(true)
@@ -201,6 +203,55 @@ public class SurveyTestFactory {
             .build();
 
         return globalSurveyResponseDto;
+    }
+
+    public static AnsweredQuestionRequestDto getAnsweredQuestionRequestDto(UUID surveyId) {
+        AnsweredQuestionDto answeredQuestionSingleChoiceDto = AnsweredQuestionDto.builder()
+            .questionTitle("A format to be saved to QuestionBank1")
+            .questionDescription("Question1's description")
+            .singleChoice("Test single choice")
+            .multipleChoices(null)
+            .shortAnswer(null)
+            .longAnswer(null)
+            .build();
+
+        List<String> multipleChoice = Arrays.asList("option 1");
+        AnsweredQuestionDto answeredQuestionMultipleChoiceDto = AnsweredQuestionDto.builder()
+            .questionTitle("A format to be saved to QuestionBank2")
+            .questionDescription("Question2's description")
+            .singleChoice(null)
+            .multipleChoices(multipleChoice)
+            .shortAnswer(null)
+            .longAnswer(null)
+            .build();
+
+        AnsweredQuestionDto answeredQuestionShortAnswerDto = AnsweredQuestionDto.builder()
+            .questionTitle("A format to be saved to QuestionBank3")
+            .questionDescription("Question3's description")
+            .singleChoice(null)
+            .multipleChoices(null)
+            .shortAnswer("Test short answer")
+            .longAnswer(null)
+            .build();
+
+        AnsweredQuestionDto answeredQuestionLongAnswerDto = AnsweredQuestionDto.builder()
+            .questionTitle("A format to be saved to QuestionBank4")
+            .questionDescription("Question4's description")
+            .singleChoice(null)
+            .multipleChoices(null)
+            .shortAnswer(null)
+            .longAnswer("Test Long answer")
+            .build();
+        List<AnsweredQuestionDto> answeredQuestionDtoList = Arrays.asList(
+            answeredQuestionSingleChoiceDto, answeredQuestionMultipleChoiceDto,
+            answeredQuestionShortAnswerDto, answeredQuestionLongAnswerDto);
+
+        AnsweredQuestionRequestDto globalAnsweredQuestionRequestDto = AnsweredQuestionRequestDto.builder()
+            .surveyId(surveyId)
+            .questionList(answeredQuestionDtoList)
+            .build();
+
+        return globalAnsweredQuestionRequestDto;
     }
 
 }
