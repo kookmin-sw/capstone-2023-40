@@ -4,9 +4,12 @@ import styled, { DefaultTheme } from 'styled-components';
 
 import { SurveyCreateRequest, CertificationType } from '../../types/request/Survey';
 import { NumberUtils } from '../../utils/NumberUtils';
+import CertificationIcons from '../CertificationList';
 import EditQuestionButton from './EditQuestionButton';
 
 const Container = styled.div``;
+
+const ButtonContainer = styled.div``;
 
 const GuideLabel = styled.label`
   margin-left: 10px;
@@ -52,7 +55,6 @@ const SelectedCertification = styled.label`
   margin: 5px;
   border-radius: ${(props) => props.theme.borderRadius};
   padding: 1.2vh 1.5vw 1.2vh 1.5vw;
-  background-color: red;
 `;
 
 const CertificationPicker = styled.label`
@@ -123,7 +125,7 @@ export default function SurveyDataForm({
           <GuideLabel theme={theme}>필수 인증 목록 : </GuideLabel>
           {surveyData.certificationTypes?.map((auth: number) => (
             <SelectedCertification theme={theme} key={auth}>
-              {CertificationType[auth]}
+              {CertificationIcons({ label: CertificationType[auth], iconOption: true })}
             </SelectedCertification>
           ))}
         </SelectedCertificationsContainer>
@@ -134,7 +136,9 @@ export default function SurveyDataForm({
               checked={surveyData.certificationTypes?.includes(index)}
               onChange={(e) => handleChangeCheck(e, index)}
             />
-            <CertificationLabel theme={theme}>{CertificationType[index]}</CertificationLabel>
+            <CertificationLabel theme={theme}>
+              {CertificationIcons({ label: CertificationType[index], iconOption: false })}
+            </CertificationLabel>
           </CertificationPicker>
         ))}
       </SurveyCertificationsContainer>
@@ -155,7 +159,9 @@ export default function SurveyDataForm({
         />
       </SurveyDateContainer>
 
-      {EditQuestionButton({ editType: 'Add', questionId: -1, handleClickButton, theme })}
+      <ButtonContainer>
+        {EditQuestionButton({ editType: 'Add', questionId: -1, handleClickButton, theme })}
+      </ButtonContainer>
     </Container>
   );
 }
