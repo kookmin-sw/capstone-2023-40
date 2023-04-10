@@ -22,6 +22,10 @@ const GuideLabel = styled.label`
   margin-right: 10px;
   font-weight: 900;
   color: ${(props) => props.theme.colors.default};
+
+  @media screen and (max-width: 900px) {
+    display: none;
+  }
 `;
 
 const TextInput = styled.input.attrs({ type: 'text', maxLength: 100 })`
@@ -100,7 +104,7 @@ const SurveyDateInput = styled.input.attrs({ type: 'datetime-local' })`
   font-weight: 900;
   color: ${(props) => props.theme.colors.default};
   background-color: ${(props) => props.theme.colors.container};
-  margin-bottom: 25px;
+  margin-bottom: 10px;
 `;
 
 const CertificationLabel = styled.span``;
