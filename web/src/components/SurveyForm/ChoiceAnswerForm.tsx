@@ -8,6 +8,10 @@ import QuestionTypeSelect from './QuestionTypeSelect';
 
 const Container = styled.div``;
 
+const ButtonContainer = styled.div``;
+
+const HeadContainer = styled.div``;
+
 const TextInput = styled.input.attrs({ type: 'text', maxLength: 100 })`
   padding: 1.2vh 1.5vw 1.2vh 1.5vw;
   border: ${(props) => props.theme.border};
@@ -71,14 +75,15 @@ export default function ChoiceAnswerForm({
 }: ChoiceAnswerFormProps) {
   return (
     <Container>
-      <QuestionTitleInput
-        theme={theme}
-        onChange={(event) => handleChangeQuestion(event, questionId)}
-        name="title"
-        value={surveyData.questions[questionId].title || ''}
-      />
-      {QuestionTypeSelect({ selected, questionId, handleChangeQuestionType, theme })}
-      {EditQuestionButton({ editType: 'Delete', questionId, handleClickButton, theme })}
+      <HeadContainer>
+        <QuestionTitleInput
+          theme={theme}
+          onChange={(event) => handleChangeQuestion(event, questionId)}
+          name="title"
+          value={surveyData.questions[questionId].title || ''}
+        />
+        {QuestionTypeSelect({ selected, questionId, handleChangeQuestionType, theme })}
+      </HeadContainer>
 
       <QuestionDescriptionInput
         theme={theme}
@@ -88,13 +93,16 @@ export default function ChoiceAnswerForm({
       />
 
       {makeOptionsForm(questionId)}
-      <br />
-      <AddOptionButton theme={theme} name="addOption" onClick={(event) => handleClickButton(event, questionId)}>
-        문항 추가하기
-      </AddOptionButton>
-      <br />
+      <ButtonContainer>
+        <AddOptionButton theme={theme} name="addOption" onClick={(event) => handleClickButton(event, questionId)}>
+          문항 추가하기
+        </AddOptionButton>
+      </ButtonContainer>
 
-      {EditQuestionButton({ editType: 'Add', questionId, handleClickButton, theme })}
+      <ButtonContainer>
+        {EditQuestionButton({ editType: 'Add', questionId, handleClickButton, theme })}
+        {EditQuestionButton({ editType: 'Delete', questionId, handleClickButton, theme })}
+      </ButtonContainer>
     </Container>
   );
 }

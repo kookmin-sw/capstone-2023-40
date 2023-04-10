@@ -12,7 +12,7 @@ import SurveyDataForm from '../../components/SurveyForm/SurveyDataForm';
 import { useTheme } from '../../hooks/useTheme';
 import { QuestionCreateRequest, QuestionType } from '../../types/request/Question';
 import { QuestionOptionCreateRequest } from '../../types/request/QuestionOption';
-import { SurveyCreateRequest, CertificationType } from '../../types/request/Survey';
+import { SurveyCreateRequest } from '../../types/request/Survey';
 import { NumberUtils } from '../../utils/NumberUtils';
 
 // TODO: add media-query for mobile....
