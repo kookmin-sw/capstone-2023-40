@@ -1,5 +1,6 @@
 package com.thesurvey.api.config;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
 
@@ -80,8 +81,10 @@ public class SecurityConfiguration {
         final CorsConfiguration config = new CorsConfiguration();
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
-        // FIXME: add client host
-        config.setAllowedOrigins(List.of("http://localhost:8080"));
+        List<String> allowedOrigins = new ArrayList<>();
+        allowedOrigins.add("http://localhost:3000");
+
+        config.setAllowedOrigins(allowedOrigins);
         config.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS", "DELETE", "PUT", "PATCH"));
         config.setAllowCredentials(true);
         config.setAllowedHeaders(Arrays.asList("Cache-Control", "Content-Type"));

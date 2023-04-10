@@ -43,6 +43,7 @@ public class AuthenticationControllerTest extends BaseControllerTest {
         JSONObject content = new JSONObject(result.getResponse().getContentAsString());
 
         assertThat(content.get("name")).isEqualTo(globalRegisterDto.getName());
+        assertThat(content.get("role")).isEqualTo(globalRole);
         assertThat(content.get("email")).isEqualTo(globalRegisterDto.getEmail());
         assertThat(content.get("profileImage")).isEqualTo(globalRegisterDto.getProfileImage());
     }
@@ -55,6 +56,7 @@ public class AuthenticationControllerTest extends BaseControllerTest {
 
         assertThat(content.get("name")).isEqualTo(globalName);
         assertThat(content.get("email")).isEqualTo(globalEmail);
+        assertThat(content.get("role")).isEqualTo(globalRole);
         assertThat(content.get("profileImage")).isEqualTo(globalProfileImage);
     }
 
@@ -87,7 +89,6 @@ public class AuthenticationControllerTest extends BaseControllerTest {
                 .name(uniqueId + globalName)
                 .email(uniqueId + globalEmail)
                 .password(password)
-                .role(globalRole)
                 .phoneNumber(globalPhoneNumber)
                 .address(globalAddress)
                 .profileImage(globalProfileImage)
@@ -103,7 +104,6 @@ public class AuthenticationControllerTest extends BaseControllerTest {
                 .name(uniqueId + globalName)
                 .email(uniqueId + globalEmail)
                 .password(password)
-                .role(globalRole)
                 .phoneNumber(globalPhoneNumber)
                 .address(globalAddress)
                 .profileImage(globalProfileImage)
@@ -135,7 +135,6 @@ public class AuthenticationControllerTest extends BaseControllerTest {
                 .name(uniqueId + globalName)
                 .email(uniqueId + globalEmail)
                 .password(globalPassword)
-                .role(globalRole)
                 .phoneNumber(phoneNumber)
                 .address(globalAddress)
                 .profileImage(globalProfileImage)
@@ -151,7 +150,6 @@ public class AuthenticationControllerTest extends BaseControllerTest {
                 .name(uniqueId + globalName)
                 .email(uniqueId + globalEmail)
                 .password(globalPassword)
-                .role(globalRole)
                 .phoneNumber(phoneNumber)
                 .address(globalAddress)
                 .profileImage(globalProfileImage)

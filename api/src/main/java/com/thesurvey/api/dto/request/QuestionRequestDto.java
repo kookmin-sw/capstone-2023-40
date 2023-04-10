@@ -31,7 +31,7 @@ public class QuestionRequestDto {
     private Integer questionNo;
 
     @NotNull
-    private boolean isRequired;
+    private Boolean isRequired;
 
     @Valid
     private List<QuestionOptionRequestDto> questionOptions;

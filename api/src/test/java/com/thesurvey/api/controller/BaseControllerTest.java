@@ -1,7 +1,7 @@
 package com.thesurvey.api.controller;
 
-
 import com.thesurvey.api.domain.EnumTypeEntity.Role;
+import com.thesurvey.api.dto.request.SurveyRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 public abstract class BaseControllerTest {
 
@@ -21,9 +22,9 @@ public abstract class BaseControllerTest {
 
     String globalAddress = "test address";
 
-    Role globalRole = Role.valueOf("USER");
-
     String globalPhoneNumber = "01012345678";
+
+    String globalRole = String.valueOf(Role.USER);
 
     String globalPassword = "Password123@";
 
@@ -35,7 +36,6 @@ public abstract class BaseControllerTest {
         .email(globalEmail)
         .password(globalPassword)
         .phoneNumber(globalPhoneNumber)
-        .role(globalRole)
         .profileImage(globalProfileImage)
         .address(globalAddress)
         .build();
@@ -70,4 +70,14 @@ public abstract class BaseControllerTest {
         return isSuccess ? resultActions.andExpect(status().isOk()).andReturn()
             : resultActions.andExpect(status().isBadRequest()).andReturn();
     }
+
+    protected MvcResult mockCreateSurvey(SurveyRequestDto surveyRequestDto)
+        throws Exception {
+        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/surveys")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(surveyRequestDto)));
+
+        return resultActions.andExpect(status().isOk()).andReturn();
+    }
+
 }

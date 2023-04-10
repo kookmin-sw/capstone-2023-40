@@ -24,8 +24,9 @@ const ListRow = styled.tr`
 const Item = styled.td`
   height: 22px;
   margin: 2px;
-  padding: 2vh;
-  font-size: 1.7vh;
+  padding: 18px;
+  padding-bottom: 19px;
+  font-size: 17px;
   font-weight: bold;
   border-radius: 5px;
   background-color: ${(props) => props.theme.colors.background};
@@ -33,8 +34,8 @@ const Item = styled.td`
 
 const HeadItem = styled.th`
   margin: 2px;
-  padding: 2vh;
-  font-size: 2vh;
+  padding: 18px;
+  font-size: 17px;
   font-weight: bold;
   text-align: center;
   color: ${(props) => props.theme.colors.default};
@@ -46,7 +47,7 @@ const Title = styled(Item)`
 `;
 
 const Authlist = styled(Item)`
-  min-width: 160px;
+  min-width: 100px;
   width: 20vw;
 `;
 
@@ -66,7 +67,7 @@ const HeadTitle = styled(HeadItem)`
 `;
 
 const HeadAuthList = styled(HeadItem)`
-  min-width: 160px;
+  min-width: 100px;
   width: 20vw;
 `;
 

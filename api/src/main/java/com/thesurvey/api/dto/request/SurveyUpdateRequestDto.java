@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.UUID;
 import javax.validation.Valid;
 import javax.validation.constraints.Future;
-import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -19,7 +18,6 @@ import lombok.Getter;
 public class SurveyUpdateRequestDto {
 
     @NotNull
-    @Size(max = 255)
     private UUID surveyId;
 
     @NotBlank
@@ -31,7 +29,6 @@ public class SurveyUpdateRequestDto {
     private String description;
 
     @NotNull
-    @FutureOrPresent
     private LocalDateTime startedDate;
 
     @NotNull
