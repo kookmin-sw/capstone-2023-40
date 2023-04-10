@@ -42,7 +42,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @TestInstance(Lifecycle.PER_CLASS)
 @AutoConfigureMockMvc
-public class SurveyControllerIntegrateTest extends BaseControllerTest {
+public class SurveyControllerTest extends BaseControllerTest {
 
     @Autowired
     SurveyRepository surveyRepository;
