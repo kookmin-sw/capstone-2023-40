@@ -64,7 +64,7 @@ const TextInput = styled.input.attrs({ type: 'text', maxLength: 100 })`
 
 const QuestionContainer = styled(ItemContainer)``;
 
-const AnswerLable = styled.label`
+const AnswerLabel = styled.label`
   display: inline-block;
   width: 30vw;
   padding: 1.2vh 1.5vw 1.2vh 1.5vw;
@@ -305,7 +305,7 @@ export default function SurveyFormPage() {
     const tmpOptions = surveyData.questions[questionId].questionOptions;
     if (typeof tmpOptions !== 'undefined') {
       if (tmpOptions.length === 0) {
-        return <AnswerLable theme={theme}>옵션을 추가해 주세요</AnswerLable>;
+        return <AnswerLabel theme={theme}>옵션을 추가해 주세요</AnswerLabel>;
       }
       return NumberUtils.range(0, tmpOptions.length).map((index: number) => (
         <OptionContainer theme={theme} key={index}>
@@ -325,7 +325,7 @@ export default function SurveyFormPage() {
         </OptionContainer>
       ));
     }
-    return <AnswerLable theme={theme}>옵션을 추가해 주세요</AnswerLable>;
+    return <AnswerLabel theme={theme}>옵션을 추가해 주세요</AnswerLabel>;
   };
 
   const makeChoiceForm = (questionId: number, selected: number) => {

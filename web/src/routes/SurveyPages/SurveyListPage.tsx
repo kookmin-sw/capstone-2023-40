@@ -68,7 +68,7 @@ const Title = styled(Item)`
   }
 `;
 
-const Authlist = styled(Item)`
+const AuthList = styled(Item)`
   min-width: 100px;
   width: 20vw;
 `;
@@ -222,13 +222,13 @@ export default function SurveyListPage() {
                 <Title onClick={() => navigate(`/survey/${survey.survey_id}`)} theme={theme}>
                   {survey.title}
                 </Title>
-                <Authlist theme={theme}>
+                <AuthList theme={theme}>
                   {survey.required_authentications.length === 0
                     ? CertificationList({ label: '', iconOption: true })
                     : survey.required_authentications.map((label) =>
                         CertificationList({ label: label, iconOption: true })
                       )}
-                </Authlist>
+                </AuthList>
                 <EndDate theme={theme}>{survey.ended_date.substring(0, 10)}</EndDate>
               </ListRow>
             ))}
