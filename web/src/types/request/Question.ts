@@ -9,7 +9,7 @@ export interface QuestionCreateRequest {
   questionOptions?: Array<QuestionOptionCreateRequest>;
 }
 
-enum QuestionType {
+export enum QuestionType {
   SINGLE_CHOICE,
   MULTIPLE_CHOICE,
   SHORT_ANSWER,

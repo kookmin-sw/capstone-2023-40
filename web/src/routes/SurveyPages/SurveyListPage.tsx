@@ -6,12 +6,11 @@ import styled from 'styled-components';
 
 import axios from '../../api/axios';
 import requests from '../../api/request';
-import { Icons } from '../../assets/svg/index';
+import CertificationList from '../../components/CertificationList';
 import Header from '../../components/Header';
 import Pagination from '../../components/Pagination';
 import SurveyListSkeleton from '../../components/Skeleton/SurveyListSkeleton';
 import { useTheme } from '../../hooks/useTheme';
-import { AuthLabel } from '../../types/labels';
 
 const Container = styled.div`
   width: 100vw;
@@ -69,7 +68,7 @@ const Title = styled(Item)`
   }
 `;
 
-const Authlist = styled(Item)`
+const AuthList = styled(Item)`
   min-width: 100px;
   width: 20vw;
 `;
@@ -101,55 +100,6 @@ const HeadEndDate = styled(HeadItem)`
   @media screen and (max-width: 900px) {
     display: none;
   }
-`;
-
-const Kakao = styled(Icons.KAKAO).attrs({
-  width: 27,
-  height: 27,
-})`
-  margin-right: 5px;
-`;
-
-const Google = styled(Icons.GOOGLE).attrs({
-  width: 27,
-  height: 27,
-})`
-  margin-right: 5px;
-`;
-
-const Webmail = styled(Icons.WEBMAIL).attrs({
-  width: 27,
-  height: 27,
-})`
-  margin-right: 5px;
-`;
-
-const Id = styled(Icons.ID).attrs({
-  width: 27,
-  height: 27,
-})`
-  margin-right: 5px;
-`;
-
-const MobilePhone = styled(Icons.MOBILE_PHONE).attrs({
-  width: 27,
-  height: 27,
-})`
-  margin-right: 5px;
-`;
-
-const DriverLicense = styled(Icons.DRIVER_LICENSE).attrs({
-  width: 27,
-  height: 27,
-})`
-  margin-right: 5px;
-`;
-
-const AuthNone = styled(Icons.FREE).attrs({
-  width: 27,
-  height: 27,
-})`
-  margin-right: 5px;
 `;
 
 const Notification = styled.div`
@@ -228,25 +178,6 @@ export default function SurveyListPage() {
     }
   };
 
-  const makeAuthLabel = (label: string) => {
-    switch (label) {
-      case 'KAKAO':
-        return <Kakao key={label}>{AuthLabel.KAKAO}</Kakao>;
-      case 'GOOGLE':
-        return <Google key={label}>{AuthLabel.GOOGLE}</Google>;
-      case 'WEBMAIL':
-        return <Webmail key={label}>{AuthLabel.WEBMAIL}</Webmail>;
-      case 'ID':
-        return <Id key={label}>{AuthLabel.ID}</Id>;
-      case 'MOBILE_PHONE':
-        return <MobilePhone key={label}>{AuthLabel.MOBILE_PHONE}</MobilePhone>;
-      case 'DRIVER_LICENSE':
-        return <DriverLicense key={label}>{AuthLabel.DRIVER_LICENSE}</DriverLicense>;
-      default:
-        return <AuthNone key={label}>{AuthLabel.NULL}</AuthNone>;
-    }
-  };
-
   useEffect(() => {
     if (isLoading) {
       abortController.abort();
@@ -266,7 +197,9 @@ export default function SurveyListPage() {
           <Notification theme={theme}>
             <Label theme={theme}>😥 참여가능한 설문이 없습니다...</Label>
             <br />
-            <Button theme={theme}>설문 만들러 가기</Button>
+            <Button theme={theme} onClick={() => navigate('/survey/form')}>
+              설문 만들러 가기
+            </Button>
           </Notification>
         </Container>
       );
@@ -289,11 +222,13 @@ export default function SurveyListPage() {
                 <Title onClick={() => navigate(`/survey/${survey.survey_id}`)} theme={theme}>
                   {survey.title}
                 </Title>
-                <Authlist theme={theme}>
+                <AuthList theme={theme}>
                   {survey.required_authentications.length === 0
-                    ? makeAuthLabel('')
-                    : survey.required_authentications.map((label) => makeAuthLabel(label))}
-                </Authlist>
+                    ? CertificationList({ label: '', iconOption: true })
+                    : survey.required_authentications.map((label) =>
+                        CertificationList({ label: label, iconOption: true })
+                      )}
+                </AuthList>
                 <EndDate theme={theme}>{survey.ended_date.substring(0, 10)}</EndDate>
               </ListRow>
             ))}
