@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.UUID;
 import javax.validation.Valid;
 import javax.validation.constraints.Future;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.Builder;
@@ -34,7 +33,6 @@ public class SurveyUpdateRequestDto {
     private List<CertificationType> certificationType;
 
     @Valid
-    @NotEmpty
     private List<QuestionBankUpdateRequestDto> questions;
 
 }
