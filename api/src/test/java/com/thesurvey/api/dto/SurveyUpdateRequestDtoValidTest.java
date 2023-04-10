@@ -59,6 +59,7 @@ public class SurveyUpdateRequestDtoValidTest implements CommonTestMethod{
     @Override
     @Test
     public void testValidateNullInput() {
+        // given
         SurveyUpdateRequestDto surveyUpdateRequestDto = SurveyUpdateRequestDto.builder()
             .surveyId(null)
             .title(null)
