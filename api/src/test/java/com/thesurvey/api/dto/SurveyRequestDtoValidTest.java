@@ -8,7 +8,6 @@ import com.thesurvey.api.dto.request.SurveyRequestDto;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
@@ -20,7 +19,7 @@ import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 
 @WebMvcTest(value = SurveyController.class, useDefaultFilters = false)
 @MockBean(JpaMetamodelMappingContext.class)
-public class SurveyRequestDtoValidTest implements CommonTestMethod{
+public class SurveyRequestDtoValidTest implements CommonTestMethod {
 
     @Autowired
     private Validator validator;
@@ -36,13 +35,13 @@ public class SurveyRequestDtoValidTest implements CommonTestMethod{
             .questionNo(1)
             .isRequired(true)
             .build();
-        List<QuestionRequestDto> questions = Arrays.asList(questionRequestDto);
+
         SurveyRequestDto surveyRequestDto = SurveyRequestDto.builder()
             .title("This is test title.")
             .description("This is test description")
             .startedDate(LocalDateTime.now())
             .endedDate(LocalDateTime.now().plusHours(1))
-            .questions(questions)
+            .questions(Arrays.asList(questionRequestDto))
             .build();
 
         // when
@@ -55,14 +54,14 @@ public class SurveyRequestDtoValidTest implements CommonTestMethod{
 
     @Override
     @Test
-    public void testValidateNullInput() {
+    public void testValidateNotNull() {
         // given
         SurveyRequestDto surveyRequestDto = SurveyRequestDto.builder()
-            .title(null)
-            .description(null)
-            .startedDate(null)
-            .endedDate(null)
-            .questions(null) // validate both @NotNull and @NotEmpty
+            .title(null) // violated by @NotBlank
+            .description(null) // violated by @NotBlank
+            .startedDate(null) // violated by @NotNull
+            .endedDate(null) // violated by @NotNull
+            .questions(null) // violated by @NotEmpty
             .build();
 
         // when
@@ -70,8 +69,7 @@ public class SurveyRequestDtoValidTest implements CommonTestMethod{
             surveyRequestDto);
 
         // then
-        assertEquals(validateSet.size(), 6);
-
+        assertEquals(validateSet.size(), 5); // violated total 5 constraints
     }
 
     @Override
@@ -83,6 +81,7 @@ public class SurveyRequestDtoValidTest implements CommonTestMethod{
             maxLengthStringBuilder.append("Test String.....");
         }
         String maxLengthString = maxLengthStringBuilder.toString();
+
         QuestionRequestDto questionRequestDto = QuestionRequestDto.builder()
             .title("This is test QuestionRequestDto")
             .description("This is test QuestionRequestDto")
@@ -90,13 +89,13 @@ public class SurveyRequestDtoValidTest implements CommonTestMethod{
             .questionNo(1)
             .isRequired(true)
             .build();
-        List<QuestionRequestDto> questions = Arrays.asList(questionRequestDto);
+
         SurveyRequestDto surveyRequestDto = SurveyRequestDto.builder()
-            .title(maxLengthString)
-            .description(maxLengthString)
+            .title(maxLengthString) // violated by @Size
+            .description(maxLengthString) // violated by @Size
             .startedDate(LocalDateTime.now())
             .endedDate(LocalDateTime.now().plusHours(1))
-            .questions(questions)
+            .questions(Arrays.asList(questionRequestDto))
             .build();
 
         // when
@@ -104,19 +103,19 @@ public class SurveyRequestDtoValidTest implements CommonTestMethod{
             surveyRequestDto);
 
         // then
-        assertEquals(validateSet.size(), 2);
+        assertEquals(validateSet.size(), 2); // violated total 2 constraints
     }
 
     @Override
     @Test
     public void testValidateNotBlank() {
-        List<QuestionRequestDto> emptyQuestions = new ArrayList<>();
+        // given
         SurveyRequestDto surveyRequestDto = SurveyRequestDto.builder()
-            .title("")
-            .description("")
+            .title(" ") // violated by @NotBlank
+            .description(" ") // violated by @NotBlank
             .startedDate(LocalDateTime.now())
             .endedDate(LocalDateTime.now().plusHours(1))
-            .questions(emptyQuestions) // validate @NotEmpty
+            .questions(new ArrayList<>()) // violated by @NotEmpty
             .build();
 
         // when
@@ -124,7 +123,27 @@ public class SurveyRequestDtoValidTest implements CommonTestMethod{
             surveyRequestDto);
 
         // then
-        assertEquals(validateSet.size(), 3);
+        assertEquals(validateSet.size(), 3); // violated total 3 constraints
+    }
+
+    @Override
+    @Test
+    public void testValidateNotEmpty() {
+        // given
+        SurveyRequestDto surveyRequestDto = SurveyRequestDto.builder()
+            .title("") // violated by @NotBlank
+            .description("") // violated by @NotBlank
+            .startedDate(LocalDateTime.now())
+            .endedDate(LocalDateTime.now().plusHours(1))
+            .questions(new ArrayList<>()) // violated by @NotEmpty
+            .build();
+
+        // when
+        Set<ConstraintViolation<SurveyRequestDto>> validateSet = validator.validate(
+            surveyRequestDto);
+
+        // then
+        assertEquals(validateSet.size(), 3); // violated total 3 constraints
     }
 
     @Test
@@ -137,13 +156,13 @@ public class SurveyRequestDtoValidTest implements CommonTestMethod{
             .questionNo(1)
             .isRequired(true)
             .build();
-        List<QuestionRequestDto> questions = Arrays.asList(questionRequestDto);
+
         SurveyRequestDto surveyRequestDto = SurveyRequestDto.builder()
             .title("This is test title.")
             .description("This is test description.")
             .startedDate(LocalDateTime.now())
             .endedDate(LocalDateTime.now().minusHours(1))
-            .questions(questions)
+            .questions(Arrays.asList(questionRequestDto))
             .build();
 
         // when

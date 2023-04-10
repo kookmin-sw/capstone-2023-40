@@ -1,7 +1,6 @@
 package com.thesurvey.api.dto.request;
 
 import io.swagger.annotations.ApiModelProperty;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -15,12 +14,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserUpdateRequestDto {
 
-    @NotBlank
     @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[~!@#$%^&*()_+=])\\S{8,25}$")
     @ApiModelProperty(name = "비밀번호", example = "Mypassword123@")
     private String password;
 
-    @NotBlank
     @Pattern(regexp = "^01[016-9]\\d{7,8}$")
     @ApiModelProperty(name = "휴대폰 번호", example = "01012345678")
     private String phoneNumber;

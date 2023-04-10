@@ -18,7 +18,7 @@ import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 
 @WebMvcTest(value = SurveyController.class, useDefaultFilters = false)
 @MockBean(JpaMetamodelMappingContext.class)
-public class AnsweredQuestionRequestDtoValidTestValidTest {
+public class AnsweredQuestionRequestDtoValidTest {
 
     @Autowired
     private Validator validator;
@@ -48,7 +48,7 @@ public class AnsweredQuestionRequestDtoValidTestValidTest {
     }
 
     @Test
-    public void testValidateNullInput() {
+    public void testValidateNotNull() {
         // given
         AnsweredQuestionRequestDto answeredQuestionRequestDto = AnsweredQuestionRequestDto.builder()
             .surveyId(null)

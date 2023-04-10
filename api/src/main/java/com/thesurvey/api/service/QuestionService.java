@@ -54,7 +54,7 @@ public class QuestionService {
                 questionBankMapper.toQuestionBank(questionRequestDto));
             questionRepository.save(
                 questionMapper.toQuestion(questionRequestDto, survey, questionBank));
-            if(questionRequestDto.getQuestionOptions() != null) {
+            if (questionRequestDto.getQuestionOptions() != null) {
                 questionOptionService.createQuestionOption(questionRequestDto, questionBank);
             }
         }
