@@ -28,9 +28,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MvcResult;
@@ -98,24 +95,14 @@ public class SurveyControllerTest extends BaseControllerTest {
     @WithMockUser
     public void testCreateSurvey() throws Exception {
         // given
-        UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(
-            globalLoginDto.getEmail(), globalLoginDto.getPassword());
-        Authentication authentication = authenticationManager.authenticate(authRequest);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
         SurveyRequestDto testSurveyRequestDto = SurveyTestFactory.getGlobalSurveyRequestDto();
 
         // when
-        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/surveys")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(testSurveyRequestDto)))
-            .andExpect(status().isOk());
+        MvcResult result = mockCreateSurvey(testSurveyRequestDto);
+        JSONObject content = new JSONObject(result.getResponse().getContentAsString());
 
         // then
-        MvcResult result = resultActions.andReturn();
-        JSONObject content = new JSONObject(result.getResponse().getContentAsString());
         assertEquals(content.get("title"), testSurveyRequestDto.getTitle());
-        resultActions.andExpect(status().isOk());
-
     }
 
     // FIXME: pass individually test but fail when run together.
@@ -126,13 +113,13 @@ public class SurveyControllerTest extends BaseControllerTest {
 //            globalLoginDto.getEmail(), globalLoginDto.getPassword());
 //        Authentication authentication = authenticationManager.authenticate(authRequest);
 //        SecurityContextHolder.getContext().setAuthentication(authentication);
-//        SurveyRequestDto testSurveyRequestDto = SurveyTestFactory.getGlobalSurveyRequestDto();
+//        SurveyRequestDto testSurveyRequestDto = surveyTestFactory.getGlobalSurveyRequestDto();
 //        SurveyResponseDto testSurveyResponseDto = surveyService.createSurvey(authentication,
 //            testSurveyRequestDto);
-//        SurveyUpdateRequestDto testSurveyUpdateRequestDto = SurveyTestFactory.getSurveyUpdateRequestDto(
+//        SurveyUpdateRequestDto testSurveyUpdateRequestDto = surveyTestFactory.getSurveyUpdateRequestDto(
 //            testSurveyResponseDto.getSurveyId());
 //
-//        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.put("/surveys")
+//        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.patch("/surveys")
 //                .contentType(MediaType.APPLICATION_JSON)
 //                .content(objectMapper.writeValueAsString(testSurveyUpdateRequestDto)))
 //            .andExpect(status().isOk());
@@ -142,13 +129,7 @@ public class SurveyControllerTest extends BaseControllerTest {
     @WithMockUser
     public void testDeleteSurvey() throws Exception {
         // given
-        UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(
-            globalLoginDto.getEmail(), globalLoginDto.getPassword());
-        Authentication authentication = authenticationManager.authenticate(authRequest);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        SurveyRequestDto testSurveyRequestDto = SurveyTestFactory.getGlobalSurveyRequestDto();
-        MvcResult mvcResult = mockCreateSurvey(testSurveyRequestDto);
+        MvcResult mvcResult = mockCreateSurvey(SurveyTestFactory.getGlobalSurveyRequestDto());
         JSONObject content = new JSONObject(mvcResult.getResponse().getContentAsString());
         String testSurveyId = content.get("surveyId").toString();
 
@@ -164,11 +145,6 @@ public class SurveyControllerTest extends BaseControllerTest {
     @WithMockUser
     public void testGetSurvey() throws Exception {
         // given
-        UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(
-            globalLoginDto.getEmail(), globalLoginDto.getPassword());
-        Authentication authentication = authenticationManager.authenticate(authRequest);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
         SurveyRequestDto testSurveyRequestDto = SurveyTestFactory.getGlobalSurveyRequestDto();
         MvcResult createSurveyResult = mockCreateSurvey(testSurveyRequestDto);
         JSONObject content = new JSONObject(createSurveyResult.getResponse().getContentAsString());
@@ -176,10 +152,9 @@ public class SurveyControllerTest extends BaseControllerTest {
 
         // when
         ResultActions resultActions = mockMvc.perform(
-                MockMvcRequestBuilders.get("/surveys/{surveyId}", testSurveyId)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(testSurveyRequestDto)))
-            .andExpect(status().isOk());
+            MockMvcRequestBuilders.get("/surveys/{surveyId}", testSurveyId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(testSurveyRequestDto)));
 
         // then
         MvcResult getSurveyResult = resultActions.andReturn();
@@ -191,27 +166,24 @@ public class SurveyControllerTest extends BaseControllerTest {
     @WithMockUser
     public void testSubmitSurvey() throws Exception {
         // given
-        UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(
-            globalLoginDto.getEmail(), globalLoginDto.getPassword());
-        Authentication authentication = authenticationManager.authenticate(authRequest);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
         SurveyRequestDto testSurveyRequestDto = SurveyTestFactory.getGlobalSurveyRequestDto();
         MvcResult createSurveyResult = mockCreateSurvey(testSurveyRequestDto);
         JSONObject content = new JSONObject(createSurveyResult.getResponse().getContentAsString());
-        String testSurveyId = content.get("surveyId").toString();
+        UUID testSurveyId = UUID.fromString(content.get("surveyId").toString());
         AnsweredQuestionRequestDto testAnsweredQuestionRequestDto = SurveyTestFactory.getAnsweredQuestionRequestDto(
-            UUID.fromString(testSurveyId));
+            testSurveyId);
 
         // when
         ResultActions resultActions = mockMvc.perform(
-                MockMvcRequestBuilders.post("/surveys/submit")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(testAnsweredQuestionRequestDto)))
-            .andExpect(status().isOk());
+            MockMvcRequestBuilders.post("/surveys/submit")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(testAnsweredQuestionRequestDto)));
+
+        // then
+        MvcResult submitSurveyResult = resultActions.andExpect(status().isOk()).andReturn();
+        JSONObject submitContent = new JSONObject(submitSurveyResult.getResponse().getContentAsString());
+        UUID submittedSurveyId = UUID.fromString(submitContent.get("surveyId").toString());
+        assertEquals(testSurveyId, submittedSurveyId);
     }
 
 }
-
-
-
