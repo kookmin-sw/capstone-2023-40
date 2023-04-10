@@ -18,7 +18,7 @@ import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 
 @WebMvcTest(value = SurveyController.class, useDefaultFilters = false)
 @MockBean(JpaMetamodelMappingContext.class)
-public class AnsweredQuestionRequestDtoValidTestValidTest {
+public class AnsweredQuestionRequestDtoValidTest {
 
     @Autowired
     private Validator validator;
