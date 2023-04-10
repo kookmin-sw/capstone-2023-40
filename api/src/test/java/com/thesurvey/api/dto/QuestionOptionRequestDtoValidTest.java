@@ -38,7 +38,7 @@ public class QuestionOptionRequestDtoValidTest implements CommonTestMethod {
 
     @Override
     @Test
-    public void testValidateNullInput() {
+    public void testValidateNotNull() {
         // given
         QuestionOptionRequestDto questionOptionRequestDto = QuestionOptionRequestDto.builder()
             .option(null)
@@ -79,7 +79,7 @@ public class QuestionOptionRequestDtoValidTest implements CommonTestMethod {
     public void testValidateNotBlank() {
         // given
         QuestionOptionRequestDto questionOptionRequestDto = QuestionOptionRequestDto.builder()
-            .option("")
+            .option(" ") // violated by @NotBlank
             .build();
 
         // when
@@ -87,7 +87,22 @@ public class QuestionOptionRequestDtoValidTest implements CommonTestMethod {
             questionOptionRequestDto);
 
         // then
-        assertEquals(validateSet.size(), 1);
+        assertEquals(validateSet.size(), 1); // violated total 1 constraint
     }
 
+    @Override
+    @Test
+    public void testValidateNotEmpty() {
+        // given
+        QuestionOptionRequestDto questionOptionRequestDto = QuestionOptionRequestDto.builder()
+            .option("") // violated by @NotBlank
+            .build();
+
+        // when
+        Set<ConstraintViolation<QuestionOptionRequestDto>> validateSet = validator.validate(
+            questionOptionRequestDto);
+
+        // then
+        assertEquals(validateSet.size(), 1); // violated total 1 constraint
+    }
 }

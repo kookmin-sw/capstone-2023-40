@@ -40,7 +40,7 @@ public class AnsweredQuestionDtoValidTest implements CommonTestMethod {
 
     @Override
     @Test
-    public void testValidateNullInput() {
+    public void testValidateNotNull() {
         // given
         AnsweredQuestionDto answeredQuestionDto = AnsweredQuestionDto.builder()
             .questionTitle(null)
@@ -58,13 +58,14 @@ public class AnsweredQuestionDtoValidTest implements CommonTestMethod {
     @Override
     @Test
     public void testValidateOverMaxStringLength() {
+        // given
         StringBuilder maxLengthStringBuilder = new StringBuilder();
         while (maxLengthStringBuilder.length() < 256) {
             maxLengthStringBuilder.append("Test String.....");
         }
+
         String maxLengthString = maxLengthStringBuilder.toString();
 
-        // given
         AnsweredQuestionDto answeredQuestionDto = AnsweredQuestionDto.builder()
             .questionTitle(maxLengthString)
             .questionDescription(maxLengthString)
@@ -86,8 +87,8 @@ public class AnsweredQuestionDtoValidTest implements CommonTestMethod {
     public void testValidateNotBlank() {
         // given
         AnsweredQuestionDto answeredQuestionDto = AnsweredQuestionDto.builder()
-            .questionTitle("")
-            .questionDescription("")
+            .questionTitle(" ") // violated by @NotBlank
+            .questionDescription(" ") // violated by @NotBlank
             .build();
 
         // when
@@ -95,6 +96,24 @@ public class AnsweredQuestionDtoValidTest implements CommonTestMethod {
             answeredQuestionDto);
 
         // then
-        assertEquals(validateSet.size(), 2);
+        assertEquals(validateSet.size(), 2); // violated total 2 constraints
     }
+
+    @Override
+    @Test
+    public void testValidateNotEmpty() {
+        // given
+        AnsweredQuestionDto answeredQuestionDto = AnsweredQuestionDto.builder()
+            .questionTitle("") // violated by @NotBlank
+            .questionDescription("") // violated by @NotBlank
+            .build();
+
+        // when
+        Set<ConstraintViolation<AnsweredQuestionDto>> validateSet = validator.validate(
+            answeredQuestionDto);
+
+        // then
+        assertEquals(validateSet.size(), 2); // violated total 2 constraints
+    }
+
 }

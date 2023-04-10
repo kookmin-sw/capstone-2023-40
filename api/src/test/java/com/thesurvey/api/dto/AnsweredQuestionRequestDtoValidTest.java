@@ -48,7 +48,7 @@ public class AnsweredQuestionRequestDtoValidTest {
     }
 
     @Test
-    public void testValidateNullInput() {
+    public void testValidateNotNull() {
         // given
         AnsweredQuestionRequestDto answeredQuestionRequestDto = AnsweredQuestionRequestDto.builder()
             .surveyId(null)
