@@ -83,8 +83,6 @@ public class SurveyControllerTest extends BaseControllerTest {
     @Autowired
     AuthenticationManager authenticationManager;
 
-    SurveyTestFactory surveyTestFactory;
-
     @BeforeEach
     void makeMockUser() throws Exception {
         mockRegister(globalRegisterDto, true);
@@ -104,7 +102,7 @@ public class SurveyControllerTest extends BaseControllerTest {
             globalLoginDto.getEmail(), globalLoginDto.getPassword());
         Authentication authentication = authenticationManager.authenticate(authRequest);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        SurveyRequestDto testSurveyRequestDto = surveyTestFactory.getGlobalSurveyRequestDto();
+        SurveyRequestDto testSurveyRequestDto = SurveyTestFactory.getGlobalSurveyRequestDto();
 
         // when
         ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/surveys")
@@ -128,10 +126,10 @@ public class SurveyControllerTest extends BaseControllerTest {
 //            globalLoginDto.getEmail(), globalLoginDto.getPassword());
 //        Authentication authentication = authenticationManager.authenticate(authRequest);
 //        SecurityContextHolder.getContext().setAuthentication(authentication);
-//        SurveyRequestDto testSurveyRequestDto = surveyTestFactory.getGlobalSurveyRequestDto();
+//        SurveyRequestDto testSurveyRequestDto = SurveyTestFactory.getGlobalSurveyRequestDto();
 //        SurveyResponseDto testSurveyResponseDto = surveyService.createSurvey(authentication,
 //            testSurveyRequestDto);
-//        SurveyUpdateRequestDto testSurveyUpdateRequestDto = surveyTestFactory.getSurveyUpdateRequestDto(
+//        SurveyUpdateRequestDto testSurveyUpdateRequestDto = SurveyTestFactory.getSurveyUpdateRequestDto(
 //            testSurveyResponseDto.getSurveyId());
 //
 //        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.put("/surveys")
@@ -149,7 +147,7 @@ public class SurveyControllerTest extends BaseControllerTest {
         Authentication authentication = authenticationManager.authenticate(authRequest);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        SurveyRequestDto testSurveyRequestDto = surveyTestFactory.getGlobalSurveyRequestDto();
+        SurveyRequestDto testSurveyRequestDto = SurveyTestFactory.getGlobalSurveyRequestDto();
         MvcResult mvcResult = mockCreateSurvey(testSurveyRequestDto);
         JSONObject content = new JSONObject(mvcResult.getResponse().getContentAsString());
         String testSurveyId = content.get("surveyId").toString();
@@ -171,7 +169,7 @@ public class SurveyControllerTest extends BaseControllerTest {
         Authentication authentication = authenticationManager.authenticate(authRequest);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        SurveyRequestDto testSurveyRequestDto = surveyTestFactory.getGlobalSurveyRequestDto();
+        SurveyRequestDto testSurveyRequestDto = SurveyTestFactory.getGlobalSurveyRequestDto();
         MvcResult createSurveyResult = mockCreateSurvey(testSurveyRequestDto);
         JSONObject content = new JSONObject(createSurveyResult.getResponse().getContentAsString());
         String testSurveyId = content.get("surveyId").toString();
@@ -198,11 +196,11 @@ public class SurveyControllerTest extends BaseControllerTest {
         Authentication authentication = authenticationManager.authenticate(authRequest);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        SurveyRequestDto testSurveyRequestDto = surveyTestFactory.getGlobalSurveyRequestDto();
+        SurveyRequestDto testSurveyRequestDto = SurveyTestFactory.getGlobalSurveyRequestDto();
         MvcResult createSurveyResult = mockCreateSurvey(testSurveyRequestDto);
         JSONObject content = new JSONObject(createSurveyResult.getResponse().getContentAsString());
         String testSurveyId = content.get("surveyId").toString();
-        AnsweredQuestionRequestDto testAnsweredQuestionRequestDto = surveyTestFactory.getAnsweredQuestionRequestDto(
+        AnsweredQuestionRequestDto testAnsweredQuestionRequestDto = SurveyTestFactory.getAnsweredQuestionRequestDto(
             UUID.fromString(testSurveyId));
 
         // when
