@@ -7,9 +7,15 @@ import { NumberUtils } from '../../utils/NumberUtils';
 import CertificationIcons from '../CertificationList';
 import EditQuestionButton from './EditQuestionButton';
 
-const Container = styled.div``;
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
-const ButtonContainer = styled.div``;
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
 
 const GuideLabel = styled.label`
   margin-left: 10px;
@@ -24,19 +30,17 @@ const TextInput = styled.input.attrs({ type: 'text', maxLength: 100 })`
   border-radius: ${(props) => props.theme.borderRadius};
   font-weight: 900;
   color: ${(props) => props.theme.colors.default};
-  background-color: ${(props) => props.theme.colors.container};
+  background-color: ${(props) => props.theme.colors.inputBackground};
   cursor: text;
 `;
 
 const SurveyTitleInput = styled(TextInput)`
-  width: 74vw;
   margin-top: 7px;
   margin-bottom: 10px;
   font-size: 23px;
 `;
 
 const SurveyDescriptionInput = styled(TextInput)`
-  width: 74vw;
   margin-bottom: 25px;
   font-size: 18px;
 `;
@@ -47,8 +51,11 @@ const SurveyCertificationsContainer = styled.div`
 `;
 
 const SelectedCertificationsContainer = styled.div`
-  width: 76vw;
-  height: 45px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  height: 50px;
 `;
 
 const SelectedCertification = styled.label`
@@ -79,7 +86,12 @@ const CheckBox = styled.input.attrs({ type: 'checkbox' })`
   }
 `;
 
-const SurveyDateContainer = styled.div``;
+const SurveyDateContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: baseline;
+`;
 
 const SurveyDateInput = styled.input.attrs({ type: 'datetime-local' })`
   padding: 1.2vh 1.5vw 1.2vh 1.5vw;
@@ -88,9 +100,6 @@ const SurveyDateInput = styled.input.attrs({ type: 'datetime-local' })`
   font-weight: 900;
   color: ${(props) => props.theme.colors.default};
   background-color: ${(props) => props.theme.colors.container};
-  width: 21vw;
-  margin-left: 2vw;
-  margin-right: 2vw;
   margin-bottom: 25px;
 `;
 
@@ -120,6 +129,24 @@ export default function SurveyDataForm({
         name="description"
         value={surveyData?.description || ''}
       />
+
+      <SurveyDateContainer>
+        <GuideLabel theme={theme}>설문조사 기간 : </GuideLabel>
+        <SurveyDateInput
+          theme={theme}
+          onChange={handleChangeSurveyData}
+          name="startedDate"
+          value={`${surveyData?.startedDate}` || ''}
+        />
+        <GuideLabel theme={theme}> ~ </GuideLabel>
+        <SurveyDateInput
+          theme={theme}
+          onChange={handleChangeSurveyData}
+          name="endedDate"
+          value={`${surveyData?.endedDate}` || ''}
+        />
+      </SurveyDateContainer>
+
       <SurveyCertificationsContainer theme={theme}>
         <SelectedCertificationsContainer theme={theme}>
           <GuideLabel theme={theme}>필수 인증 목록 : </GuideLabel>
@@ -142,22 +169,6 @@ export default function SurveyDataForm({
           </CertificationPicker>
         ))}
       </SurveyCertificationsContainer>
-      <SurveyDateContainer>
-        <GuideLabel theme={theme}>설문조사 기간 : </GuideLabel>
-        <SurveyDateInput
-          theme={theme}
-          onChange={handleChangeSurveyData}
-          name="startedDate"
-          value={`${surveyData?.startedDate}` || ''}
-        />
-        <GuideLabel theme={theme}> ~ </GuideLabel>
-        <SurveyDateInput
-          theme={theme}
-          onChange={handleChangeSurveyData}
-          name="endedDate"
-          value={`${surveyData?.endedDate}` || ''}
-        />
-      </SurveyDateContainer>
 
       <ButtonContainer>
         {EditQuestionButton({ editType: 'Add', questionId: -1, handleClickButton, theme })}

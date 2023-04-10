@@ -42,7 +42,7 @@ const BodyContainer = styled.div`
 const ItemContainer = styled.div`
   margin-top: 15px;
   border-radius: ${(props) => props.theme.borderRadius};
-  border-left: 16px solid transparent;
+  border-left: 16px solid ${(props) => props.theme.colors.primary};
   padding: 1.2vh 2vw 1.2vh 2vw;
   color: ${(props) => props.theme.colors.default};
   background-color: ${(props) => props.theme.colors.background};
@@ -58,15 +58,17 @@ const TextInput = styled.input.attrs({ type: 'text', maxLength: 100 })`
   border-radius: ${(props) => props.theme.borderRadius};
   font-weight: 900;
   color: ${(props) => props.theme.colors.default};
-  background-color: ${(props) => props.theme.colors.container};
+  background-color: ${(props) => props.theme.colors.inputBackground};
   cursor: text;
 `;
 
 const QuestionContainer = styled(ItemContainer)``;
 
 const AnswerLable = styled.label`
-  font-size: 13px;
+  display: inline-block;
+  width: 30vw;
   padding: 1.2vh 1.5vw 1.2vh 1.5vw;
+  font-size: 15px;
   color: ${(props) => props.theme.colors.text};
   text-decoration: underline;
   text-decoration-style: dotted;
@@ -126,8 +128,6 @@ export default function SurveyFormPage() {
   const questionRefs = useRef<HTMLDivElement[]>([]);
   const [recentCreate, setRecentCreate] = useState<number>();
   const [resultModalOpen, setResultModalOpen] = useState<boolean>(false);
-  // const [questionList, setQuestionList] = useState<QuestionCreateRequest[]>([]);
-  // const [requiredCertificationList, setRequiredCertificationList] = useState<CertificationType[]>([]);
   const [certificationIsChecked, setCertificationIsChecked] = useState<boolean>(false);
   const [surveyData, setSurveyData] = useState<SurveyCreateRequest>({
     title: '제목 없는 설문',
@@ -152,7 +152,7 @@ export default function SurveyFormPage() {
     // TODO: Check surveyData is valid
     // TODO: submit surveyData to server
     console.log(surveyData);
-    // setResultModalOpen(true);
+    setResultModalOpen(true);
   };
 
   const addQuestionUnderId = (questionId: number) => {
@@ -304,6 +304,9 @@ export default function SurveyFormPage() {
   const makeOptionsForm = (questionId: number) => {
     const tmpOptions = surveyData.questions[questionId].questionOptions;
     if (typeof tmpOptions !== 'undefined') {
+      if (tmpOptions.length === 0) {
+        return <AnswerLable theme={theme}>옵션을 추가해 주세요</AnswerLable>;
+      }
       return NumberUtils.range(0, tmpOptions.length).map((index: number) => (
         <OptionContainer theme={theme} key={index}>
           <OptionInput

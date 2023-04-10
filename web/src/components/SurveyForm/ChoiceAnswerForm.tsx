@@ -6,34 +6,43 @@ import { SurveyCreateRequest } from '../../types/request/Survey';
 import EditQuestionButton from './EditQuestionButton';
 import QuestionTypeSelect from './QuestionTypeSelect';
 
-const Container = styled.div``;
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
-const ButtonContainer = styled.div``;
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
 
-const HeadContainer = styled.div``;
+const HeadContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
 
 const TextInput = styled.input.attrs({ type: 'text', maxLength: 100 })`
+  flex-basis: 80%;
   padding: 1.2vh 1.5vw 1.2vh 1.5vw;
   border: ${(props) => props.theme.border};
   border-radius: ${(props) => props.theme.borderRadius};
   font-weight: 900;
   color: ${(props) => props.theme.colors.default};
-  background-color: ${(props) => props.theme.colors.container};
+  background-color: ${(props) => props.theme.colors.inputBackground};
   cursor: text;
 `;
 
 const QuestionTitleInput = styled(TextInput).attrs({ type: 'text' })`
   font-size: 18px;
-  width: 57vw;
   margin-top: 7px;
 `;
 
 const QuestionDescriptionInput = styled(TextInput).attrs({ type: 'text' })`
   font-size: 15px;
-  width: 57vw;
   margin-top: 7px;
   margin-bottom: 23px;
-  margin-right: 18vw;
 `;
 
 const AddOptionButton = styled.button`

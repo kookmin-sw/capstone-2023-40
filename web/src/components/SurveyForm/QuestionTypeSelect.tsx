@@ -7,15 +7,14 @@ import { QuestionType } from '../../types/request/Question';
 const QuestionTypeOption = styled.option``;
 
 const QuestionTypeSelector = styled.select`
+  font-size: 15px;
+  margin-top: 7px;
   padding: 1.2vh 1.5vw 1.2vh 1.5vw;
   border: ${(props) => props.theme.border};
   border-radius: ${(props) => props.theme.borderRadius};
-  font-size: 14px;
   font-weight: 900;
   color: ${(props) => props.theme.colors.default};
   background-color: ${(props) => props.theme.colors.container};
-  width: 10vw;
-  margin-left: 2vw;
   cursor: pointer;
 `;
 
