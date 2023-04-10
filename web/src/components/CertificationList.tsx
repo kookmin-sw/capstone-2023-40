@@ -82,7 +82,7 @@ export default function CertificationList({ label, iconOption }: CertificationLi
   }
   switch (label) {
     case 'KAKAO':
-      return <Label>{AuthLabel.KAKAO}</Label>;
+      return <Label key={label}>{AuthLabel.KAKAO}</Label>;
     case 'GOOGLE':
       return <Label key={label}>{AuthLabel.GOOGLE}</Label>;
     case 'WEBMAIL':

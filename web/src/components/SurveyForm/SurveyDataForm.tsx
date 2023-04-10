@@ -4,7 +4,7 @@ import styled, { DefaultTheme } from 'styled-components';
 
 import { SurveyCreateRequest, CertificationType } from '../../types/request/Survey';
 import { NumberUtils } from '../../utils/NumberUtils';
-import CertificationIcons from '../CertificationList';
+import CertificationList from '../CertificationList';
 import EditQuestionButton from './EditQuestionButton';
 
 const Container = styled.div`
@@ -152,7 +152,7 @@ export default function SurveyDataForm({
           <GuideLabel theme={theme}>필수 인증 목록 : </GuideLabel>
           {surveyData.certificationTypes?.map((auth: number) => (
             <SelectedCertification theme={theme} key={auth}>
-              {CertificationIcons({ label: CertificationType[auth], iconOption: true })}
+              {CertificationList({ label: CertificationType[auth], iconOption: true })}
             </SelectedCertification>
           ))}
         </SelectedCertificationsContainer>
@@ -164,7 +164,7 @@ export default function SurveyDataForm({
               onChange={(e) => handleChangeCheck(e, index)}
             />
             <CertificationLabel theme={theme}>
-              {CertificationIcons({ label: CertificationType[index], iconOption: false })}
+              {CertificationList({ label: CertificationType[index], iconOption: false })}
             </CertificationLabel>
           </CertificationPicker>
         ))}
