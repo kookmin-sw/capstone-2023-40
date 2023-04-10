@@ -1,6 +1,5 @@
 package com.thesurvey.api.dto.request;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
@@ -15,7 +14,6 @@ public class QuestionOptionUpdateRequestDto {
     @Positive
     private Long optionId;
 
-    @NotBlank
     @Size(max = 50)
     private String option;
 
