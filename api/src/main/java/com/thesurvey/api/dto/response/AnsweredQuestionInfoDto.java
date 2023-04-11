@@ -15,9 +15,9 @@ public class AnsweredQuestionInfoDto {
 
     private String questionDescription;
 
-    private String singleChoice;
+    private Integer singleChoice;
 
-    private List<String> multipleChoices;
+    private List<Integer> multipleChoices;
 
     private String shortAnswer;
 

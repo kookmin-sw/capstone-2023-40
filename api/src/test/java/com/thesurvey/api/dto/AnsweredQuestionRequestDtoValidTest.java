@@ -27,16 +27,14 @@ public class AnsweredQuestionRequestDtoValidTest {
     public void testCorrectInput() {
         // given
         AnsweredQuestionDto answeredQuestionDto = AnsweredQuestionDto.builder()
-            .questionTitle("This is test question title")
-            .questionDescription("This is test question description")
             .shortAnswer("This tis test short answer.")
             .longAnswer("This is test long answer")
             .build();
 
-        List<AnsweredQuestionDto> questionList = Arrays.asList(answeredQuestionDto);
+        List<AnsweredQuestionDto> answers = Arrays.asList(answeredQuestionDto);
         AnsweredQuestionRequestDto answeredQuestionRequestDto = AnsweredQuestionRequestDto.builder()
             .surveyId(UUID.fromString("5eaa47c1-cba3-45da-9533-3528e18563c3"))
-            .questionList(questionList)
+            .answers(answers)
             .build();
 
         // when
@@ -52,7 +50,7 @@ public class AnsweredQuestionRequestDtoValidTest {
         // given
         AnsweredQuestionRequestDto answeredQuestionRequestDto = AnsweredQuestionRequestDto.builder()
             .surveyId(null)
-            .questionList(null)
+            .answers(null)
             .build();
 
         // when
