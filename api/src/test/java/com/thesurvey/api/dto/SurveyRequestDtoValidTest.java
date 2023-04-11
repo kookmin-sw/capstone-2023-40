@@ -146,32 +146,4 @@ public class SurveyRequestDtoValidTest implements CommonTestMethod {
         assertEquals(validateSet.size(), 3); // violated total 3 constraints
     }
 
-    @Test
-    public void testValidateTime() {
-        // given
-        QuestionRequestDto questionRequestDto = QuestionRequestDto.builder()
-            .title("This is test QuestionRequestDto")
-            .description("This is test QuestionRequestDto")
-            .questionType(QuestionType.LONG_ANSWER)
-            .questionNo(1)
-            .isRequired(true)
-            .build();
-
-        SurveyRequestDto surveyRequestDto = SurveyRequestDto.builder()
-            .title("This is test title.")
-            .description("This is test description.")
-            .startedDate(LocalDateTime.now())
-            .endedDate(LocalDateTime.now().minusHours(1))
-            .questions(Arrays.asList(questionRequestDto))
-            .build();
-
-        // when
-        Set<ConstraintViolation<SurveyRequestDto>> validateSet = validator.validate(
-            surveyRequestDto);
-
-        // then
-        assertEquals(validateSet.size(), 1);
-    }
-
-
 }

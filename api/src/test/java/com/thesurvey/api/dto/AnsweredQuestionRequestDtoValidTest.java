@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import com.thesurvey.api.controller.SurveyController;
 import com.thesurvey.api.dto.request.AnsweredQuestionDto;
 import com.thesurvey.api.dto.request.AnsweredQuestionRequestDto;
+import com.thesurvey.api.dto.request.QuestionBankUpdateRequestDto;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -33,7 +34,7 @@ public class AnsweredQuestionRequestDtoValidTest {
 
         List<AnsweredQuestionDto> answers = Arrays.asList(answeredQuestionDto);
         AnsweredQuestionRequestDto answeredQuestionRequestDto = AnsweredQuestionRequestDto.builder()
-            .surveyId(UUID.fromString("5eaa47c1-cba3-45da-9533-3528e18563c3"))
+            .surveyId(UUID.randomUUID())
             .answers(answers)
             .build();
 
