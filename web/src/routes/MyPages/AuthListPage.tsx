@@ -162,7 +162,6 @@ const initialState: AuthState = {
 export default function MyPage() {
   const [theme, toggleTheme] = useTheme();
   const navigate = useNavigate();
-
   const [state, dispatch] = useReducer(authReducer, initialState);
 
   // FIXME: To API data

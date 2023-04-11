@@ -1,13 +1,11 @@
 import React, { useState, useReducer } from 'react';
 
 import { AxiosError, AxiosResponse } from 'axios';
-import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
 
 import axios from '../api/axios';
 import requests from '../api/request';
-import { RootState } from '../reducers';
 import { formReducer } from '../reducers/form';
 import { FormState } from '../types/form';
 import { UserRegisterRequest } from '../types/request/Authentication';

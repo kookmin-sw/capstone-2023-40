@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from 'react';
 
+import { useSelector, useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
 
 import DarkModeIcon from '../assets/darkmode.webp';
 import LightModeIcon from '../assets/lightmode.webp';
 import { Icons } from '../assets/svg';
+
+// import { RootState } from '../reducers';
+
+// import { setLogin, setSubPageOpen } from '../reducers/header';
 
 const HeaderContainer = styled.header<{ isTransitionEnabled: boolean }>`
   position: sticky;
@@ -236,8 +241,10 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
   const navigate = useNavigate();
   const currentLocation = useLocation().pathname;
   const [isTransitionEnabled, setIsTransitionEnabled] = useState<boolean>(false);
-  const [isLogin, setIsLogin] = useState(true);
-  const [isSubPageOpen, setIsSubPageOpen] = useState<boolean>(false);
+  // const isLogin = useSelector((state: RootState) => state.header.isLogin);
+  // const isSubPageOpen = useSelector((state: RootState) => state.header.isSubPageOpen);
+  // const dispatch = useDispatch();
+  // console.log('isLogin : ', isLogin);
 
   const handleClick = () => {
     setIsTransitionEnabled(true);
@@ -245,15 +252,15 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
   };
 
   const logoutClick = () => {
-    setIsLogin(!isLogin);
-    setIsSubPageOpen(!isSubPageOpen);
-    console.log('isLogin : ', isLogin);
+    // dispatch(setLogin(!isLogin));
+    // dispatch(setSubPageOpen(!isSubPageOpen));
+    // console.log('isLogin : ', isLogin);
     navigate('../../../login');
   };
 
   const navigateMypage = () => {
     navigate('../../../mypage');
-    setIsSubPageOpen(!isSubPageOpen);
+    // setSubPageOpen(!isSubPageOpen);
   };
 
   return (
@@ -294,17 +301,17 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
               개인정보 저장하기
             </SaveUserInformationButton>
           ) : undefined}
-          {isLogin ? (
-            <UserImage onClick={() => setIsSubPageOpen(!isSubPageOpen)} />
+          {/* {isLogin ? (
+            <UserImage onClick={() => setSubPageOpen(!isSubPageOpen)} />
           ) : (
             <LoginInformation onClick={() => navigate('/login')} theme={theme}>
               로그인/회원가입
             </LoginInformation>
-          )}
+          )} */}
         </CheckBoxContainer>
       </ButtonContainer>
 
-      {isSubPageOpen && (
+      {/* {isSubPageOpen && (
         <SubPageContainer theme={theme}>
           <SubPageButton onClick={navigateMypage} theme={theme}>
             마이페이지
@@ -313,7 +320,7 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
             로그아웃
           </SubPageButton>
         </SubPageContainer>
-      )}
+      )} */}
     </HeaderContainer>
   );
 }
