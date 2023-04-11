@@ -3,6 +3,9 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
 
+import { CertificationType } from '../../types/request/Survey';
+import CertificationList from '../CertificationList';
+
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
@@ -18,14 +21,14 @@ const Container = styled.div`
 `;
 
 const ModalContainer = styled.div`
-  padding: 0vh 3vw 0vh 3vw;
+  padding: 5vh 3vw 5vh 3vw;
   width: 80vw;
-  height: 70vh;
+  height: 50vh;
   border-radius: ${(props) => props.theme.borderRadius};
   background-color: ${(props) => props.theme.colors.container};
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
 `;
 
 const TitleContainer = styled.div`
@@ -51,6 +54,13 @@ const ButtonContainer = styled.div`
   justify-content: center;
 `;
 
+const CertificationContainer = styled.div`
+  padding: 1.2vh 1.5vw 1.2vh 1.5vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+`;
+
 const Label = styled.label`
   display: inline-block;
   color: ${(props) => props.theme.colors.default};
@@ -74,8 +84,8 @@ const Subtitle = styled(Label)`
   width: 30vw;
   padding: 1.2vh 1.5vw 1.2vh 1.5vw;
   text-decoration: underline;
-  text-decoration-style: dotted;
   text-decoration-color: currentColor;
+  text-underline-offset: 5px;
 `;
 
 const Description = styled(Label)`
@@ -130,6 +140,13 @@ export default function SurveyPageResultModal({ surveyItem, theme }: ModalProps)
           <Subtitle theme={theme}>설문조사 상세내용</Subtitle>
           <Description theme={theme}>{surveyItem.description}</Description>
           <Subtitle theme={theme}>필수인증 목록</Subtitle>
+          <CertificationContainer>
+            {surveyItem.required_authentications.length === 0
+              ? CertificationList({ label: '', iconOption: true })
+              : surveyItem.required_authentications.map((label) =>
+                  CertificationList({ label: label, iconOption: true })
+                )}
+          </CertificationContainer>
         </BodyContainer>
         <ButtonContainer>
           <Button onClick={() => navigate(`/survey/${surveyItem.survey_id}`)} theme={theme}>
