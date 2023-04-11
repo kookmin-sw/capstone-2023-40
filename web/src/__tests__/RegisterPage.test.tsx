@@ -180,6 +180,6 @@ describe('[RegisterPage Test]', () => {
     expect(completeButton).toBeDisabled();
 
     fireEvent.click(agreeInformationButton);
-    expect(completeButton).toBeEnabled;
+    expect(completeButton).toBeEnabled();
   });
 });

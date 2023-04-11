@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { Icons } from '../../assets/svg/index';
 import Header from '../../components/Header';
 import { useTheme } from '../../hooks/useTheme';
-import { userInfoReducer } from '../../reducers';
+import { userInfoReducer } from '../../reducers/userInfo';
 
 const PencilImage = styled(Icons.PENCIL).attrs({
   width: 30,

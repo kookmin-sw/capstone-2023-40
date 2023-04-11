@@ -1,12 +1,14 @@
 import React, { useState, useReducer } from 'react';
 
 import { AxiosError, AxiosResponse } from 'axios';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
 
 import axios from '../api/axios';
 import requests from '../api/request';
-import { formReducer } from '../reducers';
+import { RootState } from '../reducers';
+import { formReducer } from '../reducers/form';
 import { FormState } from '../types/form';
 import { UserRegisterRequest } from '../types/request/Authentication';
 import { UserResponse } from '../types/response/User';
@@ -113,8 +115,8 @@ export default function RegisterForm(props: RegisterFormProps) {
   const navigate = useNavigate();
   const [state, dispatch] = useReducer(formReducer, initialFormState);
   const [isAlertModal, setIsAlertModal] = useState<boolean>(false);
-  const [title, setTitle] = useState('');
-  const [text, setText] = useState('');
+  const [titleAlert, setTitleAlert] = useState('');
+  const [textAlert, setTextAlert] = useState('');
 
   const setInputValue = (name: string, value: string) => {
     switch (name) {
@@ -151,73 +153,74 @@ export default function RegisterForm(props: RegisterFormProps) {
 
   // FIXME: It will have to Add connect User DataBase - Email
   const sendEmailAuthentication = (email: string): void => {
-    setTitle('회원가입 오류');
+    setTitleAlert('회원가입 오류');
     if (isEmptyString(email)) {
-      setText('이메일을 입력해주세요.');
+      setTextAlert('이메일을 입력해주세요.');
     } else if (!validateEmail(email)) {
-      setText('이메일을 다시 확인해주세요.');
+      setTextAlert('이메일을 다시 확인해주세요.');
     } else {
       dispatch({ type: 'AUTH_EMAIL', payload: true });
-      setTitle('회원가입');
-      setText('해당 이메일에 인증요청을 보냈습니다.');
+      setTitleAlert('회원가입');
+      setTextAlert('해당 이메일에 인증요청을 보냈습니다.');
     }
     setIsAlertModal(true);
   };
 
   const checkPassword = (password: string, confirmPassword: string) => {
-    setTitle('회원가입 오류');
+    setTitleAlert('회원가입 오류');
     if (isEmptyString(password)) {
-      setText('비밀번호를 입력해주세요.');
+      setTextAlert('비밀번호를 입력해주세요.');
       setIsAlertModal(true);
       return false;
     }
 
     if (!validatePassword(password)) {
-      setText('비밀번호를 다시 확인해주세요.');
+      setTextAlert('비밀번호를 다시 확인해주세요.');
       setIsAlertModal(true);
       return false;
     }
 
     if (isEmptyString(confirmPassword)) {
-      setText('비밀번호를 한 번 더 입력해주세요.');
+      setTextAlert('비밀번호를 한 번 더 입력해주세요.');
       setIsAlertModal(true);
       return false;
     }
 
     if (password !== confirmPassword) {
-      setText('비밀번호가 일치하지 않습니다.');
+      setTextAlert('비밀번호가 일치하지 않습니다.');
       setIsAlertModal(true);
       return false;
     }
-    setTitle('회원가입');
+
     dispatch({ type: 'CONFIRM_PASSWORD', payload: true });
-    setText('비밀번호가 일치합니다!');
+    setTitleAlert('회원가입');
+    setTextAlert('비밀번호가 일치합니다!');
     setIsAlertModal(true);
     return true;
   };
 
   const checkUserInput = () => {
-    setTitle('회원가입 오류');
+    setTitleAlert('회원가입 오류');
     if (!state.isEmailChecked || !state.isPasswordChecked) {
-      setText('이메일 또는 비밀번호를 다시 확인해주세요');
+      setTextAlert('이메일 또는 비밀번호를 다시 확인해주세요');
       setIsAlertModal(true);
       return false;
     }
 
     if (!checkPassword(state.password, state.confirmPassword)) {
-      setText('비밀번호를 확인해주세요.');
+      setTextAlert('비밀번호를 확인해주세요.');
       setIsAlertModal(true);
       return false;
     }
 
     if (isEmptyString(state.name)) {
-      setText('이름을 입력해주세요.');
+      setTextAlert('이름을 입력해주세요.');
       setIsAlertModal(true);
       return false;
     }
 
     if (!validatePhoneNumber(state.phoneNumber)) {
-      setText('휴대폰 번호를 입력해주세요');
+      setTextAlert('휴대폰 번호를 입력해주세요');
       setIsAlertModal(true);
       return false;
     }
@@ -227,27 +230,26 @@ export default function RegisterForm(props: RegisterFormProps) {
 
   const sendAuthenticationNumber = () => {
     if (isEmptyString(state.phoneNumber) || validatePhoneNumber(state.phoneNumber)) {
-      setTitle('회원가입 오류');
-      setText('휴대폰 번호를 확인해주세요.');
-      setIsAlertModal(true);
+      setTitleAlert('회원가입 오류');
+      setTextAlert('휴대폰 번호를 확인해주세요.');
     } else {
       dispatch({ type: 'AUTH_KEY', payload: true });
-      setTitle('회원가입 알림');
-      setText('해당 번호에 인증번호를 보냈습니다! (ex. 1234)');
-      setIsAlertModal(true);
+      setTitleAlert('회원가입 알림');
+      setTextAlert('해당 번호에 인증번호를 보냈습니다! (ex. 1234)');
     }
+    setIsAlertModal(true);
   };
 
   const authenticatePhoneNumber = () => {
-    setTitle('회원가입 오류');
+    setTitleAlert('회원가입 오류');
     if (!state.key) {
-      setText('먼저 인증번호를 보내주세요.');
+      setTextAlert('먼저 인증번호를 보내주세요.');
     } else if (Number(state.key) !== testNumber) {
-      setText('인증번호가 일치하지 않습니다');
+      setTextAlert('인증번호가 일치하지 않습니다');
     } else {
       dispatch({ type: 'AUTH_KEY', payload: true });
-      setTitle('회원가입 알림');
-      setText('인증되었습니다!');
+      setTitleAlert('회원가입 알림');
+      setTextAlert('인증되었습니다!');
     }
     setIsAlertModal(true);
   };
@@ -268,7 +270,9 @@ export default function RegisterForm(props: RegisterFormProps) {
 
       const response: AxiosResponse<UserResponse> = await axios.post<UserResponse>(requests.register, body);
       if (response.status === 200) {
-        alert('회원가입이 완료되었습니다.');
+        setTitleAlert('회원가입');
+        setTextAlert('회원가입이 완료되었습니다.');
+        setIsAlertModal(true);
         navigate('../login');
       } else {
         // TODO: would this be necessary?
@@ -332,9 +336,9 @@ export default function RegisterForm(props: RegisterFormProps) {
         {isAlertModal && (
           <AlertModal
             theme={props.theme}
-            title={title}
+            title={titleAlert}
             level="INFO"
-            text={text}
+            text={textAlert}
             buttonText="확인"
             onClose={closeAlertModal}
           />
