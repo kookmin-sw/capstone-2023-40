@@ -29,6 +29,12 @@ const ModalContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+
+  @media screen and (max-width: 960px) {
+    padding: 3vh 3vw 5vh 3vw;
+    width: 80vw;
+    height: 60vh;
+  }
 `;
 
 const TitleContainer = styled.div`
@@ -84,6 +90,10 @@ const EndDate = styled(Label)`
   font-weight: 600;
   margin-left: 15px;
   color: ${(props) => props.theme.colors.text};
+
+  @media screen and (max-width: 960px) {
+    display: none;
+  }
 `;
 
 const Subtitle = styled(Label)`
@@ -94,6 +104,10 @@ const Subtitle = styled(Label)`
   text-decoration: underline;
   text-decoration-color: currentColor;
   text-underline-offset: 5px;
+
+  @media screen and (max-width: 960px) {
+    width: 35vw;
+  }
 `;
 
 const Description = styled(Label)`
@@ -101,11 +115,10 @@ const Description = styled(Label)`
 `;
 
 const Button = styled.button`
-  width: 15vw;
+  width: 200px;
   border: none;
   padding: 2vh 2vw 2vh 2vw;
   margin-top: 30px;
-  margin-bottom: 30px;
   border-radius: ${(props) => props.theme.borderRadius};
   font-size: 14px;
   font-weight: 700;
@@ -119,10 +132,10 @@ const Button = styled.button`
 `;
 
 const EndButton = styled.button`
+  height: 30px;
+  width: 30px;
   border: none;
-  padding: 1vh 1vw 1vh 1vw;
-  border-radius: ${(props) => props.theme.borderRadius};
-  font-size: 14px;
+  border-radius: 50%;
   font-weight: 700;
   color: ${(props) => props.theme.colors.default};
   background-color: ${(props) => props.theme.colors.button};
@@ -130,6 +143,10 @@ const EndButton = styled.button`
 
   &:hover {
     background-color: ${(props) => props.theme.colors.btnhover};
+  }
+
+  @media screen and (max-width: 960px) {
+    display: none;
   }
 `;
 
