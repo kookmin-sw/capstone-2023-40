@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useRef } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
 
+import useOnClickOutside from '../../hooks/useOnClickOutside';
 import CertificationList from '../CertificationList';
 
 const Container = styled.div`
@@ -148,13 +149,19 @@ interface ModalProps {
   theme: DefaultTheme;
 }
 
-// TODO: show point earned instead of emoji
 export default function SurveyPageResultModal({ surveyItem, setEnterModalOpen, theme }: ModalProps) {
   const navigate = useNavigate();
+  const modalRef = useRef<HTMLDivElement>(null);
+  useOnClickOutside({
+    ref: modalRef,
+    handler: () => {
+      setEnterModalOpen(false);
+    },
+  });
 
   return (
     <Container>
-      <ModalContainer theme={theme}>
+      <ModalContainer ref={modalRef} theme={theme}>
         <EndButtonContainer>
           <EndButton onClick={() => setEnterModalOpen(false)} theme={theme}>
             x
