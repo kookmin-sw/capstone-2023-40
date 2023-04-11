@@ -1,9 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
 
-import { CertificationType } from '../../types/request/Survey';
 import CertificationList from '../CertificationList';
 
 const Container = styled.div`
@@ -21,17 +20,18 @@ const Container = styled.div`
 `;
 
 const ModalContainer = styled.div`
-  padding: 5vh 3vw 5vh 3vw;
+  padding: 3vh 3vw 5vh 3vw;
   width: 80vw;
-  height: 50vh;
+  height: 60vh;
   border-radius: ${(props) => props.theme.borderRadius};
   background-color: ${(props) => props.theme.colors.container};
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-around;
 `;
 
 const TitleContainer = styled.div`
+  padding: 1vh 1vw 1vh 1vw;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -39,6 +39,7 @@ const TitleContainer = styled.div`
 `;
 
 const BodyContainer = styled.div`
+  margin-top: 15px;
   padding: 1vh 1vw 1vh 1vw;
   display: flex;
   flex-direction: column;
@@ -52,6 +53,12 @@ const ButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
+`;
+
+const EndButtonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
 `;
 
 const CertificationContainer = styled.div`
@@ -110,6 +117,21 @@ const Button = styled.button`
   }
 `;
 
+const EndButton = styled.button`
+  border: none;
+  padding: 1vh 1vw 1vh 1vw;
+  border-radius: ${(props) => props.theme.borderRadius};
+  font-size: 14px;
+  font-weight: 700;
+  color: ${(props) => props.theme.colors.default};
+  background-color: ${(props) => props.theme.colors.button};
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${(props) => props.theme.colors.btnhover};
+  }
+`;
+
 interface SurveyItem {
   survey_id: string;
   author: number;
@@ -122,16 +144,22 @@ interface SurveyItem {
 
 interface ModalProps {
   surveyItem: SurveyItem;
+  setEnterModalOpen: (arg: boolean) => void;
   theme: DefaultTheme;
 }
 
 // TODO: show point earned instead of emoji
-export default function SurveyPageResultModal({ surveyItem, theme }: ModalProps) {
+export default function SurveyPageResultModal({ surveyItem, setEnterModalOpen, theme }: ModalProps) {
   const navigate = useNavigate();
 
   return (
     <Container>
       <ModalContainer theme={theme}>
+        <EndButtonContainer>
+          <EndButton onClick={() => setEnterModalOpen(false)} theme={theme}>
+            x
+          </EndButton>
+        </EndButtonContainer>
         <TitleContainer theme={theme}>
           <Title theme={theme}>{surveyItem.title}</Title>
           <EndDate theme={theme}>~ {surveyItem.ended_date.substring(0, 10)}</EndDate>

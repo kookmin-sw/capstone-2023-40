@@ -170,6 +170,7 @@ export default function SurveyListPage() {
       // const request: AxiosResponse<SurveyItem[]> = await axios.get<SurveyItem[]>(requests.getSurvey + page, {
       //   signal: abortSignal,
       // });
+      // for test
       const request: AxiosResponse<SurveyItem[]> = await axios.get<SurveyItem[]>(
         `https://capstone-mock-api.fly.dev/api/survey?page=${page}`,
         {
@@ -251,7 +252,13 @@ export default function SurveyListPage() {
 
         <Pagination currentPage={page} numOfTotalPage={13} numOfPageToShow={5} setPage={setPage} theme={theme} />
 
-        {enterModalOpen && <SurveyEnterModal surveyItem={surveys[selectedSurveyIndex]} theme={theme} />}
+        {enterModalOpen && (
+          <SurveyEnterModal
+            surveyItem={surveys[selectedSurveyIndex]}
+            setEnterModalOpen={setEnterModalOpen}
+            theme={theme}
+          />
+        )}
       </Container>
     );
   }
