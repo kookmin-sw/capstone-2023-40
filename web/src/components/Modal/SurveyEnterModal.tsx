@@ -3,7 +3,7 @@ import React, { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
 
-import useOnClickOutside from '../../hooks/useOnClickOutside';
+import { useOnClickOutside } from '../../hooks/useOnClickOutside';
 import CertificationList from '../CertificationList';
 
 const Container = styled.div`
@@ -110,7 +110,8 @@ const Subtitle = styled(Label)`
   }
 `;
 
-const Description = styled(Label)`
+const Description = styled.span`
+  color: ${(props) => props.theme.colors.default};
   padding: 1.2vh 1.5vw 1.2vh 1.5vw;
 `;
 
