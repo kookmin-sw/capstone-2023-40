@@ -59,11 +59,11 @@ public class AnsweredQuestionService {
             .orElseThrow(() -> new ExceptionMapper(ErrorMessage.SURVEY_NOT_FOUND));
 
         List<AnsweredQuestionInfoDto> savedAnsweredQuestionInfoDtoList = new ArrayList<>();
-        for (AnsweredQuestionDto answeredQuestionDto : answeredQuestionRequestDto.getQuestionList()) {
-            validateNoAnswerToQuestion(answeredQuestionDto);
+        for (AnsweredQuestionDto answeredQuestionDto : answeredQuestionRequestDto.getAnswers()) {
+            validateEmptyAnswer(answeredQuestionDto);
 
-            QuestionBank questionBank = questionBankRepository.findBySurveyIdAndTitle(
-                    survey.getSurveyId(), answeredQuestionDto.getQuestionTitle())
+            QuestionBank questionBank = questionBankRepository.findByQuestionBankId(
+                    answeredQuestionDto.getQuestionBankId())
                 .orElseThrow(() -> new ExceptionMapper(ErrorMessage.QUESTION_BANK_NOT_FOUND));
 
             if (answeredQuestionDto.getMultipleChoices() != null
@@ -77,8 +77,8 @@ public class AnsweredQuestionService {
                 List<AnsweredQuestion> savedAnsweredQuestionList = answeredQuestionRepository.saveAll(
                     answeredQuestionList);
 
-                List<String> multipleChoice = savedAnsweredQuestionList.stream().map(
-                    AnsweredQuestion::getMultipleChoices).collect(Collectors.toList());
+                List<Integer> multipleChoice = savedAnsweredQuestionList.stream().map(
+                    AnsweredQuestion::getMultipleChoice).collect(Collectors.toList());
 
                 savedAnsweredQuestionInfoDtoList.add(
                     answeredQuestionMapper.toAnsweredInfoQuestionDtoWithMultipleChoices(
@@ -87,15 +87,17 @@ public class AnsweredQuestionService {
             } else {
                 AnsweredQuestion savedAnsweredQuestion = answeredQuestionRepository.save(
                     answeredQuestionMapper.toAnsweredQuestion(answeredQuestionDto, user,
-                        survey, questionBank, null));
+                        survey, questionBank));
 
                 savedAnsweredQuestionInfoDtoList.add(
                     answeredQuestionMapper.toAnsweredInfoQuestionDto(savedAnsweredQuestion,
                         questionBank, null));
             }
         }
+
         return answeredQuestionMapper.toAnsweredQuestionResponseDto(survey,
             savedAnsweredQuestionInfoDtoList);
+
     }
 
     @Transactional
@@ -105,11 +107,13 @@ public class AnsweredQuestionService {
         answeredQuestionRepository.deleteAll(answeredQuestionList);
     }
 
-    public void validateNoAnswerToQuestion(AnsweredQuestionDto answeredQuestionDto) {
+    public void validateEmptyAnswer(AnsweredQuestionDto answeredQuestionDto) {
         if (answeredQuestionDto.getLongAnswer() == null
             && answeredQuestionDto.getShortAnswer() == null
-            && answeredQuestionDto.getMultipleChoices() == null
-            && answeredQuestionDto.getSingleChoice() == null) {
+            && answeredQuestionDto.getSingleChoice() == null
+            && (answeredQuestionDto.getMultipleChoices() == null
+            || answeredQuestionDto.getMultipleChoices().isEmpty())
+        ) {
             throw new ExceptionMapper(ErrorMessage.NO_ANSWER_TO_QUESTION);
         }
     }

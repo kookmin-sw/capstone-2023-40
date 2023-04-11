@@ -49,7 +49,6 @@ public class QuestionOptionUpdateRequestDtoValidTest {
 
         // then
         assertEquals(validateSet.size(), 1);
-
     }
 
     @Test
@@ -72,6 +71,21 @@ public class QuestionOptionUpdateRequestDtoValidTest {
 
         // then
         assertEquals(validateSet.size(), 2);
+    }
+
+    @Test
+    public void testInvalidId() {
+        // given
+        QuestionOptionUpdateRequestDto questionOptionUpdateRequestDto = QuestionOptionUpdateRequestDto.builder()
+            .optionId(-1L)
+            .build();
+
+        // when
+        Set<ConstraintViolation<QuestionOptionUpdateRequestDto>> validateSet = validator.validate(
+            questionOptionUpdateRequestDto);
+
+        // then
+        assertEquals(validateSet.size(), 1);
     }
 
 }

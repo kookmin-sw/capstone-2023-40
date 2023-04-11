@@ -95,8 +95,8 @@ public class QuestionBankUpdateRequestDtoValidTest {
     public void testValidatePositive() {
         // given
         QuestionBankUpdateRequestDto questionBankUpdateRequestDto = QuestionBankUpdateRequestDto.builder()
-            .questionBankId(-1L)
-            .questionNo(-1)
+            .questionBankId(1L)
+            .questionNo(-1) // violated by @Positive
             .build();
 
         // when
@@ -104,6 +104,21 @@ public class QuestionBankUpdateRequestDtoValidTest {
             questionBankUpdateRequestDto);
 
         // then
-        assertEquals(validateSet.size(), 2);
+        assertEquals(validateSet.size(), 1); // violated total 1 constraint
+    }
+
+    @Test
+    public void testInvalidId() {
+        // given
+        QuestionBankUpdateRequestDto questionBankUpdateRequestDto = QuestionBankUpdateRequestDto.builder()
+            .questionBankId(-1L)
+            .build();
+
+        // when
+        Set<ConstraintViolation<QuestionBankUpdateRequestDto>> validateSet = validator.validate(
+            questionBankUpdateRequestDto);
+
+        // then
+        assertEquals(validateSet.size(), 1);
     }
 }

@@ -11,8 +11,6 @@ public class AnsweredQuestionResponseDto {
 
     private UUID surveyId;
 
-    private String surveyTitle;
-
     List<AnsweredQuestionInfoDto> questions;
 
 }

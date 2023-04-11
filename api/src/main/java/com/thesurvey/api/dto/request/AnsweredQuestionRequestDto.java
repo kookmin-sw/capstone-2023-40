@@ -16,6 +16,6 @@ public class AnsweredQuestionRequestDto {
 
     @Valid
     @NotNull
-    List<AnsweredQuestionDto> questionList;
+    List<AnsweredQuestionDto> answers;
 
 }

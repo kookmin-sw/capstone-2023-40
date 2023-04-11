@@ -60,7 +60,7 @@ public class SurveyUpdateRequestDtoValidTest {
     public void testValidateNotNull() {
         // given
         SurveyUpdateRequestDto surveyUpdateRequestDto = SurveyUpdateRequestDto.builder()
-            .surveyId(null) // validated by @NotNull
+            .surveyId(null) // violated by @NotNull
             .build();
 
         // when
