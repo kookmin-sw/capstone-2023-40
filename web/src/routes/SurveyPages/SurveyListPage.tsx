@@ -8,6 +8,7 @@ import axios from '../../api/axios';
 import requests from '../../api/request';
 import CertificationList from '../../components/CertificationList';
 import Header from '../../components/Header';
+import SurveyEnterModal from '../../components/Modal/SurveyEnterModal';
 import Pagination from '../../components/Pagination';
 import SurveyListSkeleton from '../../components/Skeleton/SurveyListSkeleton';
 import { useTheme } from '../../hooks/useTheme';
@@ -158,15 +159,23 @@ export default function SurveyListPage() {
   const [surveys, setSurveys] = useState<SurveyItem[]>([]);
   const [page, setPage] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [enterModalOpen, setEnterModalOpen] = useState<boolean>(false);
+  const [selectedSurveyIndex, setSelectedSurveyIndex] = useState<number>(0);
   const [abortController, setAbortController] = useState<AbortController>(new AbortController());
   const navigate = useNavigate();
 
   const fetchSurveyList = async (abortSignal: AbortSignal): Promise<void> => {
     setIsLoading(true);
     try {
-      const request: AxiosResponse<SurveyItem[]> = await axios.get<SurveyItem[]>(requests.getSurvey + page, {
-        signal: abortSignal,
-      });
+      // const request: AxiosResponse<SurveyItem[]> = await axios.get<SurveyItem[]>(requests.getSurvey + page, {
+      //   signal: abortSignal,
+      // });
+      const request: AxiosResponse<SurveyItem[]> = await axios.get<SurveyItem[]>(
+        `https://capstone-mock-api.fly.dev/api/survey?page=${page}`,
+        {
+          signal: abortSignal,
+        }
+      );
       setSurveys(request.data);
       setIsLoading(false);
     } catch (error) {
@@ -176,6 +185,11 @@ export default function SurveyListPage() {
         setIsLoading(false);
       }
     }
+  };
+
+  const handleButtonClick = (index: number) => {
+    setSelectedSurveyIndex(index);
+    setEnterModalOpen(true);
   };
 
   useEffect(() => {
@@ -217,9 +231,9 @@ export default function SurveyListPage() {
           </ListHead>
 
           <ListBody>
-            {surveys.map((survey) => (
+            {surveys.map((survey: SurveyItem, index: number) => (
               <ListRow key={survey.survey_id} theme={theme}>
-                <Title onClick={() => navigate(`/survey/${survey.survey_id}`)} theme={theme}>
+                <Title onClick={() => handleButtonClick(index)} theme={theme}>
                   {survey.title}
                 </Title>
                 <AuthList theme={theme}>
@@ -236,6 +250,8 @@ export default function SurveyListPage() {
         </ListTable>
 
         <Pagination currentPage={page} numOfTotalPage={13} numOfPageToShow={5} setPage={setPage} theme={theme} />
+
+        {enterModalOpen && <SurveyEnterModal surveyItem={surveys[selectedSurveyIndex]} theme={theme} />}
       </Container>
     );
   }
