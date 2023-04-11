@@ -42,7 +42,7 @@ public class UserRegisterRequestDto {
     private String address;
 
     @Pattern(regexp = "^https?://.*$")
-    @ApiModelProperty(name = "프로필 이미지", example = "https://www.nasa.gov/sites/default/files/styles/full_width_feature/public/thumbnails/image/hubble_m14_wfc3_1flat_cont_final.jpg")
+    @ApiModelProperty(name = "프로필 이미지", example = "https://images2.alphacoders.com/130/1306410.png")
     private String profileImage;
 
 }
