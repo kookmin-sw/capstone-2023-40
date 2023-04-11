@@ -13,22 +13,20 @@ import org.springframework.stereotype.Component;
 @Component
 public class AnsweredQuestionMapper {
 
-    public AnsweredQuestionInfoDto toAnsweredInfoQuestionDtoWithMultipleChoices(AnsweredQuestion answeredQuestion,
-        QuestionBank questionBank, List<String> multipleChoices) {
+    public AnsweredQuestionInfoDto toAnsweredInfoQuestionDtoWithMultipleChoices(
+        AnsweredQuestion answeredQuestion,
+        QuestionBank questionBank, List<Integer> multipleChoices) {
 
         return AnsweredQuestionInfoDto.builder()
             .answeredQuestionId(answeredQuestion.getAnsweredQuestionId().getAnswerId())
             .questionTitle(questionBank.getTitle())
             .questionDescription(questionBank.getDescription())
-            .singleChoice(null)
             .multipleChoices(multipleChoices)
-            .shortAnswer(null)
-            .longAnswer(null)
             .build();
     }
 
     public AnsweredQuestionInfoDto toAnsweredInfoQuestionDto(AnsweredQuestion answeredQuestion,
-        QuestionBank questionBank, List<String> multipleChoices) {
+        QuestionBank questionBank, List<Integer> multipleChoices) {
 
         return AnsweredQuestionInfoDto.builder()
             .answeredQuestionId(answeredQuestion.getAnsweredQuestionId().getAnswerId())
@@ -43,34 +41,27 @@ public class AnsweredQuestionMapper {
 
     public AnsweredQuestion toAnsweredQuestion(
         AnsweredQuestionDto answeredQuestionRequestDto, User user, Survey survey,
-        QuestionBank questionBank, String multipleChoice) {
-        String singleChoice = answeredQuestionRequestDto.getSingleChoice();
-        String shortAnswer = answeredQuestionRequestDto.getShortAnswer();
-        String longAnswer = answeredQuestionRequestDto.getLongAnswer();
+        QuestionBank questionBank) {
 
         return AnsweredQuestion
             .builder()
             .user(user)
             .survey(survey)
             .questionBank(questionBank)
-            .singleChoice(singleChoice == null || singleChoice.length() == 0 ? null : singleChoice)
-            .multipleChoices(multipleChoice)
-            .shortAnswer(shortAnswer == null || shortAnswer.length() == 0 ? null : shortAnswer)
-            .longAnswer(longAnswer == null || longAnswer.length() == 0 ? null : longAnswer)
+            .singleChoice(answeredQuestionRequestDto.getSingleChoice())
+            .shortAnswer(answeredQuestionRequestDto.getShortAnswer())
+            .longAnswer(answeredQuestionRequestDto.getLongAnswer())
             .build();
     }
 
     public AnsweredQuestion toAnsweredQuestionWithMultipleChoices(User user, Survey survey,
-        QuestionBank questionBank, String multipleChoice) {
+        QuestionBank questionBank, int multipleChoice) {
         return AnsweredQuestion
             .builder()
             .user(user)
             .survey(survey)
             .questionBank(questionBank)
-            .singleChoice(null)
-            .multipleChoices(multipleChoice)
-            .shortAnswer(null)
-            .longAnswer(null)
+            .multipleChoice(multipleChoice)
             .build();
     }
 
@@ -78,7 +69,6 @@ public class AnsweredQuestionMapper {
         List<AnsweredQuestionInfoDto> answeredQuestionInfoDtoList) {
         return AnsweredQuestionResponseDto.builder()
             .surveyId(survey.getSurveyId())
-            .surveyTitle(survey.getTitle())
             .questions(answeredQuestionInfoDtoList)
             .build();
     }
