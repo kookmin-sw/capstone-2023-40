@@ -2,7 +2,7 @@ import { AnsweredQuestion } from './AnsweredQuestion';
 import { QuestionCreateRequest } from './Question';
 import { QuestionBankUpdateRequest } from './QuestionBank';
 
-enum CertificationType {
+export enum CertificationType {
   KAKAO,
   NAVER,
   GOOGLE,
@@ -14,8 +14,8 @@ enum CertificationType {
 export interface SurveyCreateRequest {
   title: string;
   description: string;
-  startedDate: Date;
-  endedDate: Date;
+  startedDate: Date | string;
+  endedDate: Date | string;
   certificationTypes?: Array<CertificationType>;
   questions: Array<QuestionCreateRequest>;
 }

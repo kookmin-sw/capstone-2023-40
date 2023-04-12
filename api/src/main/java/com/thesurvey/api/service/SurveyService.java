@@ -29,7 +29,8 @@ public class SurveyService {
 
     public SurveyService(SurveyRepository surveyRepository, SurveyMapper surveyMapper,
         QuestionService questionService,
-        ParticipationService participationService, AnsweredQuestionService answeredQuestionService) {
+        ParticipationService participationService,
+        AnsweredQuestionService answeredQuestionService) {
         this.surveyRepository = surveyRepository;
         this.surveyMapper = surveyMapper;
         this.questionService = questionService;
@@ -79,7 +80,8 @@ public class SurveyService {
 
     @Transactional
     public SurveyResponseDto updateSurvey(SurveyUpdateRequestDto surveyUpdateRequestDto) {
-        validateRequestedSurveyDate(surveyUpdateRequestDto.getStartedDate(), surveyUpdateRequestDto.getEndedDate());
+        validateRequestedSurveyDate(surveyUpdateRequestDto.getStartedDate(),
+            surveyUpdateRequestDto.getEndedDate());
 
         Survey survey = surveyRepository.findBySurveyId(surveyUpdateRequestDto.getSurveyId())
             .orElseThrow(

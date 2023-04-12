@@ -14,12 +14,11 @@ import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 
 @WebMvcTest(value = SurveyController.class, useDefaultFilters = false)
 @MockBean(JpaMetamodelMappingContext.class)
-public class QuestionOptionUpdateRequestDtoValidTest implements CommonTestMethod {
+public class QuestionOptionUpdateRequestDtoValidTest {
 
     @Autowired
     private Validator validator;
 
-    @Override
     @Test
     public void testCorrectInput() {
         // given
@@ -37,13 +36,11 @@ public class QuestionOptionUpdateRequestDtoValidTest implements CommonTestMethod
         assertEquals(validateSet.size(), 0);
     }
 
-    @Override
     @Test
-    public void testValidateNullInput() {
+    public void testValidateNotNull() {
         // given
         QuestionOptionUpdateRequestDto questionOptionUpdateRequestDto = QuestionOptionUpdateRequestDto.builder()
             .optionId(null)
-            .option(null)
             .build();
 
         // when
@@ -51,11 +48,9 @@ public class QuestionOptionUpdateRequestDtoValidTest implements CommonTestMethod
             questionOptionUpdateRequestDto);
 
         // then
-        assertEquals(validateSet.size(), 2);
-
+        assertEquals(validateSet.size(), 1);
     }
 
-    @Override
     @Test
     public void testValidateOverMaxStringLength() {
         // given
@@ -78,13 +73,11 @@ public class QuestionOptionUpdateRequestDtoValidTest implements CommonTestMethod
         assertEquals(validateSet.size(), 2);
     }
 
-    @Override
     @Test
-    public void testValidateNotBlank() {
+    public void testInvalidId() {
         // given
         QuestionOptionUpdateRequestDto questionOptionUpdateRequestDto = QuestionOptionUpdateRequestDto.builder()
-            .optionId(1L)
-            .option("")
+            .optionId(-1L)
             .build();
 
         // when
@@ -94,4 +87,5 @@ public class QuestionOptionUpdateRequestDtoValidTest implements CommonTestMethod
         // then
         assertEquals(validateSet.size(), 1);
     }
+
 }

@@ -18,12 +18,11 @@ import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 
 @WebMvcTest(value = SurveyController.class, useDefaultFilters = false)
 @MockBean(JpaMetamodelMappingContext.class)
-public class QuestionBankUpdateRequestDtoValidTest implements CommonTestMethod {
+public class QuestionBankUpdateRequestDtoValidTest {
 
     @Autowired
     private Validator validator;
 
-    @Override
     @Test
     public void testCorrectInput() {
         // given
@@ -54,17 +53,11 @@ public class QuestionBankUpdateRequestDtoValidTest implements CommonTestMethod {
         assertEquals(validateSet.size(), 0);
     }
 
-    @Override
     @Test
-    public void testValidateNullInput() {
+    public void testValidateNotNull() {
         // given
         QuestionBankUpdateRequestDto questionBankUpdateRequestDto = QuestionBankUpdateRequestDto.builder()
-            .questionBankId(null)
-            .title(null)
-            .description(null)
-            .questionType(null)
-            .questionNo(null)
-            .isRequired(null)
+            .questionBankId(null) // violated by @NotNull
             .build();
 
         // when
@@ -72,11 +65,10 @@ public class QuestionBankUpdateRequestDtoValidTest implements CommonTestMethod {
             questionBankUpdateRequestDto);
 
         // then
-        assertEquals(validateSet.size(), 6);
+        assertEquals(validateSet.size(), 1); // violated total 1 constraint
 
     }
 
-    @Override
     @Test
     public void testValidateOverMaxStringLength() {
         // given
@@ -89,30 +81,6 @@ public class QuestionBankUpdateRequestDtoValidTest implements CommonTestMethod {
             .questionBankId(1L)
             .title(maxLengthString)
             .description(maxLengthString)
-            .questionType(QuestionType.LONG_ANSWER)
-            .questionNo(1)
-            .isRequired(true)
-            .build();
-
-        // when
-        Set<ConstraintViolation<QuestionBankUpdateRequestDto>> validateSet = validator.validate(
-            questionBankUpdateRequestDto);
-
-        // then
-        assertEquals(validateSet.size(), 2);
-    }
-
-    @Override
-    @Test
-    public void testValidateNotBlank() {
-        // given
-        QuestionBankUpdateRequestDto questionBankUpdateRequestDto = QuestionBankUpdateRequestDto.builder()
-            .questionBankId(1L)
-            .title("")
-            .description("")
-            .questionType(QuestionType.LONG_ANSWER)
-            .questionNo(1)
-            .isRequired(true)
             .build();
 
         // when
@@ -127,12 +95,8 @@ public class QuestionBankUpdateRequestDtoValidTest implements CommonTestMethod {
     public void testValidatePositive() {
         // given
         QuestionBankUpdateRequestDto questionBankUpdateRequestDto = QuestionBankUpdateRequestDto.builder()
-            .questionBankId(-1L)
-            .title("This is test QuestionBankUpdateRequestDto")
-            .description("This is test QuestionBankUpdateRequestDto")
-            .questionType(QuestionType.LONG_ANSWER)
-            .questionNo(-1)
-            .isRequired(true)
+            .questionBankId(1L)
+            .questionNo(-1) // violated by @Positive
             .build();
 
         // when
@@ -140,6 +104,21 @@ public class QuestionBankUpdateRequestDtoValidTest implements CommonTestMethod {
             questionBankUpdateRequestDto);
 
         // then
-        assertEquals(validateSet.size(), 2);
+        assertEquals(validateSet.size(), 1); // violated total 1 constraint
+    }
+
+    @Test
+    public void testInvalidId() {
+        // given
+        QuestionBankUpdateRequestDto questionBankUpdateRequestDto = QuestionBankUpdateRequestDto.builder()
+            .questionBankId(-1L)
+            .build();
+
+        // when
+        Set<ConstraintViolation<QuestionBankUpdateRequestDto>> validateSet = validator.validate(
+            questionBankUpdateRequestDto);
+
+        // then
+        assertEquals(validateSet.size(), 1);
     }
 }

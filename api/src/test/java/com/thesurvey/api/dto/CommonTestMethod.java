@@ -4,9 +4,12 @@ public interface CommonTestMethod {
 
     void testCorrectInput();
 
-    void testValidateNullInput();
+    void testValidateNotNull();
 
     void testValidateOverMaxStringLength();
 
     void testValidateNotBlank();
+
+    void testValidateNotEmpty();
+
 }

@@ -1,6 +1,7 @@
 package com.thesurvey.api.service;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import com.thesurvey.api.UserTestFactory;
 import com.thesurvey.api.dto.response.UserResponseDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 @Transactional
 @AutoConfigureMockMvc
-public class AuthenticationServiceTest extends BaseServiceTest {
+public class AuthenticationServiceTest {
 
     @Autowired
     UserService userService;
@@ -23,19 +24,23 @@ public class AuthenticationServiceTest extends BaseServiceTest {
 
     @Test
     void testRegisterService() {
-        UserResponseDto result = authenticationService.register(globalRegisterDto);
+        UserResponseDto result = authenticationService.register(
+            UserTestFactory.globalUserRegisterDto);
 
-        assertThat(result.getName()).isEqualTo(globalRegisterDto.getName());
-        assertThat(result.getPhoneNumber()).isEqualTo(globalRegisterDto.getPhoneNumber());
+        assertThat(result.getName()).isEqualTo(UserTestFactory.globalUserRegisterDto.getName());
+        assertThat(result.getPhoneNumber()).isEqualTo(
+            UserTestFactory.globalUserRegisterDto.getPhoneNumber());
         assertThat(result.getUserId()).isEqualTo(
-            userService.getUserByName(globalRegisterDto.getName()).getUserId());
+            userService.getUserByName(UserTestFactory.globalUserRegisterDto.getName()).getUserId());
     }
 
     @Test
     void testLoginService() {
-        UserResponseDto userResponseDto = authenticationService.register(globalRegisterDto);
+        UserResponseDto userResponseDto = authenticationService.register(
+            UserTestFactory.globalUserRegisterDto);
         Authentication result = authenticationService.authenticate(
-            new UsernamePasswordAuthenticationToken(globalEmail, globalPassword)
+            new UsernamePasswordAuthenticationToken(UserTestFactory.globalEmail,
+                UserTestFactory.globalPassword)
         );
 
         assertThat(result.isAuthenticated()).isTrue();

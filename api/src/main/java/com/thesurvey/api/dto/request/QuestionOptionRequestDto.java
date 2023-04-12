@@ -9,11 +9,11 @@ import lombok.Getter;
 @Builder
 public class QuestionOptionRequestDto {
 
-        @NotBlank
-        @Size(max = 100)
-        private String option;
+    @NotBlank
+    @Size(max = 100)
+    private String option;
 
-        @Size(max = 255)
-        private String description;
+    @Size(max = 255)
+    private String description;
 
 }

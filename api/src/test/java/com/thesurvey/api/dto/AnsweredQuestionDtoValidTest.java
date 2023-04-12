@@ -14,18 +14,15 @@ import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 
 @WebMvcTest(value = SurveyController.class, useDefaultFilters = false)
 @MockBean(JpaMetamodelMappingContext.class)
-public class AnsweredQuestionDtoValidTest implements CommonTestMethod {
+public class AnsweredQuestionDtoValidTest {
 
     @Autowired
     private Validator validator;
 
-    @Override
     @Test
     public void testCorrectInput() {
         // given
         AnsweredQuestionDto answeredQuestionDto = AnsweredQuestionDto.builder()
-            .questionTitle("This is test question title")
-            .questionDescription("This is test question description")
             .shortAnswer("This tis test short answer.")
             .longAnswer("This is test long answer")
             .build();
@@ -38,38 +35,19 @@ public class AnsweredQuestionDtoValidTest implements CommonTestMethod {
         assertEquals(validateSet.size(), 0);
     }
 
-    @Override
-    @Test
-    public void testValidateNullInput() {
-        // given
-        AnsweredQuestionDto answeredQuestionDto = AnsweredQuestionDto.builder()
-            .questionTitle(null)
-            .questionDescription(null)
-            .build();
-
-        // when
-        Set<ConstraintViolation<AnsweredQuestionDto>> validateSet = validator.validate(
-            answeredQuestionDto);
-
-        // then
-        assertEquals(validateSet.size(), 2);
-    }
-
-    @Override
     @Test
     public void testValidateOverMaxStringLength() {
+        // given
         StringBuilder maxLengthStringBuilder = new StringBuilder();
         while (maxLengthStringBuilder.length() < 256) {
             maxLengthStringBuilder.append("Test String.....");
         }
+
         String maxLengthString = maxLengthStringBuilder.toString();
 
-        // given
         AnsweredQuestionDto answeredQuestionDto = AnsweredQuestionDto.builder()
-            .questionTitle(maxLengthString)
-            .questionDescription(maxLengthString)
-            .shortAnswer(maxLengthString)
-            .longAnswer(maxLengthString)
+            .shortAnswer(maxLengthString) // violated by @Size
+            .longAnswer(maxLengthString) // violated by @Size
             .build();
 
         // when
@@ -77,24 +55,8 @@ public class AnsweredQuestionDtoValidTest implements CommonTestMethod {
             answeredQuestionDto);
 
         // then
-        assertEquals(validateSet.size(), 4);
+        assertEquals(validateSet.size(), 2); // violated total 2 constraints
 
     }
 
-    @Override
-    @Test
-    public void testValidateNotBlank() {
-        // given
-        AnsweredQuestionDto answeredQuestionDto = AnsweredQuestionDto.builder()
-            .questionTitle("")
-            .questionDescription("")
-            .build();
-
-        // when
-        Set<ConstraintViolation<AnsweredQuestionDto>> validateSet = validator.validate(
-            answeredQuestionDto);
-
-        // then
-        assertEquals(validateSet.size(), 2);
-    }
 }

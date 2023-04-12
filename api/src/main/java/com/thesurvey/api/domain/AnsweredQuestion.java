@@ -38,11 +38,10 @@ public class AnsweredQuestion {
     public QuestionBank questionBank;
 
     @Column(name = "single_choice", nullable = true)
-    private String singleChoice;
+    private Integer singleChoice;
 
-    // FIXME: modify to join columns
     @Column(name = "multiple_choices", nullable = true)
-    private String multipleChoices;
+    private Integer multipleChoice;
 
     @Column(name = "short_answer", nullable = true)
     private String shortAnswer;
@@ -50,19 +49,16 @@ public class AnsweredQuestion {
     @Column(name = "long_answer", nullable = true)
     private String longAnswer;
 
-
     @Builder
-    public AnsweredQuestion(String singleChoice,
-        String multipleChoices,
-        String shortAnswer, String longAnswer, Survey survey, User user,
-        QuestionBank questionBank) {
+    public AnsweredQuestion(Integer singleChoice, Integer multipleChoice, String shortAnswer,
+        String longAnswer, Survey survey, User user, QuestionBank questionBank) {
         this.user = user;
         this.survey = survey;
         this.questionBank = questionBank;
         this.shortAnswer = shortAnswer;
         this.longAnswer = longAnswer;
         this.singleChoice = singleChoice;
-        this.multipleChoices = multipleChoices;
+        this.multipleChoice = multipleChoice;
         this.answeredQuestionId = AnsweredQuestionId.builder()
             .surveyId(survey.getSurveyId())
             .userId(user.getUserId())

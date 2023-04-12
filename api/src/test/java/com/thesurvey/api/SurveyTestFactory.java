@@ -133,7 +133,7 @@ public class SurveyTestFactory {
             globalSingleChoiceDto,
             globalMultipleChoiceDto, globalShortAnswerDto, globalLongAnswerDto);
 
-        SurveyUpdateRequestDto globalSurveyUpdateRequestDto = SurveyUpdateRequestDto.builder()
+        return SurveyUpdateRequestDto.builder()
             .surveyId(surveyId)
             .title("My name is Jin")
             .description("A test survey for Jin")
@@ -143,8 +143,6 @@ public class SurveyTestFactory {
             .endedDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")).plusWeeks(1))
             .questions(globalQuestionUpdateDtoList)
             .build();
-
-        return globalSurveyUpdateRequestDto;
     }
 
     public static SurveyResponseDto getSurveyResponseDto(String surveyId) {
@@ -191,7 +189,7 @@ public class SurveyTestFactory {
             globalSingleChoiceDto,
             globalMultipleChoiceDto, globalShortAnswerDto, globalLongAnswerDto);
 
-        SurveyResponseDto globalSurveyResponseDto = SurveyResponseDto.builder()
+        return SurveyResponseDto.builder()
             .surveyId(UUID.fromString(surveyId))
             .title("Updated My name is Jin")
             .description("Updated A test survey for Jin")
@@ -201,57 +199,37 @@ public class SurveyTestFactory {
             .endedDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")).plusWeeks(1))
             .questions(globalQuestionUpdateDtoList)
             .build();
-
-        return globalSurveyResponseDto;
     }
 
     public static AnsweredQuestionRequestDto getAnsweredQuestionRequestDto(UUID surveyId) {
         AnsweredQuestionDto answeredQuestionSingleChoiceDto = AnsweredQuestionDto.builder()
-            .questionTitle("A format to be saved to QuestionBank1")
-            .questionDescription("Question1's description")
-            .singleChoice("Test single choice")
-            .multipleChoices(null)
-            .shortAnswer(null)
-            .longAnswer(null)
+            .questionBankId(1L)
+            .singleChoice(1)
             .build();
 
-        List<String> multipleChoice = Arrays.asList("option 1");
         AnsweredQuestionDto answeredQuestionMultipleChoiceDto = AnsweredQuestionDto.builder()
-            .questionTitle("A format to be saved to QuestionBank2")
-            .questionDescription("Question2's description")
-            .singleChoice(null)
-            .multipleChoices(multipleChoice)
-            .shortAnswer(null)
-            .longAnswer(null)
+            .questionBankId(2L)
+            .multipleChoices(List.of(1, 2, 3))
             .build();
 
         AnsweredQuestionDto answeredQuestionShortAnswerDto = AnsweredQuestionDto.builder()
-            .questionTitle("A format to be saved to QuestionBank3")
-            .questionDescription("Question3's description")
-            .singleChoice(null)
-            .multipleChoices(null)
+            .questionBankId(3L)
             .shortAnswer("Test short answer")
-            .longAnswer(null)
             .build();
 
         AnsweredQuestionDto answeredQuestionLongAnswerDto = AnsweredQuestionDto.builder()
-            .questionTitle("A format to be saved to QuestionBank4")
-            .questionDescription("Question4's description")
-            .singleChoice(null)
-            .multipleChoices(null)
-            .shortAnswer(null)
+            .questionBankId(4L)
             .longAnswer("Test Long answer")
             .build();
-        List<AnsweredQuestionDto> answeredQuestionDtoList = Arrays.asList(
+
+        List<AnsweredQuestionDto> answers = Arrays.asList(
             answeredQuestionSingleChoiceDto, answeredQuestionMultipleChoiceDto,
             answeredQuestionShortAnswerDto, answeredQuestionLongAnswerDto);
 
-        AnsweredQuestionRequestDto globalAnsweredQuestionRequestDto = AnsweredQuestionRequestDto.builder()
+        return AnsweredQuestionRequestDto.builder()
             .surveyId(surveyId)
-            .questionList(answeredQuestionDtoList)
+            .answers(answers)
             .build();
-
-        return globalAnsweredQuestionRequestDto;
     }
 
 }

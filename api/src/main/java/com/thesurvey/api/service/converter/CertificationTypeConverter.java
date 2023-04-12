@@ -1,43 +1,39 @@
 package com.thesurvey.api.service.converter;
 
 import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class CertificationTypeConverter {
 
     /**
-     * return List<Integer> certificationTypeList to
-     * List<CertificationType> convertedCertificationTypeList.
+     * Converts certificationTypeList type from Integer to CertificationType.
+     *
      * @param certificationTypeList List converted from CertificationType to Integer in db.
      * @return convertedCertificationTypeList List converted from Integer to CertificationType.
      */
     public List<CertificationType> toCertificationTypeList(List<Integer> certificationTypeList) {
-        List<CertificationType> convertedCertificationTypeList = new ArrayList<>();
-        for (Integer type : certificationTypeList) {
-
-            if (type == 0) {
-                convertedCertificationTypeList.add(CertificationType.KAKAO);
-            }
-            else if (type == 1) {
-                convertedCertificationTypeList.add(CertificationType.NAVER);
-            }
-            else if (type == 2) {
-                convertedCertificationTypeList.add(CertificationType.GOOGLE);
-            }
-            else if (type == 3) {
-                convertedCertificationTypeList.add(CertificationType.WEBMAIL);
-            }
-            else if (type == 4) {
-                convertedCertificationTypeList.add(CertificationType.DRIVER_LICENSE);
-            }
-            else if (type == 5) {
-                convertedCertificationTypeList.add(CertificationType.MOBILE_PHONE);
-            }
-
-        }
-        return convertedCertificationTypeList;
+        return certificationTypeList.stream()
+            .map(type -> {
+                switch (type) {
+                    case 0:
+                        return CertificationType.KAKAO;
+                    case 1:
+                        return CertificationType.NAVER;
+                    case 2:
+                        return CertificationType.GOOGLE;
+                    case 3:
+                        return CertificationType.WEBMAIL;
+                    case 4:
+                        return CertificationType.DRIVER_LICENSE;
+                    case 5:
+                        return CertificationType.MOBILE_PHONE;
+                    default:
+                        return null;
+                }
+            })
+            .collect(Collectors.toList());
     }
 }
