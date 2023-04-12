@@ -35,10 +35,10 @@ public class QuestionBank extends BaseTimeEntity {
     @OneToMany(mappedBy = "questionBank", fetch = FetchType.EAGER ,cascade = CascadeType.ALL, orphanRemoval = true)
     private List<QuestionOption> questionOptions;
 
-    @Column(name = "title", nullable = true)
+    @Column(name = "title")
     private String title;
 
-    @Column(name = "description", nullable = true)
+    @Column(name = "description")
     private String description;
 
     @Enumerated(EnumType.STRING)

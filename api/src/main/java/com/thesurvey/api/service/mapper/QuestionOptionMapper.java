@@ -11,10 +11,15 @@ public class QuestionOptionMapper {
 
     public QuestionOption toQuestionOption(QuestionOptionRequestDto questionOptionRequestDto,
         QuestionBank questionBank) {
+        String description = questionOptionRequestDto.getDescription();
+        if (questionOptionRequestDto.getDescription() != null
+            && questionOptionRequestDto.getDescription().length() != 0) {
+            description = questionOptionRequestDto.getDescription().trim();
+        }
         return QuestionOption.builder()
             .questionBank(questionBank)
-            .option(questionOptionRequestDto.getOption())
-            .description(questionOptionRequestDto.getDescription())
+            .option(questionOptionRequestDto.getOption().trim())
+            .description(description)
             .build();
     }
 

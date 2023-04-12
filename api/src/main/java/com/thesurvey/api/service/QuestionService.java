@@ -8,7 +8,7 @@ import com.thesurvey.api.dto.request.QuestionBankUpdateRequestDto;
 import com.thesurvey.api.dto.request.QuestionRequestDto;
 import com.thesurvey.api.dto.request.SurveyRequestDto;
 import com.thesurvey.api.exception.ErrorMessage;
-import com.thesurvey.api.exception.ExceptionMapper;
+import com.thesurvey.api.exception.BadRequestExceptionMapper;
 import com.thesurvey.api.repository.QuestionBankRepository;
 import com.thesurvey.api.repository.QuestionRepository;
 import com.thesurvey.api.service.mapper.QuestionBankMapper;
@@ -66,21 +66,20 @@ public class QuestionService {
         for (QuestionBankUpdateRequestDto questionBankUpdateRequestDto : questionBankUpdateRequestDtoList) {
             QuestionBank questionBank = questionBankRepository.findByQuestionBankId(
                     questionBankUpdateRequestDto.getQuestionBankId())
-                .orElseThrow(() -> new ExceptionMapper(ErrorMessage.QUESTION_BANK_NOT_FOUND));
+                .orElseThrow(() -> new BadRequestExceptionMapper(ErrorMessage.QUESTION_BANK_NOT_FOUND));
 
             if (questionBankUpdateRequestDto.getTitle() != null) {
-                questionBank.changeTitle(questionBankUpdateRequestDto.getTitle());
+                questionBank.changeTitle(questionBankUpdateRequestDto.getTitle().trim());
             }
             if (questionBankUpdateRequestDto.getDescription() != null) {
-                questionBank.changeDescription(questionBankUpdateRequestDto.getDescription());
+                questionBank.changeDescription(questionBankUpdateRequestDto.getDescription().trim());
             }
             if (questionBankUpdateRequestDto.getQuestionType() != null) {
                 questionBank.changeQuestionType(questionBankUpdateRequestDto.getQuestionType());
             }
-            questionBankRepository.save(questionBank);
 
             Question question = questionRepository.findByQuestionBankId(
-                questionBank.getQuestionBankId()).orElseThrow(() -> new ExceptionMapper(
+                questionBank.getQuestionBankId()).orElseThrow(() -> new BadRequestExceptionMapper(
                 ErrorMessage.QUESTION_NOT_FOUND));
 
             if (questionBankUpdateRequestDto.getIsRequired() != null) {
@@ -89,8 +88,6 @@ public class QuestionService {
             if (questionBankUpdateRequestDto.getQuestionNo() != null) {
                 question.changeQuestionNo(questionBankUpdateRequestDto.getQuestionNo());
             }
-            questionRepository.save(question);
-
             if (questionBankUpdateRequestDto.getQuestionOptions() != null) {
                 questionOptionService.updateQuestionOption(
                     questionBankUpdateRequestDto.getQuestionOptions());

@@ -45,8 +45,8 @@ public class SurveyMapper {
     public Survey toSurvey(SurveyRequestDto surveyRequestDto) {
         return Survey
             .builder()
-            .title(surveyRequestDto.getTitle())
-            .description(surveyRequestDto.getDescription())
+            .title(surveyRequestDto.getTitle().trim())
+            .description(surveyRequestDto.getDescription().trim())
             .startedDate(surveyRequestDto.getStartedDate())
             .endedDate(surveyRequestDto.getEndedDate())
             .build();

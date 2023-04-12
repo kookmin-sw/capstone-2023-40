@@ -42,6 +42,13 @@ public class AnsweredQuestionMapper {
     public AnsweredQuestion toAnsweredQuestion(
         AnsweredQuestionDto answeredQuestionRequestDto, User user, Survey survey,
         QuestionBank questionBank) {
+        String shortAnswer = answeredQuestionRequestDto.getShortAnswer();
+        String longAnswer = answeredQuestionRequestDto.getLongAnswer();
+        if (shortAnswer != null && shortAnswer.length() != 0) {
+            shortAnswer = shortAnswer.trim();
+        } else if (longAnswer != null && longAnswer.length() != 0) {
+            longAnswer = longAnswer.trim();
+        }
 
         return AnsweredQuestion
             .builder()
@@ -49,8 +56,8 @@ public class AnsweredQuestionMapper {
             .survey(survey)
             .questionBank(questionBank)
             .singleChoice(answeredQuestionRequestDto.getSingleChoice())
-            .shortAnswer(answeredQuestionRequestDto.getShortAnswer())
-            .longAnswer(answeredQuestionRequestDto.getLongAnswer())
+            .shortAnswer(shortAnswer)
+            .longAnswer(longAnswer)
             .build();
     }
 
