@@ -67,7 +67,7 @@ public class SurveyTestFactory {
         List<QuestionRequestDto> globalQuestion = Arrays.asList(globalSingleChoiceDto,
             globalMultipleChoiceDto, globalShortAnswerDto, globalLongAnswerDto);
 
-        SurveyRequestDto globalSurveyRequestDto = SurveyRequestDto.builder()
+        return SurveyRequestDto.builder()
             .title("My name is Jin")
             .description("A test survey for Jin")
             .certificationType(
@@ -76,8 +76,6 @@ public class SurveyTestFactory {
             .endedDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")).plusWeeks(1))
             .questions(globalQuestion)
             .build();
-
-        return globalSurveyRequestDto;
     }
 
     public static SurveyUpdateRequestDto getSurveyUpdateRequestDto(UUID surveyId) {
