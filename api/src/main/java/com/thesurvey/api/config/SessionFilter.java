@@ -2,7 +2,7 @@ package com.thesurvey.api.config;
 
 import com.thesurvey.api.domain.User;
 import com.thesurvey.api.exception.ErrorMessage;
-import com.thesurvey.api.exception.ExceptionMapper;
+import com.thesurvey.api.exception.UnauthorizedRequestExceptionMapper;
 import com.thesurvey.api.repository.UserRepository;
 import java.io.IOException;
 
@@ -73,7 +73,7 @@ public class SessionFilter extends OncePerRequestFilter {
                 response.addCookie(jSessionIdCookie.get());
 
             } catch (AuthenticationException e) {
-                throw new ExceptionMapper(ErrorMessage.FAILED_AUTHENTICATION);
+                throw new UnauthorizedRequestExceptionMapper(ErrorMessage.FAILED_AUTHENTICATION);
             }
         }
     }
@@ -83,10 +83,10 @@ public class SessionFilter extends OncePerRequestFilter {
             String email = authentication.getName();
             String password = authentication.getCredentials().toString();
             User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ExceptionMapper(ErrorMessage.USER_EMAIL_NOT_FOUND, email));
+                .orElseThrow(() -> new UnauthorizedRequestExceptionMapper(ErrorMessage.USER_EMAIL_NOT_FOUND, email));
 
             if (!user.getPassword().equals(password)) {
-                throw new ExceptionMapper(ErrorMessage.INVALID_CREDENTIALS);
+                throw new UnauthorizedRequestExceptionMapper(ErrorMessage.INVALID_CREDENTIALS);
             }
 
             return new UsernamePasswordAuthenticationToken(email, password,

@@ -1,5 +1,6 @@
 package com.thesurvey.api.config;
 
+import com.thesurvey.api.exception.AuthenticationEntryPointHandler;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
@@ -53,7 +54,7 @@ public class SecurityConfiguration {
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .anyRequest().permitAll()
             .and()
-            .exceptionHandling()
+            .exceptionHandling().authenticationEntryPoint(new AuthenticationEntryPointHandler())
             .and()
             .logout()
                 .logoutUrl("/auth/logout")

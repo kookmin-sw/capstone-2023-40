@@ -21,6 +21,11 @@ public enum ErrorMessage {
     NO_ANSWER_TO_QUESTION("질문에 응답을 하지 않았습니다."),
     STARTEDDATE_ISAFTER_ENDEDDATE("설문조사 시작 시간이 종료 시간보다 앞설 수 없습니다."),
     REQUEST_TIMEOUT("요청 시간이 만료되었습니다."),
+    SURVEY_ALREADY_ENDED("이미 끝난 설문조사 입니다."),
+    SURVEY_NOT_STARTED("아직 시작하지 않은 설문조사 입니다."),
+    STARTEDDATE_ISBEFORE_CURRENTDATE("설문조사 시작 시간은 현재 시간 이후 이어야 합니다."),
+    NO_HAVE_AUTHORITY("권한이 없습니다."),
+    CREATOR_CANNOT_ANSWER("설문조사 작성자는 자신의 설문조사에 응답할 수 없습니다."),
     INVALID_REQUEST("유효하지 않은 요청입니다");
 
     private final String message;

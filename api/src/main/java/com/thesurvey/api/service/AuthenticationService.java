@@ -5,7 +5,8 @@ import com.thesurvey.api.dto.response.UserResponseDto;
 import com.thesurvey.api.dto.request.UserLoginRequestDto;
 import com.thesurvey.api.dto.request.UserRegisterRequestDto;
 import com.thesurvey.api.exception.ErrorMessage;
-import com.thesurvey.api.exception.ExceptionMapper;
+import com.thesurvey.api.exception.BadRequestExceptionMapper;
+import com.thesurvey.api.exception.UnauthorizedRequestExceptionMapper;
 import com.thesurvey.api.repository.UserRepository;
 import com.thesurvey.api.service.mapper.UserMapper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -47,7 +48,7 @@ public class AuthenticationService {
             return new UsernamePasswordAuthenticationToken(userDetails.getUsername(), null,
                 userDetails.getAuthorities());
         } else {
-            throw new ExceptionMapper(ErrorMessage.INVALID_CREDENTIALS);
+            throw new BadRequestExceptionMapper(ErrorMessage.INVALID_CREDENTIALS);
         }
     }
 
@@ -67,7 +68,7 @@ public class AuthenticationService {
             SecurityContextHolder.getContext().setAuthentication(authenticated);
             return userService.getUserByName(authenticated.getName());
         } catch (AuthenticationException e) {
-            throw new ExceptionMapper(ErrorMessage.UNAUTHORIZED_REQUEST);
+            throw new UnauthorizedRequestExceptionMapper(ErrorMessage.UNAUTHORIZED_REQUEST);
         }
     }
 

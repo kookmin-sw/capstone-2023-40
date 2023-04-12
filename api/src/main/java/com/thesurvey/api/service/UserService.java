@@ -4,7 +4,7 @@ import com.thesurvey.api.domain.User;
 import com.thesurvey.api.dto.response.UserResponseDto;
 import com.thesurvey.api.dto.request.UserUpdateRequestDto;
 import com.thesurvey.api.exception.ErrorMessage;
-import com.thesurvey.api.exception.ExceptionMapper;
+import com.thesurvey.api.exception.NotFoundExceptionMapper;
 import com.thesurvey.api.repository.UserRepository;
 import com.thesurvey.api.service.mapper.UserMapper;
 import org.springframework.security.core.Authentication;
@@ -26,14 +26,14 @@ public class UserService {
     @Transactional(readOnly = true)
     public UserResponseDto getUserByName(String name) {
         User user = userRepository.findByName(name)
-            .orElseThrow(() -> new ExceptionMapper(ErrorMessage.USER_NAME_NOT_FOUND, name));
+            .orElseThrow(() -> new NotFoundExceptionMapper(ErrorMessage.USER_NAME_NOT_FOUND));
         return userMapper.toUserResponseDto(user);
     }
 
     @Transactional(readOnly = true)
     public UserResponseDto getUserByEmail(String email) {
         User user = userRepository.findByEmail(email)
-            .orElseThrow(() -> new ExceptionMapper(ErrorMessage.USER_EMAIL_NOT_FOUND, email));
+            .orElseThrow(() -> new NotFoundExceptionMapper(ErrorMessage.USER_EMAIL_NOT_FOUND, email));
         return userMapper.toUserResponseDto(user);
 
     }
@@ -41,7 +41,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public UserResponseDto getUserProfile(Authentication authentication) {
         User user = userRepository.findByName(authentication.getName())
-            .orElseThrow(() -> new ExceptionMapper(ErrorMessage.USER_NAME_NOT_FOUND,
+            .orElseThrow(() -> new NotFoundExceptionMapper(ErrorMessage.USER_NAME_NOT_FOUND,
                 authentication.getName()));
         return userMapper.toUserResponseDto(user);
     }
@@ -77,7 +77,7 @@ public class UserService {
 
     private User getUserFromAuthentication(Authentication authentication) {
         return userRepository.findByName(authentication.getName()).orElseThrow(
-            () -> new ExceptionMapper(ErrorMessage.USER_NAME_NOT_FOUND, authentication.getName()));
+            () -> new NotFoundExceptionMapper(ErrorMessage.USER_NAME_NOT_FOUND, authentication.getName()));
     }
 
 }

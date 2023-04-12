@@ -5,7 +5,7 @@ import com.thesurvey.api.domain.QuestionOption;
 import com.thesurvey.api.dto.request.QuestionOptionUpdateRequestDto;
 import com.thesurvey.api.dto.request.QuestionRequestDto;
 import com.thesurvey.api.exception.ErrorMessage;
-import com.thesurvey.api.exception.ExceptionMapper;
+import com.thesurvey.api.exception.NotFoundExceptionMapper;
 import com.thesurvey.api.repository.QuestionOptionRepository;
 import com.thesurvey.api.service.mapper.QuestionOptionMapper;
 import java.util.List;
@@ -43,14 +43,14 @@ public class QuestionOptionService {
         for (QuestionOptionUpdateRequestDto questionOptionUpdateRequestDto : questionOptionUpdateRequestDtoList) {
             QuestionOption questionOption = questionOptionRepository.findByQuestionOptionId(
                 questionOptionUpdateRequestDto.getOptionId()).orElseThrow(
-                () -> new ExceptionMapper(ErrorMessage.QUESTION_OPTION_NOT_FOUND,
+                () -> new NotFoundExceptionMapper(ErrorMessage.QUESTION_OPTION_NOT_FOUND,
                     questionOptionUpdateRequestDto.getOptionId()));
 
             if (questionOptionUpdateRequestDto.getOption() != null) {
-                questionOption.changeOption(questionOptionUpdateRequestDto.getOption());
+                questionOption.changeOption(questionOptionUpdateRequestDto.getOption().trim());
             }
             if (questionOptionUpdateRequestDto.getDescription() != null) {
-                questionOption.changeDescription(questionOptionUpdateRequestDto.getDescription());
+                questionOption.changeDescription(questionOptionUpdateRequestDto.getDescription().trim());
             }
 
         }
