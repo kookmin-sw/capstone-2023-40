@@ -2,23 +2,23 @@ import React from 'react';
 
 import 'pace-js/themes/red/pace-theme-minimal.css';
 import ReactDOM from 'react-dom/client';
-// import { Provider } from 'react-redux';
+import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { createStore } from 'redux';
 
 import App from './App';
-// import rootReducer from './reducers';
+import rootReducer from './reducers';
 import reportWebVitals from './reportWebVitals';
 
-// const store = createStore(rootReducer);
+const store = createStore(rootReducer);
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      {/* <Provider store={store}> */}
-      <App />
-      {/* </Provider> */}
+      <Provider store={store}>
+        <App />
+      </Provider>
     </BrowserRouter>
   </React.StrictMode>
 );

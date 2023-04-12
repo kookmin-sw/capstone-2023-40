@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import BackgroundImage from '../assets/main-page.webp';
 import Header from '../components/Header';
 import { useTheme } from '../hooks/useTheme';
+import { RootState } from '../reducers';
+import { setLogin } from '../reducers/header';
 
 const Container = styled.div`
   width: 100vw;
@@ -58,7 +61,8 @@ const Button = styled.button`
 export default function MainPage() {
   const [theme, toggleTheme] = useTheme();
   const navigate = useNavigate();
-  const [loginCheck, setLoginCheck] = useState(false);
+  const isLogin = useSelector((state: RootState) => state.header.isLogin);
+  const dispatch = useDispatch();
 
   return (
     <Container>
@@ -70,7 +74,7 @@ export default function MainPage() {
           <AppTitle>더 서베이</AppTitle>
           에서 쉽고 간편하게
         </Description>
-        {!loginCheck ? (
+        {!isLogin ? (
           <Button onClick={() => navigate('/login')} theme={theme}>
             바로 설문하기
           </Button>

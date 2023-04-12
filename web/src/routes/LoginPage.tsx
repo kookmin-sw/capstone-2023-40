@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
+import { useSelector, useDispatch } from 'react-redux';
 import { Navigate, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -7,6 +8,8 @@ import BackgroundImage from '../assets/main-page.webp';
 import Header from '../components/Header';
 import AlertModal from '../components/Modal/AlertModal';
 import { useTheme } from '../hooks/useTheme';
+import { RootState } from '../reducers';
+import { setLogin } from '../reducers/header';
 import { isEmptyString } from '../utils/validate';
 
 const Container = styled.div`
@@ -102,6 +105,8 @@ export default function LoginPage() {
   const [isAlertModal, setIsAlertModal] = useState<boolean>(false);
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
+  const isLogin = useSelector((state: RootState) => state.header.isLogin);
+  const dispatch = useDispatch();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -115,7 +120,8 @@ export default function LoginPage() {
     } else {
       setTitle('로그인 성공');
       setText('로그인에 성공했습니다!');
-      navigate('../survey');
+      dispatch(setLogin(!isLogin));
+      navigate('../../');
     }
     setIsAlertModal(true);
   };
