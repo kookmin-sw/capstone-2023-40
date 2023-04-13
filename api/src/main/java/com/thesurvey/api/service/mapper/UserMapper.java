@@ -11,13 +11,15 @@ import org.springframework.stereotype.Component;
 public class UserMapper {
 
     public User toUser(UserRegisterRequestDto userRegisterRequestDto) {
+        String address = userRegisterRequestDto.getAddress() != null ?
+            userRegisterRequestDto.getAddress().trim() : null;
         return User
             .builder()
             .name(userRegisterRequestDto.getName())
             .email(userRegisterRequestDto.getEmail())
             .password(passwordEncoder().encode(userRegisterRequestDto.getPassword()))
             .phoneNumber(userRegisterRequestDto.getPhoneNumber())
-            .address(userRegisterRequestDto.getAddress())
+            .address(address)
             .profileImage(userRegisterRequestDto.getProfileImage())
             .build();
     }

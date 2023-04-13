@@ -1,11 +1,11 @@
 package com.thesurvey.api.service;
 
+import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
 import com.thesurvey.api.domain.Participation;
 import com.thesurvey.api.domain.Survey;
 import com.thesurvey.api.domain.User;
-import com.thesurvey.api.dto.request.SurveyRequestDto;
 import com.thesurvey.api.exception.ErrorMessage;
-import com.thesurvey.api.exception.ExceptionMapper;
+import com.thesurvey.api.exception.NotFoundExceptionMapper;
 import com.thesurvey.api.repository.ParticipationRepository;
 import com.thesurvey.api.repository.UserRepository;
 import com.thesurvey.api.service.mapper.ParticipationMapper;
@@ -33,14 +33,14 @@ public class ParticipationService {
 
     @Transactional
     public void createParticipation(Authentication authentication,
-        SurveyRequestDto surveyRequestDto, Survey survey) {
+        List<CertificationType> certificationType, Survey survey) {
         User user = userRepository.findByName(authentication.getName())
-            .orElseThrow(() -> new ExceptionMapper(ErrorMessage.USER_NAME_NOT_FOUND,
+            .orElseThrow(() -> new NotFoundExceptionMapper(ErrorMessage.USER_NAME_NOT_FOUND,
                 authentication.getName()));
 
-        surveyRequestDto.getCertificationType().stream()
-            .map((certificationType) -> participationMapper.toParticipation(user, survey,
-                certificationType))
+        certificationType.stream()
+            .map((type) -> participationMapper.toParticipation(user, survey,
+                type))
             .forEach(participationRepository::save);
     }
 

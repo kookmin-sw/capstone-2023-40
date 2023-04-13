@@ -7,6 +7,8 @@ import com.thesurvey.api.domain.User;
 import com.thesurvey.api.dto.response.AnsweredQuestionInfoDto;
 import com.thesurvey.api.dto.response.AnsweredQuestionResponseDto;
 import com.thesurvey.api.dto.request.AnsweredQuestionDto;
+import com.thesurvey.api.exception.BadRequestExceptionMapper;
+import com.thesurvey.api.exception.ErrorMessage;
 import java.util.List;
 import org.springframework.stereotype.Component;
 
@@ -42,6 +44,19 @@ public class AnsweredQuestionMapper {
     public AnsweredQuestion toAnsweredQuestion(
         AnsweredQuestionDto answeredQuestionRequestDto, User user, Survey survey,
         QuestionBank questionBank) {
+        String shortAnswer = answeredQuestionRequestDto.getShortAnswer();
+        String longAnswer = answeredQuestionRequestDto.getLongAnswer();
+        if (shortAnswer != null) {
+            if (shortAnswer.isBlank()) {
+                throw new BadRequestExceptionMapper(ErrorMessage.NO_ONLY_WHITESPACE);
+            }
+            shortAnswer = shortAnswer.trim();
+        } else if (longAnswer != null) {
+            if (longAnswer.isBlank()) {
+                throw new BadRequestExceptionMapper(ErrorMessage.NO_ONLY_WHITESPACE);
+            }
+            longAnswer = longAnswer.trim();
+        }
 
         return AnsweredQuestion
             .builder()
@@ -49,8 +64,8 @@ public class AnsweredQuestionMapper {
             .survey(survey)
             .questionBank(questionBank)
             .singleChoice(answeredQuestionRequestDto.getSingleChoice())
-            .shortAnswer(answeredQuestionRequestDto.getShortAnswer())
-            .longAnswer(answeredQuestionRequestDto.getLongAnswer())
+            .shortAnswer(shortAnswer)
+            .longAnswer(longAnswer)
             .build();
     }
 

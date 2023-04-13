@@ -14,6 +14,6 @@ public interface AnsweredQuestionRepository extends
     @Query("SELECT aq FROM AnsweredQuestion aq WHERE aq.answeredQuestionId.surveyId = :surveyId")
     List<AnsweredQuestion> findAllBySurveyId(UUID surveyId);
 
-    @Query("SELECT CASE WHEN COUNT(aq) > 0 THEN true ELSE false END FROM AnsweredQuestion aq WHERE aq.answeredQuestionId.userId = :userId")
-    boolean existsByUserId(Long userId);
+    @Query("SELECT CASE WHEN COUNT(aq) > 0 THEN true ELSE false END FROM AnsweredQuestion aq WHERE aq.answeredQuestionId.userId = :userId AND aq.answeredQuestionId.surveyId = :surveyId")
+    boolean existsByUserIdAndSurveyId(Long userId, UUID surveyId);
 }

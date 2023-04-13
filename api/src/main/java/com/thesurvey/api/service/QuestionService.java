@@ -8,7 +8,7 @@ import com.thesurvey.api.dto.request.QuestionBankUpdateRequestDto;
 import com.thesurvey.api.dto.request.QuestionRequestDto;
 import com.thesurvey.api.dto.request.SurveyRequestDto;
 import com.thesurvey.api.exception.ErrorMessage;
-import com.thesurvey.api.exception.ExceptionMapper;
+import com.thesurvey.api.exception.BadRequestExceptionMapper;
 import com.thesurvey.api.repository.QuestionBankRepository;
 import com.thesurvey.api.repository.QuestionRepository;
 import com.thesurvey.api.service.mapper.QuestionBankMapper;
@@ -61,26 +61,37 @@ public class QuestionService {
     }
 
     @Transactional
-    public void updateQuestion(
+    public void updateQuestion(UUID surveyId,
         List<QuestionBankUpdateRequestDto> questionBankUpdateRequestDtoList) {
         for (QuestionBankUpdateRequestDto questionBankUpdateRequestDto : questionBankUpdateRequestDtoList) {
             QuestionBank questionBank = questionBankRepository.findByQuestionBankId(
                     questionBankUpdateRequestDto.getQuestionBankId())
-                .orElseThrow(() -> new ExceptionMapper(ErrorMessage.QUESTION_BANK_NOT_FOUND));
+                .orElseThrow(() -> new BadRequestExceptionMapper(ErrorMessage.QUESTION_BANK_NOT_FOUND));
+
+            // check if the question is included in the survey.
+            if (questionRepository.notExistsBySurveyIdAndQuestionBankId(surveyId,
+                questionBank.getQuestionBankId())) {
+                throw new BadRequestExceptionMapper(ErrorMessage.NOT_SURVEY_QUESTION);
+            }
 
             if (questionBankUpdateRequestDto.getTitle() != null) {
-                questionBank.changeTitle(questionBankUpdateRequestDto.getTitle());
+                if (questionBankUpdateRequestDto.getTitle().isBlank()) {
+                    throw new BadRequestExceptionMapper(ErrorMessage.NO_ONLY_WHITESPACE);
+                }
+                questionBank.changeTitle(questionBankUpdateRequestDto.getTitle().trim());
             }
             if (questionBankUpdateRequestDto.getDescription() != null) {
-                questionBank.changeDescription(questionBankUpdateRequestDto.getDescription());
+                if (questionBankUpdateRequestDto.getDescription().isBlank()) {
+                    throw new BadRequestExceptionMapper(ErrorMessage.NO_ONLY_WHITESPACE);
+                }
+                questionBank.changeDescription(questionBankUpdateRequestDto.getDescription().trim());
             }
             if (questionBankUpdateRequestDto.getQuestionType() != null) {
                 questionBank.changeQuestionType(questionBankUpdateRequestDto.getQuestionType());
             }
-            questionBankRepository.save(questionBank);
 
             Question question = questionRepository.findByQuestionBankId(
-                questionBank.getQuestionBankId()).orElseThrow(() -> new ExceptionMapper(
+                questionBank.getQuestionBankId()).orElseThrow(() -> new BadRequestExceptionMapper(
                 ErrorMessage.QUESTION_NOT_FOUND));
 
             if (questionBankUpdateRequestDto.getIsRequired() != null) {
@@ -89,10 +100,8 @@ public class QuestionService {
             if (questionBankUpdateRequestDto.getQuestionNo() != null) {
                 question.changeQuestionNo(questionBankUpdateRequestDto.getQuestionNo());
             }
-            questionRepository.save(question);
-
             if (questionBankUpdateRequestDto.getQuestionOptions() != null) {
-                questionOptionService.updateQuestionOption(
+                questionOptionService.updateQuestionOption(questionBank.getQuestionBankId(),
                     questionBankUpdateRequestDto.getQuestionOptions());
             }
         }

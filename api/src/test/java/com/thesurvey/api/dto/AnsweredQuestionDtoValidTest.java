@@ -23,7 +23,7 @@ public class AnsweredQuestionDtoValidTest {
     public void testCorrectInput() {
         // given
         AnsweredQuestionDto answeredQuestionDto = AnsweredQuestionDto.builder()
-            .shortAnswer("This tis test short answer.")
+            .shortAnswer("This is test short answer.")
             .longAnswer("This is test long answer")
             .build();
 

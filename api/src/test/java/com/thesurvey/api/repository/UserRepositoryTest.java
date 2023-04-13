@@ -6,7 +6,7 @@ import com.thesurvey.api.UserTestFactory;
 import com.thesurvey.api.domain.User;
 import com.thesurvey.api.dto.request.UserRegisterRequestDto;
 import com.thesurvey.api.exception.ErrorMessage;
-import com.thesurvey.api.exception.ExceptionMapper;
+import com.thesurvey.api.exception.NotFoundExceptionMapper;
 import com.thesurvey.api.service.UserService;
 import com.thesurvey.api.service.mapper.UserMapper;
 import java.util.Optional;
@@ -44,7 +44,7 @@ public class UserRepositoryTest {
 
         // then
         User foundUser = userRepository.findByName(userRegisterRequestDto.getName())
-            .orElseThrow(() -> new ExceptionMapper(
+            .orElseThrow(() -> new NotFoundExceptionMapper(
                 ErrorMessage.USER_NAME_NOT_FOUND, userRegisterRequestDto.getName()));
 
         assertThat(foundUser.getName()).isEqualTo(userRegisterRequestDto.getName());
@@ -62,7 +62,7 @@ public class UserRepositoryTest {
 
         // then
         User foundUser = userRepository.findByEmail(userRegisterRequestDto.getEmail())
-            .orElseThrow(() -> new ExceptionMapper(
+            .orElseThrow(() -> new NotFoundExceptionMapper(
                 ErrorMessage.USER_NAME_NOT_FOUND, userRegisterRequestDto.getEmail()));
 
         assertThat(foundUser.getEmail()).isEqualTo(userRegisterRequestDto.getEmail());
