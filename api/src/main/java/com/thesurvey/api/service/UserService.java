@@ -3,6 +3,7 @@ package com.thesurvey.api.service;
 import com.thesurvey.api.domain.User;
 import com.thesurvey.api.dto.response.UserResponseDto;
 import com.thesurvey.api.dto.request.UserUpdateRequestDto;
+import com.thesurvey.api.exception.BadRequestExceptionMapper;
 import com.thesurvey.api.exception.ErrorMessage;
 import com.thesurvey.api.exception.NotFoundExceptionMapper;
 import com.thesurvey.api.repository.UserRepository;
@@ -64,7 +65,10 @@ public class UserService {
         }
 
         if (userUpdateRequestDto.getAddress() != null) {
-            user.changeAddress(userUpdateRequestDto.getAddress());
+            if (userUpdateRequestDto.getAddress().isBlank()) {
+                throw new BadRequestExceptionMapper(ErrorMessage.NO_ONLY_WHITESPACE);
+            }
+            user.changeAddress(userUpdateRequestDto.getAddress().trim());
         }
 
         return userMapper.toUserResponseDto(userRepository.save(user));

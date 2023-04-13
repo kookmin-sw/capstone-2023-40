@@ -137,10 +137,16 @@ public class SurveyService {
         validateUpdateSurvey(survey, surveyUpdateRequestDto);
 
         if (surveyUpdateRequestDto.getTitle() != null) {
+            if (surveyUpdateRequestDto.getTitle().isBlank()) {
+                throw new BadRequestExceptionMapper(ErrorMessage.NO_ONLY_WHITESPACE);
+            }
             survey.changeTitle(surveyUpdateRequestDto.getTitle().trim());
         }
 
         if (surveyUpdateRequestDto.getDescription() != null) {
+            if (surveyUpdateRequestDto.getDescription().isBlank()) {
+                throw new BadRequestExceptionMapper(ErrorMessage.NO_ONLY_WHITESPACE);
+            }
             survey.changeDescription(surveyUpdateRequestDto.getDescription().trim());
         }
 
@@ -151,8 +157,7 @@ public class SurveyService {
         if (surveyUpdateRequestDto.getEndedDate() != null) {
             survey.changeEndedDate(surveyUpdateRequestDto.getEndedDate());
         }
-
-        questionService.updateQuestion(surveyUpdateRequestDto.getQuestions());
+        questionService.updateQuestion(survey.getSurveyId(), surveyUpdateRequestDto.getQuestions());
         return surveyMapper.toSurveyResponseDto(survey);
     }
 

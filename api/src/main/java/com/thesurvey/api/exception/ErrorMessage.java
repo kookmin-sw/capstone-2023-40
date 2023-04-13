@@ -6,7 +6,7 @@ public enum ErrorMessage {
     USER_EMAIL_NOT_FOUND("이메일 {0} 에 해당하는 사용자를 찾을 수 없습니다."),
     FAILED_AUTHENTICATION("사용자 인증에 실패했습니다."),
     UNAUTHORIZED_REQUEST("인증되지 않은 요청입니다. 로그인 후 다시 시도해주세요."),
-    INVALID_CREDENTIALS("이름 혹은 비밀번호가 정확하지 않습니다."),
+    INVALID_CREDENTIALS("이메일 혹은 비밀번호가 정확하지 않습니다."),
     SURVEY_NOT_FOUND("설문조사 정보를 찾을 수 없습니다."),
     INTERNAL_ERROR("알 수 없는 오류가 발생했습니다. 다시 시도해주세요.\n{0}"),
     QUESTION_BANK_NOT_FOUND("존재하지 않는 질문입니다."),
@@ -25,7 +25,9 @@ public enum ErrorMessage {
     SURVEY_NOT_STARTED("아직 시작하지 않은 설문조사 입니다."),
     STARTEDDATE_ISBEFORE_CURRENTDATE("설문조사 시작 시간은 현재 시간 이후 이어야 합니다."),
     NO_HAVE_AUTHORITY("권한이 없습니다."),
+    NO_ONLY_WHITESPACE("공백만 입력할 수 없습니다."),
     CREATOR_CANNOT_ANSWER("설문조사 작성자는 자신의 설문조사에 응답할 수 없습니다."),
+    NOT_SURVEY_QUESTION("해당 설문조사의 질문이 아닙니다."),
     INVALID_REQUEST("유효하지 않은 요청입니다");
 
     private final String message;

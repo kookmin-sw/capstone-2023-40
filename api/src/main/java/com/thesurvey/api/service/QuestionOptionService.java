@@ -4,6 +4,7 @@ import com.thesurvey.api.domain.QuestionBank;
 import com.thesurvey.api.domain.QuestionOption;
 import com.thesurvey.api.dto.request.QuestionOptionUpdateRequestDto;
 import com.thesurvey.api.dto.request.QuestionRequestDto;
+import com.thesurvey.api.exception.BadRequestExceptionMapper;
 import com.thesurvey.api.exception.ErrorMessage;
 import com.thesurvey.api.exception.NotFoundExceptionMapper;
 import com.thesurvey.api.repository.QuestionOptionRepository;
@@ -37,19 +38,25 @@ public class QuestionOptionService {
     }
 
     @Transactional
-    public void updateQuestionOption(
+    public void updateQuestionOption(Long questionBankId,
         List<QuestionOptionUpdateRequestDto> questionOptionUpdateRequestDtoList) {
 
         for (QuestionOptionUpdateRequestDto questionOptionUpdateRequestDto : questionOptionUpdateRequestDtoList) {
-            QuestionOption questionOption = questionOptionRepository.findByQuestionOptionId(
-                questionOptionUpdateRequestDto.getOptionId()).orElseThrow(
+            QuestionOption questionOption = questionOptionRepository.findByQuestionOptionIdAndQuestionBankId(
+                questionOptionUpdateRequestDto.getOptionId(), questionBankId).orElseThrow(
                 () -> new NotFoundExceptionMapper(ErrorMessage.QUESTION_OPTION_NOT_FOUND,
                     questionOptionUpdateRequestDto.getOptionId()));
 
             if (questionOptionUpdateRequestDto.getOption() != null) {
+                if (questionOption.getOption().isBlank()) {
+                    throw new BadRequestExceptionMapper(ErrorMessage.NO_ONLY_WHITESPACE);
+                }
                 questionOption.changeOption(questionOptionUpdateRequestDto.getOption().trim());
             }
             if (questionOptionUpdateRequestDto.getDescription() != null) {
+                if (questionOptionUpdateRequestDto.getDescription().isBlank()) {
+                    throw new BadRequestExceptionMapper(ErrorMessage.NO_ONLY_WHITESPACE);
+                }
                 questionOption.changeDescription(questionOptionUpdateRequestDto.getDescription().trim());
             }
 
