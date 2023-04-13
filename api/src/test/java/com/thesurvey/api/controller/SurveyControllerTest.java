@@ -1,9 +1,11 @@
 package com.thesurvey.api.controller;
 
+import static com.thesurvey.api.SurveyTestFactory.getGlobalSurveyRequestDto;
+import static com.thesurvey.api.SurveyTestFactory.getSurveyUpdateRequestDto;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import com.thesurvey.api.SurveyTestFactory;
 import com.thesurvey.api.dto.request.SurveyRequestDto;
+import com.thesurvey.api.dto.request.SurveyUpdateRequestDto;
 import com.thesurvey.api.repository.ParticipationRepository;
 import com.thesurvey.api.repository.QuestionBankRepository;
 import com.thesurvey.api.repository.QuestionOptionRepository;
@@ -15,8 +17,10 @@ import com.thesurvey.api.service.SurveyService;
 import com.thesurvey.api.service.mapper.QuestionBankMapper;
 import com.thesurvey.api.service.mapper.QuestionMapper;
 import com.thesurvey.api.service.mapper.SurveyMapper;
+import java.util.UUID;
 import org.json.JSONObject;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -78,9 +82,12 @@ public class SurveyControllerTest extends BaseControllerTest {
     @Autowired
     AuthenticationManager authenticationManager;
 
-    @BeforeEach
-    void makeMockUser() throws Exception {
+    @BeforeAll
+    void mockRegister() throws Exception {
         mockRegister(globalRegisterDto, true);
+    }
+    @BeforeEach
+    void mockUserLogin() throws Exception {
         mockLogin(globalLoginDto, true);
     }
 
@@ -93,7 +100,7 @@ public class SurveyControllerTest extends BaseControllerTest {
     @WithMockUser
     public void testCreateSurvey() throws Exception {
         // given
-        SurveyRequestDto testSurveyRequestDto = SurveyTestFactory.getGlobalSurveyRequestDto();
+        SurveyRequestDto testSurveyRequestDto = getGlobalSurveyRequestDto();
 
         // when
         MvcResult result = mockCreateSurvey(testSurveyRequestDto);
@@ -103,47 +110,51 @@ public class SurveyControllerTest extends BaseControllerTest {
         assertEquals(content.get("title"), testSurveyRequestDto.getTitle());
     }
 
-    // FIXME: pass individually test but fail when run together.
-//    @Test
-//    @WithMockUser
-//    public void testUpdateSurvey() throws Exception {
-//        UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(
-//            globalLoginDto.getEmail(), globalLoginDto.getPassword());
-//        Authentication authentication = authenticationManager.authenticate(authRequest);
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
-//        SurveyRequestDto testSurveyRequestDto = surveyTestFactory.getGlobalSurveyRequestDto();
-//        SurveyResponseDto testSurveyResponseDto = surveyService.createSurvey(authentication,
-//            testSurveyRequestDto);
-//        SurveyUpdateRequestDto testSurveyUpdateRequestDto = surveyTestFactory.getSurveyUpdateRequestDto(
-//            testSurveyResponseDto.getSurveyId());
-//
-//        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.patch("/surveys")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(objectMapper.writeValueAsString(testSurveyUpdateRequestDto)))
-//            .andExpect(status().isOk());
-//    }
+    @Test
+    @WithMockUser
+    public void testUpdateSurvey() throws Exception {
+        // given
+        SurveyRequestDto testSurveyRequestDto = getGlobalSurveyRequestDto();
+        MvcResult resultCreatedSurvey = mockCreateSurvey(testSurveyRequestDto);
+        JSONObject createdSurveyContent = new JSONObject(resultCreatedSurvey.getResponse().getContentAsString());
+        SurveyUpdateRequestDto testSurveyUpdateRequestDto = getSurveyUpdateRequestDto(
+            UUID.fromString(String.valueOf(createdSurveyContent.get("surveyId"))));
+
+        // when
+        MvcResult resultActions = mockMvc.perform(MockMvcRequestBuilders.patch("/surveys")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(testSurveyUpdateRequestDto)))
+            .andExpect(status().isOk())
+            .andReturn();
+        JSONObject content = new JSONObject(resultActions.getResponse().getContentAsString());
+
+        // then
+        assertEquals(content.get("title"), testSurveyUpdateRequestDto.getTitle());
+    }
 
     @Test
     @WithMockUser
     public void testDeleteSurvey() throws Exception {
         // given
-        MvcResult mvcResult = mockCreateSurvey(SurveyTestFactory.getGlobalSurveyRequestDto());
+        MvcResult mvcResult = mockCreateSurvey(getGlobalSurveyRequestDto());
         JSONObject content = new JSONObject(mvcResult.getResponse().getContentAsString());
         String testSurveyId = content.get("surveyId").toString();
 
         // when
-        ResultActions resultActions = mockMvc.perform(
+        mockMvc.perform(
                 MockMvcRequestBuilders.delete("/surveys/{surveyId}", testSurveyId))
             .andExpect(status().isOk());
+
         // FIXME : should null, but returned not null.
-        // assertNull(surveyRepository.findBySurveyId(UUID.fromString(testSurveyId)));
+        // then
+//        assertNull(surveyRepository.findBySurveyId(UUID.fromString(testSurveyId)));
     }
 
     @Test
     @WithMockUser
     public void testGetSurvey() throws Exception {
         // given
-        SurveyRequestDto testSurveyRequestDto = SurveyTestFactory.getGlobalSurveyRequestDto();
+        SurveyRequestDto testSurveyRequestDto = getGlobalSurveyRequestDto();
         MvcResult createSurveyResult = mockCreateSurvey(testSurveyRequestDto);
         JSONObject content = new JSONObject(createSurveyResult.getResponse().getContentAsString());
         String testSurveyId = content.get("surveyId").toString();

@@ -81,16 +81,25 @@ public class SurveyTestFactory {
     public static SurveyUpdateRequestDto getSurveyUpdateRequestDto(UUID surveyId) {
 
         List<QuestionOptionUpdateRequestDto> globalQuestionOptionUpdateDtoList = Stream.of(
-                QuestionOptionUpdateRequestDto.builder().optionId(1L).option("option 1")
+                QuestionOptionUpdateRequestDto.builder().optionId(7L).option("option 1")
                     .description("option 1").build(),
-                QuestionOptionUpdateRequestDto.builder().optionId(2L).option("option 2")
+                QuestionOptionUpdateRequestDto.builder().optionId(8L).option("option 2")
                     .description("option 2").build(),
-                QuestionOptionUpdateRequestDto.builder().optionId(3L).option("option 3")
+                QuestionOptionUpdateRequestDto.builder().optionId(9L).option("option 3")
+                    .description("option 3").build())
+            .collect(Collectors.toList());
+
+        List<QuestionOptionUpdateRequestDto> globalQuestionOptionUpdateDtoList2 = Stream.of(
+                QuestionOptionUpdateRequestDto.builder().optionId(10L).option("option 4")
+                    .description("option 1").build(),
+                QuestionOptionUpdateRequestDto.builder().optionId(11L).option("option 5")
+                    .description("option 2").build(),
+                QuestionOptionUpdateRequestDto.builder().optionId(12L).option("option 6")
                     .description("option 3").build())
             .collect(Collectors.toList());
 
         QuestionBankUpdateRequestDto globalSingleChoiceDto = QuestionBankUpdateRequestDto.builder()
-            .questionBankId(1L)
+            .questionBankId(5L)
             .title("A format to be saved to QuestionBank1")
             .description("Question1's description")
             .questionType(QuestionType.SINGLE_CHOICE)
@@ -100,17 +109,17 @@ public class SurveyTestFactory {
             .build();
 
         QuestionBankUpdateRequestDto globalMultipleChoiceDto = QuestionBankUpdateRequestDto.builder()
-            .questionBankId(2L)
+            .questionBankId(6L)
             .title("A format to be saved to QuestionBank2")
             .description("Question2's description")
             .questionType(QuestionType.MULTIPLE_CHOICE)
-            .questionOptions(globalQuestionOptionUpdateDtoList)
+            .questionOptions(globalQuestionOptionUpdateDtoList2)
             .isRequired(true)
             .questionNo(2)
             .build();
 
         QuestionBankUpdateRequestDto globalShortAnswerDto = QuestionBankUpdateRequestDto.builder()
-            .questionBankId(3L)
+            .questionBankId(7L)
             .title("A format to be saved to QuestionBank3")
             .description("Question3's description")
             .questionType(QuestionType.SHORT_ANSWER)
@@ -119,7 +128,7 @@ public class SurveyTestFactory {
             .build();
 
         QuestionBankUpdateRequestDto globalLongAnswerDto = QuestionBankUpdateRequestDto.builder()
-            .questionBankId(4L)
+            .questionBankId(8L)
             .title("A format to be saved to QuestionBank4")
             .description("Question4's description")
             .questionType(QuestionType.LONG_ANSWER)
