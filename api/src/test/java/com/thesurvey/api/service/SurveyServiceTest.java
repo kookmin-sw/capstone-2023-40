@@ -155,7 +155,7 @@ public class SurveyServiceTest {
             Optional.ofNullable(testUser));
         when(participationRepository.existsByUserIdAndSurveyId(any(), any())).thenReturn(true);
         when(surveyMapper.toSurveyResponseDto(any())).thenReturn(updatedSurveyDto);
-        doNothing().when(questionService).updateQuestion(any());
+        doNothing().when(questionService).updateQuestion(any(), any());
 
         // when
         SurveyResponseDto resultSurveyDto = surveyService.updateSurvey(authentication,

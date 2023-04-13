@@ -61,17 +61,29 @@ public class QuestionService {
     }
 
     @Transactional
-    public void updateQuestion(
+    public void updateQuestion(UUID surveyId,
         List<QuestionBankUpdateRequestDto> questionBankUpdateRequestDtoList) {
         for (QuestionBankUpdateRequestDto questionBankUpdateRequestDto : questionBankUpdateRequestDtoList) {
             QuestionBank questionBank = questionBankRepository.findByQuestionBankId(
                     questionBankUpdateRequestDto.getQuestionBankId())
                 .orElseThrow(() -> new BadRequestExceptionMapper(ErrorMessage.QUESTION_BANK_NOT_FOUND));
 
+            // check if the question is included in the survey.
+            if (questionRepository.notExistsBySurveyIdAndQuestionBankId(surveyId,
+                questionBank.getQuestionBankId())) {
+                throw new BadRequestExceptionMapper(ErrorMessage.NOT_SURVEY_QUESTION);
+            }
+
             if (questionBankUpdateRequestDto.getTitle() != null) {
+                if (questionBankUpdateRequestDto.getTitle().isBlank()) {
+                    throw new BadRequestExceptionMapper(ErrorMessage.NO_ONLY_WHITESPACE);
+                }
                 questionBank.changeTitle(questionBankUpdateRequestDto.getTitle().trim());
             }
             if (questionBankUpdateRequestDto.getDescription() != null) {
+                if (questionBankUpdateRequestDto.getDescription().isBlank()) {
+                    throw new BadRequestExceptionMapper(ErrorMessage.NO_ONLY_WHITESPACE);
+                }
                 questionBank.changeDescription(questionBankUpdateRequestDto.getDescription().trim());
             }
             if (questionBankUpdateRequestDto.getQuestionType() != null) {
@@ -89,7 +101,7 @@ public class QuestionService {
                 question.changeQuestionNo(questionBankUpdateRequestDto.getQuestionNo());
             }
             if (questionBankUpdateRequestDto.getQuestionOptions() != null) {
-                questionOptionService.updateQuestionOption(
+                questionOptionService.updateQuestionOption(questionBank.getQuestionBankId(),
                     questionBankUpdateRequestDto.getQuestionOptions());
             }
         }

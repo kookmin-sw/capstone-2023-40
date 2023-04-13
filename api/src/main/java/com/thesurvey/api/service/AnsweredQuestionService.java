@@ -15,6 +15,7 @@ import com.thesurvey.api.exception.NotFoundExceptionMapper;
 import com.thesurvey.api.repository.AnsweredQuestionRepository;
 import com.thesurvey.api.repository.ParticipationRepository;
 import com.thesurvey.api.repository.QuestionBankRepository;
+import com.thesurvey.api.repository.QuestionRepository;
 import com.thesurvey.api.repository.SurveyRepository;
 import com.thesurvey.api.repository.UserRepository;
 import com.thesurvey.api.service.mapper.AnsweredQuestionMapper;
@@ -37,18 +38,20 @@ public class AnsweredQuestionService {
     private final QuestionBankRepository questionBankRepository;
     private final AnsweredQuestionMapper answeredQuestionMapper;
     private final ParticipationRepository participationRepository;
+    private final QuestionRepository questionRepository;
 
     public AnsweredQuestionService(UserRepository userRepository, SurveyRepository surveyRepository,
         AnsweredQuestionRepository answeredQuestionRepository,
         QuestionBankRepository questionBankRepository,
         AnsweredQuestionMapper answeredQuestionMapper,
-        ParticipationRepository participationRepository) {
+        ParticipationRepository participationRepository, QuestionRepository questionRepository) {
         this.userRepository = userRepository;
         this.surveyRepository = surveyRepository;
         this.answeredQuestionRepository = answeredQuestionRepository;
         this.questionBankRepository = questionBankRepository;
         this.answeredQuestionMapper = answeredQuestionMapper;
         this.participationRepository = participationRepository;
+        this.questionRepository = questionRepository;
     }
 
     @Transactional
@@ -85,6 +88,12 @@ public class AnsweredQuestionService {
             QuestionBank questionBank = questionBankRepository.findByQuestionBankId(
                     answeredQuestionDto.getQuestionBankId())
                 .orElseThrow(() -> new NotFoundExceptionMapper(ErrorMessage.QUESTION_BANK_NOT_FOUND));
+
+            // check if the question is included in the survey.
+            if (questionRepository.notExistsBySurveyIdAndQuestionBankId(survey.getSurveyId(),
+                questionBank.getQuestionBankId())) {
+                throw new BadRequestExceptionMapper(ErrorMessage.NOT_SURVEY_QUESTION);
+            }
 
             if (answeredQuestionDto.getMultipleChoices() != null
                 && answeredQuestionDto.getMultipleChoices().size() != 0) {

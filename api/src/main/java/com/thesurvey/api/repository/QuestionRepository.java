@@ -17,4 +17,7 @@ public interface QuestionRepository extends JpaRepository<Question, QuestionId> 
 
     @Query("SELECT q FROM Question q WHERE q.questionBank.questionBankId = :questionBankId")
     Optional<Question> findByQuestionBankId(Long questionBankId);
+
+    @Query("SELECT CASE WHEN COUNT(q) < 0 THEN true ELSE false END FROM Question q WHERE q.questionId.surveyId = :surveyId AND q.questionId.questionBankId = :questionBankId")
+    boolean notExistsBySurveyIdAndQuestionBankId(UUID surveyId, Long questionBankId);
 }
