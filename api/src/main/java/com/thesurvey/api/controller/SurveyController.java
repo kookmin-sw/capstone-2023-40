@@ -93,9 +93,9 @@ public class SurveyController {
         @ApiResponse(code = 500, message = "서버 내부 오류")
     })
     @PatchMapping
-    public ResponseEntity<SurveyResponseDto> updateSurvey(
+    public ResponseEntity<SurveyResponseDto> updateSurvey(Authentication authentication,
         @Valid @RequestBody SurveyUpdateRequestDto surveyUpdateRequestDto) {
-        return ResponseEntity.ok(surveyService.updateSurvey(surveyUpdateRequestDto));
+        return ResponseEntity.ok(surveyService.updateSurvey(authentication, surveyUpdateRequestDto));
     }
 
     @ApiOperation(value = "설문조사 삭제", notes = "파라미터로 전달 받은 UUID에 해당하는 설문조사를 삭제합니다.")
@@ -107,8 +107,8 @@ public class SurveyController {
         @ApiResponse(code = 404, message = "요청한 리소스 찾을 수 없음")
     })
     @DeleteMapping("/{surveyId}")
-    public ResponseEntity<Void> deleteSurvey(@PathVariable("surveyId") String surveyId) {
-        surveyService.deleteSurvey(UUID.fromString(surveyId));
+    public ResponseEntity<Void> deleteSurvey(Authentication authentication, @PathVariable("surveyId") String surveyId) {
+        surveyService.deleteSurvey(authentication, UUID.fromString(surveyId));
         return ResponseEntity.ok().build();
     }
 

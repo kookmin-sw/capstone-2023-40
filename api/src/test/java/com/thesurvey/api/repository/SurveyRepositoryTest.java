@@ -43,9 +43,8 @@ public class SurveyRepositoryTest {
         // when
         surveyRepository.save(oldSurvey);
         surveyRepository.save(latestSurvey);
-
-        // then
         List<Survey> resultList = surveyRepository.findAllInDescendingOrder();
+        // then
         assertEquals(resultList.get(0).getTitle(), latestSurvey.getTitle());
 
     }

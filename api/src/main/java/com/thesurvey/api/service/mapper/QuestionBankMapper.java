@@ -24,9 +24,9 @@ public class QuestionBankMapper {
 
     public QuestionBank toQuestionBank(QuestionRequestDto questionRequestDto) {
         return QuestionBank.builder()
-            .title(questionRequestDto.getTitle())
+            .title(questionRequestDto.getTitle().trim())
             .questionType(questionRequestDto.getQuestionType())
-            .description(questionRequestDto.getDescription())
+            .description(questionRequestDto.getDescription().trim())
             .build();
     }
 

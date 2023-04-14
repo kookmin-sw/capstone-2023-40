@@ -1,7 +1,7 @@
 package com.thesurvey.api.config;
 
 import com.thesurvey.api.exception.ErrorMessage;
-import com.thesurvey.api.exception.ExceptionMapper;
+import com.thesurvey.api.exception.NotFoundExceptionMapper;
 import com.thesurvey.api.repository.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +24,7 @@ public class ApplicationConfiguration {
     @Bean
     public UserDetailsService userDetailsService() {
         return userEmail -> userRepository.findByEmail(userEmail)
-            .orElseThrow(() -> new ExceptionMapper(ErrorMessage.USER_EMAIL_NOT_FOUND, userEmail));
+            .orElseThrow(() -> new NotFoundExceptionMapper(ErrorMessage.USER_EMAIL_NOT_FOUND, userEmail));
     }
 
     @Bean
