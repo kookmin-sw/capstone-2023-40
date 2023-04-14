@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import Header from '../../components/Header';
 import SurveyPageResultModal from '../../components/Modal/SurveyPageResultModal';
 import ChoiceAnswerForm from '../../components/SurveyForm/ChoiceAnswerForm';
+import { InputCheck } from '../../components/SurveyForm/InputCheck';
 import SubjectiveAnswerForm from '../../components/SurveyForm/SubjectiveAnswerForm';
 import SurveyDataForm from '../../components/SurveyForm/SurveyDataForm';
 import { useTheme } from '../../hooks/useTheme';
@@ -122,6 +123,11 @@ const SubmitButton = styled.button.attrs({ type: 'submit' })`
   }
 `;
 
+interface InputCheckResult {
+  message: string;
+  errorIndex: number | Array<number> | null;
+}
+
 // TODO: Drag and drop questions order
 export default function SurveyFormPage() {
   const [theme, toggleTheme] = useTheme();
@@ -149,10 +155,15 @@ export default function SurveyFormPage() {
   }, [recentCreate]);
 
   const handleSubmit = () => {
-    // TODO: Check surveyData is valid
-    // TODO: submit surveyData to server
-    console.log(surveyData);
-    setResultModalOpen(true);
+    const checkResult: InputCheckResult = InputCheck({ surveyData });
+    if (checkResult.message === 'NO_OPTION') {
+      console.log(checkResult.message);
+    } else if (checkResult.message === 'NO_QUESTION') {
+      console.log(checkResult.message);
+    } else {
+      // TODO: submit surveyData to server
+      setResultModalOpen(false);
+    }
   };
 
   const addQuestionUnderId = (questionId: number) => {
