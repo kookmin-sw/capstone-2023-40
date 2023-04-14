@@ -83,7 +83,9 @@ public class SessionFilter extends OncePerRequestFilter {
             String email = authentication.getName();
             String password = authentication.getCredentials().toString();
             User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UnauthorizedRequestExceptionMapper(ErrorMessage.USER_EMAIL_NOT_FOUND, email));
+                .orElseThrow(
+                    () -> new UnauthorizedRequestExceptionMapper(ErrorMessage.USER_EMAIL_NOT_FOUND,
+                        email));
 
             if (!user.getPassword().equals(password)) {
                 throw new UnauthorizedRequestExceptionMapper(ErrorMessage.INVALID_CREDENTIALS);
