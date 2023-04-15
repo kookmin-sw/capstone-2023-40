@@ -252,7 +252,7 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
   const logoutClick = () => {
     dispatch(setLogin(!isLogin));
     dispatch(setSubPageOpen(!isSubPageOpen));
-    navigate('../../../login');
+    navigate('../../../');
   };
 
   const navigateMypage = () => {
