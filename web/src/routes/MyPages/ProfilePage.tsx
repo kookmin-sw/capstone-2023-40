@@ -162,6 +162,9 @@ export default function MyPage() {
     const { name, value } = e.currentTarget;
     if (e.type === 'change' || e.type === 'Enter' || e.type === 'blur') {
       switch (name) {
+        case 'point':
+          dispatch({ type: 'CHANGE_POINT', payload: value });
+          break;
         case 'password':
           dispatch({ type: 'CHANGE_PASSWORD', payload: value });
           break;

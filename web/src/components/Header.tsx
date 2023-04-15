@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, NavigateOptions } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
 
 import DarkModeIcon from '../assets/darkmode.webp';
@@ -242,7 +242,19 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
   const isLogin = useSelector((state: RootState) => state.header.isLogin);
   const isSubPageOpen = useSelector((state: RootState) => state.header.isSubPageOpen);
   const dispatch = useDispatch();
-  console.log(isLogin);
+
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      if (isSubPageOpen === true) {
+        event.preventDefault(); // 경고 메시지 표시
+        dispatch(setSubPageOpen(false));
+      }
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
 
   const handleClick = () => {
     setIsTransitionEnabled(true);
