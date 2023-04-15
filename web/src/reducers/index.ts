@@ -5,7 +5,7 @@ import storage from 'redux-persist/lib/storage';
 import { headerReducer } from './header';
 
 /**
- * Maintaining login status through redux
+ * Maintaining all status through redux
  * To prevent state initialization with a refresh
  */
 export const persistConfig = {
