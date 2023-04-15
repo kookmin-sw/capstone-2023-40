@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
+import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { Navigate, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -100,8 +101,8 @@ const Button = styled.button`
 export default function LoginPage() {
   const [theme, toggleTheme] = useTheme();
   const navigate = useNavigate();
-  const [inputEmail, setInputEmail] = useState('');
-  const [inputPassword, setInputPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [isAlertModal, setIsAlertModal] = useState<boolean>(false);
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
@@ -112,12 +113,30 @@ export default function LoginPage() {
     event.preventDefault();
   };
 
-  // It will have to Add connect User DataBase - Email & Password
-  const checkLogin = (email: string, password: string) => {
+  // TODO: It will have to Add connect User DataBase - Email & Password
+  const loginFunction = () => {
+    // Check isEmpty Email or Password
     if (isEmptyString(email) || isEmptyString(password)) {
       setTitle('로그인 오류');
       setText('아이디 또는 비밀번호를 확인해주세요.');
     } else {
+      // const loginRequestBody = {
+      //   email,
+      //   password,
+      // };
+      // axios.post(`https://capstone-mock-api.fly.dev/api/auth/login`, loginRequestBody).then((res) => {
+      //   console.log(res.data.message);
+      //   // TODO: add to other response [ 존재하지 않는 email, Password가 틀림 ]
+      //   if (res.data.code === 200) {
+      //     setTitle('로그인 성공');
+      //     setText('로그인에 성공했습니다!');
+      //     dispatch(setLogin(!isLogin));
+      //     navigate('../../');
+      //   } else {
+      //     setTitle('로그인 오류');
+      //     setText('아이디 또는 비밀번호를 확인해주세요.');
+      //   }
+      // });
       setTitle('로그인 성공');
       setText('로그인에 성공했습니다!');
       dispatch(setLogin(!isLogin));
@@ -140,8 +159,8 @@ export default function LoginPage() {
           <Input
             name="email"
             type="email"
-            value={inputEmail}
-            onChange={(e) => setInputEmail(e.target.value)}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             theme={theme}
             placeholder="이메일을 입력하세요."
           />
@@ -149,12 +168,12 @@ export default function LoginPage() {
           <Input
             name="password"
             type="password"
-            value={inputPassword}
-            onChange={(e) => setInputPassword(e.target.value)}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             theme={theme}
             placeholder="비밀번호를 입력하세요."
           />
-          <Button onClick={() => checkLogin(inputEmail, inputPassword)} theme={theme}>
+          <Button onClick={() => loginFunction()} theme={theme}>
             로그인
           </Button>
           {isAlertModal && (

@@ -24,6 +24,7 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'global-require': 'off',
     '@typescript-eslint/no-var-requires': 'off',
+    'import/no-extraneous-dependencies': 'off',
     'no-underscore-dangle': 'off',
     'object-shorthand': 'off',
     'react/jsx-props-no-spreading': 'warn',

@@ -1,5 +1,3 @@
-import React from 'react';
-
 const SETLOGIN = 'SETLOGIN' as const;
 const SETSUBPAGE = 'SETSUBPAGE' as const;
 
@@ -7,6 +5,7 @@ export const setLogin = (payload: boolean) => ({
   type: SETLOGIN,
   payload: !payload,
 });
+
 export const setSubPageOpen = (payload: boolean) => ({
   type: SETSUBPAGE,
   payload: !payload,
@@ -15,7 +14,7 @@ export const setSubPageOpen = (payload: boolean) => ({
 export type HeaderAction = ReturnType<typeof setLogin> | ReturnType<typeof setSubPageOpen>;
 
 export const initialAction: HeaderAction = {
-  type: 'SETLOGIN',
+  type: 'SETSUBPAGE',
   payload: false,
 };
 
@@ -23,16 +22,16 @@ export interface HeaderState {
   isLogin: boolean;
   isSubPageOpen: boolean;
 }
+
 export const initialState: HeaderState = {
   isLogin: false,
   isSubPageOpen: false,
 };
 
 /**
- *
- * @param action
- * @param state
- * @returns
+ * @param action setLogin & setSubPageOpen in HeaderAction
+ * @param state Check Login & Opened SubPage
+ * @returns state(Login & SubPage)
  */
 export const headerReducer = (state: HeaderState = initialState, action: HeaderAction = initialAction): HeaderState => {
   switch (action.type) {

@@ -4,20 +4,20 @@ import 'pace-js/themes/red/pace-theme-minimal.css';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import { createStore } from 'redux';
+import { PersistGate } from 'redux-persist/integration/react';
 
 import App from './App';
-import rootReducer from './reducers';
+import { store, persistor } from './reducers/store';
 import reportWebVitals from './reportWebVitals';
-
-const store = createStore(rootReducer);
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>
     <BrowserRouter>
       <Provider store={store}>
-        <App />
+        <PersistGate persistor={persistor}>
+          <App />
+        </PersistGate>
       </Provider>
     </BrowserRouter>
   </React.StrictMode>

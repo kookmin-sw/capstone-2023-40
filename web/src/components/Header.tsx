@@ -7,8 +7,8 @@ import styled, { DefaultTheme } from 'styled-components';
 import DarkModeIcon from '../assets/darkmode.webp';
 import LightModeIcon from '../assets/lightmode.webp';
 import { Icons } from '../assets/svg';
-import { RootState } from '../reducers';
 import { setLogin, setSubPageOpen } from '../reducers/header';
+import { RootState } from '../reducers/index';
 
 const HeaderContainer = styled.header<{ isTransitionEnabled: boolean }>`
   position: sticky;
@@ -242,6 +242,7 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
   const isLogin = useSelector((state: RootState) => state.header.isLogin);
   const isSubPageOpen = useSelector((state: RootState) => state.header.isSubPageOpen);
   const dispatch = useDispatch();
+  console.log(isLogin);
 
   const handleClick = () => {
     setIsTransitionEnabled(true);
