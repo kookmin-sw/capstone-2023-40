@@ -7,7 +7,6 @@ import styled from 'styled-components';
 import Header from '../../components/Header';
 import SurveyPageResultModal from '../../components/Modal/SurveyPageResultModal';
 import ChoiceAnswerForm from '../../components/SurveyForm/ChoiceAnswerForm';
-import { InputCheck } from '../../components/SurveyForm/InputCheck';
 import SubjectiveAnswerForm from '../../components/SurveyForm/SubjectiveAnswerForm';
 import SurveyDataForm from '../../components/SurveyForm/SurveyDataForm';
 import { useTheme } from '../../hooks/useTheme';
@@ -125,8 +124,63 @@ const SubmitButton = styled.button.attrs({ type: 'submit' })`
 
 interface InputCheckResult {
   message: string;
-  errorIndex: number | Array<number> | null;
+  errorIndex: number;
 }
+
+const InputCheck = (surveyData: SurveyCreateRequest): InputCheckResult => {
+  let err = -1;
+  const currentDate = new Date();
+  const startedDate = new Date(surveyData.startedDate);
+  const endedDate = new Date(surveyData.endedDate);
+
+  if (startedDate < currentDate) {
+    return {
+      message: 'EARLY_START',
+      errorIndex: err,
+    };
+  }
+
+  if (endedDate < startedDate) {
+    return {
+      message: 'EARLY_END',
+      errorIndex: err,
+    };
+  }
+
+  if (surveyData.questions.length === 0) {
+    return {
+      message: 'NO_QUESTION',
+      errorIndex: err,
+    };
+  }
+
+  for (let i = 0; i < surveyData.questions.length; i += 1) {
+    if (
+      surveyData.questions[i].questionType === QuestionType.SINGLE_CHOICE ||
+      surveyData.questions[i].questionType === QuestionType.MULTIPLE_CHOICE
+    ) {
+      if (
+        typeof surveyData.questions[i].questionOptions === 'undefined' ||
+        surveyData.questions[i].questionOptions?.length === 0
+      ) {
+        err = surveyData.questions[i].questionNo;
+        break;
+      }
+    }
+  }
+
+  if (err !== -1) {
+    return {
+      message: 'NO_OPTION',
+      errorIndex: err,
+    };
+  }
+
+  return {
+    message: 'OK',
+    errorIndex: err,
+  };
+};
 
 // TODO: Drag and drop questions order
 export default function SurveyFormPage() {
@@ -144,25 +198,56 @@ export default function SurveyFormPage() {
     questions: [],
   });
 
-  const scrollToRecentCreateQuestion = () => {
-    if (typeof recentCreate !== 'undefined') {
-      questionRefs.current[recentCreate].scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'smooth' });
-    }
+  const scrollToQuestion = (domIndex: number) => {
+    questionRefs.current[domIndex].scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'smooth' });
+  };
+
+  const turnOnAlertLabel = (domIndex: number) => {
+    questionRefs.current[domIndex].style.borderLeft = '15px solid #FF5733';
+  };
+
+  const turnOffAlertLabel = (domIndex: number) => {
+    questionRefs.current[domIndex].style.borderLeft = `15px solid ${theme.colors.primary}`;
+  };
+
+  // TODO: logic must be improve
+  const setAlertLabel = (errorIndex: number) => {
+    surveyData.questions.forEach((question: QuestionCreateRequest) => {
+      if (question.questionNo === errorIndex) {
+        turnOnAlertLabel(question.questionNo);
+      } else {
+        turnOffAlertLabel(question.questionNo);
+      }
+    });
   };
 
   useEffect(() => {
-    scrollToRecentCreateQuestion();
+    if (typeof recentCreate !== 'undefined') {
+      scrollToQuestion(recentCreate);
+    }
   }, [recentCreate]);
 
   const handleSubmit = () => {
-    const checkResult: InputCheckResult = InputCheck({ surveyData });
-    if (checkResult.message === 'NO_OPTION') {
-      console.log(checkResult.message);
-    } else if (checkResult.message === 'NO_QUESTION') {
-      console.log(checkResult.message);
-    } else {
-      // TODO: submit surveyData to server
-      setResultModalOpen(false);
+    // TODO: show error modal instaed of console.log
+    const checkResult: InputCheckResult = InputCheck(surveyData);
+    switch (checkResult.message) {
+      case 'NO_QUESTION':
+        console.log(checkResult.message);
+        break;
+      case 'NO_OPTION':
+        setAlertLabel(checkResult.errorIndex);
+        scrollToQuestion(checkResult.errorIndex);
+        console.log(checkResult.message);
+        break;
+      case 'EARLY_START':
+        console.log(checkResult.message);
+        break;
+      case 'EARLY_END':
+        console.log(checkResult.message);
+        break;
+      default:
+        // TODO: submit surveyData to server
+        setResultModalOpen(false);
     }
   };
 
