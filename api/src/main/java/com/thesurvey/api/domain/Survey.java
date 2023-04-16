@@ -1,5 +1,7 @@
 package com.thesurvey.api.domain;
 
+import com.thesurvey.api.exception.BadRequestExceptionMapper;
+import com.thesurvey.api.exception.ErrorMessage;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -11,6 +13,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Future;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,6 +41,7 @@ public class Survey extends BaseTimeEntity {
     )
     private List<Participation> participations;
 
+    @Size(min = 1)
     @OneToMany(
         mappedBy = "survey",
         cascade = CascadeType.PERSIST,
@@ -41,22 +49,35 @@ public class Survey extends BaseTimeEntity {
     )
     private List<Question> questions;
 
+    @NotNull
+    @Positive
+    @Column(name = "author_id", updatable = false, nullable = false)
+    private Long authorId;
+
+    @NotBlank
+    @Size(max = 100)
     @Column(name = "title", nullable = false)
     private String title;
 
+    @NotBlank
+    @Size(max = 255)
     @Column(name = "description", nullable = true)
     private String description;
 
-    @Column(name = "started_date", nullable = true)
+    @NotNull
+    @Column(name = "started_date", nullable = false)
     private LocalDateTime startedDate;
 
-    @Column(name = "ended_date", nullable = true)
+    @NotNull
+    @Future
+    @Column(name = "ended_date", nullable = false)
     private LocalDateTime endedDate;
 
     @Builder
-    public Survey(String title, List<Question> questions, List<Participation> participations,
-        String description,
-        LocalDateTime startedDate, LocalDateTime endedDate) {
+    public Survey(Long authorId, String title, List<Question> questions,
+        List<Participation> participations, String description, LocalDateTime startedDate,
+        LocalDateTime endedDate) {
+        this.authorId = authorId;
         this.title = title;
         this.participations = participations;
         this.questions = questions;
@@ -65,9 +86,17 @@ public class Survey extends BaseTimeEntity {
         this.endedDate = endedDate;
     }
 
-    public void changeTitle(String title) { this.title = title; }
+    public void changeTitle(String title) {
+        if (title.length() > 100) {
+            throw new BadRequestExceptionMapper(ErrorMessage.MAX_SIZE_EXCEEDED, "제목", 100);
+        }
+        this.title = title;
+    }
 
     public void changeDescription(String description) {
+        if (description.length() > 255) {
+            throw new BadRequestExceptionMapper(ErrorMessage.MAX_SIZE_EXCEEDED, "설명", 255);
+        }
         this.description = description;
     }
 

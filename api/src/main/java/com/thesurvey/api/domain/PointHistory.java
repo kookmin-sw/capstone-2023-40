@@ -32,10 +32,10 @@ public class PointHistory {
     private User user;
 
     @Column(name = "point")
-    private int point;
+    private Integer point;
 
     @Builder
-    public PointHistory(User user, LocalDateTime transactionDate, int point) {
+    public PointHistory(User user, LocalDateTime transactionDate, Integer point) {
         this.user = user;
         this.point = point;
         this.transactionDate = transactionDate;

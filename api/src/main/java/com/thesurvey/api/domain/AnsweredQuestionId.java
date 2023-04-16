@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class AnsweredQuestionId implements Serializable {
 
     @Column(name = "answer_id")
-    private UUID answerId;
+    private UUID answerId = UUID.randomUUID();
 
     @Column(name = "user_id")
     private Long userId;
@@ -29,7 +29,6 @@ public class AnsweredQuestionId implements Serializable {
 
     @Builder
     public AnsweredQuestionId(Long userId, UUID surveyId, Long questionBankId) {
-        this.answerId = UUID.randomUUID();
         this.userId = userId;
         this.surveyId = surveyId;
         this.questionBankId = questionBankId;
