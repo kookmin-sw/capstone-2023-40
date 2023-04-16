@@ -4,10 +4,10 @@ import com.thesurvey.api.domain.QuestionBank;
 import com.thesurvey.api.domain.QuestionOption;
 import com.thesurvey.api.dto.request.QuestionOptionUpdateRequestDto;
 import com.thesurvey.api.dto.request.QuestionRequestDto;
-import com.thesurvey.api.exception.BadRequestExceptionMapper;
 import com.thesurvey.api.exception.ErrorMessage;
 import com.thesurvey.api.exception.NotFoundExceptionMapper;
 import com.thesurvey.api.repository.QuestionOptionRepository;
+import com.thesurvey.api.util.StringUtil;
 import com.thesurvey.api.service.mapper.QuestionOptionMapper;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,19 +47,10 @@ public class QuestionOptionService {
                 () -> new NotFoundExceptionMapper(ErrorMessage.QUESTION_OPTION_NOT_FOUND,
                     questionOptionUpdateRequestDto.getOptionId()));
 
-            if (questionOptionUpdateRequestDto.getOption() != null) {
-                if (questionOption.getOption().isBlank()) {
-                    throw new BadRequestExceptionMapper(ErrorMessage.NO_ONLY_WHITESPACE);
-                }
-                questionOption.changeOption(questionOptionUpdateRequestDto.getOption().trim());
-            }
-            if (questionOptionUpdateRequestDto.getDescription() != null) {
-                if (questionOptionUpdateRequestDto.getDescription().isBlank()) {
-                    throw new BadRequestExceptionMapper(ErrorMessage.NO_ONLY_WHITESPACE);
-                }
-                questionOption.changeDescription(
-                    questionOptionUpdateRequestDto.getDescription().trim());
-            }
+            questionOption.changeOption(
+                StringUtil.trim(questionOptionUpdateRequestDto.getOption()));
+            questionOption.changeDescription(
+                StringUtil.trim(questionOptionUpdateRequestDto.getDescription()));
 
         }
 
