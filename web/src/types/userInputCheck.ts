@@ -1,4 +1,4 @@
-export enum ErrorMessage {
+export enum ValidationErrorMessage {
   OK,
   NO_QUESTION,
   NO_OPTION,
@@ -7,6 +7,6 @@ export enum ErrorMessage {
 }
 
 export interface InputCheckResult {
-  message: ErrorMessage;
-  errorIndex: number;
+  message: ValidationErrorMessage;
+  index: number;
 }

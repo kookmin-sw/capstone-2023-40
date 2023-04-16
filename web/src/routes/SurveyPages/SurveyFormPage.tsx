@@ -9,11 +9,12 @@ import SurveyPageResultModal from '../../components/Modal/SurveyPageResultModal'
 import ChoiceAnswerForm from '../../components/SurveyForm/ChoiceAnswerForm';
 import SubjectiveAnswerForm from '../../components/SurveyForm/SubjectiveAnswerForm';
 import SurveyDataForm from '../../components/SurveyForm/SurveyDataForm';
+import { SurveyFormValidation } from '../../features/SurveyFormValidation';
 import { useTheme } from '../../hooks/useTheme';
 import { QuestionCreateRequest, QuestionType } from '../../types/request/Question';
 import { QuestionOptionCreateRequest } from '../../types/request/QuestionOption';
 import { SurveyCreateRequest } from '../../types/request/Survey';
-import { ErrorMessage, InputCheckResult } from '../../types/userInputCheck';
+import { ValidationErrorMessage, InputCheckResult } from '../../types/userInputCheck';
 import { NumberUtils } from '../../utils/NumberUtils';
 
 // TODO: add media-query for mobile....
@@ -123,61 +124,6 @@ const SubmitButton = styled.button.attrs({ type: 'submit' })`
   }
 `;
 
-const InputCheck = (surveyData: SurveyCreateRequest): InputCheckResult => {
-  let err = -1;
-  const currentDate = new Date();
-  const startedDate = new Date(surveyData.startedDate);
-  const endedDate = new Date(surveyData.endedDate);
-
-  if (startedDate < currentDate) {
-    return {
-      message: ErrorMessage.EARLY_START,
-      errorIndex: err,
-    };
-  }
-
-  if (endedDate < startedDate) {
-    return {
-      message: ErrorMessage.EARLY_END,
-      errorIndex: err,
-    };
-  }
-
-  if (surveyData.questions.length === 0) {
-    return {
-      message: ErrorMessage.NO_QUESTION,
-      errorIndex: err,
-    };
-  }
-
-  for (let i = 0; i < surveyData.questions.length; i += 1) {
-    if (
-      surveyData.questions[i].questionType === QuestionType.SINGLE_CHOICE ||
-      surveyData.questions[i].questionType === QuestionType.MULTIPLE_CHOICE
-    ) {
-      if (
-        typeof surveyData.questions[i].questionOptions === 'undefined' ||
-        surveyData.questions[i].questionOptions?.length === 0
-      ) {
-        err = surveyData.questions[i].questionNo;
-        break;
-      }
-    }
-  }
-
-  if (err !== -1) {
-    return {
-      message: ErrorMessage.NO_OPTION,
-      errorIndex: err,
-    };
-  }
-
-  return {
-    message: ErrorMessage.OK,
-    errorIndex: err,
-  };
-};
-
 // TODO: Drag and drop questions order
 export default function SurveyFormPage() {
   const [theme, toggleTheme] = useTheme();
@@ -228,26 +174,27 @@ export default function SurveyFormPage() {
 
   const handleSubmit = () => {
     // TODO: show error modal instaed of console.log
-    const checkResult: InputCheckResult = InputCheck(surveyData);
-    setAlertLabel(checkResult.errorIndex);
+    const checkResult: InputCheckResult = SurveyFormValidation(surveyData);
+    setAlertLabel(checkResult.index);
     switch (checkResult.message) {
-      case ErrorMessage.NO_QUESTION:
+      case ValidationErrorMessage.NO_QUESTION:
         console.log(checkResult.message);
         break;
-      case ErrorMessage.NO_OPTION:
-        scrollToQuestion(checkResult.errorIndex);
+      case ValidationErrorMessage.NO_OPTION:
+        scrollToQuestion(checkResult.index);
         console.log(checkResult.message);
         break;
-      case ErrorMessage.EARLY_START:
+      case ValidationErrorMessage.EARLY_START:
         scrollToTop();
         console.log(checkResult.message);
         break;
-      case ErrorMessage.EARLY_END:
+      case ValidationErrorMessage.EARLY_END:
         scrollToTop();
         console.log(checkResult.message);
         break;
       default:
         // TODO: submit surveyData to server
+        console.log(checkResult.message);
         setResultModalOpen(false);
     }
   };
