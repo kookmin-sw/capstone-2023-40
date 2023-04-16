@@ -10,6 +10,7 @@ import Header from '../../components/Header';
 import SurveyPageResultModal from '../../components/Modal/SurveyPageResultModal';
 import SurveyPageSkeleton from '../../components/Skeleton/SurveyPageSkeleton';
 import { useTheme } from '../../hooks/useTheme';
+import { scrollToRef } from '../../utils/scroll';
 
 const Container = styled.div`
   width: 100vw;
@@ -234,7 +235,7 @@ export default function SurveyPage() {
 
   const turnOnUserAttention = (domIndex: number) => {
     questionRefs.current[domIndex].style.borderLeft = '15px solid #FF5733';
-    questionRefs.current[domIndex].scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'smooth' });
+    scrollToRef(questionRefs, domIndex);
   };
 
   const turnOffUserAttention = (domIndex: number) => {

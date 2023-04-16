@@ -16,6 +16,7 @@ import { QuestionOptionCreateRequest } from '../../types/request/QuestionOption'
 import { SurveyCreateRequest } from '../../types/request/Survey';
 import { ValidationErrorMessage, InputCheckResult } from '../../types/userInputCheck';
 import { NumberUtils } from '../../utils/NumberUtils';
+import { scrollToRef, scrollToTop } from '../../utils/scroll';
 
 // TODO: add media-query for mobile....
 const Container = styled.div`
@@ -140,14 +141,6 @@ export default function SurveyFormPage() {
     questions: [],
   });
 
-  const scrollToQuestion = (domIndex: number) => {
-    questionRefs.current[domIndex].scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'smooth' });
-  };
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
   const turnOnAlertLabel = (domIndex: number) => {
     questionRefs.current[domIndex].style.borderLeft = '15px solid #FF5733';
   };
@@ -168,7 +161,7 @@ export default function SurveyFormPage() {
 
   useEffect(() => {
     if (typeof recentCreate !== 'undefined') {
-      scrollToQuestion(recentCreate);
+      scrollToRef(questionRefs, recentCreate);
     }
   }, [recentCreate]);
 
@@ -181,7 +174,7 @@ export default function SurveyFormPage() {
         console.log(checkResult.message);
         break;
       case ValidationErrorMessage.NO_OPTION:
-        scrollToQuestion(checkResult.index);
+        scrollToRef(questionRefs, checkResult.index);
         console.log(checkResult.message);
         break;
       case ValidationErrorMessage.EARLY_START:
