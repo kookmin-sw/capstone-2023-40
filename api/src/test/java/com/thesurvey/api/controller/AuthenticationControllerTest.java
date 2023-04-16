@@ -2,6 +2,8 @@ package com.thesurvey.api.controller;
 
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import com.thesurvey.api.domain.EnumTypeEntity.Role;
+import com.thesurvey.api.dto.request.UserLoginRequestDto;
 import com.thesurvey.api.dto.request.UserRegisterRequestDto;
 import com.thesurvey.api.repository.UserRepository;
 import com.thesurvey.api.service.AuthenticationService;
@@ -39,29 +41,56 @@ public class AuthenticationControllerTest extends BaseControllerTest {
 
     @Test
     void testMockRegister() throws Exception {
-        MvcResult result = mockRegister(globalRegisterDto, true);
+        // given
+        UserRegisterRequestDto userRegisterRequestDto = UserRegisterRequestDto.builder()
+            .name("test")
+            .email("test@gmail.com")
+            .password("Password40@")
+            .phoneNumber("01012345678")
+            .build();
+
+        // when
+        MvcResult result = mockRegister(userRegisterRequestDto, true);
         JSONObject content = new JSONObject(result.getResponse().getContentAsString());
 
-        assertThat(content.get("name")).isEqualTo(globalRegisterDto.getName());
-        assertThat(content.get("role")).isEqualTo(globalRole);
-        assertThat(content.get("email")).isEqualTo(globalRegisterDto.getEmail());
-        assertThat(content.get("profileImage")).isEqualTo(globalRegisterDto.getProfileImage());
+        // then
+        assertThat(content.get("name")).isEqualTo(userRegisterRequestDto.getName());
+        assertThat(content.get("role")).isEqualTo(String.valueOf(Role.USER));
+        assertThat(content.get("email")).isEqualTo(userRegisterRequestDto.getEmail());
     }
 
     @Test
     void testMockLogin() throws Exception {
-        authenticationService.register(globalRegisterDto);
-        MvcResult result = mockLogin(globalLoginDto, true);
-        JSONObject content = new JSONObject(result.getResponse().getContentAsString());
+        // given
+        UserRegisterRequestDto userRegisterRequestDto = UserRegisterRequestDto.builder()
+            .name("test")
+            .email("test@gmail.com")
+            .password("Password40@")
+            .phoneNumber("01012345678")
+            .build();
 
-        assertThat(content.get("name")).isEqualTo(globalName);
-        assertThat(content.get("email")).isEqualTo(globalEmail);
-        assertThat(content.get("role")).isEqualTo(globalRole);
-        assertThat(content.get("profileImage")).isEqualTo(globalProfileImage);
+        UserLoginRequestDto userLoginRequestDto = UserLoginRequestDto.builder()
+            .email("test@gmail.com")
+            .password("Password40@")
+            .build();
+
+        // when
+        MvcResult registerResult = mockRegister(userRegisterRequestDto, true);
+        JSONObject registerContent = new JSONObject(
+            registerResult.getResponse().getContentAsString());
+
+        MvcResult loginResult = mockLogin(userLoginRequestDto, true);
+        JSONObject loginContent = new JSONObject(loginResult.getResponse().getContentAsString());
+
+        assertThat(registerContent.get("name")).isEqualTo(loginContent.get("name"));
+        assertThat(registerContent.get("email")).isEqualTo(loginContent.get("email"));
+        assertThat(registerContent.get("role")).isEqualTo(loginContent.get("role"));
+        assertThat(registerContent.get("phoneNumber")).isEqualTo(loginContent.get("phoneNumber"));
     }
 
     @Test
     void testPasswordFormat() throws Exception {
+        // given
         String[] invalidPasswords = {
             "Short1!",
             "ThisisTooooooooooooooooolongPassword123@",
@@ -82,39 +111,40 @@ public class AuthenticationControllerTest extends BaseControllerTest {
             "MyPassword!$%123",
         };
 
-        for (String password : invalidPasswords) {
+        for (String invalidPassword : invalidPasswords) {
+            // when
             String uniqueId = UUID.randomUUID().toString(); // To avoid duplicate user name or email
 
-            UserRegisterRequestDto registerRequestDto = UserRegisterRequestDto.builder()
-                .name(uniqueId + globalName)
-                .email(uniqueId + globalEmail)
-                .password(password)
-                .phoneNumber(globalPhoneNumber)
-                .address(globalAddress)
-                .profileImage(globalProfileImage)
+            UserRegisterRequestDto userRegisterRequestDto = UserRegisterRequestDto.builder()
+                .name(uniqueId + "test")
+                .email(uniqueId + "test@gmail.com")
+                .password(invalidPassword)
+                .phoneNumber("01012345678")
                 .build();
 
-            mockRegister(registerRequestDto, false);
+            // then
+            mockRegister(userRegisterRequestDto, false);
         }
 
-        for (String password : validPasswords) {
+        for (String validPassword : validPasswords) {
+            // when
             String uniqueId = UUID.randomUUID().toString(); // To avoid duplicate user name or email
 
-            UserRegisterRequestDto registerRequestDto = UserRegisterRequestDto.builder()
-                .name(uniqueId + globalName)
-                .email(uniqueId + globalEmail)
-                .password(password)
-                .phoneNumber(globalPhoneNumber)
-                .address(globalAddress)
-                .profileImage(globalProfileImage)
+            UserRegisterRequestDto userRegisterRequestDto = UserRegisterRequestDto.builder()
+                .name(uniqueId + "test")
+                .email(uniqueId + "test@gmail.com")
+                .password(validPassword)
+                .phoneNumber("01012345678")
                 .build();
 
-            mockRegister(registerRequestDto, true);
+            // then
+            mockRegister(userRegisterRequestDto, true);
         }
     }
 
     @Test
     void testPhoneNumberFormat() throws Exception {
+        // given
         String[] invalidPhoneNumbers = {
             "010-1234-5678",
             "some string",
@@ -128,34 +158,34 @@ public class AuthenticationControllerTest extends BaseControllerTest {
             "0161112222",
         };
 
-        for (String phoneNumber : invalidPhoneNumbers) {
+        for (String invalidPhoneNumber : invalidPhoneNumbers) {
+            // when
             String uniqueId = UUID.randomUUID().toString(); // To avoid duplicate user name or email
 
-            UserRegisterRequestDto registerRequestDto = UserRegisterRequestDto.builder()
-                .name(uniqueId + globalName)
-                .email(uniqueId + globalEmail)
-                .password(globalPassword)
-                .phoneNumber(phoneNumber)
-                .address(globalAddress)
-                .profileImage(globalProfileImage)
+            UserRegisterRequestDto userRegisterRequestDto = UserRegisterRequestDto.builder()
+                .name(uniqueId + "test")
+                .email(uniqueId + "test@gmail.com")
+                .password("Password40@")
+                .phoneNumber(invalidPhoneNumber)
                 .build();
 
-            mockRegister(registerRequestDto, false);
+            // then
+            mockRegister(userRegisterRequestDto, false);
         }
 
-        for (String phoneNumber : validPhoneNumbers) {
+        for (String validPhoneNumber : validPhoneNumbers) {
+            // when
             String uniqueId = UUID.randomUUID().toString(); // To avoid duplicate user name or email
 
-            UserRegisterRequestDto registerRequestDto = UserRegisterRequestDto.builder()
-                .name(uniqueId + globalName)
-                .email(uniqueId + globalEmail)
-                .password(globalPassword)
-                .phoneNumber(phoneNumber)
-                .address(globalAddress)
-                .profileImage(globalProfileImage)
+            UserRegisterRequestDto userRegisterRequestDto = UserRegisterRequestDto.builder()
+                .name(uniqueId + "test")
+                .email(uniqueId + "test@gmail.com")
+                .password("Password40@")
+                .phoneNumber(validPhoneNumber)
                 .build();
 
-            mockRegister(registerRequestDto, true);
+            // then
+            mockRegister(userRegisterRequestDto, true);
         }
     }
 
