@@ -9,10 +9,9 @@ import com.thesurvey.api.exception.ErrorMessage;
 import com.thesurvey.api.exception.BadRequestExceptionMapper;
 import com.thesurvey.api.exception.ForbiddenRequestExceptionMapper;
 import com.thesurvey.api.exception.NotFoundExceptionMapper;
-import com.thesurvey.api.repository.ParticipationRepository;
 import com.thesurvey.api.repository.SurveyRepository;
-import com.thesurvey.api.repository.UserRepository;
 import com.thesurvey.api.service.mapper.SurveyMapper;
+import com.thesurvey.api.util.UserUtil;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
@@ -31,21 +30,16 @@ public class SurveyService {
     private final QuestionService questionService;
     private final ParticipationService participationService;
     private final AnsweredQuestionService answeredQuestionService;
-    private final UserRepository userRepository;
-    private final ParticipationRepository participationRepository;
 
     public SurveyService(SurveyRepository surveyRepository, SurveyMapper surveyMapper,
         QuestionService questionService,
         ParticipationService participationService,
-        AnsweredQuestionService answeredQuestionService, UserRepository userRepository,
-        ParticipationRepository participationRepository) {
+        AnsweredQuestionService answeredQuestionService) {
         this.surveyRepository = surveyRepository;
         this.surveyMapper = surveyMapper;
         this.questionService = questionService;
         this.participationService = participationService;
         this.answeredQuestionService = answeredQuestionService;
-        this.userRepository = userRepository;
-        this.participationRepository = participationRepository;
     }
 
     @Transactional(readOnly = true)
@@ -68,43 +62,34 @@ public class SurveyService {
     @Transactional
     public SurveyResponseDto createSurvey(Authentication authentication,
         SurveyRequestDto surveyRequestDto) {
-        /*
-         * A 5-second delay is allowed
-         * if a user sets the start time for a survey to the current time.
-         */
-        if (surveyRequestDto.getStartedDate().isBefore(
-            LocalDateTime.now(ZoneId.of("Asia/Seoul")).minusSeconds(5))) {
+        // `startedDate` is only allowed to be within 5 seconds from now or later.
+        if (surveyRequestDto.getStartedDate()
+            .isBefore(LocalDateTime.now(ZoneId.of("Asia/Seoul")).minusSeconds(5))) {
             throw new BadRequestExceptionMapper(ErrorMessage.STARTEDDATE_ISBEFORE_CURRENTDATE);
         }
 
         // validate for when the start time of the survey is set after the end time.
-        if (surveyRequestDto.getStartedDate().isAfter(
-            surveyRequestDto.getEndedDate())) {
+        if (surveyRequestDto.getStartedDate().isAfter(surveyRequestDto.getEndedDate())) {
             throw new BadRequestExceptionMapper(ErrorMessage.STARTEDDATE_ISAFTER_ENDEDDATE);
         }
 
-        Survey survey = surveyRepository.save(surveyMapper.toSurvey(surveyRequestDto));
+        User user = UserUtil.getUserFromAuthentication(authentication);
+        Survey survey = surveyRepository.save(
+            surveyMapper.toSurvey(surveyRequestDto, user.getUserId()));
         questionService.createQuestion(surveyRequestDto, survey);
-        participationService.createParticipation(authentication,
-            surveyRequestDto.getCertificationType(), survey);
-        return surveyMapper.toSurveyResponseDto(survey);
+        participationService.createParticipation(user, surveyRequestDto.getCertificationTypes(),
+            survey);
+        return surveyMapper.toSurveyResponseDto(survey, user.getUserId());
     }
 
     @Transactional
     public void deleteSurvey(Authentication authentication, UUID surveyId) {
-        Survey survey = surveyRepository.findById(surveyId)
-            .orElseThrow(
-                () -> new NotFoundExceptionMapper(ErrorMessage.SURVEY_NOT_FOUND, surveyId));
+        Long userId = UserUtil.getUserIdFromAuthentication(authentication);
+        Survey survey = surveyRepository.findBySurveyId(surveyId).orElseThrow(
+            () -> new NotFoundExceptionMapper(ErrorMessage.SURVEY_NOT_FOUND));
 
-        User user = userRepository.findByName(authentication.getName())
-            .orElseThrow(() -> new NotFoundExceptionMapper(ErrorMessage.USER_NAME_NOT_FOUND,
-                authentication.getName()));
-
-        // validate for when a non-survey author attempts to delete.
-        if (!participationRepository.existsByUserIdAndSurveyId(user.getUserId(),
-            survey.getSurveyId())) {
-            throw new ForbiddenRequestExceptionMapper(ErrorMessage.NO_HAVE_AUTHORITY);
-        }
+        // validate survey author from current user
+        validateSurveyAuthor(userId, survey.getAuthorId());
 
         // validate for attempts to delete a started survey.
         if (survey.getStartedDate().isBefore(LocalDateTime.now(ZoneId.of("Asia/Seoul")))
@@ -121,19 +106,14 @@ public class SurveyService {
     @Transactional
     public SurveyResponseDto updateSurvey(Authentication authentication,
         SurveyUpdateRequestDto surveyUpdateRequestDto) {
-        Survey survey = surveyRepository.findById(surveyUpdateRequestDto.getSurveyId())
-            .orElseThrow(() -> new NotFoundExceptionMapper(ErrorMessage.SURVEY_NOT_FOUND,
-                surveyUpdateRequestDto.getSurveyId()));
+        Long userId = UserUtil.getUserIdFromAuthentication(authentication);
+        Survey survey = surveyRepository.findBySurveyId(surveyUpdateRequestDto.getSurveyId())
+            .orElseThrow(() -> new NotFoundExceptionMapper(ErrorMessage.SURVEY_NOT_FOUND));
 
-        User user = userRepository.findByName(authentication.getName())
-            .orElseThrow(() -> new NotFoundExceptionMapper(ErrorMessage.USER_NAME_NOT_FOUND,
-                authentication.getName()));
+        // validate survey author from current user
+        validateSurveyAuthor(userId, survey.getAuthorId());
 
-        if (!participationRepository.existsByUserIdAndSurveyId(user.getUserId(),
-            survey.getSurveyId())) {
-            throw new ForbiddenRequestExceptionMapper(ErrorMessage.NO_HAVE_AUTHORITY);
-        }
-
+        // validate survey request dto
         validateUpdateSurvey(survey, surveyUpdateRequestDto);
 
         if (surveyUpdateRequestDto.getTitle() != null) {
@@ -157,8 +137,10 @@ public class SurveyService {
         if (surveyUpdateRequestDto.getEndedDate() != null) {
             survey.changeEndedDate(surveyUpdateRequestDto.getEndedDate());
         }
+
         questionService.updateQuestion(survey.getSurveyId(), surveyUpdateRequestDto.getQuestions());
-        return surveyMapper.toSurveyResponseDto(survey);
+        surveyRepository.save(survey);
+        return surveyMapper.toSurveyResponseDto(survey, userId);
     }
 
     public void validateUpdateSurvey(Survey survey, SurveyUpdateRequestDto surveyUpdateRequestDto) {
@@ -169,8 +151,7 @@ public class SurveyService {
 
         // validate for when to modify a survey that has already been started.
         if (survey.getStartedDate()
-            .isBefore(LocalDateTime.now(ZoneId.of("Asia/Seoul")).minusSeconds(5))
-            && LocalDateTime.now(ZoneId.of("Asia/Seoul")).isBefore(survey.getEndedDate())) {
+            .isBefore(LocalDateTime.now(ZoneId.of("Asia/Seoul")).minusSeconds(5))) {
             throw new BadRequestExceptionMapper(ErrorMessage.SURVEY_ALREADY_STARTED);
         }
 
@@ -180,6 +161,12 @@ public class SurveyService {
             throw new BadRequestExceptionMapper(ErrorMessage.STARTEDDATE_ISAFTER_ENDEDDATE);
         }
 
+    }
+
+    private void validateSurveyAuthor(Long userId, Long authorId) {
+        if (!userId.equals(authorId)) {
+            throw new ForbiddenRequestExceptionMapper(ErrorMessage.AUTHOR_NOT_MATCHING);
+        }
     }
 
 }
