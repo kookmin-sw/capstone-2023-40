@@ -10,6 +10,7 @@ import com.thesurvey.api.service.SurveyService;
 import java.util.List;
 import java.util.UUID;
 import javax.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -95,26 +96,28 @@ public class SurveyController {
     @PatchMapping
     public ResponseEntity<SurveyResponseDto> updateSurvey(Authentication authentication,
         @Valid @RequestBody SurveyUpdateRequestDto surveyUpdateRequestDto) {
-        return ResponseEntity.ok(surveyService.updateSurvey(authentication, surveyUpdateRequestDto));
+        return ResponseEntity.ok(
+            surveyService.updateSurvey(authentication, surveyUpdateRequestDto));
     }
 
     @ApiOperation(value = "설문조사 삭제", notes = "파라미터로 전달 받은 UUID에 해당하는 설문조사를 삭제합니다.")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "요청 성공"),
+        @ApiResponse(code = 204, message = "요청 성공"),
         @ApiResponse(code = 400, message = "잘못된 요청"),
         @ApiResponse(code = 401, message = "사용자 인증 실패"),
         @ApiResponse(code = 403, message = "접근 권한 없음"),
         @ApiResponse(code = 404, message = "요청한 리소스 찾을 수 없음")
     })
     @DeleteMapping("/{surveyId}")
-    public ResponseEntity<Void> deleteSurvey(Authentication authentication, @PathVariable("surveyId") String surveyId) {
+    public ResponseEntity<Void> deleteSurvey(Authentication authentication,
+        @PathVariable("surveyId") String surveyId) {
         surveyService.deleteSurvey(authentication, UUID.fromString(surveyId));
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @ApiOperation(value = "설문조사 응답 제출", notes = "설문조사 응답을 제출합니다.")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "요청 성공"),
+        @ApiResponse(code = 204, message = "요청 성공"),
         @ApiResponse(code = 400, message = "잘못된 요청"),
         @ApiResponse(code = 401, message = "사용자 인증 실패"),
         @ApiResponse(code = 403, message = "접근 권한 없음"),
@@ -123,8 +126,8 @@ public class SurveyController {
     @PostMapping("/submit")
     public ResponseEntity<AnsweredQuestionResponseDto> submitSurvey(Authentication authentication,
         @Valid @RequestBody AnsweredQuestionRequestDto answeredQuestionRequestDto) {
-        return ResponseEntity.ok(
-            answeredQuestionService.createAnswer(authentication, answeredQuestionRequestDto));
+        answeredQuestionService.createAnswer(authentication, answeredQuestionRequestDto);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 }

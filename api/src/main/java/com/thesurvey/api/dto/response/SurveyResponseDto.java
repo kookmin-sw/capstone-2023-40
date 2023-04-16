@@ -13,6 +13,8 @@ public class SurveyResponseDto {
 
     private UUID surveyId;
 
+    private Long authorId;
+
     private String title;
 
     private String description;
@@ -27,6 +29,6 @@ public class SurveyResponseDto {
 
     private LocalDateTime modifiedDate;
 
-    private List<CertificationType> certificationType;
+    private List<CertificationType> certificationTypes;
 
 }

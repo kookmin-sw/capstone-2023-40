@@ -57,7 +57,8 @@ public class QuestionOptionService {
                 if (questionOptionUpdateRequestDto.getDescription().isBlank()) {
                     throw new BadRequestExceptionMapper(ErrorMessage.NO_ONLY_WHITESPACE);
                 }
-                questionOption.changeDescription(questionOptionUpdateRequestDto.getDescription().trim());
+                questionOption.changeDescription(
+                    questionOptionUpdateRequestDto.getDescription().trim());
             }
 
         }

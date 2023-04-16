@@ -52,8 +52,10 @@ public class QuestionService {
         for (QuestionRequestDto questionRequestDto : surveyRequestDto.getQuestions()) {
             QuestionBank questionBank = questionBankRepository.save(
                 questionBankMapper.toQuestionBank(questionRequestDto));
+
             questionRepository.save(
                 questionMapper.toQuestion(questionRequestDto, survey, questionBank));
+
             if (questionRequestDto.getQuestionOptions() != null) {
                 questionOptionService.createQuestionOption(questionRequestDto, questionBank);
             }
@@ -66,7 +68,8 @@ public class QuestionService {
         for (QuestionBankUpdateRequestDto questionBankUpdateRequestDto : questionBankUpdateRequestDtoList) {
             QuestionBank questionBank = questionBankRepository.findByQuestionBankId(
                     questionBankUpdateRequestDto.getQuestionBankId())
-                .orElseThrow(() -> new BadRequestExceptionMapper(ErrorMessage.QUESTION_BANK_NOT_FOUND));
+                .orElseThrow(
+                    () -> new BadRequestExceptionMapper(ErrorMessage.QUESTION_BANK_NOT_FOUND));
 
             // check if the question is included in the survey.
             if (questionRepository.notExistsBySurveyIdAndQuestionBankId(surveyId,
@@ -84,7 +87,8 @@ public class QuestionService {
                 if (questionBankUpdateRequestDto.getDescription().isBlank()) {
                     throw new BadRequestExceptionMapper(ErrorMessage.NO_ONLY_WHITESPACE);
                 }
-                questionBank.changeDescription(questionBankUpdateRequestDto.getDescription().trim());
+                questionBank.changeDescription(
+                    questionBankUpdateRequestDto.getDescription().trim());
             }
             if (questionBankUpdateRequestDto.getQuestionType() != null) {
                 questionBank.changeQuestionType(questionBankUpdateRequestDto.getQuestionType());

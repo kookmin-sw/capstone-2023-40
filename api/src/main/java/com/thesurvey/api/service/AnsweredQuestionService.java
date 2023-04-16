@@ -4,8 +4,6 @@ import com.thesurvey.api.domain.AnsweredQuestion;
 import com.thesurvey.api.domain.QuestionBank;
 import com.thesurvey.api.domain.Survey;
 import com.thesurvey.api.domain.User;
-import com.thesurvey.api.dto.response.AnsweredQuestionInfoDto;
-import com.thesurvey.api.dto.response.AnsweredQuestionResponseDto;
 import com.thesurvey.api.dto.request.AnsweredQuestionDto;
 import com.thesurvey.api.dto.request.AnsweredQuestionRequestDto;
 import com.thesurvey.api.exception.ErrorMessage;
@@ -13,15 +11,13 @@ import com.thesurvey.api.exception.BadRequestExceptionMapper;
 import com.thesurvey.api.exception.ForbiddenRequestExceptionMapper;
 import com.thesurvey.api.exception.NotFoundExceptionMapper;
 import com.thesurvey.api.repository.AnsweredQuestionRepository;
-import com.thesurvey.api.repository.ParticipationRepository;
 import com.thesurvey.api.repository.QuestionBankRepository;
 import com.thesurvey.api.repository.QuestionRepository;
 import com.thesurvey.api.repository.SurveyRepository;
-import com.thesurvey.api.repository.UserRepository;
 import com.thesurvey.api.service.mapper.AnsweredQuestionMapper;
+import com.thesurvey.api.util.UserUtil;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -32,47 +28,42 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class AnsweredQuestionService {
 
-    private final UserRepository userRepository;
     private final SurveyRepository surveyRepository;
     private final AnsweredQuestionRepository answeredQuestionRepository;
     private final QuestionBankRepository questionBankRepository;
     private final AnsweredQuestionMapper answeredQuestionMapper;
-    private final ParticipationRepository participationRepository;
     private final QuestionRepository questionRepository;
+    private final ParticipationService participationService;
 
-    public AnsweredQuestionService(UserRepository userRepository, SurveyRepository surveyRepository,
+    public AnsweredQuestionService(SurveyRepository surveyRepository,
         AnsweredQuestionRepository answeredQuestionRepository,
         QuestionBankRepository questionBankRepository,
         AnsweredQuestionMapper answeredQuestionMapper,
-        ParticipationRepository participationRepository, QuestionRepository questionRepository) {
-        this.userRepository = userRepository;
+        QuestionRepository questionRepository,
+        ParticipationService participationService) {
         this.surveyRepository = surveyRepository;
         this.answeredQuestionRepository = answeredQuestionRepository;
         this.questionBankRepository = questionBankRepository;
         this.answeredQuestionMapper = answeredQuestionMapper;
-        this.participationRepository = participationRepository;
         this.questionRepository = questionRepository;
+        this.participationService = participationService;
     }
 
     @Transactional
-    public AnsweredQuestionResponseDto createAnswer(Authentication authentication,
+    public void createAnswer(Authentication authentication,
         AnsweredQuestionRequestDto answeredQuestionRequestDto) {
-
-        User user = userRepository.findByName(authentication.getName())
-            .orElseThrow(() -> new NotFoundExceptionMapper(ErrorMessage.USER_NAME_NOT_FOUND,
-                authentication.getName()));
-
+        User user = UserUtil.getUserFromAuthentication(authentication);
         Survey survey = surveyRepository.findBySurveyId(answeredQuestionRequestDto.getSurveyId())
             .orElseThrow(() -> new NotFoundExceptionMapper(ErrorMessage.SURVEY_NOT_FOUND));
 
         // validate if a user has already responded to the survey
-        if (answeredQuestionRepository.existsByUserIdAndSurveyId(user.getUserId(), answeredQuestionRequestDto.getSurveyId())) {
+        if (answeredQuestionRepository.existsByUserIdAndSurveyId(user.getUserId(),
+            answeredQuestionRequestDto.getSurveyId())) {
             throw new ForbiddenRequestExceptionMapper(ErrorMessage.ANSWER_ALREADY_SUBMITTED);
         }
 
         // validate if the survey creator is attempting to respond to their own survey
-        if (participationRepository.existsByUserIdAndSurveyId(user.getUserId(),
-            survey.getSurveyId())) {
+        if (user.getUserId().equals(survey.getAuthorId())) {
             throw new ForbiddenRequestExceptionMapper(ErrorMessage.CREATOR_CANNOT_ANSWER);
         }
 
@@ -81,13 +72,18 @@ public class AnsweredQuestionService {
             throw new ForbiddenRequestExceptionMapper(ErrorMessage.SURVEY_NOT_STARTED);
         }
 
-        List<AnsweredQuestionInfoDto> savedAnsweredQuestionInfoDtoList = new ArrayList<>();
+        // validate if the survey has already ended
+        if (LocalDateTime.now(ZoneId.of("Asia/Seoul")).isAfter(survey.getEndedDate())) {
+            throw new ForbiddenRequestExceptionMapper(ErrorMessage.SURVEY_ALREADY_ENDED);
+        }
+
         for (AnsweredQuestionDto answeredQuestionDto : answeredQuestionRequestDto.getAnswers()) {
             validateEmptyAnswer(answeredQuestionDto);
 
             QuestionBank questionBank = questionBankRepository.findByQuestionBankId(
                     answeredQuestionDto.getQuestionBankId())
-                .orElseThrow(() -> new NotFoundExceptionMapper(ErrorMessage.QUESTION_BANK_NOT_FOUND));
+                .orElseThrow(
+                    () -> new NotFoundExceptionMapper(ErrorMessage.QUESTION_BANK_NOT_FOUND));
 
             // check if the question is included in the survey.
             if (questionRepository.notExistsBySurveyIdAndQuestionBankId(survey.getSurveyId(),
@@ -103,31 +99,15 @@ public class AnsweredQuestionService {
                         user, survey, questionBank, choice))
                     .collect(Collectors.toList());
 
-                List<AnsweredQuestion> savedAnsweredQuestionList = answeredQuestionRepository.saveAll(
-                    answeredQuestionList);
-
-                //  make a List of multipleChoice for assigning values to AnsweredInfoQuestionDto.multipleChoices
-                List<Integer> multipleChoice = savedAnsweredQuestionList.stream().map(
-                    AnsweredQuestion::getMultipleChoice).collect(Collectors.toList());
-
-                savedAnsweredQuestionInfoDtoList.add(
-                    answeredQuestionMapper.toAnsweredInfoQuestionDtoWithMultipleChoices(
-                        savedAnsweredQuestionList.get(0),
-                        questionBank, multipleChoice));
+                answeredQuestionRepository.saveAll(answeredQuestionList);
+                participationService.createParticipation(user,
+                    answeredQuestionRequestDto.getCertificationTypes(), survey);
             } else {
-                AnsweredQuestion savedAnsweredQuestion = answeredQuestionRepository.save(
+                answeredQuestionRepository.save(
                     answeredQuestionMapper.toAnsweredQuestion(answeredQuestionDto, user,
                         survey, questionBank));
-
-                savedAnsweredQuestionInfoDtoList.add(
-                    answeredQuestionMapper.toAnsweredInfoQuestionDto(savedAnsweredQuestion,
-                        questionBank, null));
             }
         }
-
-        return answeredQuestionMapper.toAnsweredQuestionResponseDto(survey,
-            savedAnsweredQuestionInfoDtoList);
-
     }
 
     @Transactional

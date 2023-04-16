@@ -30,7 +30,7 @@ public class SurveyUpdateRequestDto {
     private LocalDateTime endedDate;
 
     @Valid
-    private List<CertificationType> certificationType;
+    private List<CertificationType> certificationTypes;
 
     @Valid
     private List<QuestionBankUpdateRequestDto> questions;
