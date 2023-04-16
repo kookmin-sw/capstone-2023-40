@@ -37,7 +37,7 @@ public class SurveyRequestDto {
     private LocalDateTime endedDate;
 
     @Valid
-    private List<CertificationType> certificationType;
+    private List<CertificationType> certificationTypes;
 
     @Valid
     @NotEmpty
