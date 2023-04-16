@@ -13,6 +13,7 @@ import { useTheme } from '../../hooks/useTheme';
 import { QuestionCreateRequest, QuestionType } from '../../types/request/Question';
 import { QuestionOptionCreateRequest } from '../../types/request/QuestionOption';
 import { SurveyCreateRequest } from '../../types/request/Survey';
+import { ErrorMessage, InputCheckResult } from '../../types/userInputCheck';
 import { NumberUtils } from '../../utils/NumberUtils';
 
 // TODO: add media-query for mobile....
@@ -122,11 +123,6 @@ const SubmitButton = styled.button.attrs({ type: 'submit' })`
   }
 `;
 
-interface InputCheckResult {
-  message: string;
-  errorIndex: number;
-}
-
 const InputCheck = (surveyData: SurveyCreateRequest): InputCheckResult => {
   let err = -1;
   const currentDate = new Date();
@@ -135,21 +131,21 @@ const InputCheck = (surveyData: SurveyCreateRequest): InputCheckResult => {
 
   if (startedDate < currentDate) {
     return {
-      message: 'EARLY_START',
+      message: ErrorMessage.EARLY_START,
       errorIndex: err,
     };
   }
 
   if (endedDate < startedDate) {
     return {
-      message: 'EARLY_END',
+      message: ErrorMessage.EARLY_END,
       errorIndex: err,
     };
   }
 
   if (surveyData.questions.length === 0) {
     return {
-      message: 'NO_QUESTION',
+      message: ErrorMessage.NO_QUESTION,
       errorIndex: err,
     };
   }
@@ -171,13 +167,13 @@ const InputCheck = (surveyData: SurveyCreateRequest): InputCheckResult => {
 
   if (err !== -1) {
     return {
-      message: 'NO_OPTION',
+      message: ErrorMessage.NO_OPTION,
       errorIndex: err,
     };
   }
 
   return {
-    message: 'OK',
+    message: ErrorMessage.OK,
     errorIndex: err,
   };
 };
@@ -202,6 +198,10 @@ export default function SurveyFormPage() {
     questionRefs.current[domIndex].scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'smooth' });
   };
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const turnOnAlertLabel = (domIndex: number) => {
     questionRefs.current[domIndex].style.borderLeft = '15px solid #FF5733';
   };
@@ -210,7 +210,6 @@ export default function SurveyFormPage() {
     questionRefs.current[domIndex].style.borderLeft = `15px solid ${theme.colors.primary}`;
   };
 
-  // TODO: logic must be improve
   const setAlertLabel = (errorIndex: number) => {
     surveyData.questions.forEach((question: QuestionCreateRequest) => {
       if (question.questionNo === errorIndex) {
@@ -230,19 +229,21 @@ export default function SurveyFormPage() {
   const handleSubmit = () => {
     // TODO: show error modal instaed of console.log
     const checkResult: InputCheckResult = InputCheck(surveyData);
+    setAlertLabel(checkResult.errorIndex);
     switch (checkResult.message) {
-      case 'NO_QUESTION':
+      case ErrorMessage.NO_QUESTION:
         console.log(checkResult.message);
         break;
-      case 'NO_OPTION':
-        setAlertLabel(checkResult.errorIndex);
+      case ErrorMessage.NO_OPTION:
         scrollToQuestion(checkResult.errorIndex);
         console.log(checkResult.message);
         break;
-      case 'EARLY_START':
+      case ErrorMessage.EARLY_START:
+        scrollToTop();
         console.log(checkResult.message);
         break;
-      case 'EARLY_END':
+      case ErrorMessage.EARLY_END:
+        scrollToTop();
         console.log(checkResult.message);
         break;
       default:
