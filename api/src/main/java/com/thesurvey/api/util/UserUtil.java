@@ -41,7 +41,7 @@ public class UserUtil {
     }
 
     public static void validateUserAuthentication(Authentication authentication) {
-        if (!authentication.isAuthenticated()) {
+        if (authentication != null && !authentication.isAuthenticated()) {
             throw new UnauthorizedRequestExceptionMapper(ErrorMessage.FAILED_AUTHENTICATION);
         }
     }

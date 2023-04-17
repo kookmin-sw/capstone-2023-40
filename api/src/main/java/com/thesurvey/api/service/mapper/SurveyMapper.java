@@ -7,6 +7,7 @@ import com.thesurvey.api.dto.request.SurveyRequestDto;
 import com.thesurvey.api.repository.SurveyRepository;
 import com.thesurvey.api.service.QuestionService;
 import com.thesurvey.api.service.converter.CertificationTypeConverter;
+import com.thesurvey.api.util.StringUtil;
 import java.util.List;
 import org.springframework.stereotype.Component;
 
@@ -14,14 +15,14 @@ import org.springframework.stereotype.Component;
 public class SurveyMapper {
 
     private final SurveyRepository surveyRepository;
-    private final CertificationTypeConverter certificationTypeConverter;
     private final QuestionService questionService;
+    private final CertificationTypeConverter certificationTypeConverter;
 
-    public SurveyMapper(SurveyRepository surveyRepository,
-        CertificationTypeConverter certificationTypeConverter, QuestionService questionService) {
+    public SurveyMapper(SurveyRepository surveyRepository, QuestionService questionService,
+        CertificationTypeConverter certificationTypeConverter) {
         this.surveyRepository = surveyRepository;
-        this.certificationTypeConverter = certificationTypeConverter;
         this.questionService = questionService;
+        this.certificationTypeConverter = certificationTypeConverter;
     }
 
     public SurveyResponseDto toSurveyResponseDto(Survey survey) {
@@ -53,7 +54,7 @@ public class SurveyMapper {
             .createdDate(survey.getCreatedDate())
             .modifiedDate(survey.getModifiedDate())
             .certificationTypes(certificationTypeConverter.toCertificationTypeList(
-                surveyRepository.findCertificationTypeBySurveyId(survey.getSurveyId())))
+                    surveyRepository.findCertificationTypeBySurveyId(survey.getSurveyId())))
             .questions(questionBankResponseDtoList)
             .build();
     }
@@ -62,10 +63,11 @@ public class SurveyMapper {
         return Survey
             .builder()
             .authorId(authorId)
-            .title(surveyRequestDto.getTitle())
-            .description(surveyRequestDto.getDescription())
+            .title(StringUtil.trim(surveyRequestDto.getTitle()))
+            .description(StringUtil.trim(surveyRequestDto.getDescription().trim()))
             .startedDate(surveyRequestDto.getStartedDate())
             .endedDate(surveyRequestDto.getEndedDate())
             .build();
     }
+
 }
