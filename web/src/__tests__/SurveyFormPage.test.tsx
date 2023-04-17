@@ -6,16 +6,22 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom';
 
 import SurveyFormPage from '../routes/SurveyPages/SurveyFormPage';
 
-describe('[SurveyFormPage Test]', () => {
-  // mock scrollIntoView function
-  window.HTMLElement.prototype.scrollIntoView = function () {};
+// mock scrollIntoView function
+window.HTMLElement.prototype.scrollIntoView = () => {};
 
+function setUp() {
+  return render(
+    <MemoryRouter initialEntries={['/survey/form']}>
+      <Routes>
+        <Route path="/survey/form" element={<SurveyFormPage />} />
+      </Routes>
+    </MemoryRouter>
+  );
+}
+
+describe('[SurveyFormPage Test]', () => {
   it('renders SurveyFormPage', () => {
-    render(
-      <MemoryRouter initialEntries={['/survey/form']}>
-        <SurveyFormPage />
-      </MemoryRouter>
-    );
+    setUp();
 
     const pageTitle = screen.getByText('설문조사 작성');
 
@@ -23,11 +29,7 @@ describe('[SurveyFormPage Test]', () => {
   });
 
   it('create question when click "+" button', async () => {
-    render(
-      <MemoryRouter initialEntries={['/survey/form']}>
-        <SurveyFormPage />
-      </MemoryRouter>
-    );
+    setUp();
 
     const addQuestionButton = screen.getByText('+');
     fireEvent.click(addQuestionButton);
@@ -37,11 +39,7 @@ describe('[SurveyFormPage Test]', () => {
   });
 
   it('delete question when click "x" button', async () => {
-    render(
-      <MemoryRouter initialEntries={['/survey/form']}>
-        <SurveyFormPage />
-      </MemoryRouter>
-    );
+    setUp();
 
     // create question for test delete
     const addQuestionButton = screen.getByText('+');
@@ -55,11 +53,7 @@ describe('[SurveyFormPage Test]', () => {
   });
 
   it('create and delete from the middle of the questions', async () => {
-    render(
-      <MemoryRouter initialEntries={['/survey/form']}>
-        <SurveyFormPage />
-      </MemoryRouter>
-    );
+    setUp();
 
     // create questions for test
     const addQuestionButton = screen.getByText('+');
