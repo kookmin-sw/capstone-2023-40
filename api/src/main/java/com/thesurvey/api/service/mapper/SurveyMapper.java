@@ -1,14 +1,13 @@
 package com.thesurvey.api.service.mapper;
 
-import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
 import com.thesurvey.api.domain.Survey;
 import com.thesurvey.api.dto.response.QuestionBankResponseDto;
 import com.thesurvey.api.dto.response.SurveyResponseDto;
 import com.thesurvey.api.dto.request.SurveyRequestDto;
 import com.thesurvey.api.repository.SurveyRepository;
 import com.thesurvey.api.service.QuestionService;
+import com.thesurvey.api.service.converter.CertificationTypeConverter;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -16,10 +15,28 @@ public class SurveyMapper {
 
     private final SurveyRepository surveyRepository;
     private final QuestionService questionService;
+    private final CertificationTypeConverter certificationTypeConverter;
 
-    public SurveyMapper(SurveyRepository surveyRepository, QuestionService questionService) {
+    public SurveyMapper(SurveyRepository surveyRepository, QuestionService questionService,
+        CertificationTypeConverter certificationTypeConverter) {
         this.surveyRepository = surveyRepository;
         this.questionService = questionService;
+        this.certificationTypeConverter = certificationTypeConverter;
+    }
+
+    public SurveyResponseDto toSurveyResponseDto(Survey survey) {
+        return SurveyResponseDto.builder()
+            .surveyId(survey.getSurveyId())
+            .authorId(survey.getAuthorId())
+            .title(survey.getTitle())
+            .description(survey.getDescription())
+            .startedDate(survey.getStartedDate())
+            .endedDate(survey.getEndedDate())
+            .createdDate(survey.getCreatedDate())
+            .modifiedDate(survey.getModifiedDate())
+            .certificationTypes(certificationTypeConverter.toCertificationTypeList(
+                surveyRepository.findCertificationTypeBySurveyId(survey.getSurveyId())))
+            .build();
     }
 
     public SurveyResponseDto toSurveyResponseDto(Survey survey, Long authorId) {
@@ -35,8 +52,8 @@ public class SurveyMapper {
             .endedDate(survey.getEndedDate())
             .createdDate(survey.getCreatedDate())
             .modifiedDate(survey.getModifiedDate())
-            .certificationTypes(toCertificationTypeList(
-                surveyRepository.findCertificationTypeBySurveyId(survey.getSurveyId())))
+            .certificationTypes(certificationTypeConverter.toCertificationTypeList(
+                    surveyRepository.findCertificationTypeBySurveyId(survey.getSurveyId())))
             .questions(questionBankResponseDtoList)
             .build();
     }
@@ -52,27 +69,4 @@ public class SurveyMapper {
             .build();
     }
 
-    public List<CertificationType> toCertificationTypeList(
-        List<Integer> certificationTypeList) {
-        return certificationTypeList.stream()
-            .map(type -> {
-                switch (type) {
-                    case 0:
-                        return CertificationType.KAKAO;
-                    case 1:
-                        return CertificationType.NAVER;
-                    case 2:
-                        return CertificationType.GOOGLE;
-                    case 3:
-                        return CertificationType.WEBMAIL;
-                    case 4:
-                        return CertificationType.DRIVER_LICENSE;
-                    case 5:
-                        return CertificationType.MOBILE_PHONE;
-                    default:
-                        return null;
-                }
-            })
-            .collect(Collectors.toList());
-    }
 }
