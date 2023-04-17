@@ -4,6 +4,7 @@ import com.thesurvey.api.domain.QuestionBank;
 import com.thesurvey.api.domain.QuestionOption;
 import com.thesurvey.api.dto.request.QuestionOptionRequestDto;
 import com.thesurvey.api.dto.response.QuestionOptionResponseDto;
+import com.thesurvey.api.util.StringUtil;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -11,15 +12,10 @@ public class QuestionOptionMapper {
 
     public QuestionOption toQuestionOption(QuestionOptionRequestDto questionOptionRequestDto,
         QuestionBank questionBank) {
-        String description = questionOptionRequestDto.getDescription();
-        if (questionOptionRequestDto.getDescription() != null
-            && questionOptionRequestDto.getDescription().length() != 0) {
-            description = questionOptionRequestDto.getDescription().trim();
-        }
         return QuestionOption.builder()
             .questionBank(questionBank)
-            .option(questionOptionRequestDto.getOption().trim())
-            .description(description)
+            .option(StringUtil.trim(questionOptionRequestDto.getOption()))
+            .description(StringUtil.trim(questionOptionRequestDto.getDescription()))
             .build();
     }
 

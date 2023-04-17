@@ -6,6 +6,7 @@ import com.thesurvey.api.dto.response.QuestionBankResponseDto;
 import com.thesurvey.api.dto.response.QuestionOptionResponseDto;
 import com.thesurvey.api.dto.request.QuestionRequestDto;
 import com.thesurvey.api.repository.QuestionOptionRepository;
+import com.thesurvey.api.util.StringUtil;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
@@ -24,9 +25,9 @@ public class QuestionBankMapper {
 
     public QuestionBank toQuestionBank(QuestionRequestDto questionRequestDto) {
         return QuestionBank.builder()
-            .title(questionRequestDto.getTitle().trim())
+            .title(StringUtil.trim(questionRequestDto.getTitle()))
             .questionType(questionRequestDto.getQuestionType())
-            .description(questionRequestDto.getDescription().trim())
+            .description(StringUtil.trim(questionRequestDto.getDescription()))
             .build();
     }
 
