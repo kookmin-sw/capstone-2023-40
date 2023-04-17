@@ -14,7 +14,7 @@ public class QuestionOptionMapper {
         QuestionBank questionBank) {
         return QuestionOption.builder()
             .questionBank(questionBank)
-            .option(questionOptionRequestDto.getOption().trim())
+            .option(StringUtil.trim(questionOptionRequestDto.getOption()))
             .description(StringUtil.trim(questionOptionRequestDto.getDescription()))
             .build();
     }

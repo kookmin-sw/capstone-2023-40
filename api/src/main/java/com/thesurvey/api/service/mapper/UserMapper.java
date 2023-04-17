@@ -14,8 +14,8 @@ public class UserMapper {
     public User toUser(UserRegisterRequestDto userRegisterRequestDto) {
         return User
             .builder()
-            .name(userRegisterRequestDto.getName())
-            .email(userRegisterRequestDto.getEmail())
+            .name(StringUtil.trim(userRegisterRequestDto.getName()))
+            .email(StringUtil.trim(userRegisterRequestDto.getEmail()))
             .password(passwordEncoder().encode(userRegisterRequestDto.getPassword()))
             .phoneNumber(userRegisterRequestDto.getPhoneNumber())
             .address(StringUtil.trim(userRegisterRequestDto.getAddress()))

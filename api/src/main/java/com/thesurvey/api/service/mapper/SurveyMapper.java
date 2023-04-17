@@ -7,6 +7,7 @@ import com.thesurvey.api.dto.request.SurveyRequestDto;
 import com.thesurvey.api.repository.SurveyRepository;
 import com.thesurvey.api.service.QuestionService;
 import com.thesurvey.api.service.converter.CertificationTypeConverter;
+import com.thesurvey.api.util.StringUtil;
 import java.util.List;
 import org.springframework.stereotype.Component;
 
@@ -62,8 +63,8 @@ public class SurveyMapper {
         return Survey
             .builder()
             .authorId(authorId)
-            .title(surveyRequestDto.getTitle().trim())
-            .description(surveyRequestDto.getDescription().trim())
+            .title(StringUtil.trim(surveyRequestDto.getTitle()))
+            .description(StringUtil.trim(surveyRequestDto.getDescription().trim()))
             .startedDate(surveyRequestDto.getStartedDate())
             .endedDate(surveyRequestDto.getEndedDate())
             .build();
