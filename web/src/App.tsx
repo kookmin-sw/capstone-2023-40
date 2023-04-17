@@ -1,12 +1,10 @@
 import React from 'react';
 
 import { Routes, Route } from 'react-router-dom';
-// import { createStore } from 'redux';
 import { ThemeProvider } from 'styled-components';
 
 import GlobalStyle from './components/GlobalStyle';
 import { useTheme } from './hooks/useTheme';
-// import rootReducer from './reducers';
 import LoginPage from './routes/LoginPage';
 import MainPage from './routes/MainPage';
 import AuthListPage from './routes/MyPages/AuthListPage';
