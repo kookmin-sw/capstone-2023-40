@@ -85,7 +85,7 @@ export default function SubjectiveAnswerForm({
     answerLabel = '단답형 답변이 입력됩니다.';
   }
   return (
-    <Container>
+    <Container data-testid="question">
       <HeadContainer>
         <QuestionTitleInput
           theme={theme}

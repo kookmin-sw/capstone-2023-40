@@ -83,7 +83,7 @@ export default function ChoiceAnswerForm({
   theme,
 }: ChoiceAnswerFormProps) {
   return (
-    <Container>
+    <Container data-testid="question">
       <HeadContainer>
         <QuestionTitleInput
           theme={theme}
