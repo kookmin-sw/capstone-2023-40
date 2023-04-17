@@ -46,14 +46,46 @@ describe('[SurveyFormPage Test]', () => {
     // create question for test delete
     const addQuestionButton = screen.getByText('+');
     fireEvent.click(addQuestionButton);
-    const beforeClick = await screen.findByTestId('question');
-
-    expect(beforeClick).toBeInTheDocument();
 
     const deleteQuestionButton = await screen.findByText('X');
     fireEvent.click(deleteQuestionButton);
-    const afterClick = screen.queryByTestId('question');
+    const deletedQuestion = screen.queryByTestId('question');
 
-    expect(afterClick === null);
+    expect(deletedQuestion).not.toBeInTheDocument();
   });
+
+  it('create and delete from the middle of the questions', async () => {
+    render(
+      <MemoryRouter initialEntries={['/survey/form']}>
+        <SurveyFormPage />
+      </MemoryRouter>
+    );
+
+    // create questions for test
+    const addQuestionButton = screen.getByText('+');
+    fireEvent.click(addQuestionButton);
+    fireEvent.click(addQuestionButton);
+    fireEvent.click(addQuestionButton);
+    fireEvent.click(addQuestionButton);
+    fireEvent.click(addQuestionButton);
+
+    const addQuestionButtons = await screen.findAllByText('+');
+    const deleteQuestionButtons = await screen.findAllByText('X');
+    const questionTitles = await screen.findAllByDisplayValue('설문 제목');
+
+    // set question titles with index for distinction
+    questionTitles.forEach((questionTitle, index) => {
+      fireEvent.change(questionTitle, { target: { value: index } });
+    });
+    expect((questionTitles[2] as HTMLInputElement).value === '2');
+
+    // delete question in index 2
+    fireEvent.click(deleteQuestionButtons[2]);
+    expect((questionTitles[2] as HTMLInputElement).value === '3');
+
+    // add question under index 1
+    fireEvent.click(addQuestionButtons[1 + 1]);
+    expect((questionTitles[2] as HTMLInputElement).value === '설문 제목');
+  });
+  // TODO: limit on number of questions and options
 });
