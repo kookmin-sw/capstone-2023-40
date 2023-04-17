@@ -19,25 +19,25 @@ public class SurveyRequestDto {
 
     @NotBlank
     @Size(max = 100)
-    @ApiModelProperty(name = "설문조사 제목", example = "카카오 사용자분들께 설문 부탁드립니다!")
+    @ApiModelProperty(name = "설문조사 제목", example = "카카오 사용자분들께 설문 부탁드립니다!", notes = "설문조사 제목은 100자 이내여야 합니다.")
     private String title;
 
     @NotBlank
     @Size(max = 255)
-    @ApiModelProperty(name = "설문조사 상세내용", example = "카카오 앱 서비스에 대한 전반적인 만족도 조사입니다.")
+    @ApiModelProperty(name = "설문조사 상세내용", example = "카카오 앱 서비스에 대한 전반적인 만족도 조사입니다.", notes = "설문조사 상세내용은 255자 이내여야 합니다.")
     private String description;
 
     @NotNull
-    @ApiModelProperty(name = "설문조사 시작일", example = "2023-04-01T00:00:00")
+    @ApiModelProperty(name = "설문조사 시작일", example = "2023-04-01T00:00:00", notes = "설문조사 시작일은 요청시각 기준 5초 이전은 불가능합니다.")
     private LocalDateTime startedDate;
 
     @NotNull
     @Future
-    @ApiModelProperty(name = "설문조사 종료일", example = "2023-04-08T00:00:00")
+    @ApiModelProperty(name = "설문조사 종료일", example = "2023-04-08T00:00:00", notes = "설문조사 종료일은 설문조사 시작일보다 앞설 수 없습니다.")
     private LocalDateTime endedDate;
 
     @Valid
-    private List<CertificationType> certificationType;
+    private List<CertificationType> certificationTypes;
 
     @Valid
     @NotEmpty

@@ -25,7 +25,7 @@ public class SwaggerConfig {
         return new ApiInfoBuilder()
             .title("the survey API")
             .description("©copyright 2023 KMU Capstone Team 40")
-            .version("1.0.0")
+            .version("1.0")
             .build();
     }
 

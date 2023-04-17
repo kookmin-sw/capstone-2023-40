@@ -45,7 +45,8 @@ public class AuthenticationService {
 
         if (passwordEncoder().matches(authentication.getCredentials().toString(),
             userDetails.getPassword())) {
-            return new UsernamePasswordAuthenticationToken(userDetails.getUsername(), null,
+            return new UsernamePasswordAuthenticationToken(userDetails.getUsername(),
+                userDetails.getPassword(),
                 userDetails.getAuthorities());
         } else {
             throw new BadRequestExceptionMapper(ErrorMessage.INVALID_CREDENTIALS);

@@ -1,6 +1,5 @@
 package com.thesurvey.api.controller;
 
-import com.thesurvey.api.domain.EnumTypeEntity.Role;
 import com.thesurvey.api.dto.request.SurveyRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -15,35 +14,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 public abstract class BaseControllerTest {
-
-    String globalName = "test name";
-
-    String globalEmail = "test@gmail.com";
-
-    String globalAddress = "test address";
-
-    String globalPhoneNumber = "01012345678";
-
-    String globalRole = String.valueOf(Role.USER);
-
-    String globalPassword = "Password123@";
-
-    // Image size: 4.2 MB;
-    String globalProfileImage = "https://images2.alphacoders.com/130/1306410.png";
-
-    UserRegisterRequestDto globalRegisterDto = UserRegisterRequestDto.builder()
-        .name(globalName)
-        .email(globalEmail)
-        .password(globalPassword)
-        .phoneNumber(globalPhoneNumber)
-        .profileImage(globalProfileImage)
-        .address(globalAddress)
-        .build();
-
-    UserLoginRequestDto globalLoginDto = UserLoginRequestDto.builder()
-        .email(globalEmail)
-        .password(globalPassword)
-        .build();
 
     @Autowired
     protected MockMvc mockMvc;

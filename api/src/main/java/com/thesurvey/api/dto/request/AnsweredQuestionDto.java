@@ -15,6 +15,7 @@ public class AnsweredQuestionDto {
     @Positive
     private Integer singleChoice;
 
+    @Size(min = 1)
     private List<Integer> multipleChoices;
 
     @Size(max = 100)

@@ -8,6 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -43,9 +44,11 @@ public class AnsweredQuestion {
     @Column(name = "multiple_choices", nullable = true)
     private Integer multipleChoice;
 
+    @Size(max = 100)
     @Column(name = "short_answer", nullable = true)
     private String shortAnswer;
 
+    @Size(max = 255)
     @Column(name = "long_answer", nullable = true)
     private String longAnswer;
 

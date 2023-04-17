@@ -1,5 +1,7 @@
 package com.thesurvey.api.domain;
 
+import com.thesurvey.api.exception.BadRequestExceptionMapper;
+import com.thesurvey.api.exception.ErrorMessage;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -8,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,14 +36,17 @@ public class Question {
     @JoinColumn(name = "question_bank_id")
     public QuestionBank questionBank;
 
+    @NotNull
+    @Positive
     @Column(name = "question_no", nullable = false)
-    private int questionNo;
+    private Integer questionNo;
 
+    @NotNull
     @Column(name = "is_required", nullable = false)
-    private boolean isRequired;
+    private Boolean isRequired;
 
     @Builder
-    public Question(QuestionBank questionBank, Survey survey, int questionNo, boolean isRequired) {
+    public Question(QuestionBank questionBank, Survey survey, Integer questionNo, Boolean isRequired) {
         this.survey = survey;
         this.questionBank = questionBank;
         this.questionNo = questionNo;
@@ -50,11 +57,14 @@ public class Question {
             .build();
     }
 
-    public void changeQuestionNo(int questionNo) {
+    public void changeQuestionNo(Integer questionNo) {
+        if (questionNo <= 0) {
+            throw new BadRequestExceptionMapper(ErrorMessage.POSITIVE_VALUE_REQUIRED, "질문번호");
+        }
         this.questionNo = questionNo;
     }
 
-    public void changeIsRequired(boolean isRequired) {
+    public void changeIsRequired(Boolean isRequired) {
         this.isRequired = isRequired;
     }
 }

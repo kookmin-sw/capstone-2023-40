@@ -24,7 +24,8 @@ public class ApplicationConfiguration {
     @Bean
     public UserDetailsService userDetailsService() {
         return userEmail -> userRepository.findByEmail(userEmail)
-            .orElseThrow(() -> new NotFoundExceptionMapper(ErrorMessage.USER_EMAIL_NOT_FOUND, userEmail));
+            .orElseThrow(
+                () -> new NotFoundExceptionMapper(ErrorMessage.USER_EMAIL_NOT_FOUND, userEmail));
     }
 
     @Bean

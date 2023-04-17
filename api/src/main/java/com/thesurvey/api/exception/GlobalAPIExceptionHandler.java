@@ -15,23 +15,25 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalAPIExceptionHandler {
 
     @ExceptionHandler(NotFoundExceptionMapper.class)
-    public ResponseEntity<String> handleNotFoundRequestException(Exception error) {
+    public ResponseEntity<String> handleNotFoundRequestException(NotFoundExceptionMapper error) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error.getMessage());
     }
 
     @ExceptionHandler(UnauthorizedRequestExceptionMapper.class)
-    public ResponseEntity<String> handleUnauthorizedRequestException(Exception error) {
+    public ResponseEntity<String> handleUnauthorizedRequestException(
+        UnauthorizedRequestExceptionMapper error) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error.getMessage());
     }
 
     @ExceptionHandler(ForbiddenRequestExceptionMapper.class)
-    public ResponseEntity<String> handleForbiddenRequestException(Exception error) {
+    public ResponseEntity<String> handleForbiddenRequestException(
+        ForbiddenRequestExceptionMapper error) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error.getMessage());
     }
 
-
     @ExceptionHandler(BadRequestExceptionMapper.class)
-    public ResponseEntity<String> handleBadRequestExceptionMapperException(Exception error) {
+    public ResponseEntity<String> handleBadRequestExceptionMapperException(
+        BadRequestExceptionMapper error) {
         return ResponseEntity.badRequest().body(error.getMessage());
     }
 

@@ -25,28 +25,45 @@ public class SurveyMapper {
     }
 
     public SurveyResponseDto toSurveyResponseDto(Survey survey) {
-        List<QuestionBankResponseDto> questionBankResponseDtoList = questionService.getQuestionBankInfoDtoListBySurveyId(
-            survey.getSurveyId());
-
         return SurveyResponseDto.builder()
             .surveyId(survey.getSurveyId())
+            .authorId(survey.getAuthorId())
             .title(survey.getTitle())
             .description(survey.getDescription())
             .startedDate(survey.getStartedDate())
             .endedDate(survey.getEndedDate())
             .createdDate(survey.getCreatedDate())
             .modifiedDate(survey.getModifiedDate())
-            .certificationType(certificationTypeConverter.toCertificationTypeList(
+            .certificationTypes(certificationTypeConverter.toCertificationTypeList(
+                surveyRepository.findCertificationTypeBySurveyId(survey.getSurveyId())))
+            .build();
+    }
+
+    public SurveyResponseDto toSurveyResponseDto(Survey survey, Long authorId) {
+        List<QuestionBankResponseDto> questionBankResponseDtoList = questionService.getQuestionBankInfoDtoListBySurveyId(
+            survey.getSurveyId());
+
+        return SurveyResponseDto.builder()
+            .surveyId(survey.getSurveyId())
+            .authorId(authorId)
+            .title(survey.getTitle())
+            .description(survey.getDescription())
+            .startedDate(survey.getStartedDate())
+            .endedDate(survey.getEndedDate())
+            .createdDate(survey.getCreatedDate())
+            .modifiedDate(survey.getModifiedDate())
+            .certificationTypes(certificationTypeConverter.toCertificationTypeList(
                 surveyRepository.findCertificationTypeBySurveyId(survey.getSurveyId())))
             .questions(questionBankResponseDtoList)
             .build();
     }
 
-    public Survey toSurvey(SurveyRequestDto surveyRequestDto) {
+    public Survey toSurvey(SurveyRequestDto surveyRequestDto, Long authorId) {
         return Survey
             .builder()
-            .title(surveyRequestDto.getTitle().trim())
-            .description(surveyRequestDto.getDescription().trim())
+            .authorId(authorId)
+            .title(surveyRequestDto.getTitle())
+            .description(surveyRequestDto.getDescription())
             .startedDate(surveyRequestDto.getStartedDate())
             .endedDate(surveyRequestDto.getEndedDate())
             .build();
