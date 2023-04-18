@@ -105,7 +105,8 @@ describe('[SurveyFormPage Test]', () => {
     const questionSelector = await screen.findByTestId('selector');
 
     fireEvent.change(questionSelector, { target: { value: QuestionType.LONG_ANSWER } });
-    expect(screen.findByText('장문형 답변이 입력됩니다.'));
+    const label = await screen.findByText('장문형 답변이 입력됩니다.');
+    expect(label).toBeInTheDocument();
   });
 
   it('change question type to SHORT_ANSWER', async () => {
@@ -118,7 +119,8 @@ describe('[SurveyFormPage Test]', () => {
     const questionSelector = await screen.findByTestId('selector');
 
     fireEvent.change(questionSelector, { target: { value: QuestionType.SHORT_ANSWER } });
-    expect(screen.findByText('단답형 답변이 입력됩니다.'));
+    const label = await screen.findByText('단답형 답변이 입력됩니다.');
+    expect(label).toBeInTheDocument();
   });
 
   it('change question type to SINGLE_CHOICE', async () => {
@@ -131,7 +133,8 @@ describe('[SurveyFormPage Test]', () => {
     const questionSelector = await screen.findByTestId('selector');
 
     fireEvent.change(questionSelector, { target: { value: QuestionType.SINGLE_CHOICE } });
-    expect(screen.findByText('옵션을 추가해 주세요'));
+    const label = await screen.findByText('옵션을 추가해 주세요');
+    expect(label).toBeInTheDocument();
   });
 
   it('change question type to MULTIPLE_CHOICE', async () => {
@@ -144,7 +147,8 @@ describe('[SurveyFormPage Test]', () => {
     const questionSelector = await screen.findByTestId('selector');
 
     fireEvent.change(questionSelector, { target: { value: QuestionType.MULTIPLE_CHOICE } });
-    expect(screen.findByText('옵션을 추가해 주세요'));
+    const label = await screen.findByText('옵션을 추가해 주세요');
+    expect(label).toBeInTheDocument();
   });
 
   it('add option when click "문항 추가하기" button', async () => {
