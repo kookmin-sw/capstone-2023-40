@@ -5,7 +5,7 @@ import styled, { DefaultTheme } from 'styled-components';
 import { SurveyCreateRequest, CertificationType } from '../../types/request/Survey';
 import { NumberUtils } from '../../utils/NumberUtils';
 import CertificationList from '../CertificationList';
-import EditQuestionButton from './EditQuestionButton';
+import EditQuestionButton from './AddQuestionButton';
 
 const Container = styled.div`
   display: flex;

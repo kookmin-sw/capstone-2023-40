@@ -6,8 +6,7 @@ import styled from 'styled-components';
 // import requests from '../../api/request';
 import Header from '../../components/Header';
 import SurveyPageResultModal from '../../components/Modal/SurveyPageResultModal';
-import ChoiceAnswerForm from '../../components/SurveyForm/ChoiceAnswerForm';
-import SubjectiveAnswerForm from '../../components/SurveyForm/SubjectiveAnswerForm';
+import QuestionForm from '../../components/SurveyForm/QuestionForm';
 import SurveyDataForm from '../../components/SurveyForm/SurveyDataForm';
 import { SurveyFormValidation } from '../../features/SurveyFormValidation';
 import { useTheme } from '../../hooks/useTheme';
@@ -15,7 +14,6 @@ import { QuestionCreateRequest, QuestionType } from '../../types/request/Questio
 import { QuestionOptionCreateRequest } from '../../types/request/QuestionOption';
 import { SurveyCreateRequest } from '../../types/request/Survey';
 import { ValidationErrorMessage, InputCheckResult } from '../../types/userInputCheck';
-import { NumberUtils } from '../../utils/NumberUtils';
 import { scrollToRef, scrollToTop } from '../../utils/scroll';
 
 // TODO: add media-query for mobile....
@@ -55,56 +53,7 @@ const SurveyDataContainer = styled(ItemContainer)`
   border-left: 16px solid ${(props) => props.theme.colors.primary};
 `;
 
-const TextInput = styled.input.attrs({ type: 'text', maxLength: 100 })`
-  padding: 1.2vh 1.5vw 1.2vh 1.5vw;
-  border: ${(props) => props.theme.border};
-  border-radius: ${(props) => props.theme.borderRadius};
-  font-weight: 900;
-  color: ${(props) => props.theme.colors.default};
-  background-color: ${(props) => props.theme.colors.inputBackground};
-  cursor: text;
-`;
-
 const QuestionContainer = styled(ItemContainer)``;
-
-const AnswerLabel = styled.label`
-  display: inline-block;
-  width: 30vw;
-  padding: 1.2vh 1.5vw 1.2vh 1.5vw;
-  font-size: 15px;
-  color: ${(props) => props.theme.colors.text};
-  text-decoration: underline;
-  text-decoration-style: dotted;
-  text-decoration-color: currentColor;
-  border: ${(props) => props.theme.border};
-  border-radius: ${(props) => props.theme.borderRadius};
-`;
-
-const OptionContainer = styled.div``;
-
-const OptionInput = styled(TextInput).attrs({ type: 'text' })`
-  width: 30vw;
-  font-size: 13px;
-  margin-top: 3px;
-`;
-
-const DeleteOptionButton = styled.button`
-  font-weight: 900;
-  text-align: center;
-  color: ${(props) => props.theme.colors.text};
-  margin-left: 3px;
-  padding: 10px;
-  background-color: ${(props) => props.theme.colors.button};
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
-  border: none;
-  cursor: pointer;
-
-  &:hover {
-    opacity: 0.8;
-  }
-`;
 
 const SubmitButton = styled.button.attrs({ type: 'submit' })`
   width: 15vw;
@@ -318,7 +267,7 @@ export default function SurveyFormPage() {
     else if (typeof optionId !== 'undefined') deleteOptionAtId(questionId, optionId);
   };
 
-  const makeSubjectiveAnswerForm = (questionId: number, selected: number) => {
+  const makeQuestionForm = (questionId: number, selected: number) => {
     return (
       <QuestionContainer
         ref={(element) => {
@@ -327,63 +276,14 @@ export default function SurveyFormPage() {
         theme={theme}
         key={questionId}
       >
-        {SubjectiveAnswerForm({
+        {QuestionForm({
           surveyData,
           selected,
           questionId,
           handleChangeQuestion,
           handleChangeQuestionType,
           handleClickButton,
-          theme,
-        })}
-      </QuestionContainer>
-    );
-  };
-
-  const makeOptionsForm = (questionId: number) => {
-    const tmpOptions = surveyData.questions[questionId].questionOptions;
-    if (typeof tmpOptions !== 'undefined') {
-      if (tmpOptions.length === 0) {
-        return <AnswerLabel theme={theme}>옵션을 추가해 주세요</AnswerLabel>;
-      }
-      return NumberUtils.range(0, tmpOptions.length).map((index: number) => (
-        <OptionContainer theme={theme} key={index}>
-          <OptionInput
-            theme={theme}
-            onChange={(event) => handleChangeOption(event, questionId, index)}
-            name="option"
-            value={tmpOptions[index].option || ''}
-          />
-          <DeleteOptionButton
-            theme={theme}
-            name="deleteOption"
-            onClick={(event) => handleClickButton(event, questionId, index)}
-          >
-            X
-          </DeleteOptionButton>
-        </OptionContainer>
-      ));
-    }
-    return <AnswerLabel theme={theme}>옵션을 추가해 주세요</AnswerLabel>;
-  };
-
-  const makeChoiceForm = (questionId: number, selected: number) => {
-    return (
-      <QuestionContainer
-        ref={(element) => {
-          questionRefs.current[questionId] = element as HTMLDivElement;
-        }}
-        theme={theme}
-        key={questionId}
-      >
-        {ChoiceAnswerForm({
-          surveyData,
-          selected,
-          questionId,
-          handleChangeQuestion,
-          handleChangeQuestionType,
-          handleClickButton,
-          makeOptionsForm,
+          handleChangeOption,
           theme,
         })}
       </QuestionContainer>
@@ -391,10 +291,7 @@ export default function SurveyFormPage() {
   };
 
   const showQuestionForm = (questionType: number, questionId: number) => {
-    if (questionType === QuestionType.LONG_ANSWER || questionType === QuestionType.SHORT_ANSWER) {
-      return makeSubjectiveAnswerForm(questionId, questionType);
-    }
-    return makeChoiceForm(questionId, questionType);
+    return makeQuestionForm(questionId, questionType);
   };
 
   return (

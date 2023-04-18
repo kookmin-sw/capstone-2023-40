@@ -4,7 +4,8 @@ import styled, { DefaultTheme } from 'styled-components';
 
 import { QuestionType } from '../../types/request/Question';
 import { SurveyCreateRequest } from '../../types/request/Survey';
-import EditQuestionButton from './EditQuestionButton';
+import EditQuestionButton from './AddQuestionButton';
+import OptionsList from './OptionList';
 import QuestionTypeSelect from './QuestionTypeSelect';
 
 const Container = styled.div`
@@ -59,6 +60,24 @@ const AnswerLabel = styled.label`
   border-radius: ${(props) => props.theme.borderRadius};
 `;
 
+const AddOptionButton = styled.button`
+  font-weight: 900;
+  text-align: center;
+  padding: 10px;
+  color: ${(props) => props.theme.colors.text};
+  background-color: ${(props) => props.theme.colors.button};
+  border: ${(props) => props.theme.border};
+  border-radius: ${(props) => props.theme.borderRadius};
+  margin-top: 25px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${(props) => props.theme.colors.btnhover};
+  }
+`;
+
+const SubjectiveQuestion = styled.div``;
+
 interface SubjectiveAnswerFormProps {
   surveyData: SurveyCreateRequest;
   selected: number;
@@ -66,16 +85,18 @@ interface SubjectiveAnswerFormProps {
   handleChangeQuestion: (event: React.ChangeEvent<HTMLInputElement>, questionId: number) => void;
   handleChangeQuestionType: (event: React.ChangeEvent<HTMLSelectElement>, questionId: number) => void;
   handleClickButton: (event: React.MouseEvent<HTMLButtonElement>, questionId: number, optionId?: number) => void;
+  handleChangeOption: (event: React.ChangeEvent<HTMLInputElement>, questionId: number, optionId: number) => void;
   theme: DefaultTheme;
 }
 
-export default function SubjectiveAnswerForm({
+export default function QuestionForm({
   surveyData,
   selected,
   questionId,
   handleChangeQuestion,
   handleChangeQuestionType,
   handleClickButton,
+  handleChangeOption,
   theme,
 }: SubjectiveAnswerFormProps) {
   let answerLabel = '';
@@ -103,7 +124,24 @@ export default function SubjectiveAnswerForm({
         value={surveyData.questions[questionId].description || ''}
       />
 
-      <AnswerLabel theme={theme}>{answerLabel}</AnswerLabel>
+      {selected === QuestionType.LONG_ANSWER || selected === QuestionType.SHORT_ANSWER ? (
+        <AnswerLabel theme={theme}>{answerLabel}</AnswerLabel>
+      ) : (
+        <SubjectiveQuestion>
+          <OptionsList
+            surveyData={surveyData}
+            questionId={questionId}
+            handleClickButton={handleClickButton}
+            handleChangeOption={handleChangeOption}
+            theme={theme}
+          />
+          <ButtonContainer>
+            <AddOptionButton theme={theme} name="addOption" onClick={(event) => handleClickButton(event, questionId)}>
+              문항 추가하기
+            </AddOptionButton>
+          </ButtonContainer>
+        </SubjectiveQuestion>
+      )}
 
       <ButtonContainer>
         {EditQuestionButton({ editType: 'Add', questionId, handleClickButton, theme })}
