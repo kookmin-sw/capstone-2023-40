@@ -9,23 +9,36 @@ import SurveyFormPage from '../routes/SurveyPages/SurveyFormPage';
 // mock scrollIntoView function
 window.HTMLElement.prototype.scrollIntoView = () => {};
 
-function setUp() {
-  return render(
-    <MemoryRouter initialEntries={['/survey/form']}>
-      <Routes>
-        <Route path="/survey/form" element={<SurveyFormPage />} />
-      </Routes>
-    </MemoryRouter>
-  );
-}
-
 describe('[SurveyFormPage Test]', () => {
+  function setUp() {
+    return render(
+      <MemoryRouter initialEntries={['/survey/form']}>
+        <Routes>
+          <Route path="/survey/form" element={<SurveyFormPage />} />
+        </Routes>
+      </MemoryRouter>
+    );
+  }
+
   it('renders SurveyFormPage', () => {
     setUp();
 
     const pageTitle = screen.getByText('설문조사 작성');
+    const surveyTitle = screen.getByPlaceholderText('설문지의 제목을 입력해주세요');
+    // TODO: Certification list test
+    const startedDate = screen.getByLabelText('시작일 :');
+    const endedDate = screen.getByLabelText('종료일 :');
+    const surveyDescription = screen.getByPlaceholderText('설문지의 제목을 입력해주세요');
+    const addQuestionButton = screen.getByText('+');
+    const submitButton = screen.getByText('완료하기');
 
     expect(pageTitle).toBeInTheDocument();
+    expect(surveyTitle).toBeInTheDocument();
+    expect(surveyDescription).toBeInTheDocument();
+    expect(startedDate).toBeInTheDocument();
+    expect(endedDate).toBeInTheDocument();
+    expect(addQuestionButton).toBeInTheDocument();
+    expect(submitButton).toBeInTheDocument();
   });
 
   it('create question when click "+" button', async () => {
@@ -40,7 +53,6 @@ describe('[SurveyFormPage Test]', () => {
 
   it('delete question when click "x" button', async () => {
     setUp();
-
     // create question for test delete
     const addQuestionButton = screen.getByText('+');
     fireEvent.click(addQuestionButton);
@@ -81,5 +93,11 @@ describe('[SurveyFormPage Test]', () => {
     fireEvent.click(addQuestionButtons[1 + 1]);
     expect((questionTitles[2] as HTMLInputElement).value === '설문 제목');
   });
+
+  // TODO: check change question type
+  // TODO: add and delete option
+  // TODO: check empty question
+  // TODO: check empty options for selective
+  // TODO: check empty value before submit(title, description, surveytitle/discription, optionTitle)
   // TODO: limit on number of questions and options
 });
