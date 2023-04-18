@@ -79,23 +79,6 @@ const SurveyDateInput = styled.input.attrs({ type: 'date' })`
   color: ${(props) => props.theme.colors.default};
   background-color: ${(props) => props.theme.colors.container};
   margin-bottom: 10px;
-
-  &::-webkit-datetime-edit-text {
-    -webkit-appearance: none;
-    display: none;
-  }
-  &::-webkit-datetime-edit-month-field {
-    -webkit-appearance: none;
-    display: none;
-  }
-  &::-webkit-datetime-edit-day-field {
-    -webkit-appearance: none;
-    display: none;
-  }
-  &::-webkit-datetime-edit-year-field {
-    -webkit-appearance: none;
-    display: none;
-  }
 `;
 
 const List = styled.div`
