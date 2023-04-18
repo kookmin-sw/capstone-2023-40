@@ -41,7 +41,6 @@ public class SurveyServiceTest {
 
     @BeforeAll
     void setup() {
-        surveyId = UUID.randomUUID();
         questionBankId = 1L;
         questionOptionId = 1L;
         user = User.builder()
@@ -186,7 +185,7 @@ public class SurveyServiceTest {
             .surveyId(surveyId)
             .title("This is update test survey.")
             .description("This is update test description")
-            .startedDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")).plusDays(100))
+            .startedDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")).plusDays(100)) // set to after endedDate
             .endedDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")).plusDays(1))
             .certificationTypes(List.of(CertificationType.KAKAO))
             .questions(List.of(questionBankUpdateRequestDto))

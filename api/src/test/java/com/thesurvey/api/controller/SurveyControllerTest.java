@@ -98,8 +98,8 @@ public class SurveyControllerTest extends BaseControllerTest {
     @BeforeAll
     void setupBeforeAll() throws Exception {
         UserRegisterRequestDto userRegisterRequestDto = UserRegisterRequestDto.builder()
-            .name("test")
-            .email("test@gmail.com")
+            .name("test1")
+            .email("test1@gmail.com")
             .password("Password40@")
             .phoneNumber("01012345678")
             .build();
@@ -134,7 +134,7 @@ public class SurveyControllerTest extends BaseControllerTest {
     void setupBeforeEach() throws Exception {
         UserUtil.userRepository = userRepository;
         UserLoginRequestDto userLoginRequestDto = UserLoginRequestDto.builder()
-            .email("test@gmail.com")
+            .email("test1@gmail.com")
             .password("Password40@")
             .build();
         mockLogin(userLoginRequestDto, true);
