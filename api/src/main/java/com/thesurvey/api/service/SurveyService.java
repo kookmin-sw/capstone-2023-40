@@ -11,6 +11,7 @@ import com.thesurvey.api.exception.ForbiddenRequestExceptionMapper;
 import com.thesurvey.api.exception.NotFoundExceptionMapper;
 import com.thesurvey.api.repository.SurveyRepository;
 import com.thesurvey.api.service.mapper.SurveyMapper;
+import com.thesurvey.api.util.StringUtil;
 import com.thesurvey.api.util.UserUtil;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -116,19 +117,8 @@ public class SurveyService {
         // validate survey request dto
         validateUpdateSurvey(survey, surveyUpdateRequestDto);
 
-        if (surveyUpdateRequestDto.getTitle() != null) {
-            if (surveyUpdateRequestDto.getTitle().isBlank()) {
-                throw new BadRequestExceptionMapper(ErrorMessage.NO_ONLY_WHITESPACE);
-            }
-            survey.changeTitle(surveyUpdateRequestDto.getTitle().trim());
-        }
-
-        if (surveyUpdateRequestDto.getDescription() != null) {
-            if (surveyUpdateRequestDto.getDescription().isBlank()) {
-                throw new BadRequestExceptionMapper(ErrorMessage.NO_ONLY_WHITESPACE);
-            }
-            survey.changeDescription(surveyUpdateRequestDto.getDescription().trim());
-        }
+        survey.changeTitle(StringUtil.trim(surveyUpdateRequestDto.getTitle()));
+        survey.changeDescription(StringUtil.trim(surveyUpdateRequestDto.getDescription()));
 
         if (surveyUpdateRequestDto.getStartedDate() != null) {
             survey.changeStartedDate(surveyUpdateRequestDto.getStartedDate());
