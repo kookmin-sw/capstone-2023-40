@@ -24,7 +24,6 @@ const AddQuestionButton = styled(Button)`
 `;
 
 const DeleteQuestionButton = styled(Button)`
-  color: #cd5c5c;
   margin-left: 2vw;
 `;
 
@@ -55,7 +54,7 @@ export default function EditQuestionButton({
           name="deleteQuestion"
           onClick={(event) => handleClickButton(event, questionId)}
         >
-          X
+          🗑️
         </DeleteQuestionButton>
       );
     default:

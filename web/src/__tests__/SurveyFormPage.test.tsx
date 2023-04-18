@@ -52,13 +52,13 @@ describe('[SurveyFormPage Test]', () => {
     expect(createdQuestion).toBeInTheDocument();
   });
 
-  it('delete question when click "x" button', async () => {
+  it('delete question when click "🗑️" button', async () => {
     setUp();
-    // create question for test delete
+    // create question
     const addQuestionButton = screen.getByText('+');
     fireEvent.click(addQuestionButton);
 
-    const deleteQuestionButton = await screen.findByText('X');
+    const deleteQuestionButton = await screen.findByText('🗑️');
     fireEvent.click(deleteQuestionButton);
     const deletedQuestion = screen.queryByTestId('question');
 
@@ -68,7 +68,7 @@ describe('[SurveyFormPage Test]', () => {
   it('create and delete from the middle of the questions', async () => {
     setUp();
 
-    // create questions for test
+    // create questions
     const addQuestionButton = screen.getByText('+');
     fireEvent.click(addQuestionButton);
     fireEvent.click(addQuestionButton);
@@ -77,7 +77,7 @@ describe('[SurveyFormPage Test]', () => {
     fireEvent.click(addQuestionButton);
 
     const addQuestionButtons = await screen.findAllByText('+');
-    const deleteQuestionButtons = await screen.findAllByText('X');
+    const deleteQuestionButtons = await screen.findAllByText('🗑️');
     const questionTitles = await screen.findAllByDisplayValue('설문 제목');
 
     // set question titles with index for distinction
@@ -97,7 +97,8 @@ describe('[SurveyFormPage Test]', () => {
 
   it('check initial question type is LONG_ANSWER', async () => {
     setUp();
-    // create question for test
+
+    // create question
     const addQuestionButton = screen.getByText('+');
     fireEvent.click(addQuestionButton);
 
@@ -109,7 +110,8 @@ describe('[SurveyFormPage Test]', () => {
 
   it('change question type to SHORT_ANSWER', async () => {
     setUp();
-    // create question for test
+
+    // create question
     const addQuestionButton = screen.getByText('+');
     fireEvent.click(addQuestionButton);
 
@@ -121,7 +123,8 @@ describe('[SurveyFormPage Test]', () => {
 
   it('change question type to SINGLE_CHOICE', async () => {
     setUp();
-    // create question for test
+
+    // create question
     const addQuestionButton = screen.getByText('+');
     fireEvent.click(addQuestionButton);
 
@@ -133,7 +136,8 @@ describe('[SurveyFormPage Test]', () => {
 
   it('change question type to MULTIPLE_CHOICE', async () => {
     setUp();
-    // create question for test
+
+    // create question
     const addQuestionButton = screen.getByText('+');
     fireEvent.click(addQuestionButton);
 
@@ -143,7 +147,60 @@ describe('[SurveyFormPage Test]', () => {
     expect(screen.findByText('옵션을 추가해 주세요'));
   });
 
-  // TODO: add and delete option
+  it('add option when click "문항 추가하기" button', async () => {
+    setUp();
+
+    // create question
+    const addQuestionButton = screen.getByText('+');
+    fireEvent.click(addQuestionButton);
+
+    // change question type
+    const questionSelector = await screen.findByTestId('selector');
+    fireEvent.change(questionSelector, { target: { value: QuestionType.MULTIPLE_CHOICE } });
+
+    const addOptionButton = screen.getByText('문항 추가하기');
+    fireEvent.click(addOptionButton);
+    fireEvent.click(addOptionButton);
+    fireEvent.click(addOptionButton);
+    fireEvent.click(addOptionButton);
+    fireEvent.click(addOptionButton);
+
+    const options = await screen.findAllByDisplayValue('객관식 문항');
+    expect(options.length === 5);
+  });
+
+  it('delete option when click "문항 추가하기" button', async () => {
+    setUp();
+
+    // create question
+    const addQuestionButton = screen.getByText('+');
+    fireEvent.click(addQuestionButton);
+
+    // change question type
+    const questionSelector = await screen.findByTestId('selector');
+    fireEvent.change(questionSelector, { target: { value: QuestionType.MULTIPLE_CHOICE } });
+
+    // add options
+    const addOptionButton = screen.getByText('문항 추가하기');
+    fireEvent.click(addOptionButton);
+    fireEvent.click(addOptionButton);
+    fireEvent.click(addOptionButton);
+    fireEvent.click(addOptionButton);
+    fireEvent.click(addOptionButton);
+
+    const options = await screen.findAllByDisplayValue('객관식 문항');
+    const deleteOptionButtons = await screen.findAllByText('X');
+
+    // set option with index for distinction
+    options.forEach((option, index) => {
+      fireEvent.change(option, { target: { value: index } });
+    });
+    expect((options[2] as HTMLInputElement).value === '2');
+
+    // delete option in index 2
+    fireEvent.click(deleteOptionButtons[2]);
+    expect((options[2] as HTMLInputElement).value === '3');
+  });
   // TODO: check empty question
   // TODO: check empty options for selective
   // TODO: check empty value before submit(title, description, surveytitle/discription, optionTitle)
