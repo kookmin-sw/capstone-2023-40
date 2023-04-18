@@ -22,10 +22,6 @@ const GuideLabel = styled.label`
   margin-right: 10px;
   font-weight: 900;
   color: ${(props) => props.theme.colors.default};
-
-  @media screen and (max-width: 900px) {
-    display: none;
-  }
 `;
 
 const TextInput = styled.input.attrs({ type: 'text', maxLength: 100 })`
@@ -68,9 +64,57 @@ const SelectedCertification = styled.label`
   padding: 1.2vh 1.5vw 1.2vh 1.5vw;
 `;
 
-const CertificationPicker = styled.label`
+const SurveyDateContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: baseline;
+`;
+
+const SurveyDateInput = styled.input.attrs({ type: 'date' })`
+  padding: 1.2vh 1.5vw 1.2vh 1.5vw;
+  border: ${(props) => props.theme.border};
+  border-radius: ${(props) => props.theme.borderRadius};
+  font-weight: 900;
+  color: ${(props) => props.theme.colors.default};
+  background-color: ${(props) => props.theme.colors.container};
+  margin-bottom: 10px;
+
+  &::-webkit-datetime-edit-text {
+    -webkit-appearance: none;
+    display: none;
+  }
+  &::-webkit-datetime-edit-month-field {
+    -webkit-appearance: none;
+    display: none;
+  }
+  &::-webkit-datetime-edit-day-field {
+    -webkit-appearance: none;
+    display: none;
+  }
+  &::-webkit-datetime-edit-year-field {
+    -webkit-appearance: none;
+    display: none;
+  }
+`;
+
+const List = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0px;
+`;
+
+const ListItem = styled.li`
+  list-style: none;
+  margin: 3px;
+`;
+
+const CertificationLabel = styled.label`
   display: flex;
   align-items: center;
+  font-weight: 900;
+  color: ${(props) => props.theme.colors.default};
 `;
 
 const CheckBox = styled.input.attrs({ type: 'checkbox' })`
@@ -90,25 +134,6 @@ const CheckBox = styled.input.attrs({ type: 'checkbox' })`
   }
 `;
 
-const SurveyDateContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: baseline;
-`;
-
-const SurveyDateInput = styled.input.attrs({ type: 'datetime-local' })`
-  padding: 1.2vh 1.5vw 1.2vh 1.5vw;
-  border: ${(props) => props.theme.border};
-  border-radius: ${(props) => props.theme.borderRadius};
-  font-weight: 900;
-  color: ${(props) => props.theme.colors.default};
-  background-color: ${(props) => props.theme.colors.container};
-  margin-bottom: 10px;
-`;
-
-const CertificationLabel = styled.span``;
-
 interface SurveyDataFormProps {
   surveyData: SurveyCreateRequest;
   handleChangeSurveyData: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -126,30 +151,20 @@ export default function SurveyDataForm({
 }: SurveyDataFormProps) {
   return (
     <Container theme={theme}>
-      <SurveyTitleInput theme={theme} onChange={handleChangeSurveyData} name="title" value={surveyData?.title || ''} />
+      <SurveyTitleInput
+        theme={theme}
+        onChange={handleChangeSurveyData}
+        id="title"
+        value={surveyData?.title || ''}
+        placeholder="설문지의 제목을 입력해주세요"
+      />
       <SurveyDescriptionInput
         theme={theme}
         onChange={handleChangeSurveyData}
-        name="description"
+        id="description"
         value={surveyData?.description || ''}
+        placeholder="설문지의 설명을 입력해주세요"
       />
-
-      <SurveyDateContainer>
-        <GuideLabel theme={theme}>설문조사 기간 : </GuideLabel>
-        <SurveyDateInput
-          theme={theme}
-          onChange={handleChangeSurveyData}
-          name="startedDate"
-          value={`${surveyData?.startedDate}` || ''}
-        />
-        <GuideLabel theme={theme}> ~ </GuideLabel>
-        <SurveyDateInput
-          theme={theme}
-          onChange={handleChangeSurveyData}
-          name="endedDate"
-          value={`${surveyData?.endedDate}` || ''}
-        />
-      </SurveyDateContainer>
 
       <SurveyCertificationsContainer theme={theme}>
         <SelectedCertificationsContainer theme={theme}>
@@ -160,19 +175,44 @@ export default function SurveyDataForm({
             </SelectedCertification>
           ))}
         </SelectedCertificationsContainer>
-        {NumberUtils.range(0, 6).map((index: number) => (
-          <CertificationPicker theme={theme} key={index} htmlFor={`${index}`}>
-            <CheckBox
-              id={`${index}`}
-              checked={surveyData.certificationTypes?.includes(index)}
-              onChange={(e) => handleChangeCheck(e, index)}
-            />
-            <CertificationLabel theme={theme}>
-              {CertificationList({ label: CertificationType[index], iconOption: false })}
-            </CertificationLabel>
-          </CertificationPicker>
-        ))}
+        <List>
+          {NumberUtils.range(0, 6).map((index: number) => {
+            return (
+              <ListItem key={index}>
+                <CertificationLabel htmlFor={`certification${index}`} theme={theme}>
+                  <CheckBox
+                    id={`certification${index}`}
+                    checked={surveyData.certificationTypes?.includes(index)}
+                    onChange={(e) => handleChangeCheck(e, index)}
+                  />
+                  {CertificationList({ label: CertificationType[index], iconOption: false })}
+                </CertificationLabel>
+              </ListItem>
+            );
+          })}
+        </List>
       </SurveyCertificationsContainer>
+
+      <SurveyDateContainer>
+        <GuideLabel htmlFor="startedDate" theme={theme}>
+          시작일 :{' '}
+        </GuideLabel>
+        <SurveyDateInput
+          theme={theme}
+          onChange={handleChangeSurveyData}
+          id="startedDate"
+          value={`${surveyData?.startedDate}` || ''}
+        />
+        <GuideLabel htmlFor="endedDate" theme={theme}>
+          종료일 :{' '}
+        </GuideLabel>
+        <SurveyDateInput
+          theme={theme}
+          onChange={handleChangeSurveyData}
+          id="endedDate"
+          value={`${surveyData?.endedDate}` || ''}
+        />
+      </SurveyDateContainer>
 
       <ButtonContainer>
         {EditQuestionButton({ editType: 'Add', questionId: -1, handleClickButton, theme })}
