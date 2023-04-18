@@ -5,6 +5,7 @@ import { act } from 'react-dom/test-utils';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 
 import SurveyFormPage from '../routes/SurveyPages/SurveyFormPage';
+import { QuestionType } from '../types/request/Question';
 
 // mock scrollIntoView function
 window.HTMLElement.prototype.scrollIntoView = () => {};
@@ -20,7 +21,7 @@ describe('[SurveyFormPage Test]', () => {
     );
   }
 
-  it('renders SurveyFormPage', () => {
+  it('initial rendering SurveyFormPage', () => {
     setUp();
 
     const pageTitle = screen.getByText('설문조사 작성');
@@ -94,7 +95,54 @@ describe('[SurveyFormPage Test]', () => {
     expect((questionTitles[2] as HTMLInputElement).value === '설문 제목');
   });
 
-  // TODO: check change question type
+  it('check initial question type is LONG_ANSWER', async () => {
+    setUp();
+    // create question for test
+    const addQuestionButton = screen.getByText('+');
+    fireEvent.click(addQuestionButton);
+
+    const questionSelector = await screen.findByTestId('selector');
+
+    fireEvent.change(questionSelector, { target: { value: QuestionType.LONG_ANSWER } });
+    expect(screen.findByText('장문형 답변이 입력됩니다.'));
+  });
+
+  it('change question type to SHORT_ANSWER', async () => {
+    setUp();
+    // create question for test
+    const addQuestionButton = screen.getByText('+');
+    fireEvent.click(addQuestionButton);
+
+    const questionSelector = await screen.findByTestId('selector');
+
+    fireEvent.change(questionSelector, { target: { value: QuestionType.SHORT_ANSWER } });
+    expect(screen.findByText('단답형 답변이 입력됩니다.'));
+  });
+
+  it('change question type to SINGLE_CHOICE', async () => {
+    setUp();
+    // create question for test
+    const addQuestionButton = screen.getByText('+');
+    fireEvent.click(addQuestionButton);
+
+    const questionSelector = await screen.findByTestId('selector');
+
+    fireEvent.change(questionSelector, { target: { value: QuestionType.SINGLE_CHOICE } });
+    expect(screen.findByText('옵션을 추가해 주세요'));
+  });
+
+  it('change question type to MULTIPLE_CHOICE', async () => {
+    setUp();
+    // create question for test
+    const addQuestionButton = screen.getByText('+');
+    fireEvent.click(addQuestionButton);
+
+    const questionSelector = await screen.findByTestId('selector');
+
+    fireEvent.change(questionSelector, { target: { value: QuestionType.MULTIPLE_CHOICE } });
+    expect(screen.findByText('옵션을 추가해 주세요'));
+  });
+
   // TODO: add and delete option
   // TODO: check empty question
   // TODO: check empty options for selective

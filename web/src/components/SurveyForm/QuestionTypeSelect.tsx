@@ -33,6 +33,7 @@ export default function QuestionTypeSelect({
 }: QuestionTypeSelectProps) {
   return (
     <QuestionTypeSelector
+      data-testid="selector"
       theme={theme}
       name="questionType"
       onChange={(event) => handleChangeQuestionType(event, questionId)}
