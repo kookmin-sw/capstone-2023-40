@@ -30,7 +30,7 @@ const HeadContainer = styled.div`
   background-color: ${(props) => props.theme.colors.container};
 `;
 
-const Title = styled.label`
+const Title = styled.span`
   font-size: 30px;
   font-weight: 600;
   color: ${(props) => props.theme.colors.default};
@@ -118,6 +118,7 @@ const SubmitButton = styled.button.attrs({ type: 'submit' })`
   font-weight: 700;
   color: ${(props) => props.theme.colors.default};
   background-color: ${(props) => props.theme.colors.primary};
+  transition: 250ms background ease;
   cursor: pointer;
 
   &:hover {
@@ -135,8 +136,8 @@ export default function SurveyFormPage() {
   const [surveyData, setSurveyData] = useState<SurveyCreateRequest>({
     title: '제목 없는 설문',
     description: '설문지 설명',
-    startedDate: '2023-04-04T20:31',
-    endedDate: '2023-04-04T20:31',
+    startedDate: '',
+    endedDate: '',
     certificationTypes: [],
     questions: [],
   });
@@ -188,6 +189,7 @@ export default function SurveyFormPage() {
       default:
         // TODO: submit surveyData to server
         console.log(checkResult.message);
+        console.log(surveyData);
         setResultModalOpen(false);
     }
   };
@@ -269,11 +271,11 @@ export default function SurveyFormPage() {
 
   // Update surveyData title | description | startedDate | endedDate
   const handleChangeSurveyData = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
+    const { id, value } = event.target;
     if (typeof surveyData !== 'undefined') {
       setSurveyData({
         ...surveyData,
-        [name]: value,
+        [id]: value,
       });
     }
   };
