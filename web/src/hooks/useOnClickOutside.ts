@@ -12,10 +12,11 @@ export const useOnClickOutside = ({ ref, handler }: Props) => {
         return;
       }
       handler();
+      console.log('클릭됨');
     };
-    document.addEventListener('mousedown', listener);
+    window.addEventListener('mousedown', listener);
     return () => {
-      document.removeEventListener('mousedown', listener);
+      window.removeEventListener('mousedown', listener);
     };
   }, [ref, handler]);
 };

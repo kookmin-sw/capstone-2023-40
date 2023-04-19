@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { Icons } from '../../assets/svg/index';
 import Header from '../../components/Header';
 import { useTheme } from '../../hooks/useTheme';
-import { authReducer } from '../../reducers';
+import { authReducer } from '../../reducers/auth';
 import { AuthState } from '../../types/auth';
 
 const KakaoImage = styled(Icons.KAKAO).attrs({
@@ -162,7 +162,6 @@ const initialState: AuthState = {
 export default function MyPage() {
   const [theme, toggleTheme] = useTheme();
   const navigate = useNavigate();
-
   const [state, dispatch] = useReducer(authReducer, initialState);
 
   // FIXME: To API data

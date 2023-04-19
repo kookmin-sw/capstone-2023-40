@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useState, useReducer } from 'react';
 
 import { AxiosError, AxiosResponse } from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -6,12 +6,13 @@ import styled, { DefaultTheme } from 'styled-components';
 
 import axios from '../api/axios';
 import requests from '../api/request';
-import { formReducer } from '../reducers';
+import { formReducer } from '../reducers/form';
 import { FormState } from '../types/form';
 import { UserRegisterRequest } from '../types/request/Authentication';
 import { UserResponse } from '../types/response/User';
 import { isEmptyString, validateEmail, validatePassword, validatePhoneNumber } from '../utils/validate';
 import InputContainer from './InputContainer';
+import AlertModal from './Modal/AlertModal';
 
 const Container = styled.div`
   padding: 7vw;
@@ -111,6 +112,9 @@ const initialFormState: FormState = {
 export default function RegisterForm(props: RegisterFormProps) {
   const navigate = useNavigate();
   const [state, dispatch] = useReducer(formReducer, initialFormState);
+  const [isAlertModal, setIsAlertModal] = useState<boolean>(false);
+  const [titleAlert, setTitleAlert] = useState('');
+  const [textAlert, setTextAlert] = useState('');
 
   const setInputValue = (name: string, value: string) => {
     switch (name) {
@@ -147,60 +151,75 @@ export default function RegisterForm(props: RegisterFormProps) {
 
   // FIXME: It will have to Add connect User DataBase - Email
   const sendEmailAuthentication = (email: string): void => {
+    setTitleAlert('회원가입 오류');
     if (isEmptyString(email)) {
-      alert('이메일을 입력해주세요.');
+      setTextAlert('이메일을 입력해주세요.');
     } else if (!validateEmail(email)) {
-      alert('이메일을 다시 확인해주세요.');
+      setTextAlert('이메일을 다시 확인해주세요.');
     } else {
       dispatch({ type: 'AUTH_EMAIL', payload: true });
-      alert('해당 이메일에 인증요청을 보냈습니다.');
+      setTitleAlert('회원가입');
+      setTextAlert('해당 이메일에 인증요청을 보냈습니다.');
     }
+    setIsAlertModal(true);
   };
 
   const checkPassword = (password: string, confirmPassword: string) => {
+    setTitleAlert('회원가입 오류');
     if (isEmptyString(password)) {
-      alert('비밀번호를 입력해주세요.');
+      setTextAlert('비밀번호를 입력해주세요.');
+      setIsAlertModal(true);
       return false;
     }
 
     if (!validatePassword(password)) {
-      alert('비밀번호를 다시 확인해주세요.');
+      setTextAlert('비밀번호를 다시 확인해주세요.');
+      setIsAlertModal(true);
       return false;
     }
 
     if (isEmptyString(confirmPassword)) {
-      alert('비밀번호를 한 번 더 입력해주세요.');
+      setTextAlert('비밀번호를 한 번 더 입력해주세요.');
+      setIsAlertModal(true);
       return false;
     }
 
     if (password !== confirmPassword) {
-      alert('비밀번호가 일치하지 않습니다.');
+      setTextAlert('비밀번호가 일치하지 않습니다.');
+      setIsAlertModal(true);
       return false;
     }
 
     dispatch({ type: 'CONFIRM_PASSWORD', payload: true });
-    alert('비밀번호가 일치합니다!');
+    setTitleAlert('회원가입');
+    setTextAlert('비밀번호가 일치합니다!');
+    setIsAlertModal(true);
     return true;
   };
 
   const checkUserInput = () => {
+    setTitleAlert('회원가입 오류');
     if (!state.isEmailChecked || !state.isPasswordChecked) {
-      alert('이메일 또는 비밀번호를 다시 확인해주세요');
+      setTextAlert('이메일 또는 비밀번호를 다시 확인해주세요');
+      setIsAlertModal(true);
       return false;
     }
 
     if (!checkPassword(state.password, state.confirmPassword)) {
-      alert('## 비번 체크하셈!');
+      setTextAlert('비밀번호를 확인해주세요.');
+      setIsAlertModal(true);
       return false;
     }
 
     if (isEmptyString(state.name)) {
-      alert('이름을 입력해주세요.');
+      setTextAlert('이름을 입력해주세요.');
+      setIsAlertModal(true);
       return false;
     }
 
     if (!validatePhoneNumber(state.phoneNumber)) {
-      alert('휴대폰 번호를 입력해주세요');
+      setTextAlert('휴대폰 번호를 입력해주세요');
+      setIsAlertModal(true);
       return false;
     }
 
@@ -208,19 +227,29 @@ export default function RegisterForm(props: RegisterFormProps) {
   };
 
   const sendAuthenticationNumber = () => {
-    dispatch({ type: 'AUTH_KEY', payload: true });
-    alert('해당 번호에 인증번호를 보냈습니다! (ex. 1234)');
+    if (isEmptyString(state.phoneNumber) || validatePhoneNumber(state.phoneNumber)) {
+      setTitleAlert('회원가입 오류');
+      setTextAlert('휴대폰 번호를 확인해주세요.');
+    } else {
+      dispatch({ type: 'AUTH_KEY', payload: true });
+      setTitleAlert('회원가입 알림');
+      setTextAlert('해당 번호에 인증번호를 보냈습니다! (ex. 1234)');
+    }
+    setIsAlertModal(true);
   };
 
   const authenticatePhoneNumber = () => {
+    setTitleAlert('회원가입 오류');
     if (!state.key) {
-      alert('먼저 인증번호를 보내주세요.');
+      setTextAlert('먼저 인증번호를 보내주세요.');
     } else if (Number(state.key) !== testNumber) {
-      alert('인증번호가 일치하지 않습니다');
+      setTextAlert('인증번호가 일치하지 않습니다');
     } else {
       dispatch({ type: 'AUTH_KEY', payload: true });
-      alert('인증되었습니다!');
+      setTitleAlert('회원가입 알림');
+      setTextAlert('인증되었습니다!');
     }
+    setIsAlertModal(true);
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -239,12 +268,18 @@ export default function RegisterForm(props: RegisterFormProps) {
 
       const response: AxiosResponse<UserResponse> = await axios.post<UserResponse>(requests.register, body);
       if (response.status === 200) {
-        alert('회원가입이 완료되었습니다.');
+        setTitleAlert('회원가입');
+        setTextAlert('회원가입이 완료되었습니다.');
+        setIsAlertModal(true);
         navigate('../login');
       } else {
         // TODO: would this be necessary?
       }
     }
+  };
+
+  const closeAlertModal = () => {
+    setIsAlertModal(false);
   };
 
   return (
@@ -296,6 +331,16 @@ export default function RegisterForm(props: RegisterFormProps) {
             onClick: () => checkPassword(state.password, state.confirmPassword),
           }}
         />
+        {isAlertModal && (
+          <AlertModal
+            theme={props.theme}
+            title={titleAlert}
+            level="INFO"
+            text={textAlert}
+            buttonText="확인"
+            onClose={closeAlertModal}
+          />
+        )}
         <InputContainer
           title="이름"
           inputOptions={{

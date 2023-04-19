@@ -1,4 +1,5 @@
 export type UserInfoState = {
+  point: string;
   email: string;
   password: string;
   name: string;
@@ -12,6 +13,7 @@ export type UserInfoState = {
 };
 
 export type UserInfoAction =
+  | { type: 'CHANGE_POINT'; payload: string }
   | { type: 'CHANGE_EMAIL'; payload: string }
   | { type: 'CHANGE_PASSWORD'; payload: string }
   | { type: 'CHANGE_NAME'; payload: string }

@@ -6,27 +6,26 @@ import { Icons } from '../../assets/svg';
 
 const Container = styled.div`
   display: flex;
+  position: absolute;
   align-items: center;
   justify-content: center;
   flex-direction: column;
 `;
 
 const Modal = styled.div`
-  margin-top: 10vh;
   width: 60vw;
   box-shadow: 4px 4px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: ${(props) => props.theme.borderRadius};
   background-color: ${(props) => props.theme.colors.container};
 
-  @media screen and (max-width: 600px) {
-    width: 95vw;
+  @media screen and (max-width: 400px) {
+    width: 60vw;
   }
 `;
 
 const TitleContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
   flex-direction: row;
 `;
 
@@ -39,27 +38,41 @@ const Title = styled.span`
 const BodyContainer = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  padding: 2em;
+  padding: 1em;
 `;
 
+// TODO: This container is replaced TextContainer, but it isn't perfect UI.
 const ListContainer = styled.ul`
   list-style-type: none;
+  align-items: center;
+  justify-content: center;
+  font-size: 1em;
+  font-weight: 700;
+`;
+
+const TextContainer = styled.span`
+  list-style-type: none;
+  align-items: center;
+  justify-content: center;
+  font-size: 1em;
+  margin-bottom: 2em;
+  font-weight: 700;
+  color: ${(props) => props.theme.colors.default};
 `;
 
 const ErrorIcon = styled(Icons.ERROR)`
-  width: 3em;
+  width: 2em;
   margin: 1em;
 `;
 
 const InfoIcon = styled(Icons.INFO)`
-  width: 3em;
+  width: 2em;
   margin: 1em;
 `;
 
 const WarnIcon = styled(Icons.WARN)`
-  width: 3em;
+  width: 2em;
   margin: 1em;
 `;
 
@@ -85,9 +98,11 @@ interface AlertModalProps {
   title: string;
   level: LogLevel;
   text: string;
+  buttonText: string;
+  onClose: () => void;
 }
 
-export default function AlertModal({ theme, title, level, text }: AlertModalProps) {
+export default function AlertModal({ theme, title, level, text, buttonText, onClose }: AlertModalProps) {
   // FIXME: maybe we can refactor this
   const setIcon = (_level: LogLevel) => {
     switch (_level) {
@@ -110,8 +125,10 @@ export default function AlertModal({ theme, title, level, text }: AlertModalProp
         </TitleContainer>
         <BodyContainer>
           {/* FIXME: To verification shortcut list */}
-          {/* <ListContainer></ListContainer> */}
-          <Button theme={theme}>{text}</Button>
+          <TextContainer theme={theme}>{text}</TextContainer>
+          <Button theme={theme} onClick={onClose}>
+            {buttonText}
+          </Button>
         </BodyContainer>
       </Modal>
     </Container>
