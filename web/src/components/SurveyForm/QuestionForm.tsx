@@ -4,9 +4,9 @@ import styled, { DefaultTheme } from 'styled-components';
 
 import { QuestionType } from '../../types/request/Question';
 import { SurveyCreateRequest } from '../../types/request/Survey';
-import OptionsList from './OptionList';
+import { SmallCircleButton } from '../Button';
+import OptionList from './OptionList';
 import QuestionTypeSelector from './QuestionTypeSelector';
-import SmallCircleButton from './SmallCircleButton';
 
 const Container = styled.div`
   display: flex;
@@ -140,7 +140,7 @@ export default function QuestionForm({
         <AnswerLabel theme={theme}>{answerLabel}</AnswerLabel>
       ) : (
         <SubjectiveQuestion>
-          <OptionsList
+          <OptionList
             surveyData={surveyData}
             questionId={questionId}
             handleClickButton={handleClickButton}

@@ -4,8 +4,8 @@ import styled, { DefaultTheme } from 'styled-components';
 
 import { SurveyCreateRequest, CertificationType } from '../../types/request/Survey';
 import { NumberUtils } from '../../utils/NumberUtils';
+import { SmallCircleButton } from '../Button';
 import CertificationList from '../CertificationList';
-import SmallCircleButton from './SmallCircleButton';
 
 const Container = styled.div`
   display: flex;

@@ -4,7 +4,7 @@ import styled, { DefaultTheme } from 'styled-components';
 
 import { SurveyCreateRequest } from '../../types/request/Survey';
 import { NumberUtils } from '../../utils/NumberUtils';
-import SmallCircleButton from './SmallCircleButton';
+import { SmallCircleButton } from '../Button';
 
 const TextInput = styled.input.attrs({ type: 'text', maxLength: 100 })`
   padding: 1.2vh 1.5vw 1.2vh 1.5vw;
@@ -38,7 +38,7 @@ const AnswerLabel = styled.label`
 
 const OptionsContainer = styled.div``;
 
-interface OptionFormProps {
+interface OptionListProps {
   surveyData: SurveyCreateRequest;
   questionId: number;
   handleChangeOption: (event: React.ChangeEvent<HTMLInputElement>, questionId: number, optionId: number) => void;
@@ -46,13 +46,13 @@ interface OptionFormProps {
   theme: DefaultTheme;
 }
 
-export default function OptionsForm({
+export default function OptionList({
   surveyData,
   questionId,
   handleChangeOption,
   handleClickButton,
   theme,
-}: OptionFormProps) {
+}: OptionListProps) {
   const tmpOptions = surveyData.questions[questionId].questionOptions;
   if (typeof tmpOptions !== 'undefined') {
     if (tmpOptions.length === 0) {

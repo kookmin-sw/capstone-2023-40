@@ -4,12 +4,12 @@ import styled from 'styled-components';
 
 // import axios from '../../api/axios';
 // import requests from '../../api/request';
-import MediumRectangleButton from '../../components/Button/MediumRectangleButton';
+import { MediumRectangleButton } from '../../components/Button';
 import Header from '../../components/Header';
-import SurveyPageResultModal from '../../components/Modal/SurveyPageResultModal';
+import { SurveyPageResultModal, AlertModal } from '../../components/Modal';
 import QuestionForm from '../../components/SurveyForm/QuestionForm';
 import SurveyDataForm from '../../components/SurveyForm/SurveyDataForm';
-import { SurveyFormValidation } from '../../features/SurveyFormValidation';
+import SurveyFormValidation from '../../features/SurveyFormValidation';
 import { useTheme } from '../../hooks/useTheme';
 import { QuestionCreateRequest, QuestionType } from '../../types/request/Question';
 import { QuestionOptionCreateRequest } from '../../types/request/QuestionOption';
@@ -298,7 +298,7 @@ export default function SurveyFormPage() {
         {surveyData.questions.map((question: QuestionCreateRequest) =>
           showQuestionForm(question.questionType, question.questionNo)
         )}
-        <MediumRectangleButton displayText="완료하기" handleClickButton={handleSubmit} theme={theme} />
+        <MediumRectangleButton type="submit" displayText="완료하기" handleClickButton={handleSubmit} theme={theme} />
       </BodyContainer>
 
       {resultModalOpen && <SurveyPageResultModal theme={theme} />}

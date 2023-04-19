@@ -8,7 +8,7 @@ import axios from '../../api/axios';
 import requests from '../../api/request';
 import CertificationList from '../../components/CertificationList';
 import Header from '../../components/Header';
-import SurveyEnterModal from '../../components/Modal/SurveyEnterModal';
+import { SurveyEnterModal } from '../../components/Modal';
 import Pagination from '../../components/Pagination';
 import SurveyListSkeleton from '../../components/Skeleton/SurveyListSkeleton';
 import { useTheme } from '../../hooks/useTheme';
