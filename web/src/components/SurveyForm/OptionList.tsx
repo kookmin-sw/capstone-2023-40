@@ -4,6 +4,7 @@ import styled, { DefaultTheme } from 'styled-components';
 
 import { SurveyCreateRequest } from '../../types/request/Survey';
 import { NumberUtils } from '../../utils/NumberUtils';
+import SmallCircleButton from './SmallCircleButton';
 
 const TextInput = styled.input.attrs({ type: 'text', maxLength: 100 })`
   padding: 1.2vh 1.5vw 1.2vh 1.5vw;
@@ -20,24 +21,6 @@ const OptionInput = styled(TextInput).attrs({ type: 'text' })`
   width: 30vw;
   font-size: 13px;
   margin-top: 3px;
-`;
-
-const DeleteOptionButton = styled.button`
-  font-weight: 900;
-  text-align: center;
-  color: ${(props) => props.theme.colors.text};
-  margin-left: 3px;
-  padding: 10px;
-  background-color: ${(props) => props.theme.colors.button};
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
-  border: none;
-  cursor: pointer;
-
-  &:hover {
-    opacity: 0.8;
-  }
 `;
 
 const AnswerLabel = styled.label`
@@ -59,7 +42,7 @@ interface OptionFormProps {
   surveyData: SurveyCreateRequest;
   questionId: number;
   handleChangeOption: (event: React.ChangeEvent<HTMLInputElement>, questionId: number, optionId: number) => void;
-  handleClickButton: (event: React.MouseEvent<HTMLButtonElement>, questionId: number, optionId?: number) => void;
+  handleClickButton: (event: React.MouseEvent<HTMLButtonElement>, questionId?: number, optionId?: number) => void;
   theme: DefaultTheme;
 }
 
@@ -85,18 +68,18 @@ export default function OptionsForm({
               name="option"
               value={tmpOptions[index].option || ''}
             />
-            <DeleteOptionButton
-              theme={theme}
+            <SmallCircleButton
+              displayText="X"
               name="deleteOption"
-              onClick={(event) => handleClickButton(event, questionId, index)}
-            >
-              X
-            </DeleteOptionButton>
+              handleClickButton={handleClickButton}
+              theme={theme}
+              questionId={questionId}
+              optionId={index}
+            />
           </OptionContainer>
         ))}
-        ;
       </OptionsContainer>
     );
   }
-  return <AnswerLabel theme={theme}>옵션을 추가해 주세요</AnswerLabel>;
+  return <AnswerLabel theme={theme}>문항을 추가해 주세요</AnswerLabel>;
 }

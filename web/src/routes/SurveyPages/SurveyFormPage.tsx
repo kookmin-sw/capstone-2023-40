@@ -259,12 +259,14 @@ export default function SurveyFormPage() {
     setSurveyData({ ...surveyData, questions: newQuestions });
   };
 
-  const handleClickButton = (event: React.MouseEvent<HTMLButtonElement>, questionId: number, optionId?: number) => {
+  const handleClickButton = (event: React.MouseEvent<HTMLButtonElement>, questionId?: number, optionId?: number) => {
     const { name } = event.target as HTMLInputElement;
-    if (name === 'addQuestion') addQuestionUnderId(questionId);
-    else if (name === 'deleteQuestion') deleteQuestionAtId(questionId);
-    else if (name === 'addOption') addOptionAtBottom(questionId);
-    else if (typeof optionId !== 'undefined') deleteOptionAtId(questionId, optionId);
+    if (typeof questionId !== 'undefined') {
+      if (name === 'addQuestion') addQuestionUnderId(questionId);
+      else if (name === 'deleteQuestion') deleteQuestionAtId(questionId);
+      else if (name === 'addOption') addOptionAtBottom(questionId);
+      else if (typeof optionId !== 'undefined') deleteOptionAtId(questionId, optionId);
+    }
   };
 
   const makeQuestionForm = (questionId: number, selected: number) => {

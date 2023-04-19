@@ -4,9 +4,9 @@ import styled, { DefaultTheme } from 'styled-components';
 
 import { QuestionType } from '../../types/request/Question';
 import { SurveyCreateRequest } from '../../types/request/Survey';
-import EditQuestionButton from './AddQuestionButton';
 import OptionsList from './OptionList';
 import QuestionTypeSelector from './QuestionTypeSelector';
+import SmallCircleButton from './SmallCircleButton';
 
 const Container = styled.div`
   display: flex;
@@ -78,13 +78,20 @@ const AddOptionButton = styled.button`
 
 const SubjectiveQuestion = styled.div``;
 
+const EmptyObject = styled.button`
+  border: none;
+  background-color: transparent;
+  width: 35px;
+  height: 35px;
+`;
+
 interface SubjectiveAnswerFormProps {
   surveyData: SurveyCreateRequest;
   selected: number;
   questionId: number;
   handleChangeQuestion: (event: React.ChangeEvent<HTMLInputElement>, questionId: number) => void;
   handleChangeQuestionType: (event: React.ChangeEvent<HTMLSelectElement>, questionId: number) => void;
-  handleClickButton: (event: React.MouseEvent<HTMLButtonElement>, questionId: number, optionId?: number) => void;
+  handleClickButton: (event: React.MouseEvent<HTMLButtonElement>, questionId?: number, optionId?: number) => void;
   handleChangeOption: (event: React.ChangeEvent<HTMLInputElement>, questionId: number, optionId: number) => void;
   theme: DefaultTheme;
 }
@@ -149,8 +156,21 @@ export default function QuestionForm({
       )}
 
       <ButtonContainer>
-        {EditQuestionButton({ editType: 'Add', questionId, handleClickButton, theme })}
-        {EditQuestionButton({ editType: 'Delete', questionId, handleClickButton, theme })}
+        <EmptyObject />
+        <SmallCircleButton
+          displayText="+"
+          name="addQuestion"
+          handleClickButton={handleClickButton}
+          theme={theme}
+          questionId={questionId}
+        />
+        <SmallCircleButton
+          displayText="🗑️"
+          name="deleteQuestion"
+          handleClickButton={handleClickButton}
+          theme={theme}
+          questionId={questionId}
+        />
       </ButtonContainer>
     </Container>
   );

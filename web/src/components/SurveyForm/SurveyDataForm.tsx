@@ -5,7 +5,7 @@ import styled, { DefaultTheme } from 'styled-components';
 import { SurveyCreateRequest, CertificationType } from '../../types/request/Survey';
 import { NumberUtils } from '../../utils/NumberUtils';
 import CertificationList from '../CertificationList';
-import EditQuestionButton from './AddQuestionButton';
+import SmallCircleButton from './SmallCircleButton';
 
 const Container = styled.div`
   display: flex;
@@ -15,6 +15,7 @@ const Container = styled.div`
 const ButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
+  justify-content: center;
 `;
 
 const GuideLabel = styled.label`
@@ -121,7 +122,7 @@ interface SurveyDataFormProps {
   surveyData: SurveyCreateRequest;
   handleChangeSurveyData: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleChangeCheck: (event: React.ChangeEvent<HTMLInputElement>, value: number) => void;
-  handleClickButton: (event: React.MouseEvent<HTMLButtonElement>, questionId: number, optionId?: number) => void;
+  handleClickButton: (event: React.MouseEvent<HTMLButtonElement>, questionId?: number, optionId?: number) => void;
   theme: DefaultTheme;
 }
 
@@ -198,7 +199,13 @@ export default function SurveyDataForm({
       </SurveyDateContainer>
 
       <ButtonContainer>
-        {EditQuestionButton({ editType: 'Add', questionId: -1, handleClickButton, theme })}
+        <SmallCircleButton
+          displayText="+"
+          name="addQuestion"
+          handleClickButton={handleClickButton}
+          theme={theme}
+          questionId={-1}
+        />
       </ButtonContainer>
     </Container>
   );

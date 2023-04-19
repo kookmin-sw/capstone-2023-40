@@ -133,7 +133,7 @@ describe('[SurveyFormPage Test]', () => {
     const questionSelector = await screen.findByTestId('selector');
 
     fireEvent.change(questionSelector, { target: { value: QuestionType.SINGLE_CHOICE } });
-    const label = await screen.findByText('옵션을 추가해 주세요');
+    const label = await screen.findByText('문항을 추가해 주세요');
     expect(label).toBeInTheDocument();
   });
 
@@ -147,7 +147,7 @@ describe('[SurveyFormPage Test]', () => {
     const questionSelector = await screen.findByTestId('selector');
 
     fireEvent.change(questionSelector, { target: { value: QuestionType.MULTIPLE_CHOICE } });
-    const label = await screen.findByText('옵션을 추가해 주세요');
+    const label = await screen.findByText('문항을 추가해 주세요');
     expect(label).toBeInTheDocument();
   });
 
