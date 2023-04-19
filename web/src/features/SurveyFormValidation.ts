@@ -2,7 +2,7 @@ import { QuestionType } from '../types/request/Question';
 import { SurveyCreateRequest } from '../types/request/Survey';
 import { ValidationErrorMessage, InputCheckResult } from '../types/userInputCheck';
 
-export const SurveyFormValidation = (surveyData: SurveyCreateRequest): InputCheckResult => {
+export default function SurveyFormValidation(surveyData: SurveyCreateRequest): InputCheckResult {
   let errorIndex = -1;
   const currentDate = new Date();
   const startedDate = new Date(surveyData.startedDate);
@@ -55,4 +55,4 @@ export const SurveyFormValidation = (surveyData: SurveyCreateRequest): InputChec
     message: ValidationErrorMessage.OK,
     index: errorIndex,
   };
-};
+}
