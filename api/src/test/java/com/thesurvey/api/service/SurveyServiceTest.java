@@ -34,15 +34,10 @@ public class SurveyServiceTest {
     SurveyService surveyService;
 
     User user;
-    UUID surveyId;
-    Long questionBankId;
-    Long questionOptionId;
     Authentication authentication;
 
     @BeforeAll
-    void setup() {
-        questionBankId = 1L;
-        questionOptionId = 1L;
+    void makeAuthentication() {
         user = User.builder()
             .name("test")
             .email("test@gmail.com")
@@ -59,13 +54,13 @@ public class SurveyServiceTest {
     @Test
     void testValidateAttemptModifyEndedSurvey() {
         QuestionOptionUpdateRequestDto questionOptionUpdateRequestDto = QuestionOptionUpdateRequestDto.builder()
-            .optionId(questionOptionId)
+            .optionId(1L)
             .option("This is test update option")
             .description("This is test update option description")
             .build();
 
         QuestionBankUpdateRequestDto questionBankUpdateRequestDto = QuestionBankUpdateRequestDto.builder()
-            .questionBankId(questionBankId)
+            .questionBankId(1L)
             .title("This is test update question title")
             .description("This is test update question description")
             .questionNo(1)
@@ -82,7 +77,7 @@ public class SurveyServiceTest {
             .build();
 
         SurveyUpdateRequestDto surveyUpdateRequestDto = SurveyUpdateRequestDto.builder()
-            .surveyId(surveyId)
+            .surveyId(UUID.randomUUID())
             .title("This is update test survey.")
             .description("This is update test description")
             .startedDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")))
@@ -182,7 +177,7 @@ public class SurveyServiceTest {
             .build();
 
         SurveyUpdateRequestDto surveyUpdateRequestDto = SurveyUpdateRequestDto.builder()
-            .surveyId(surveyId)
+            .surveyId(UUID.randomUUID())
             .title("This is update test survey.")
             .description("This is update test description")
             .startedDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")).plusDays(100)) // set to after endedDate
@@ -228,7 +223,7 @@ public class SurveyServiceTest {
             .build();
 
         SurveyUpdateRequestDto surveyUpdateRequestDto = SurveyUpdateRequestDto.builder()
-            .surveyId(surveyId)
+            .surveyId(UUID.randomUUID())
             .title("This is update test survey.")
             .description("This is update test description")
             .startedDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")).plusDays(10))
