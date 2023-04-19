@@ -6,7 +6,7 @@ import { QuestionType } from '../../types/request/Question';
 import { SurveyCreateRequest } from '../../types/request/Survey';
 import EditQuestionButton from './AddQuestionButton';
 import OptionsList from './OptionList';
-import QuestionTypeSelect from './QuestionTypeSelect';
+import QuestionTypeSelector from './QuestionTypeSelector';
 
 const Container = styled.div`
   display: flex;
@@ -114,7 +114,12 @@ export default function QuestionForm({
           name="title"
           value={surveyData.questions[questionId].title || ''}
         />
-        {QuestionTypeSelect({ selected, questionId, handleChangeQuestionType, theme })}
+        <QuestionTypeSelector
+          selected={selected}
+          questionId={questionId}
+          handleChange={handleChangeQuestionType}
+          theme={theme}
+        />
       </HeadContainer>
 
       <QuestionDescriptionInput
