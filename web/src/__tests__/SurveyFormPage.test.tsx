@@ -173,7 +173,7 @@ describe('[SurveyFormPage Test]', () => {
     expect(options.length === 5);
   });
 
-  it('delete option when click "문항 추가하기" button', async () => {
+  it('delete option when click "X" button', async () => {
     setUp();
 
     // create question
