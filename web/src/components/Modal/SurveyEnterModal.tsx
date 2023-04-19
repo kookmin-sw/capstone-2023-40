@@ -167,7 +167,7 @@ interface ModalProps {
   theme: DefaultTheme;
 }
 
-export default function SurveyPageResultModal({ surveyItem, setEnterModalOpen, theme }: ModalProps) {
+export default function SurveyEnterModal({ surveyItem, setEnterModalOpen, theme }: ModalProps) {
   const navigate = useNavigate();
   const modalRef = useRef<HTMLDivElement>(null);
   useOnClickOutside({
