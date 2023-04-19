@@ -256,33 +256,6 @@ export default function SurveyFormPage() {
     }
   };
 
-  const makeQuestionForm = (questionId: number, selected: number) => {
-    return (
-      <QuestionContainer
-        ref={(element) => {
-          questionRefs.current[questionId] = element as HTMLDivElement;
-        }}
-        theme={theme}
-        key={questionId}
-      >
-        {QuestionForm({
-          surveyData,
-          selected,
-          questionId,
-          handleChangeQuestion,
-          handleChangeQuestionType,
-          handleClickButton,
-          handleChangeOption,
-          theme,
-        })}
-      </QuestionContainer>
-    );
-  };
-
-  const showQuestionForm = (questionType: number, questionId: number) => {
-    return makeQuestionForm(questionId, questionType);
-  };
-
   return (
     <Container theme={theme}>
       <Header theme={theme} toggleTheme={toggleTheme} />
@@ -301,9 +274,26 @@ export default function SurveyFormPage() {
           })}
         </SurveyDataContainer>
 
-        {surveyData.questions.map((question: QuestionCreateRequest) =>
-          showQuestionForm(question.questionType, question.questionNo)
-        )}
+        {surveyData.questions.map((question: QuestionCreateRequest) => (
+          <QuestionContainer
+            ref={(element) => {
+              questionRefs.current[question.questionNo] = element as HTMLDivElement;
+            }}
+            theme={theme}
+            key={question.questionNo}
+          >
+            <QuestionForm
+              surveyData={surveyData}
+              selected={question.questionType}
+              questionId={question.questionNo}
+              handleChangeQuestion={handleChangeQuestion}
+              handleChangeQuestionType={handleChangeQuestionType}
+              handleClickButton={handleClickButton}
+              handleChangeOption={handleChangeOption}
+              theme={theme}
+            />
+          </QuestionContainer>
+        ))}
         <ButtonContainer>
           <MediumRectangleButton type="submit" displayText="완료하기" handleClickButton={handleSubmit} theme={theme} />
         </ButtonContainer>
