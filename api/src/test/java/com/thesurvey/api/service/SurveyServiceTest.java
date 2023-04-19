@@ -34,18 +34,20 @@ public class SurveyServiceTest {
     SurveyService surveyService;
 
     User user;
-    Authentication authentication;
+
+    Authentication fakeAuthentication;
 
     @BeforeAll
-    void makeAuthentication() {
+    void setUpBeforeAll() {
         user = User.builder()
             .name("test")
             .email("test@gmail.com")
             .password("Password40@")
             .phoneNumber("01012345678")
             .build();
-        authentication = new UsernamePasswordAuthenticationToken(user.getName(),
-            user.getPassword());
+
+        // Fake authentication instance. Authentication is not guaranteed on these tests
+        fakeAuthentication = new UsernamePasswordAuthenticationToken(null, null);
     }
 
     /**
@@ -120,7 +122,7 @@ public class SurveyServiceTest {
             .build();
 
         assertThrows(BadRequestExceptionMapper.class,
-            () -> surveyService.createSurvey(authentication, surveyRequestDto));
+            () -> surveyService.createSurvey(fakeAuthentication, surveyRequestDto));
     }
 
     /**
@@ -179,14 +181,15 @@ public class SurveyServiceTest {
             .surveyId(UUID.randomUUID())
             .title("This is update test survey.")
             .description("This is update test description")
-            .startedDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")).plusDays(100)) // set to after endedDate
+            .startedDate(
+                LocalDateTime.now(ZoneId.of("Asia/Seoul")).plusDays(100)) // set to after endedDate
             .endedDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")).plusDays(1))
             .certificationTypes(List.of(CertificationType.KAKAO))
             .questions(List.of(questionBankUpdateRequestDto))
             .build();
 
         assertThrows(BadRequestExceptionMapper.class,
-            () -> surveyService.createSurvey(authentication, surveyRequestDto));
+            () -> surveyService.createSurvey(fakeAuthentication, surveyRequestDto));
         assertThrows(BadRequestExceptionMapper.class,
             () -> surveyService.validateUpdateSurvey(survey, surveyUpdateRequestDto));
     }
