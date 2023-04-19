@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled, { DefaultTheme } from 'styled-components';
 
-const Button = styled.button.attrs({ type: 'submit' })`
+const Button = styled.button`
   width: 15vw;
   border: none;
   padding: 2vh 2vw 2vh 2vw;
@@ -24,13 +24,19 @@ const Button = styled.button.attrs({ type: 'submit' })`
 
 interface MediumRectangleButtonProps {
   displayText: string;
+  type: 'button' | 'submit' | 'reset' | undefined;
   handleClickButton: () => void;
   theme: DefaultTheme;
 }
 
-export default function MediumRectangleButton({ displayText, handleClickButton, theme }: MediumRectangleButtonProps) {
+export default function MediumRectangleButton({
+  displayText,
+  type,
+  handleClickButton,
+  theme,
+}: MediumRectangleButtonProps) {
   return (
-    <Button theme={theme} onClick={handleClickButton}>
+    <Button type={type} onClick={handleClickButton} theme={theme}>
       {displayText}
     </Button>
   );
