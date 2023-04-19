@@ -66,21 +66,15 @@ export default function Header({ theme }: HeaderProps) {
   };
 
   const subPageRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const listener = (event: MouseEvent) => {
-      if (subPageRef.current && !subPageRef.current.contains(event.target as Node)) {
-        return;
-      }
+  useOnClickOutside({
+    ref: subPageRef,
+    handler: () => {
       dispatch(setSubPageOpen(false));
-    };
-    window.addEventListener('mousedown', listener);
-    return () => {
-      window.removeEventListener('mousedown', listener);
-    };
-  }, []);
+    },
+  });
 
   return (
-    <SubPageContainer theme={theme}>
+    <SubPageContainer theme={theme} ref={subPageRef}>
       <SubPageButton onClick={navigateMypage} theme={theme}>
         마이페이지
       </SubPageButton>
