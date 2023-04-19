@@ -6,9 +6,6 @@ const Button = styled.button`
   width: 15vw;
   border: none;
   padding: 2vh 2vw 2vh 2vw;
-  margin-top: 30px;
-  margin-bottom: 30px;
-  margin-left: 69vw;
   border-radius: ${(props) => props.theme.borderRadius};
   font-size: 2vh;
   font-weight: 700;

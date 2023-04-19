@@ -24,6 +24,12 @@ const HeadContainer = styled.div`
   background-color: ${(props) => props.theme.colors.container};
 `;
 
+const ButtonContainer = styled.div`
+  padding: 10px;
+  display: flex;
+  justify-content: flex-end;
+`;
+
 const Title = styled.span`
   font-size: 40px;
   font-weight: 600;
@@ -347,12 +353,14 @@ export default function SurveyPage() {
             )}
           </QuestionContainer>
         ))}
-        <MediumRectangleButton
-          displayText="제출하기"
-          type="submit"
-          handleClickButton={handleSubmitButtonClick}
-          theme={theme}
-        />
+        <ButtonContainer>
+          <MediumRectangleButton
+            displayText="제출하기"
+            type="submit"
+            handleClickButton={handleSubmitButtonClick}
+            theme={theme}
+          />
+        </ButtonContainer>
       </BodyContainer>
       {resultModalOpen && <SurveyPageResultModal theme={theme} />}
     </Container>

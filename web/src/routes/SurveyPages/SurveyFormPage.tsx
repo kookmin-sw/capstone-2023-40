@@ -29,6 +29,12 @@ const HeadContainer = styled.div`
   background-color: ${(props) => props.theme.colors.container};
 `;
 
+const ButtonContainer = styled.div`
+  padding: 10px;
+  display: flex;
+  justify-content: flex-end;
+`;
+
 const Title = styled.span`
   font-size: 30px;
   font-weight: 600;
@@ -298,7 +304,9 @@ export default function SurveyFormPage() {
         {surveyData.questions.map((question: QuestionCreateRequest) =>
           showQuestionForm(question.questionType, question.questionNo)
         )}
-        <MediumRectangleButton type="submit" displayText="완료하기" handleClickButton={handleSubmit} theme={theme} />
+        <ButtonContainer>
+          <MediumRectangleButton type="submit" displayText="완료하기" handleClickButton={handleSubmit} theme={theme} />
+        </ButtonContainer>
       </BodyContainer>
 
       {resultModalOpen && <SurveyPageResultModal theme={theme} />}
