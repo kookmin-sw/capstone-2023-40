@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 
@@ -7,6 +8,8 @@ import { Icons } from '../../assets/svg/index';
 import { KAKAO_AUTH_URL } from '../../components/authlist/kakaoAuth';
 import Header from '../../components/Header';
 import { useTheme } from '../../hooks/useTheme';
+import { RootState } from '../../reducers';
+import { authKakao, authDriver, authGoogle, authIdentity, authNaver, authWebMail } from '../../types/auth';
 
 const rotate = keyframes`
   0% {
@@ -55,6 +58,7 @@ const TextType = styled.span`
   text-align: center;
   font-size: calc(1vh + 1.4vmin);
   font-weight: 900;
+  color: ${(props) => props.theme.colors.default};
 `;
 
 const Form = styled.form`
@@ -65,18 +69,52 @@ const Form = styled.form`
   text-align: center;
 `;
 
+const Button = styled.button`
+  margin-top: 1vh;
+  border: none;
+  padding: 2vh;
+  padding-left: 8vw;
+  padding-right: 8vw;
+  border-radius: ${(props) => props.theme.borderRadius};
+  font-size: 2vh;
+  font-weight: 700;
+  color: ${(props) => props.theme.colors.text};
+  background-color: ${(props) => props.theme.colors.button};
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${(props) => props.theme.colors.btnhover};
+  }
+`;
+
 export default function AuthenticationPage() {
   const [theme, toggleTheme] = useTheme();
   const navigate = useNavigate();
-  const texta = '카카오';
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-  };
+  const [completeAuth, setCompleteAuth] = useState<boolean>(true);
+  const authState = useSelector((state: RootState) => state.header);
+  const dispatch = useDispatch;
+  const texta = '인증사이트';
 
   const handleClick = () => {
-    window.location.href = KAKAO_AUTH_URL;
+    dispatch();
+    navigate('../mypage/auth-list');
   };
+
+  if (completeAuth) {
+    return (
+      <Container theme={theme}>
+        <Header theme={theme} toggleTheme={toggleTheme} />
+        <AuthenticationContainer theme={theme}>
+          <Form>
+            <TextType theme={theme}>인증이 완료되었습니다!</TextType>
+            <Button theme={theme} onClick={handleClick}>
+              돌아가기
+            </Button>
+          </Form>
+        </AuthenticationContainer>
+      </Container>
+    );
+  }
 
   return (
     <Container theme={theme}>
@@ -86,7 +124,7 @@ export default function AuthenticationPage() {
           <WaitingImage>
             <circle cx="50" cy="50" r="50" />
           </WaitingImage>
-          <TextType>{texta}에서 인증을 완료해주세요.</TextType>
+          <TextType theme={theme}>{texta}에서 인증을 완료해주세요.</TextType>
         </Form>
       </AuthenticationContainer>
     </Container>
