@@ -126,7 +126,6 @@ public class SurveyServiceTest {
     /**
      * Test validate for when the start time of the survey is set after the end time.
      */
-
     @Test
     void testValidateSurveyStartTimeSetAfterEndTime() {
         QuestionOptionUpdateRequestDto questionOptionUpdateRequestDto = QuestionOptionUpdateRequestDto.builder()
