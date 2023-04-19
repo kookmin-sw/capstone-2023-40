@@ -169,7 +169,7 @@ export default function MyPage() {
       image: <KakaoImage />,
       title: '카카오',
       checkAuth: state.kakao,
-      pageNavigate: () => navigate('../mypage/auth-list'),
+      pageNavigate: () => navigate('../mypage/authentication'),
     },
     {
       number: 2,

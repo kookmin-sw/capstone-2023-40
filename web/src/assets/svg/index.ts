@@ -20,6 +20,7 @@ import { ReactComponent as Plus } from './plus-circle.svg';
 import { ReactComponent as Trash } from './trash.svg';
 import { ReactComponent as TwoArrow } from './twoArrow.svg';
 import { ReactComponent as UserImage } from './userBasicImage.svg';
+import { ReactComponent as Waiting } from './WaitingImage.svg';
 import { ReactComponent as Warn } from './warn-icon.svg';
 
 export type IconType = React.FunctionComponent<React.SVGProps<SVGSVGElement> & { title?: string | undefined }>;
@@ -48,4 +49,5 @@ export const Icons: { [src: string]: IconType } = {
   TRASH: Trash,
   PLUS: Plus,
   DELETE: Delete,
+  WAITING: Waiting,
 };
