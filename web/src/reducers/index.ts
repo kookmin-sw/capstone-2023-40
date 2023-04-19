@@ -14,6 +14,8 @@ export const persistConfig = {
 };
 
 /**
+ * Root Reducer that combines reducers you assign
+ *
  * You can add to otherReducer what you want otherState.
  * ex) auth: authReducer (you must implement authReducer..)
  */

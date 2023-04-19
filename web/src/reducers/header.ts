@@ -29,9 +29,11 @@ export const initialState: HeaderState = {
 };
 
 /**
- * @param action setLogin & setSubPageOpen in HeaderAction
- * @param state Check Login & Opened SubPage
- * @returns state(Login & SubPage)
+ * Check login status and Open status of SubPage
+ *
+ * @param {HeaderState} state: State value of Check Login and Opened SubPage
+ * @param {HeaderAction} action: Action method for setLogin and setSubPageOpen
+ * @returns {HeaderState} state Updated state value of Check Login and Opened SubPage
  */
 export const headerReducer = (state: HeaderState = initialState, action: HeaderAction = initialAction): HeaderState => {
   switch (action.type) {

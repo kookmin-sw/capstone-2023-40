@@ -130,7 +130,7 @@ const PurchaseButton = styled.div`
 `;
 
 const initalState = {
-  point: '0P',
+  point: '0',
   email: 'test@gmail.com',
   password: 'asdf1234!',
   name: 'jsontest',
@@ -180,7 +180,7 @@ export default function MyPage() {
     }
   };
 
-  const pencilClick = (text: string) => {
+  const handleEditTextClick = (text: string) => {
     if (text === 'password') {
       dispatch({ type: 'SET_CHANGE_PASSWORD', payload: !state.passwordDisabled });
     } else if (text === 'phoneNumber') {
@@ -278,7 +278,7 @@ export default function MyPage() {
                   type="submit"
                   theme={theme}
                   title={!isDisabled ? '수정하기' : '수정완료'}
-                  onClick={() => pencilClick(name)}
+                  onClick={() => handleEditTextClick(name)}
                 />
               ) : undefined}
             </ContainerBox>
