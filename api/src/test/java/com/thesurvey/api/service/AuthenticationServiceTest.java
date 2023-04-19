@@ -5,6 +5,8 @@ import com.thesurvey.api.dto.request.UserLoginRequestDto;
 import com.thesurvey.api.dto.request.UserRegisterRequestDto;
 import com.thesurvey.api.dto.response.UserResponseDto;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 @Transactional
 @AutoConfigureMockMvc
+@TestInstance(Lifecycle.PER_CLASS)
 public class AuthenticationServiceTest {
 
     @Autowired

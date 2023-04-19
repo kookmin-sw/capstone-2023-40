@@ -13,15 +13,20 @@ import com.thesurvey.api.service.mapper.UserMapper;
 import java.util.UUID;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @Transactional
 @AutoConfigureMockMvc
+@TestInstance(Lifecycle.PER_CLASS)
 public class AuthenticationControllerTest extends BaseControllerTest {
 
     @Autowired
@@ -38,6 +43,8 @@ public class AuthenticationControllerTest extends BaseControllerTest {
 
     @Autowired
     UserMapper userMapper;
+
+    Authentication authentication;
 
     @Test
     void testMockRegister() throws Exception {
@@ -81,7 +88,12 @@ public class AuthenticationControllerTest extends BaseControllerTest {
 
         MvcResult loginResult = mockLogin(userLoginRequestDto, true);
         JSONObject loginContent = new JSONObject(loginResult.getResponse().getContentAsString());
+        authentication = authenticationService.authenticate(
+            new UsernamePasswordAuthenticationToken(userRegisterRequestDto.getEmail(),
+                userRegisterRequestDto.getPassword())
+        );
 
+        assertThat(authentication.isAuthenticated()).isTrue();
         assertThat(registerContent.get("name")).isEqualTo(loginContent.get("name"));
         assertThat(registerContent.get("email")).isEqualTo(loginContent.get("email"));
         assertThat(registerContent.get("role")).isEqualTo(loginContent.get("role"));
