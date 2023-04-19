@@ -2,9 +2,13 @@ name: SpringBoot CI with Gradle
 
 on:
   push:
-    branches: ["develop", "feature/**"]
+    branches:
+      - '**'
+      - '!master'
   pull_request:
-    branches: ["develop", "feature/**"]
+    branches:
+      - '**'
+      - '!master'
 
 jobs:
   build:

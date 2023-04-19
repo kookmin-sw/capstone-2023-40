@@ -7,6 +7,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -58,7 +59,7 @@ public class UserController {
 
     @ApiOperation(value = "사용자 삭제", notes = "요청한 사용자의 정보를 삭제합니다.")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "요청 성공"),
+        @ApiResponse(code = 204, message = "요청 성공"),
         @ApiResponse(code = 400, message = "잘못된 요청"),
         @ApiResponse(code = 401, message = "사용자 인증 실패"),
         @ApiResponse(code = 403, message = "접근 권한 없음"),
@@ -67,6 +68,6 @@ public class UserController {
     @DeleteMapping
     public ResponseEntity<Void> deleteUser(Authentication authentication) {
         userService.deleteUser(authentication);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

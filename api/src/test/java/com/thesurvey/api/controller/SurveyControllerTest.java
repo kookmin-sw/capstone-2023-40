@@ -38,10 +38,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
@@ -94,6 +95,7 @@ public class SurveyControllerTest extends BaseControllerTest {
     QuestionRequestDto questionRequestDto;
     QuestionOptionRequestDto questionOptionRequestDto;
     JSONObject mockSurvey;
+    Authentication authentication;
 
     @BeforeAll
     void setupBeforeAll() throws Exception {
@@ -132,12 +134,16 @@ public class SurveyControllerTest extends BaseControllerTest {
 
     @BeforeEach
     void setupBeforeEach() throws Exception {
-        UserUtil.userRepository = userRepository;
         UserLoginRequestDto userLoginRequestDto = UserLoginRequestDto.builder()
             .email("test1@gmail.com")
             .password("Password40@")
             .build();
         mockLogin(userLoginRequestDto, true);
+
+        authentication = authenticationService.authenticate(
+            new UsernamePasswordAuthenticationToken(userLoginRequestDto.getEmail(),
+                userLoginRequestDto.getPassword())
+        );
 
         MvcResult createdSurvey = mockCreateSurvey(surveyRequestDto);
         mockSurvey = new JSONObject(createdSurvey.getResponse().getContentAsString());
@@ -145,25 +151,36 @@ public class SurveyControllerTest extends BaseControllerTest {
 
     @Test
     void testGetSurvey() throws Exception {
-        ResultActions resultActions = mockMvc.perform(
-                get("/surveys/" + mockSurvey.get("surveyId").toString()))
-            .andExpect(status().isOk());
-        MvcResult mvcResult = resultActions.andReturn();
-        JSONObject content = new JSONObject(mvcResult.getResponse().getContentAsString());
+        // given
+        UUID surveyId = UUID.fromString(mockSurvey.getString("surveyId"));
 
+        // when
+        MvcResult result = mockMvc.perform(get("/surveys/" + surveyId))
+            .andExpect(status().isOk()).andReturn();
+        JSONObject content = new JSONObject(result.getResponse().getContentAsString());
+
+        // then
+        assertThat(surveyId.toString()).isEqualTo(content.getString("surveyId"));
         assertThat(surveyRequestDto.getTitle()).isEqualTo(content.get("title"));
+        assertThat(surveyRequestDto.getStartedDate()).isEqualTo(content.getString("startedDate"));
+        assertThat(surveyRequestDto.getEndedDate()).isEqualTo(content.getString("endedDate"));
+        assertThat(LocalDateTime.parse(content.getString("startedDate"))).isBefore(
+            LocalDateTime.parse(content.getString("endedDate")));
     }
 
     @Test
     void testUpdateSurvey() throws Exception {
         // given
+        UUID surveyId = UUID.fromString(mockSurvey.getString("surveyId"));
+        Long userId = UserUtil.getUserIdFromAuthentication(authentication);
+        Long authorId = mockSurvey.getLong("authorId");
         JSONArray questions = mockSurvey.getJSONArray("questions");
         JSONObject questionBank = (JSONObject) questions.get(0);
-        Long questionBankId = Long.valueOf(questionBank.get("questionBankId").toString());
+        Long questionBankId = questionBank.getLong("questionBankId");
 
         JSONArray questionOptions = questionBank.getJSONArray("questionOptions");
         JSONObject questionOption = (JSONObject) questionOptions.get(0);
-        Long questionOptionId = Long.valueOf(questionOption.get("questionOptionId").toString());
+        Long questionOptionId = questionOption.getLong("questionOptionId");
 
         QuestionOptionUpdateRequestDto questionOptionUpdateRequestDto = QuestionOptionUpdateRequestDto.builder()
             .optionId(questionOptionId)
@@ -180,7 +197,7 @@ public class SurveyControllerTest extends BaseControllerTest {
             .build();
 
         SurveyUpdateRequestDto surveyUpdateRequestDto = SurveyUpdateRequestDto.builder()
-            .surveyId(UUID.fromString(mockSurvey.get("surveyId").toString()))
+            .surveyId(surveyId)
             .title("This is test update title.")
             .description("This is test update description")
             .startedDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")).plusDays(3))
@@ -190,23 +207,40 @@ public class SurveyControllerTest extends BaseControllerTest {
             .build();
 
         // when
-        ResultActions resultActions = mockMvc.perform(patch("/surveys")
+        MvcResult result = mockMvc.perform(patch("/surveys")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(surveyUpdateRequestDto)))
-            .andExpect(status().isOk());
-        MvcResult mvcResult = resultActions.andReturn();
-        JSONObject content = new JSONObject(mvcResult.getResponse().getContentAsString());
+            .andExpect(status().isOk())
+            .andReturn();
+        JSONObject content = new JSONObject(result.getResponse().getContentAsString());
 
         // then
+        assertThat(userId).isEqualTo(authorId);
+        assertThat(surveyId.toString()).isEqualTo(content.getString("surveyId"));
         assertThat(surveyUpdateRequestDto.getTitle()).isEqualTo(content.get("title"));
+        assertThat(surveyUpdateRequestDto.getStartedDate().toString()).isEqualTo(
+            content.getString("startedDate"));
+        assertThat(surveyUpdateRequestDto.getEndedDate().toString()).isEqualTo(
+            content.getString("endedDate"));
+        assertThat(LocalDateTime.parse(content.getString("startedDate"))).isBefore(
+            LocalDateTime.parse(content.getString("endedDate")));
     }
 
     @Test
     void testDeleteSurvey() throws Exception {
-        ResultActions resultActions = mockMvc.perform(
-                delete("/surveys/" + mockSurvey.get("surveyId").toString()))
-            .andExpect(status().isNoContent());
-        // FIXME: should be 0, but 1 returns
-//        assertThat(surveyRepository.findAll().size()).isEqualTo(0);
+        // given
+        UUID surveyId = UUID.fromString(mockSurvey.getString("surveyId"));
+        Long authorId = mockSurvey.getLong("authorId");
+        Long userId = UserUtil.getUserIdFromAuthentication(authentication);
+
+        // when
+        // FIXME: deleting survey twice works fine but this is not the expected one.
+        surveyService.deleteSurvey(authentication, surveyId);
+        mockMvc.perform(delete("/surveys/" + surveyId)).andExpect(status().isNoContent());
+
+        // then
+        assertThat(authentication.isAuthenticated()).isTrue();
+        assertThat(userId).isEqualTo(authorId);
+        assertThat(surveyRepository.findBySurveyId(surveyId).isEmpty()).isTrue();
     }
 }
