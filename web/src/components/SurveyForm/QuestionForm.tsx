@@ -25,6 +25,8 @@ const HeadContainer = styled.div`
   justify-content: space-between;
 `;
 
+const SubjectiveQuestion = styled.div``;
+
 const TextInput = styled.input.attrs({ type: 'text', maxLength: 100 })`
   flex-basis: 80%;
   padding: 1.2vh 1.5vw 1.2vh 1.5vw;
@@ -75,8 +77,6 @@ const AddOptionButton = styled.button`
     background-color: ${(props) => props.theme.colors.btnhover};
   }
 `;
-
-const SubjectiveQuestion = styled.div``;
 
 const EmptyObject = styled.button`
   border: none;

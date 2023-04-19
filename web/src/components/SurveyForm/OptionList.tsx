@@ -6,6 +6,10 @@ import { SurveyCreateRequest } from '../../types/request/Survey';
 import { NumberUtils } from '../../utils/NumberUtils';
 import { SmallCircleButton } from '../Button';
 
+const OptionContainer = styled.div``;
+
+const OptionsContainer = styled.div``;
+
 const TextInput = styled.input.attrs({ type: 'text', maxLength: 100 })`
   padding: 1.2vh 1.5vw 1.2vh 1.5vw;
   border: ${(props) => props.theme.border};
@@ -15,7 +19,6 @@ const TextInput = styled.input.attrs({ type: 'text', maxLength: 100 })`
   background-color: ${(props) => props.theme.colors.inputBackground};
   cursor: text;
 `;
-const OptionContainer = styled.div``;
 
 const OptionInput = styled(TextInput).attrs({ type: 'text' })`
   width: 30vw;
@@ -35,8 +38,6 @@ const AnswerLabel = styled.label`
   border: ${(props) => props.theme.border};
   border-radius: ${(props) => props.theme.borderRadius};
 `;
-
-const OptionsContainer = styled.div``;
 
 interface OptionListProps {
   surveyData: SurveyCreateRequest;
