@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
 
 import { useOnClickOutside } from '../../hooks/useOnClickOutside';
+import { MediumRectangleButton, SmallCircleButton } from '../Button';
 import CertificationList from '../CertificationList';
 
 const Container = styled.div`
@@ -115,42 +116,6 @@ const Description = styled.span`
   padding: 1.2vh 1.5vw 1.2vh 1.5vw;
 `;
 
-const Button = styled.button`
-  width: 200px;
-  border: none;
-  padding: 2vh 2vw 2vh 2vw;
-  margin-top: 30px;
-  border-radius: ${(props) => props.theme.borderRadius};
-  font-size: 14px;
-  font-weight: 700;
-  color: ${(props) => props.theme.colors.default};
-  background-color: ${(props) => props.theme.colors.primary};
-  cursor: pointer;
-
-  &:hover {
-    background-color: ${(props) => props.theme.colors.prhover};
-  }
-`;
-
-const EndButton = styled.button`
-  height: 30px;
-  width: 30px;
-  border: none;
-  border-radius: 50%;
-  font-weight: 700;
-  color: ${(props) => props.theme.colors.default};
-  background-color: ${(props) => props.theme.colors.button};
-  cursor: pointer;
-
-  &:hover {
-    background-color: ${(props) => props.theme.colors.btnhover};
-  }
-
-  @media screen and (max-width: 960px) {
-    display: none;
-  }
-`;
-
 interface SurveyItem {
   survey_id: string;
   author: number;
@@ -181,9 +146,12 @@ export default function SurveyEnterModal({ surveyItem, setEnterModalOpen, theme 
     <Container>
       <ModalContainer ref={modalRef} theme={theme}>
         <EndButtonContainer>
-          <EndButton onClick={() => setEnterModalOpen(false)} theme={theme}>
-            x
-          </EndButton>
+          <SmallCircleButton
+            displayText="X"
+            name="closeModal"
+            handleClickButton={() => setEnterModalOpen(false)}
+            theme={theme}
+          />
         </EndButtonContainer>
         <TitleContainer theme={theme}>
           <Title theme={theme}>{surveyItem.title}</Title>
@@ -202,9 +170,12 @@ export default function SurveyEnterModal({ surveyItem, setEnterModalOpen, theme 
           </CertificationContainer>
         </BodyContainer>
         <ButtonContainer>
-          <Button onClick={() => navigate(`/survey/${surveyItem.survey_id}`)} theme={theme}>
-            설문 조사 시작하기
-          </Button>
+          <MediumRectangleButton
+            displayText="설문 조사 시작하기"
+            type="submit"
+            handleClickButton={() => navigate(`/survey/${surveyItem.survey_id}`)}
+            theme={theme}
+          />
         </ButtonContainer>
       </ModalContainer>
     </Container>

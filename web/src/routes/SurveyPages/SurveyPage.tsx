@@ -6,6 +6,7 @@ import styled from 'styled-components';
 
 import axios from '../../api/axios';
 import requests from '../../api/request';
+import { MediumRectangleButton } from '../../components/Button';
 import Header from '../../components/Header';
 import SurveyPageResultModal from '../../components/Modal/SurveyPageResultModal';
 import SurveyPageSkeleton from '../../components/Skeleton/SurveyPageSkeleton';
@@ -142,25 +143,6 @@ const RadioCheckmark = styled.span`
     height: 10px;
     width: 10px;
     border-radius: 50%;
-  }
-`;
-
-const SubmitButton = styled.button`
-  width: 15vw;
-  border: none;
-  padding: 2vh 2vw 2vh 2vw;
-  margin-top: 30px;
-  margin-bottom: 30px;
-  margin-left: 69vw;
-  border-radius: ${(props) => props.theme.borderRadius};
-  font-size: 2vh;
-  font-weight: 700;
-  color: ${(props) => props.theme.colors.default};
-  background-color: ${(props) => props.theme.colors.primary};
-  cursor: pointer;
-
-  &:hover {
-    background-color: ${(props) => props.theme.colors.prhover};
   }
 `;
 
@@ -365,9 +347,12 @@ export default function SurveyPage() {
             )}
           </QuestionContainer>
         ))}
-        <SubmitButton onClick={handleSubmitButtonClick} type="submit" theme={theme}>
-          제출하기
-        </SubmitButton>
+        <MediumRectangleButton
+          displayText="제출하기"
+          type="submit"
+          handleClickButton={handleSubmitButtonClick}
+          theme={theme}
+        />
       </BodyContainer>
       {resultModalOpen && <SurveyPageResultModal theme={theme} />}
     </Container>
