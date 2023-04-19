@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 // import axios from '../../api/axios';
 // import requests from '../../api/request';
+import MediumRectangleButton from '../../components/Button/MediumRectangleButton';
 import Header from '../../components/Header';
 import SurveyPageResultModal from '../../components/Modal/SurveyPageResultModal';
 import QuestionForm from '../../components/SurveyForm/QuestionForm';
@@ -54,26 +55,6 @@ const SurveyDataContainer = styled(ItemContainer)`
 `;
 
 const QuestionContainer = styled(ItemContainer)``;
-
-const SubmitButton = styled.button.attrs({ type: 'submit' })`
-  width: 15vw;
-  border: none;
-  padding: 2vh 2vw 2vh 2vw;
-  margin-top: 30px;
-  margin-bottom: 30px;
-  margin-left: 69vw;
-  border-radius: ${(props) => props.theme.borderRadius};
-  font-size: 2vh;
-  font-weight: 700;
-  color: ${(props) => props.theme.colors.default};
-  background-color: ${(props) => props.theme.colors.primary};
-  transition: 250ms background ease;
-  cursor: pointer;
-
-  &:hover {
-    background-color: ${(props) => props.theme.colors.prhover};
-  }
-`;
 
 // TODO: Drag and drop questions order
 export default function SurveyFormPage() {
@@ -317,10 +298,7 @@ export default function SurveyFormPage() {
         {surveyData.questions.map((question: QuestionCreateRequest) =>
           showQuestionForm(question.questionType, question.questionNo)
         )}
-
-        <SubmitButton theme={theme} onClick={handleSubmit}>
-          완료하기
-        </SubmitButton>
+        <MediumRectangleButton displayText="완료하기" handleClickButton={handleSubmit} theme={theme} />
       </BodyContainer>
 
       {resultModalOpen && <SurveyPageResultModal theme={theme} />}
