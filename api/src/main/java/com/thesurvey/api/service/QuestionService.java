@@ -13,6 +13,7 @@ import com.thesurvey.api.repository.QuestionBankRepository;
 import com.thesurvey.api.repository.QuestionRepository;
 import com.thesurvey.api.service.mapper.QuestionBankMapper;
 import com.thesurvey.api.service.mapper.QuestionMapper;
+import com.thesurvey.api.util.StringUtil;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -77,19 +78,10 @@ public class QuestionService {
                 throw new BadRequestExceptionMapper(ErrorMessage.NOT_SURVEY_QUESTION);
             }
 
-            if (questionBankUpdateRequestDto.getTitle() != null) {
-                if (questionBankUpdateRequestDto.getTitle().isBlank()) {
-                    throw new BadRequestExceptionMapper(ErrorMessage.NO_ONLY_WHITESPACE);
-                }
-                questionBank.changeTitle(questionBankUpdateRequestDto.getTitle().trim());
-            }
-            if (questionBankUpdateRequestDto.getDescription() != null) {
-                if (questionBankUpdateRequestDto.getDescription().isBlank()) {
-                    throw new BadRequestExceptionMapper(ErrorMessage.NO_ONLY_WHITESPACE);
-                }
-                questionBank.changeDescription(
-                    questionBankUpdateRequestDto.getDescription().trim());
-            }
+            questionBank.changeTitle(StringUtil.trim(questionBankUpdateRequestDto.getTitle()));
+            questionBank.changeDescription(
+                StringUtil.trim(questionBankUpdateRequestDto.getDescription()));
+
             if (questionBankUpdateRequestDto.getQuestionType() != null) {
                 questionBank.changeQuestionType(questionBankUpdateRequestDto.getQuestionType());
             }
