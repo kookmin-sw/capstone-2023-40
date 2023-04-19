@@ -8,6 +8,7 @@ import ProtectedRoute from './contexts/ProtectedRoute';
 import { useTheme } from './hooks/useTheme';
 import LoginPage from './routes/LoginPage';
 import MainPage from './routes/MainPage';
+import AuthenticationPage from './routes/MyPages/AuthenticationPage';
 import AuthListPage from './routes/MyPages/AuthListPage';
 import ProfilePage from './routes/MyPages/ProfilePage';
 import SurveyResultPage from './routes/MyPages/SurveyResultPage';
