@@ -1,27 +1,42 @@
 package com.thesurvey.api.service;
 
-import com.thesurvey.api.repository.UserRepository;
-import com.thesurvey.api.service.mapper.UserMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import com.thesurvey.api.domain.User;
+import com.thesurvey.api.dto.request.UserUpdateRequestDto;
+import com.thesurvey.api.exception.BadRequestExceptionMapper;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 
-@SpringBootTest
-@Transactional
-@AutoConfigureMockMvc
+@ExtendWith(MockitoExtension.class)
+@TestInstance(Lifecycle.PER_CLASS)
 public class UserServiceTest {
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    AuthenticationService authenticationService;
-    @Autowired
+
+    @InjectMocks
     UserService userService;
-    @Autowired
-    SurveyService surveyService;
-    @Autowired
-    UserMapper userMapper;
 
+    User user;
 
+    Authentication fakeAuthentication;
+
+    @BeforeAll
+    void setUpBeforeAll() {
+        user = User.builder()
+            .name("test")
+            .email("test@gmail.com")
+            .password("Password40@")
+            .phoneNumber("01012345678")
+            .build();
+
+        // Fake authentication instance. Authentication is not guaranteed on these tests
+        fakeAuthentication = new UsernamePasswordAuthenticationToken(user.getEmail(),
+            user.getPassword());
+    }
 
 }
