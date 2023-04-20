@@ -2,8 +2,11 @@ import React from 'react';
 
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
+import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { PersistGate } from 'redux-persist/integration/react';
 
+import { persistor, store } from '../reducers/store';
 import SurveyFormPage from '../routes/SurveyPages/SurveyFormPage';
 import { QuestionType } from '../types/request/Question';
 
@@ -13,11 +16,15 @@ window.HTMLElement.prototype.scrollIntoView = () => {};
 describe('[SurveyFormPage Test]', () => {
   function setUp() {
     return render(
-      <MemoryRouter initialEntries={['/survey/form']}>
-        <Routes>
-          <Route path="/survey/form" element={<SurveyFormPage />} />
-        </Routes>
-      </MemoryRouter>
+      <Provider store={store}>
+        <PersistGate persistor={persistor}>
+          <MemoryRouter initialEntries={['/survey/form']}>
+            <Routes>
+              <Route path="/survey/form" element={<SurveyFormPage />} />
+            </Routes>
+          </MemoryRouter>
+        </PersistGate>
+      </Provider>
     );
   }
 
