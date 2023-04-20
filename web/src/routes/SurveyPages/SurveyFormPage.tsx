@@ -108,23 +108,29 @@ export default function SurveyFormPage() {
     setAlertLabel(checkResult.index);
     switch (checkResult.message) {
       case ValidationErrorMessage.NO_QUESTION:
-        console.log(checkResult.message);
+        console.log(ValidationErrorMessage[checkResult.message]);
         break;
       case ValidationErrorMessage.NO_OPTION:
         scrollToRef(questionRefs, checkResult.index);
-        console.log(checkResult.message);
+        console.log(ValidationErrorMessage[checkResult.message]);
         break;
       case ValidationErrorMessage.EARLY_START:
         scrollToTop();
-        console.log(checkResult.message);
+        console.log(ValidationErrorMessage[checkResult.message]);
         break;
       case ValidationErrorMessage.EARLY_END:
         scrollToTop();
-        console.log(checkResult.message);
+        console.log(ValidationErrorMessage[checkResult.message]);
+        break;
+      case ValidationErrorMessage.EMPTY_INPUT:
+        if (checkResult.index !== -1) {
+          scrollToRef(questionRefs, checkResult.index);
+        }
+        console.log(ValidationErrorMessage[checkResult.message]);
         break;
       default:
         // TODO: submit surveyData to server
-        console.log(checkResult.message);
+        console.log(ValidationErrorMessage[checkResult.message]);
         console.log(surveyData);
         setResultModalOpen(false);
     }
@@ -234,7 +240,7 @@ export default function SurveyFormPage() {
     setSurveyData({ ...surveyData });
   };
 
-  // update questionList[questionId][optionId] option
+  // Update questionList[questionId][optionId] option
   const handleChangeOption = (event: React.ChangeEvent<HTMLInputElement>, questionId: number, optionId: number) => {
     const { name, value } = event.target;
     const newOptions = surveyData.questions[questionId].questionOptions;
@@ -246,6 +252,7 @@ export default function SurveyFormPage() {
     setSurveyData({ ...surveyData, questions: newQuestions });
   };
 
+  // Add and delete question and option
   const handleClickButton = (event: React.MouseEvent<HTMLButtonElement>, questionId?: number, optionId?: number) => {
     const { name } = event.target as HTMLInputElement;
     if (typeof questionId !== 'undefined') {

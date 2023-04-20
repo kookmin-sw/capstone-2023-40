@@ -4,6 +4,7 @@ export enum ValidationErrorMessage {
   NO_OPTION,
   EARLY_START,
   EARLY_END,
+  EMPTY_INPUT,
 }
 
 export interface InputCheckResult {
