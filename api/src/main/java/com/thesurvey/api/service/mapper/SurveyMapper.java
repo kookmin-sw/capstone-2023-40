@@ -2,6 +2,7 @@ package com.thesurvey.api.service.mapper;
 
 import com.thesurvey.api.domain.Survey;
 import com.thesurvey.api.dto.response.QuestionBankResponseDto;
+import com.thesurvey.api.dto.response.SurveyListPageDto;
 import com.thesurvey.api.dto.response.SurveyResponseDto;
 import com.thesurvey.api.dto.request.SurveyRequestDto;
 import com.thesurvey.api.repository.SurveyRepository;
@@ -54,7 +55,7 @@ public class SurveyMapper {
             .createdDate(survey.getCreatedDate())
             .modifiedDate(survey.getModifiedDate())
             .certificationTypes(certificationTypeConverter.toCertificationTypeList(
-                    surveyRepository.findCertificationTypeBySurveyId(survey.getSurveyId())))
+                surveyRepository.findCertificationTypeBySurveyId(survey.getSurveyId())))
             .questions(questionBankResponseDtoList)
             .build();
     }
@@ -68,6 +69,23 @@ public class SurveyMapper {
             .startedDate(surveyRequestDto.getStartedDate())
             .endedDate(surveyRequestDto.getEndedDate())
             .build();
+    }
+
+    public SurveyListPageDto toSurveyListPageDto(Survey survey) {
+        List<Integer> certificationTypes = surveyRepository.findCertificationTypeBySurveyId(
+            survey.getSurveyId());
+        return SurveyListPageDto.builder()
+            .surveyId(survey.getSurveyId())
+            .authorId(survey.getAuthorId())
+            .title(survey.getTitle())
+            .description(survey.getDescription())
+            .startedDate(survey.getStartedDate())
+            .endedDate(survey.getEndedDate())
+            .certificationTypes(
+                certificationTypeConverter.toCertificationTypeList(certificationTypes))
+            .modifiedDate(survey.getModifiedDate())
+            .build();
+
     }
 
 }

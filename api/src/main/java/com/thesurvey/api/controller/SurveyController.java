@@ -1,15 +1,18 @@
 package com.thesurvey.api.controller;
 
 import com.thesurvey.api.dto.response.AnsweredQuestionResponseDto;
+import com.thesurvey.api.dto.response.SurveyListPageDto;
 import com.thesurvey.api.dto.response.SurveyResponseDto;
 import com.thesurvey.api.dto.request.AnsweredQuestionRequestDto;
 import com.thesurvey.api.dto.request.SurveyRequestDto;
 import com.thesurvey.api.dto.request.SurveyUpdateRequestDto;
 import com.thesurvey.api.service.AnsweredQuestionService;
 import com.thesurvey.api.service.SurveyService;
-import java.util.List;
 import java.util.UUID;
 import javax.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -50,8 +53,8 @@ public class SurveyController {
         @ApiResponse(code = 404, message = "요청한 리소스 찾을 수 없음")
     })
     @GetMapping
-    public ResponseEntity<List<SurveyResponseDto>> getAllSurvey() {
-        return ResponseEntity.ok(surveyService.getAllSurvey());
+    public ResponseEntity<Page<SurveyListPageDto>> getAllSurvey(@PageableDefault(page = 0, size = 8) Pageable pageable) {
+        return ResponseEntity.ok(surveyService.getAllSurvey(pageable));
     }
 
     @ApiOperation(value = "설문조사 조회", notes = "파라미터로 전달 받은 UUID에 해당하는 설문조사를 조회합니다.")

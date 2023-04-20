@@ -2,6 +2,7 @@ package com.thesurvey.api.service;
 
 import com.thesurvey.api.domain.Survey;
 import com.thesurvey.api.domain.User;
+import com.thesurvey.api.dto.response.SurveyListPageDto;
 import com.thesurvey.api.dto.response.SurveyResponseDto;
 import com.thesurvey.api.dto.request.SurveyRequestDto;
 import com.thesurvey.api.dto.request.SurveyUpdateRequestDto;
@@ -15,10 +16,9 @@ import com.thesurvey.api.util.StringUtil;
 import com.thesurvey.api.util.UserUtil;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,13 +44,9 @@ public class SurveyService {
     }
 
     @Transactional(readOnly = true)
-    public List<SurveyResponseDto> getAllSurvey() {
-        return Optional.ofNullable(
-                surveyRepository.findAllInDescendingOrder())
-            .orElseThrow(() -> new NotFoundExceptionMapper(ErrorMessage.SURVEY_NOT_FOUND))
-            .stream()
-            .map(surveyMapper::toSurveyResponseDto)
-            .collect(Collectors.toList());
+    public Page<SurveyListPageDto> getAllSurvey(Pageable pageable) {
+        Page<Survey> surveyPage = surveyRepository.findAllInDescendingOrder(pageable);
+        return surveyPage.map(surveyMapper::toSurveyListPageDto);
     }
 
     @Transactional(readOnly = true)
