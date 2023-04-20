@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 @Api(tags = "사용자")
 @RestController
@@ -38,7 +39,8 @@ public class UserController {
         @ApiResponse(code = 404, message = "요청한 리소스 찾을 수 없음")
     })
     @GetMapping("/profile")
-    public ResponseEntity<UserResponseDto> getUserProfile(Authentication authentication) {
+    public ResponseEntity<UserResponseDto> getUserProfile(
+        @ApiIgnore Authentication authentication) {
         return ResponseEntity.ok(userService.getUserProfile(authentication));
     }
 
@@ -51,7 +53,8 @@ public class UserController {
         @ApiResponse(code = 404, message = "요청한 리소스 찾을 수 없음")
     })
     @PatchMapping("/profile")
-    public ResponseEntity<UserResponseDto> updateUserProfile(Authentication authentication,
+    public ResponseEntity<UserResponseDto> updateUserProfile(
+        @ApiIgnore Authentication authentication,
         @RequestBody UserUpdateRequestDto userUpdateRequestDto) {
         return ResponseEntity.ok(
             userService.updateUserProfile(authentication, userUpdateRequestDto));
@@ -66,7 +69,7 @@ public class UserController {
         @ApiResponse(code = 404, message = "요청한 리소스 찾을 수 없음")
     })
     @DeleteMapping
-    public ResponseEntity<Void> deleteUser(Authentication authentication) {
+    public ResponseEntity<Void> deleteUser(@ApiIgnore Authentication authentication) {
         userService.deleteUser(authentication);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

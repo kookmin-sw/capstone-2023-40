@@ -29,6 +29,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import springfox.documentation.annotations.ApiIgnore;
 
 @Api(tags = "설문조사")
 @RestController
@@ -82,7 +83,7 @@ public class SurveyController {
         @ApiResponse(code = 500, message = "서버 내부 오류")
     })
     @PostMapping
-    public ResponseEntity<SurveyResponseDto> createSurvey(Authentication authentication,
+    public ResponseEntity<SurveyResponseDto> createSurvey(@ApiIgnore Authentication authentication,
         @Valid @RequestBody SurveyRequestDto surveyRequestDto) {
         return ResponseEntity.ok(surveyService.createSurvey(authentication, surveyRequestDto));
     }
@@ -97,7 +98,7 @@ public class SurveyController {
         @ApiResponse(code = 500, message = "서버 내부 오류")
     })
     @PatchMapping
-    public ResponseEntity<SurveyResponseDto> updateSurvey(Authentication authentication,
+    public ResponseEntity<SurveyResponseDto> updateSurvey(@ApiIgnore Authentication authentication,
         @Valid @RequestBody SurveyUpdateRequestDto surveyUpdateRequestDto) {
         return ResponseEntity.ok(
             surveyService.updateSurvey(authentication, surveyUpdateRequestDto));
@@ -112,7 +113,7 @@ public class SurveyController {
         @ApiResponse(code = 404, message = "요청한 리소스 찾을 수 없음")
     })
     @DeleteMapping("/{surveyId}")
-    public ResponseEntity<Void> deleteSurvey(Authentication authentication,
+    public ResponseEntity<Void> deleteSurvey(@ApiIgnore Authentication authentication,
         @PathVariable("surveyId") String surveyId) {
         surveyService.deleteSurvey(authentication, UUID.fromString(surveyId));
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -127,7 +128,8 @@ public class SurveyController {
         @ApiResponse(code = 404, message = "요청한 리소스 찾을 수 없음")
     })
     @PostMapping("/submit")
-    public ResponseEntity<AnsweredQuestionResponseDto> submitSurvey(Authentication authentication,
+    public ResponseEntity<AnsweredQuestionResponseDto> submitSurvey(
+        @ApiIgnore Authentication authentication,
         @Valid @RequestBody AnsweredQuestionRequestDto answeredQuestionRequestDto) {
         answeredQuestionService.createAnswer(authentication, answeredQuestionRequestDto);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
