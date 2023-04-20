@@ -5,8 +5,8 @@ import { ValidationErrorMessage, InputCheckResult } from '../types/userInputChec
 export default function SurveyFormValidation(surveyData: SurveyCreateRequest): InputCheckResult {
   const errorIndex = -1;
   const currentDate = new Date();
-  const startedDate = new Date(surveyData.startedDate);
-  const endedDate = new Date(surveyData.endedDate);
+  const startedDate = surveyData.startedDate !== '' ? new Date(surveyData.startedDate) : null;
+  const endedDate = surveyData.endedDate !== '' ? new Date(surveyData.endedDate) : null;
 
   if (surveyData.title.length === 0 || surveyData.description.length === 0) {
     return {
@@ -14,17 +14,22 @@ export default function SurveyFormValidation(surveyData: SurveyCreateRequest): I
       index: errorIndex,
     };
   }
-
-  if (startedDate < currentDate) {
+  if (startedDate !== null && endedDate !== null) {
+    if (startedDate < currentDate) {
+      return {
+        message: ValidationErrorMessage.EARLY_START,
+        index: errorIndex,
+      };
+    }
+    if (endedDate <= startedDate) {
+      return {
+        message: ValidationErrorMessage.EARLY_END,
+        index: errorIndex,
+      };
+    }
+  } else {
     return {
-      message: ValidationErrorMessage.EARLY_START,
-      index: errorIndex,
-    };
-  }
-
-  if (endedDate < startedDate) {
-    return {
-      message: ValidationErrorMessage.EARLY_END,
+      message: ValidationErrorMessage.EMPTY_INPUT,
       index: errorIndex,
     };
   }

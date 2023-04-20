@@ -68,6 +68,8 @@ export default function SurveyFormPage() {
   const questionRefs = useRef<HTMLDivElement[]>([]);
   const [recentCreate, setRecentCreate] = useState<number>();
   const [resultModalOpen, setResultModalOpen] = useState<boolean>(false);
+  const [alertModalOpen, setAlertModalOpen] = useState<boolean>(false);
+  const [warnText, setWarnText] = useState('');
   const [certificationIsChecked, setCertificationIsChecked] = useState<boolean>(false);
   const [surveyData, setSurveyData] = useState<SurveyCreateRequest>({
     title: '제목 없는 설문',
@@ -103,34 +105,36 @@ export default function SurveyFormPage() {
   }, [recentCreate]);
 
   const handleSubmit = () => {
-    // TODO: show error modal instaed of console.log
     const checkResult: InputCheckResult = SurveyFormValidation(surveyData);
     setAlertLabel(checkResult.index);
+    setAlertModalOpen(true);
     switch (checkResult.message) {
       case ValidationErrorMessage.NO_QUESTION:
-        console.log(ValidationErrorMessage[checkResult.message]);
+        setWarnText('하나 이상의 질문을 추가 해주세요');
         break;
       case ValidationErrorMessage.NO_OPTION:
         scrollToRef(questionRefs, checkResult.index);
-        console.log(ValidationErrorMessage[checkResult.message]);
+        setWarnText('객관식 문항을 추가 해주세요');
         break;
       case ValidationErrorMessage.EARLY_START:
         scrollToTop();
-        console.log(ValidationErrorMessage[checkResult.message]);
+        setWarnText('설문조사 시작일을 확인해 주세요');
         break;
       case ValidationErrorMessage.EARLY_END:
         scrollToTop();
-        console.log(ValidationErrorMessage[checkResult.message]);
+        setWarnText('설문조사 종료일이 시작일 보다 빠릅니다');
         break;
       case ValidationErrorMessage.EMPTY_INPUT:
         if (checkResult.index !== -1) {
           scrollToRef(questionRefs, checkResult.index);
+        } else {
+          scrollToTop();
         }
-        console.log(ValidationErrorMessage[checkResult.message]);
+        setWarnText('모든 입력을 채워 주세요');
         break;
       default:
         // TODO: submit surveyData to server
-        console.log(ValidationErrorMessage[checkResult.message]);
+        setWarnText('dhksfy');
         console.log(surveyData);
         setResultModalOpen(false);
     }
@@ -307,6 +311,16 @@ export default function SurveyFormPage() {
       </BodyContainer>
 
       {resultModalOpen && <SurveyPageResultModal theme={theme} />}
+      {alertModalOpen && (
+        <AlertModal
+          theme={theme}
+          title="경고"
+          level="WARN"
+          text={warnText}
+          buttonText="확인"
+          onClose={() => setAlertModalOpen(false)}
+        />
+      )}
     </Container>
   );
 }
