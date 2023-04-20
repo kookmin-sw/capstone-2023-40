@@ -8,12 +8,15 @@ export default function SurveyFormValidation(surveyData: SurveyCreateRequest): I
   const startedDate = surveyData.startedDate !== '' ? new Date(surveyData.startedDate) : null;
   const endedDate = surveyData.endedDate !== '' ? new Date(surveyData.endedDate) : null;
 
+  // Check survey title and description is empty
   if (surveyData.title.length === 0 || surveyData.description.length === 0) {
     return {
       message: ValidationErrorMessage.EMPTY_INPUT,
       index: errorIndex,
     };
   }
+
+  // Check survey date is empty and valid
   if (startedDate !== null && endedDate !== null) {
     if (startedDate < currentDate) {
       return {
@@ -34,6 +37,7 @@ export default function SurveyFormValidation(surveyData: SurveyCreateRequest): I
     };
   }
 
+  // Check survey has least 1 question
   if (surveyData.questions.length === 0) {
     return {
       message: ValidationErrorMessage.NO_QUESTION,
@@ -41,13 +45,17 @@ export default function SurveyFormValidation(surveyData: SurveyCreateRequest): I
     };
   }
 
+  // Check each questions
   for (let i = 0; i < surveyData.questions.length; i += 1) {
+    // Check question title and description is empty
     if (surveyData.questions[i].title.length === 0 || surveyData.questions[i].description.length === 0) {
       return {
         message: ValidationErrorMessage.EMPTY_INPUT,
         index: i,
       };
     }
+
+    // Check selective question has least 1 option
     if (
       surveyData.questions[i].questionType === QuestionType.SINGLE_CHOICE ||
       surveyData.questions[i].questionType === QuestionType.MULTIPLE_CHOICE
