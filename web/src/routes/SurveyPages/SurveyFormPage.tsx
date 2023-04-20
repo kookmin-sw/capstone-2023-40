@@ -6,7 +6,7 @@ import styled from 'styled-components';
 // import requests from '../../api/request';
 import { MediumRectangleButton } from '../../components/Button';
 import Header from '../../components/Header';
-import { SurveyPageResultModal, AlertModal } from '../../components/Modal';
+import { SurveyPageResultModal, AlertModal, ConfirmModal } from '../../components/Modal';
 import QuestionForm from '../../components/SurveyForm/QuestionForm';
 import SurveyDataForm from '../../components/SurveyForm/SurveyDataForm';
 import SurveyFormValidation from '../../features/SurveyFormValidation';
@@ -69,6 +69,7 @@ export default function SurveyFormPage() {
   const [recentCreate, setRecentCreate] = useState<number>();
   const [resultModalOpen, setResultModalOpen] = useState<boolean>(false);
   const [alertModalOpen, setAlertModalOpen] = useState<boolean>(false);
+  const [confirmModalOpen, setConfirmModalOpen] = useState<boolean>(false);
   const [warnText, setWarnText] = useState('');
   const [certificationIsChecked, setCertificationIsChecked] = useState<boolean>(false);
   const [surveyData, setSurveyData] = useState<SurveyCreateRequest>({
@@ -80,20 +81,20 @@ export default function SurveyFormPage() {
     questions: [],
   });
 
-  const turnOnAlertLabel = (domIndex: number) => {
+  const turnOnAlertNotification = (domIndex: number) => {
     questionRefs.current[domIndex].style.borderLeft = '15px solid #FF5733';
   };
 
-  const turnOffAlertLabel = (domIndex: number) => {
+  const turnOffAlertNotification = (domIndex: number) => {
     questionRefs.current[domIndex].style.borderLeft = `15px solid ${theme.colors.primary}`;
   };
 
-  const setAlertLabel = (errorIndex: number) => {
+  const setAlertNotification = (errorIndex: number) => {
     surveyData.questions.forEach((question: QuestionCreateRequest) => {
       if (question.questionNo === errorIndex) {
-        turnOnAlertLabel(question.questionNo);
+        turnOnAlertNotification(question.questionNo);
       } else {
-        turnOffAlertLabel(question.questionNo);
+        turnOffAlertNotification(question.questionNo);
       }
     });
   };
@@ -105,24 +106,35 @@ export default function SurveyFormPage() {
   }, [recentCreate]);
 
   const handleSubmit = () => {
+    // TODO: submit surveyData to server
+    console.log(surveyData);
+    setConfirmModalOpen(false);
+    setResultModalOpen(true);
+  };
+
+  const validateSurveyData = () => {
     const checkResult: InputCheckResult = SurveyFormValidation(surveyData);
-    setAlertLabel(checkResult.index);
-    setAlertModalOpen(true);
+    setAlertNotification(checkResult.index);
+
     switch (checkResult.message) {
       case ValidationErrorMessage.NO_QUESTION:
         setWarnText('하나 이상의 질문을 추가 해주세요');
+        setAlertModalOpen(true);
         break;
       case ValidationErrorMessage.NO_OPTION:
         scrollToRef(questionRefs, checkResult.index);
         setWarnText('객관식 문항을 추가 해주세요');
+        setAlertModalOpen(true);
         break;
       case ValidationErrorMessage.EARLY_START:
         scrollToTop();
         setWarnText('설문조사 시작일을 확인해 주세요');
+        setAlertModalOpen(true);
         break;
       case ValidationErrorMessage.EARLY_END:
         scrollToTop();
         setWarnText('설문조사 종료일이 시작일 보다 빠릅니다');
+        setAlertModalOpen(true);
         break;
       case ValidationErrorMessage.EMPTY_INPUT:
         if (checkResult.index !== -1) {
@@ -131,12 +143,10 @@ export default function SurveyFormPage() {
           scrollToTop();
         }
         setWarnText('모든 입력을 채워 주세요');
+        setAlertModalOpen(true);
         break;
       default:
-        // TODO: submit surveyData to server
-        setWarnText('dhksfy');
-        console.log(surveyData);
-        setResultModalOpen(false);
+        setConfirmModalOpen(true);
     }
   };
 
@@ -306,7 +316,12 @@ export default function SurveyFormPage() {
           </QuestionContainer>
         ))}
         <ButtonContainer>
-          <MediumRectangleButton type="submit" displayText="완료하기" handleClickButton={handleSubmit} theme={theme} />
+          <MediumRectangleButton
+            type="submit"
+            displayText="완료하기"
+            handleClickButton={validateSurveyData}
+            theme={theme}
+          />
         </ButtonContainer>
       </BodyContainer>
 
@@ -319,6 +334,16 @@ export default function SurveyFormPage() {
           text={warnText}
           buttonText="확인"
           onClose={() => setAlertModalOpen(false)}
+        />
+      )}
+      {confirmModalOpen && (
+        <ConfirmModal
+          theme={theme}
+          title="확인"
+          level="INFO"
+          text="제출하시겠습니까?"
+          handleCancleClick={() => setConfirmModalOpen(false)}
+          handleConfimClick={() => handleSubmit()}
         />
       )}
     </Container>
