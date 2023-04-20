@@ -2,12 +2,26 @@ import { QuestionType } from '../types/request/Question';
 import { SurveyCreateRequest } from '../types/request/Survey';
 import { ValidationErrorMessage, InputCheckResult } from '../types/userInputCheck';
 
-const isFutureAndPast = (future: Date, past: Date): boolean => {
-  const dateDiff = future.getTime() - past.getTime();
+const validateStartDate = (start: Date, current: Date): boolean => {
+  const dateDiff = start.getTime() - current.getTime();
 
-  if (dateDiff <= -60000) {
+  if (Math.abs(dateDiff) < 60000) {
+    if (start.getMinutes() >= current.getMinutes()) return true;
     return false;
   }
+
+  if (dateDiff < 0) return false;
+
+  return true;
+};
+
+const validateEndDate = (start: Date, end: Date): boolean => {
+  const dateDiff = end.getTime() - start.getTime();
+
+  if (dateDiff <= 0) return false;
+
+  if (dateDiff < 60000) return false;
+
   return true;
 };
 
@@ -17,7 +31,7 @@ export default function SurveyFormValidation(surveyData: SurveyCreateRequest): I
   const startedDate = surveyData.startedDate !== '' ? new Date(surveyData.startedDate) : null;
   const endedDate = surveyData.endedDate !== '' ? new Date(surveyData.endedDate) : null;
 
-  // Check survey title and description is empty
+  // Check survey title and description is not empty
   if (surveyData.title.length === 0 || surveyData.description.length === 0) {
     return {
       message: ValidationErrorMessage.EMPTY_INPUT,
@@ -25,15 +39,15 @@ export default function SurveyFormValidation(surveyData: SurveyCreateRequest): I
     };
   }
 
-  // Check survey date is empty and valid
+  // Check survey date is not empty and valid
   if (startedDate !== null && endedDate !== null) {
-    if (!isFutureAndPast(startedDate, currentDate)) {
+    if (!validateStartDate(startedDate, currentDate)) {
       return {
         message: ValidationErrorMessage.EARLY_START,
         index: errorIndex,
       };
     }
-    if (endedDate <= startedDate) {
+    if (!validateEndDate(startedDate, endedDate)) {
       return {
         message: ValidationErrorMessage.EARLY_END,
         index: errorIndex,
@@ -56,27 +70,38 @@ export default function SurveyFormValidation(surveyData: SurveyCreateRequest): I
 
   // Check each questions
   for (let i = 0; i < surveyData.questions.length; i += 1) {
-    // Check question title and description is empty
-    if (surveyData.questions[i].title.length === 0 || surveyData.questions[i].description.length === 0) {
+    const { questions } = surveyData;
+
+    // Check question title and description is not empty
+    if (questions[i].title.length === 0 || questions[i].description.length === 0) {
       return {
         message: ValidationErrorMessage.EMPTY_INPUT,
         index: i,
       };
     }
 
-    // Check selective question has least 1 option
     if (
-      surveyData.questions[i].questionType === QuestionType.SINGLE_CHOICE ||
-      surveyData.questions[i].questionType === QuestionType.MULTIPLE_CHOICE
+      questions[i].questionType === QuestionType.SINGLE_CHOICE ||
+      questions[i].questionType === QuestionType.MULTIPLE_CHOICE
     ) {
-      if (
-        typeof surveyData.questions[i].questionOptions === 'undefined' ||
-        surveyData.questions[i].questionOptions?.length === 0
-      ) {
+      const options = questions[i].questionOptions;
+
+      // Check selective question has least 1 option
+      if (typeof options === 'undefined' || options.length === 0) {
         return {
           message: ValidationErrorMessage.NO_OPTION,
           index: i,
         };
+      }
+
+      // Check selective question option is not empty
+      for (let j = 0; j < options.length; j += 1) {
+        if (options[j].option.length === 0) {
+          return {
+            message: ValidationErrorMessage.EMPTY_INPUT,
+            index: i,
+          };
+        }
       }
     }
   }
