@@ -18,7 +18,9 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,7 +47,18 @@ public class SurveyService {
 
     @Transactional(readOnly = true)
     public Page<SurveyListPageDto> getAllSurvey(Pageable pageable) {
-        Page<Survey> surveyPage = surveyRepository.findAllInDescendingOrder(pageable);
+        if (pageable.getPageSize() != 8) {
+            throw new BadRequestExceptionMapper(ErrorMessage.INVALID_PAGE_SIZE);
+        }
+        if (pageable.getSort() != Sort.unsorted()) {
+            throw new BadRequestExceptionMapper(ErrorMessage.INVALID_PAGE_SORT);
+        }
+
+        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), 8);
+        Page<Survey> surveyPage = surveyRepository.findAllInDescendingOrder(pageRequest);
+        if (surveyPage.getTotalPages() <= pageable.getPageNumber()) {
+            throw new BadRequestExceptionMapper(ErrorMessage.PAGE_NOT_FOUND);
+        }
         return surveyPage.map(surveyMapper::toSurveyListPageDto);
     }
 

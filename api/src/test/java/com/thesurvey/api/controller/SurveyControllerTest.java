@@ -253,7 +253,7 @@ public class SurveyControllerTest extends BaseControllerTest {
         // then
         assertThat("This is test survey title 7").isEqualTo(latestSurvey.get("title"));
         assertThat(content.get("totalElements")).isEqualTo(16); // mockSurvey 1 + test surveys 15
-        assertThat(content.get("totalPages")).isEqualTo(2); // totalElements / page size
+        assertThat(content.get("totalPages")).isEqualTo(2); // total elements / page size
         assertThat(content.get("last")).isEqualTo(true); // page 1 is last page
     }
 
