@@ -5,15 +5,20 @@ import styled, { DefaultTheme } from 'styled-components';
 import { Icons } from '../../assets/svg';
 
 const Container = styled.div`
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  z-index: 100;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
-  position: absolute;
-  align-items: center;
   justify-content: center;
-  flex-direction: column;
+  align-items: center;
 `;
 
 const Modal = styled.div`
-  width: 60vw;
+  width: 50vw;
   box-shadow: 4px 4px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: ${(props) => props.theme.borderRadius};
   background-color: ${(props) => props.theme.colors.container};
@@ -85,6 +90,7 @@ const Button = styled.button`
   cursor: pointer;
   font-weight: 700;
   color: ${(props) => props.theme.colors.text};
+  transition: 250ms background ease;
 
   &:hover {
     background-color: ${(props) => props.theme.colors.btnhover};
