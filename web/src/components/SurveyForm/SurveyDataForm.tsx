@@ -72,7 +72,7 @@ const SurveyDateContainer = styled.div`
   align-items: baseline;
 `;
 
-const SurveyDateInput = styled.input.attrs({ type: 'date' })`
+const SurveyDateInput = styled.input.attrs({ type: 'datetime-local' })`
   padding: 1.2vh 1.5vw 1.2vh 1.5vw;
   border: ${(props) => props.theme.border};
   border-radius: ${(props) => props.theme.borderRadius};

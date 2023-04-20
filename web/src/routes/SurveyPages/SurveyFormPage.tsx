@@ -133,7 +133,7 @@ export default function SurveyFormPage() {
         break;
       case ValidationErrorMessage.EARLY_END:
         scrollToTop();
-        setWarnText('설문조사 종료일이 시작일 보다 빠릅니다');
+        setWarnText('설문조사 종료일이 시작일과 같거나 빠릅니다');
         setAlertModalOpen(true);
         break;
       case ValidationErrorMessage.EMPTY_INPUT:
@@ -318,7 +318,7 @@ export default function SurveyFormPage() {
         <ButtonContainer>
           <MediumRectangleButton
             type="submit"
-            displayText="완료하기"
+            displayText="제출하기"
             handleClickButton={validateSurveyData}
             theme={theme}
           />

@@ -2,6 +2,15 @@ import { QuestionType } from '../types/request/Question';
 import { SurveyCreateRequest } from '../types/request/Survey';
 import { ValidationErrorMessage, InputCheckResult } from '../types/userInputCheck';
 
+const isFutureAndPast = (future: Date, past: Date): boolean => {
+  const dateDiff = future.getTime() - past.getTime();
+
+  if (dateDiff <= -60000) {
+    return false;
+  }
+  return true;
+};
+
 export default function SurveyFormValidation(surveyData: SurveyCreateRequest): InputCheckResult {
   const errorIndex = -1;
   const currentDate = new Date();
@@ -18,7 +27,7 @@ export default function SurveyFormValidation(surveyData: SurveyCreateRequest): I
 
   // Check survey date is empty and valid
   if (startedDate !== null && endedDate !== null) {
-    if (startedDate < currentDate) {
+    if (!isFutureAndPast(startedDate, currentDate)) {
       return {
         message: ValidationErrorMessage.EARLY_START,
         index: errorIndex,
