@@ -1,11 +1,15 @@
 package com.thesurvey.api.config;
 
+import com.fasterxml.classmate.TypeResolver;
+import com.thesurvey.api.dto.request.CustomPageable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import org.springframework.data.domain.Pageable;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.schema.AlternateTypeRules;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ApiKey;
 import springfox.documentation.service.AuthorizationScope;
@@ -29,9 +33,13 @@ public class SwaggerConfig {
             .build();
     }
 
+    TypeResolver typeResolver = new TypeResolver();
+
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
+            .alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(Pageable.class), typeResolver.resolve(
+                CustomPageable.class)))
             .consumes(getConsumeContentTypes())
             .produces(getProduceContentTypes())
             .apiInfo(apiInfo())
