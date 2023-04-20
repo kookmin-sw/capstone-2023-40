@@ -120,6 +120,7 @@ export default function QuestionForm({
           onChange={(event) => handleChangeQuestion(event, questionId)}
           name="title"
           value={surveyData.questions[questionId].title || ''}
+          placeholder="설문의 제목을 입력해주세요"
         />
         <QuestionTypeSelector
           selected={selected}
@@ -134,6 +135,7 @@ export default function QuestionForm({
         onChange={(event) => handleChangeQuestion(event, questionId)}
         name="description"
         value={surveyData.questions[questionId].description || ''}
+        placeholder="설문의 설명을 입력해주세요"
       />
 
       {selected === QuestionType.LONG_ANSWER || selected === QuestionType.SHORT_ANSWER ? (

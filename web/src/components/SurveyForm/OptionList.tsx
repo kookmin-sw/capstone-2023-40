@@ -68,6 +68,7 @@ export default function OptionList({
               onChange={(event) => handleChangeOption(event, questionId, index)}
               name="option"
               value={tmpOptions[index].option || ''}
+              placeholder="문항을 입력해 주세요"
             />
             <SmallCircleButton
               displayText="X"
