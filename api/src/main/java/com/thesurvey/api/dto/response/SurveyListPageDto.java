@@ -1,9 +1,8 @@
+
+
 package com.thesurvey.api.dto.response;
 
-import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -11,20 +10,13 @@ import lombok.Getter;
 @Builder
 public class SurveyListPageDto {
 
-    private UUID surveyId;
+    List<SurveyPageDto> surveys;
 
-    private Long authorId;
+    Integer page;
 
-    private String title;
+    Long totalSurveys;
 
-    private String description;
-
-    private LocalDateTime startedDate;
-
-    private LocalDateTime endedDate;
-
-    private LocalDateTime modifiedDate;
-
-    private List<CertificationType> certificationTypes;
+    Integer totalPages;
 
 }
+

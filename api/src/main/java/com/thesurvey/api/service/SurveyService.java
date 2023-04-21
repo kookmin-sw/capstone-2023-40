@@ -3,6 +3,7 @@ package com.thesurvey.api.service;
 import com.thesurvey.api.domain.Survey;
 import com.thesurvey.api.domain.User;
 import com.thesurvey.api.dto.response.SurveyListPageDto;
+import com.thesurvey.api.dto.response.SurveyPageDto;
 import com.thesurvey.api.dto.response.SurveyResponseDto;
 import com.thesurvey.api.dto.request.SurveyRequestDto;
 import com.thesurvey.api.dto.request.SurveyUpdateRequestDto;
@@ -16,11 +17,12 @@ import com.thesurvey.api.util.StringUtil;
 import com.thesurvey.api.util.UserUtil;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,20 +48,19 @@ public class SurveyService {
     }
 
     @Transactional(readOnly = true)
-    public Page<SurveyListPageDto> getAllSurvey(Pageable pageable) {
-        if (pageable.getPageSize() != 8) {
-            throw new BadRequestExceptionMapper(ErrorMessage.INVALID_PAGE_SIZE);
+    public SurveyListPageDto getAllSurvey(int page) {
+        if (page < 1) {
+            throw new BadRequestExceptionMapper(ErrorMessage.INVALID_REQUEST);
         }
-        if (pageable.getSort() != Sort.unsorted()) {
-            throw new BadRequestExceptionMapper(ErrorMessage.INVALID_PAGE_SORT);
+        Page<Survey> surveyPage = surveyRepository.findAllInDescendingOrder(
+            PageRequest.of(page - 1, 8));
+        if (surveyPage.getTotalPages() < page) {
+            throw new NotFoundExceptionMapper(ErrorMessage.PAGE_NOT_FOUND);
         }
-
-        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), 8);
-        Page<Survey> surveyPage = surveyRepository.findAllInDescendingOrder(pageRequest);
-        if (surveyPage.getTotalPages() <= pageable.getPageNumber()) {
-            throw new BadRequestExceptionMapper(ErrorMessage.PAGE_NOT_FOUND);
-        }
-        return surveyPage.map(surveyMapper::toSurveyListPageDto);
+        List<SurveyPageDto> surveyPageDtoList = surveyPage.getContent().stream()
+            .map(surveyMapper::toSurveyPageDto).collect(
+                Collectors.toList());
+        return surveyMapper.toSurveyListPageDto(surveyPageDtoList, surveyPage);
     }
 
     @Transactional(readOnly = true)

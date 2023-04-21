@@ -1,7 +1,7 @@
 package com.thesurvey.api.config;
 
 import com.fasterxml.classmate.TypeResolver;
-import com.thesurvey.api.dto.request.CustomPageable;
+import com.thesurvey.api.dto.request.PageableSwagger;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -39,7 +39,7 @@ public class SwaggerConfig {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
             .alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(Pageable.class), typeResolver.resolve(
-                CustomPageable.class)))
+                PageableSwagger.class)))
             .consumes(getConsumeContentTypes())
             .produces(getProduceContentTypes())
             .apiInfo(apiInfo())

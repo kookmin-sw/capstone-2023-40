@@ -243,18 +243,16 @@ public class SurveyControllerTest extends BaseControllerTest {
 
         // when
         MvcResult result = mockMvc.perform(get("/surveys")
-                .param("page", "1")
-                .param("size", "8"))
+                .param("page", "2"))
             .andExpect(status().isOk()).andReturn();
         JSONObject content = new JSONObject(result.getResponse().getContentAsString());
-        JSONArray paginatedSurveyList = content.getJSONArray("content");
+        JSONArray paginatedSurveyList = content.getJSONArray("surveys");
         JSONObject latestSurvey = paginatedSurveyList.getJSONObject(0);
 
         // then
         assertThat("This is test survey title 7").isEqualTo(latestSurvey.get("title"));
-        assertThat(content.get("totalElements")).isEqualTo(16); // mockSurvey 1 + test surveys 15
+        assertThat(content.get("totalSurveys")).isEqualTo(16); // mockSurvey 1 + test surveys 15
         assertThat(content.get("totalPages")).isEqualTo(2); // total elements / page size
-        assertThat(content.get("last")).isEqualTo(true); // page 1 is last page
     }
 
     @Test

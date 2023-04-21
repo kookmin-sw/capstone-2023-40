@@ -1,6 +1,7 @@
 package com.thesurvey.api.service;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
 import com.thesurvey.api.domain.EnumTypeEntity.QuestionType;
@@ -13,6 +14,7 @@ import com.thesurvey.api.dto.request.QuestionRequestDto;
 import com.thesurvey.api.dto.request.SurveyRequestDto;
 import com.thesurvey.api.dto.request.SurveyUpdateRequestDto;
 import com.thesurvey.api.exception.BadRequestExceptionMapper;
+import com.thesurvey.api.exception.NotFoundExceptionMapper;
 import com.thesurvey.api.repository.SurveyRepository;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -26,6 +28,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -247,40 +251,26 @@ public class SurveyServiceTest {
     }
 
     @Test
-    void testValidateInvalidPageSize() {
-        int invalidPageSize = 10;
-        PageRequest pageRequest = PageRequest.of(0, invalidPageSize);
+    void testValidateInvalidPageNumber() {
+        // given
+        Survey survey = Survey.builder()
+            .title("This is test survey.")
+            .authorId(1L)
+            .description("This is test description.")
+            .startedDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")))
+            .endedDate(LocalDateTime.now(
+                ZoneId.of("Asia/Seoul")).plusDays(100))
+            .build();
+
+        // when
+        Page<Survey> testSurveyPage = new PageImpl<>(List.of(survey));
+        when(surveyRepository.findAllInDescendingOrder(any())).thenReturn(testSurveyPage);
+
+        // then
         assertThrows(BadRequestExceptionMapper.class,
-            () -> surveyService.getAllSurvey(pageRequest));
-
+            () -> surveyService.getAllSurvey(-1));
+        assertThrows(NotFoundExceptionMapper.class,
+            () -> surveyService.getAllSurvey(100));
     }
-
-    @Test
-    void testValidateInvalidPageSort() {
-        PageRequest pageRequest = PageRequest.of(0, 8)
-            .withSort(Direction.ASC, "surveyId"); // set to not default sort
-        assertThrows(BadRequestExceptionMapper.class,
-            () -> surveyService.getAllSurvey(pageRequest));
-    }
-
-    // FIXME: pass when run individually but not when the whole test class run
-//    @Test
-//    void testValidateInvalidPageNumber() {
-//        Survey survey = Survey.builder()
-//            .title("This is test survey.")
-//            .authorId(1L)
-//            .description("This is test description.")
-//            .startedDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")))
-//            .endedDate(LocalDateTime.now(
-//                ZoneId.of("Asia/Seoul")).plusDays(100))
-//            .build();
-//        int invalidPageNumber = 10;
-//        PageRequest pageRequest = PageRequest.of(invalidPageNumber, 8);
-//
-//        Page<Survey> testSurveyPage = new PageImpl<>(List.of(survey));
-//        when(surveyRepository.findAllInDescendingOrder(pageRequest)).thenReturn(testSurveyPage);
-//        assertThrows(BadRequestExceptionMapper.class,
-//            () -> surveyService.getAllSurvey(pageRequest));
-//    }
 
 }
