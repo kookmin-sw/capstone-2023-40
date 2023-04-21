@@ -158,7 +158,7 @@ const Navigator = styled.li<{ currentLocation: string }>`
 `;
 
 const LoginInformation = styled.div`
-  display: flex;z
+  display: flex;
   align-items: center;
   justify-content: center;
   font-size: calc(1.5vh + 0.5vmin);
