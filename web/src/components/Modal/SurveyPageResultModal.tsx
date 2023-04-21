@@ -3,6 +3,8 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
 
+import { RectanglePrimaryButton } from '../Styled/Buttons';
+
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
@@ -28,21 +30,8 @@ const ModalContainer = styled.div`
   align-items: center;
 `;
 
-const Button = styled.button`
+const SubmitButton = styled(RectanglePrimaryButton)`
   width: 15vw;
-  border: none;
-  padding: 2vh 2vw 2vh 2vw;
-  margin: 2vw;
-  border-radius: ${(props) => props.theme.borderRadius};
-  font-size: 2vh;
-  font-weight: 700;
-  color: ${(props) => props.theme.colors.default};
-  background-color: ${(props) => props.theme.colors.primary};
-  cursor: pointer;
-
-  &:hover {
-    background-color: ${(props) => props.theme.colors.prhover};
-  }
 `;
 
 const Label = styled.label`
@@ -76,9 +65,9 @@ export default function SurveyPageResultModal({ theme }: ModalProps) {
     <Container theme={theme}>
       <ModalContainer theme={theme}>
         <Label theme={theme}>🥳</Label>
-        <Button theme={theme} onClick={() => navigate('/survey')}>
+        <SubmitButton theme={theme} onClick={() => navigate('/survey')}>
           완료하기
-        </Button>
+        </SubmitButton>
       </ModalContainer>
     </Container>
   );

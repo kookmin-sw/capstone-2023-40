@@ -6,10 +6,10 @@ import styled from 'styled-components';
 
 import axios from '../../api/axios';
 import requests from '../../api/request';
-import { MediumRectangleButton } from '../../components/Button';
 import Header from '../../components/Header';
 import SurveyPageResultModal from '../../components/Modal/SurveyPageResultModal';
 import SurveyPageSkeleton from '../../components/Skeleton/SurveyPageSkeleton';
+import { RectanglePrimaryButton } from '../../components/Styled/Buttons';
 import { useTheme } from '../../hooks/useTheme';
 import { scrollToRef } from '../../utils/scroll';
 
@@ -150,6 +150,10 @@ const RadioCheckmark = styled.span`
     width: 10px;
     border-radius: 50%;
   }
+`;
+
+const SubmitButton = styled(RectanglePrimaryButton)`
+  width: 20vw;
 `;
 
 interface QuestionOption {
@@ -354,12 +358,9 @@ export default function SurveyPage() {
           </QuestionContainer>
         ))}
         <ButtonContainer>
-          <MediumRectangleButton
-            displayText="제출하기"
-            type="submit"
-            handleClickButton={handleSubmitButtonClick}
-            theme={theme}
-          />
+          <SubmitButton type="submit" onClick={handleSubmitButtonClick} theme={theme}>
+            제출하기
+          </SubmitButton>
         </ButtonContainer>
       </BodyContainer>
       {resultModalOpen && <SurveyPageResultModal theme={theme} />}

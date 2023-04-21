@@ -4,8 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
 
 import { useOnClickOutside } from '../../hooks/useOnClickOutside';
-import { MediumRectangleButton, SmallCircleButton } from '../Button';
+import { SmallCircleButton } from '../Button';
 import CertificationList from '../CertificationList';
+import { RectanglePrimaryButton } from '../Styled/Buttons';
 
 const Container = styled.div`
   width: 100vw;
@@ -116,6 +117,11 @@ const Description = styled.span`
   padding: 1.2vh 1.5vw 1.2vh 1.5vw;
 `;
 
+const SubmitButton = styled(RectanglePrimaryButton)`
+  width: 30vw;
+  margin-top: 10px;
+`;
+
 interface SurveyItem {
   survey_id: string;
   author: number;
@@ -170,12 +176,9 @@ export default function SurveyPreviewModal({ surveyItem, setEnterModalOpen, them
           </CertificationContainer>
         </BodyContainer>
         <ButtonContainer>
-          <MediumRectangleButton
-            displayText="설문 조사 시작하기"
-            type="submit"
-            handleClickButton={() => navigate(`/survey/${surveyItem.survey_id}`)}
-            theme={theme}
-          />
+          <SubmitButton type="submit" onClick={() => navigate(`/survey/${surveyItem.survey_id}`)} theme={theme}>
+            설문 조사 시작하기
+          </SubmitButton>
         </ButtonContainer>
       </ModalContainer>
     </Container>

@@ -3,6 +3,7 @@ import React from 'react';
 import styled, { DefaultTheme } from 'styled-components';
 
 import { Icons } from '../../assets/svg';
+import { RectangleButton } from '../Styled/Buttons';
 
 const Container = styled.div`
   width: 100vw;
@@ -81,20 +82,8 @@ const WarnIcon = styled(Icons.WARN)`
   margin: 1em;
 `;
 
-const Button = styled.button`
+const Button = styled(RectangleButton)`
   padding: 1em;
-  font-size: 1.2em;
-  border: none;
-  border-radius: ${(props) => props.theme.borderRadius};
-  background-color: ${(props) => props.theme.colors.button};
-  cursor: pointer;
-  font-weight: 700;
-  color: ${(props) => props.theme.colors.text};
-  transition: 250ms background ease;
-
-  &:hover {
-    background-color: ${(props) => props.theme.colors.btnhover};
-  }
 `;
 
 export type LogLevel = 'ERROR' | 'WARN' | 'INFO';

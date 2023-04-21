@@ -4,9 +4,9 @@ import styled from 'styled-components';
 
 // import axios from '../../api/axios';
 // import requests from '../../api/request';
-import { MediumRectangleButton } from '../../components/Button';
 import Header from '../../components/Header';
 import { SurveyPageResultModal, AlertModal, ConfirmModal } from '../../components/Modal';
+import { RectanglePrimaryButton } from '../../components/Styled/Buttons';
 import QuestionForm from '../../components/SurveyForm/QuestionForm';
 import SurveyDataForm from '../../components/SurveyForm/SurveyDataForm';
 import { useTheme } from '../../hooks/useTheme';
@@ -61,6 +61,10 @@ const SurveyDataContainer = styled(ItemContainer)`
 `;
 
 const QuestionContainer = styled(ItemContainer)``;
+
+const SubmitButton = styled(RectanglePrimaryButton)`
+  width: 15vw;
+`;
 
 // TODO: Drag and drop questions order
 export default function SurveyFormPage() {
@@ -316,7 +320,9 @@ export default function SurveyFormPage() {
           </QuestionContainer>
         ))}
         <ButtonContainer>
-          <MediumRectangleButton type="submit" displayText="제출하기" handleClickButton={validation} theme={theme} />
+          <SubmitButton type="submit" onClick={validation} theme={theme}>
+            제출하기
+          </SubmitButton>
         </ButtonContainer>
       </BodyContainer>
 
