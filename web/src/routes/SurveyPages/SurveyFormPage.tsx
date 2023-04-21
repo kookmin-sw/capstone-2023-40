@@ -342,8 +342,8 @@ export default function SurveyFormPage() {
           title="확인"
           level="INFO"
           text="제출하시겠습니까?"
-          handleCancleClick={() => setConfirmModalOpen(false)}
-          handleConfimClick={() => handleSubmit()}
+          handleCancelClick={() => setConfirmModalOpen(false)}
+          handleConfirmClick={() => handleSubmit()}
         />
       )}
     </Container>

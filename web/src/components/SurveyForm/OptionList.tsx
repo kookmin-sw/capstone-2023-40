@@ -42,16 +42,16 @@ const AnswerLabel = styled.label`
 interface OptionListProps {
   surveyData: SurveyCreateRequest;
   questionId: number;
-  handleChangeOption: (event: React.ChangeEvent<HTMLInputElement>, questionId: number, optionId: number) => void;
-  handleClickButton: (event: React.MouseEvent<HTMLButtonElement>, questionId?: number, optionId?: number) => void;
+  handleOptionChange: (event: React.ChangeEvent<HTMLInputElement>, questionId: number, optionId: number) => void;
+  handleButtonClick: (event: React.MouseEvent<HTMLButtonElement>, questionId?: number, optionId?: number) => void;
   theme: DefaultTheme;
 }
 
 export default function OptionList({
   surveyData,
   questionId,
-  handleChangeOption,
-  handleClickButton,
+  handleOptionChange,
+  handleButtonClick,
   theme,
 }: OptionListProps) {
   const tmpOptions = surveyData.questions[questionId].questionOptions;
@@ -65,7 +65,7 @@ export default function OptionList({
           <OptionContainer theme={theme} key={index}>
             <OptionInput
               theme={theme}
-              onChange={(event) => handleChangeOption(event, questionId, index)}
+              onChange={(event) => handleOptionChange(event, questionId, index)}
               name="option"
               value={tmpOptions[index].option || ''}
               placeholder="문항을 입력해 주세요"
@@ -73,7 +73,7 @@ export default function OptionList({
             <SmallCircleButton
               displayText="X"
               name="deleteOption"
-              handleClickButton={handleClickButton}
+              handleClickButton={handleButtonClick}
               theme={theme}
               questionId={questionId}
               optionId={index}

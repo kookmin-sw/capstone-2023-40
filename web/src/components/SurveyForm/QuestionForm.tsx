@@ -145,8 +145,8 @@ export default function QuestionForm({
           <OptionList
             surveyData={surveyData}
             questionId={questionId}
-            handleClickButton={handleClickButton}
-            handleChangeOption={handleChangeOption}
+            handleButtonClick={handleClickButton}
+            handleOptionChange={handleChangeOption}
             theme={theme}
           />
           <ButtonContainer>

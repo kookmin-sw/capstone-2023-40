@@ -86,8 +86,8 @@ interface AlertModalProps {
   title: string;
   level: LogLevel;
   text: string;
-  handleCancleClick: () => void;
-  handleConfimClick: () => void;
+  handleCancelClick: () => void;
+  handleConfirmClick: () => void;
 }
 
 export default function ConfirmModal({
@@ -95,8 +95,8 @@ export default function ConfirmModal({
   title,
   level,
   text,
-  handleCancleClick,
-  handleConfimClick,
+  handleCancelClick,
+  handleConfirmClick,
 }: AlertModalProps) {
   // FIXME: maybe we can refactor this
   const setIcon = (_level: LogLevel) => {
@@ -125,13 +125,13 @@ export default function ConfirmModal({
             <MediumRectangleButton
               displayText="취소"
               type={undefined}
-              handleClickButton={handleCancleClick}
+              handleClickButton={handleCancelClick}
               theme={theme}
             />
             <MediumRectangleButton
               displayText="확인"
               type={undefined}
-              handleClickButton={handleConfimClick}
+              handleClickButton={handleConfirmClick}
               theme={theme}
             />
           </ButtonContainer>
