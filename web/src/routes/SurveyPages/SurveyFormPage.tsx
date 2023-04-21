@@ -9,13 +9,13 @@ import Header from '../../components/Header';
 import { SurveyPageResultModal, AlertModal, ConfirmModal } from '../../components/Modal';
 import QuestionForm from '../../components/SurveyForm/QuestionForm';
 import SurveyDataForm from '../../components/SurveyForm/SurveyDataForm';
-import SurveyFormValidation from '../../features/SurveyFormValidation';
 import { useTheme } from '../../hooks/useTheme';
 import { QuestionCreateRequest, QuestionType } from '../../types/request/Question';
 import { QuestionOptionCreateRequest } from '../../types/request/QuestionOption';
 import { SurveyCreateRequest } from '../../types/request/Survey';
 import { ValidationErrorMessage, InputCheckResult } from '../../types/userInputCheck';
 import { scrollToRef, scrollToTop } from '../../utils/scroll';
+import { validateSurveyData } from '../../utils/validate';
 
 // TODO: add media-query for mobile....
 const Container = styled.div`
@@ -112,8 +112,8 @@ export default function SurveyFormPage() {
     setResultModalOpen(true);
   };
 
-  const validateSurveyData = () => {
-    const checkResult: InputCheckResult = SurveyFormValidation(surveyData);
+  const validation = () => {
+    const checkResult: InputCheckResult = validateSurveyData(surveyData);
     setAlertNotification(checkResult.index);
 
     switch (checkResult.message) {
@@ -316,12 +316,7 @@ export default function SurveyFormPage() {
           </QuestionContainer>
         ))}
         <ButtonContainer>
-          <MediumRectangleButton
-            type="submit"
-            displayText="제출하기"
-            handleClickButton={validateSurveyData}
-            theme={theme}
-          />
+          <MediumRectangleButton type="submit" displayText="제출하기" handleClickButton={validation} theme={theme} />
         </ButtonContainer>
       </BodyContainer>
 
