@@ -226,7 +226,7 @@ describe('[SurveyFormPage Test]', () => {
     expect((options[2] as HTMLInputElement).value === '3');
   });
 
-  it('show modal when survey title, description, startedDate and enededDate is empty', async () => {
+  it('show modal when survey title, description, startedDate and endedDate is empty', async () => {
     setUp();
 
     const surveyTitle = screen.getByPlaceholderText('설문지의 제목을 입력해주세요');
@@ -312,7 +312,7 @@ describe('[SurveyFormPage Test]', () => {
     const endedDate = screen.getByLabelText('종료일 :');
     const submitButton = screen.getByText('제출하기');
 
-    // 1) put input on staredDate and early enededDate
+    // 1) put input on staredDate and early endedDate
     fireEvent.change(startedDate, { target: { value: '9999-12-12 11:13:00' } });
     fireEvent.change(endedDate, { target: { value: '9999-12-12 11:12:59' } });
 
@@ -321,7 +321,7 @@ describe('[SurveyFormPage Test]', () => {
     let wrongDateModal = await screen.findByText('설문조사 종료일이 시작일과 같거나 빠릅니다');
     expect(wrongDateModal).toBeInTheDocument();
 
-    // 3) put input on not enough enededDate
+    // 3) put input on not enough endedDate
     fireEvent.change(endedDate, { target: { value: '9999-12-12 11:13:59' } });
 
     // 4) check modal is open
@@ -337,7 +337,7 @@ describe('[SurveyFormPage Test]', () => {
     const endedDate = screen.getByLabelText('종료일 :');
     const submitButton = screen.getByText('제출하기');
 
-    // 1) put input on staredDate and enededDate
+    // 1) put input on staredDate and endedDate
     fireEvent.change(startedDate, { target: { value: '9999-12-12 11:11' } });
     fireEvent.change(endedDate, { target: { value: '9999-12-12 11:12' } });
 
@@ -355,7 +355,7 @@ describe('[SurveyFormPage Test]', () => {
     const addQuestionButton = screen.getByTestId('addQuestion');
     const submitButton = screen.getByText('제출하기');
 
-    // 1) put input on staredDate and enededDate
+    // 1) put input on staredDate and endedDate
     fireEvent.change(startedDate, { target: { value: '9999-12-12 11:11' } });
     fireEvent.change(endedDate, { target: { value: '9999-12-12 11:12' } });
 
@@ -398,7 +398,7 @@ describe('[SurveyFormPage Test]', () => {
     const addQuestionButton = screen.getByTestId('addQuestion');
     const submitButton = screen.getByText('제출하기');
 
-    // 1) put input on staredDate and enededDate
+    // 1) put input on staredDate and endedDate
     fireEvent.change(startedDate, { target: { value: '9999-12-12 11:11' } });
     fireEvent.change(endedDate, { target: { value: '9999-12-12 11:12' } });
 
@@ -423,7 +423,7 @@ describe('[SurveyFormPage Test]', () => {
     const addQuestionButton = screen.getByTestId('addQuestion');
     const submitButton = screen.getByText('제출하기');
 
-    // 1) put input on staredDate and enededDate
+    // 1) put input on staredDate and endedDate
     fireEvent.change(startedDate, { target: { value: '9999-12-12 11:11' } });
     fireEvent.change(endedDate, { target: { value: '9999-12-12 11:12' } });
 
