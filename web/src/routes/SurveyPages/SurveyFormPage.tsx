@@ -122,12 +122,12 @@ export default function SurveyFormPage() {
 
     switch (checkResult.message) {
       case ValidationErrorMessage.NO_QUESTION:
-        setWarnText('하나 이상의 질문을 추가 해주세요');
+        setWarnText('하나 이상의 질문을 추가해 주세요');
         setAlertModalOpen(true);
         break;
       case ValidationErrorMessage.NO_OPTION:
         scrollToRef(questionRefs, checkResult.index);
-        setWarnText('객관식 문항을 추가 해주세요');
+        setWarnText('객관식 문항을 추가해 주세요');
         setAlertModalOpen(true);
         break;
       case ValidationErrorMessage.EARLY_START:

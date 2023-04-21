@@ -343,7 +343,7 @@ describe('[SurveyFormPage Test]', () => {
 
     // 2) check modal is open
     fireEvent.click(submitButton);
-    const noQuestionModal = await screen.findByText('하나 이상의 질문을 추가 해주세요');
+    const noQuestionModal = await screen.findByText('하나 이상의 질문을 추가해 주세요');
     expect(noQuestionModal).toBeInTheDocument();
   });
 
@@ -411,7 +411,7 @@ describe('[SurveyFormPage Test]', () => {
 
     // 4) check modal is open
     fireEvent.click(submitButton);
-    const emptyInputModal = await screen.findByText('객관식 문항을 추가 해주세요');
+    const emptyInputModal = await screen.findByText('객관식 문항을 추가해 주세요');
     expect(emptyInputModal).toBeInTheDocument();
   });
 

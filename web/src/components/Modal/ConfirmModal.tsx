@@ -89,7 +89,7 @@ const SubmitButton = styled(RectanglePrimaryButton)`
 
 export type LogLevel = 'ERROR' | 'WARN' | 'INFO';
 
-interface AlertModalProps {
+interface ConfirmModalProps {
   theme: DefaultTheme;
   title: string;
   level: LogLevel;
@@ -105,7 +105,7 @@ export default function ConfirmModal({
   text,
   handleCancelClick,
   handleConfirmClick,
-}: AlertModalProps) {
+}: ConfirmModalProps) {
   // FIXME: maybe we can refactor this
   const setIcon = (_level: LogLevel) => {
     switch (_level) {
