@@ -2,10 +2,10 @@ import React from 'react';
 
 import styled, { DefaultTheme } from 'styled-components';
 
-import { Icons } from '../../assets/svg';
 import { SurveyCreateRequest, CertificationType } from '../../types/request/Survey';
 import { NumberUtils } from '../../utils/NumberUtils';
 import CertificationList from '../CertificationList';
+import { PlusImage } from '../Styled/ImageButtons';
 
 const Container = styled.div`
   display: flex;
@@ -118,23 +118,6 @@ const CheckBox = styled.input.attrs({ type: 'checkbox' })`
   }
 `;
 
-const PlusImage = styled(Icons.PLUS).attrs({
-  width: 30,
-  height: 30,
-})`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  padding: 0.5vh;
-  border-radius: 30px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: ${(props) => props.theme.colors.inputBackground};
-  }
-`;
-
 interface SurveyDataFormProps {
   surveyData: SurveyCreateRequest;
   handleChangeSurveyData: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -216,7 +199,7 @@ export default function SurveyDataForm({
       </SurveyDateContainer>
 
       <ButtonContainer>
-        <PlusImage onClick={() => handleClickButton('addQuestion', -1)} theme={theme} />
+        <PlusImage data-testid="addQuestion" onClick={() => handleClickButton('addQuestion', -1)} theme={theme} />
       </ButtonContainer>
     </Container>
   );

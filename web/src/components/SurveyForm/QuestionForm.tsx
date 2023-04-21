@@ -2,9 +2,9 @@ import React from 'react';
 
 import styled, { DefaultTheme } from 'styled-components';
 
-import { Icons } from '../../assets/svg';
 import { QuestionType } from '../../types/request/Question';
 import { SurveyCreateRequest } from '../../types/request/Survey';
+import { PlusImage, TrashImage } from '../Styled/ImageButtons';
 import OptionList from './OptionList';
 import QuestionTypeSelector from './QuestionTypeSelector';
 
@@ -85,40 +85,6 @@ const EmptyObject = styled.button`
   height: 35px;
 `;
 
-const TrashImage = styled(Icons.TRASH).attrs({
-  width: 30,
-  height: 30,
-})`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  padding: 0.5vh;
-  border-radius: 30px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: ${(props) => props.theme.colors.inputBackground};
-  }
-`;
-
-const PlusImage = styled(Icons.PLUS).attrs({
-  width: 30,
-  height: 30,
-})`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  padding: 0.5vh;
-  border-radius: 30px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: ${(props) => props.theme.colors.inputBackground};
-  }
-`;
-
 interface SubjectiveAnswerFormProps {
   surveyData: SurveyCreateRequest;
   selected: number;
@@ -193,8 +159,16 @@ export default function QuestionForm({
 
       <ButtonContainer>
         <EmptyObject />
-        <PlusImage onClick={() => handleClickButton('addQuestion', questionId)} theme={theme} />
-        <TrashImage onClick={() => handleClickButton('deleteQuestion', questionId)} theme={theme} />
+        <PlusImage
+          data-testid="addQuestion"
+          onClick={() => handleClickButton('addQuestion', questionId)}
+          theme={theme}
+        />
+        <TrashImage
+          data-testid="deleteQuestion"
+          onClick={() => handleClickButton('deleteQuestion', questionId)}
+          theme={theme}
+        />
       </ButtonContainer>
     </Container>
   );

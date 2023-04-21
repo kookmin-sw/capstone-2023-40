@@ -2,9 +2,9 @@ import React from 'react';
 
 import styled, { DefaultTheme } from 'styled-components';
 
-import { Icons } from '../../assets/svg';
 import { SurveyCreateRequest } from '../../types/request/Survey';
 import { NumberUtils } from '../../utils/NumberUtils';
+import { DeleteImage } from '../Styled/ImageButtons';
 
 const OptionsContainer = styled.div``;
 
@@ -44,23 +44,6 @@ const AnswerLabel = styled.label`
   border-radius: ${(props) => props.theme.borderRadius};
 `;
 
-const DeleteImage = styled(Icons.DELETE).attrs({
-  width: 30,
-  height: 30,
-})`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  padding: 0.5vh;
-  border-radius: 30px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: ${(props) => props.theme.colors.inputBackground};
-  }
-`;
-
 interface OptionListProps {
   surveyData: SurveyCreateRequest;
   questionId: number;
@@ -92,7 +75,11 @@ export default function OptionList({
               value={tmpOptions[index].option || ''}
               placeholder="문항을 입력해 주세요"
             />
-            <DeleteImage onClick={() => handleClickButton('deleteOption', questionId, index)} theme={theme} />
+            <DeleteImage
+              data-testid="deleteOption"
+              onClick={() => handleClickButton('deleteOption', questionId, index)}
+              theme={theme}
+            />
           </OptionContainer>
         ))}
       </OptionsContainer>
