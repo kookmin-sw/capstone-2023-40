@@ -38,7 +38,7 @@ describe('[SurveyFormPage Test]', () => {
     const startedDate = screen.getByLabelText('시작일 :');
     const endedDate = screen.getByLabelText('종료일 :');
     const surveyDescription = screen.getByPlaceholderText('설문지의 설명을 입력해주세요');
-    const addQuestionButton = screen.getByText('+');
+    const addQuestionButton = screen.getByTestId('addQuestion');
     const submitButton = screen.getByText('제출하기');
 
     expect(pageTitle).toBeInTheDocument();
@@ -53,7 +53,7 @@ describe('[SurveyFormPage Test]', () => {
   it('create question when click "+" button', async () => {
     setUp();
 
-    const addQuestionButton = screen.getByText('+');
+    const addQuestionButton = screen.getByTestId('addQuestion');
 
     // 1) create question
     fireEvent.click(addQuestionButton);
@@ -67,11 +67,11 @@ describe('[SurveyFormPage Test]', () => {
     setUp();
 
     // 1) create question
-    const addQuestionButton = screen.getByText('+');
+    const addQuestionButton = screen.getByTestId('addQuestion');
     fireEvent.click(addQuestionButton);
 
     // 2) delete question
-    const deleteQuestionButton = await screen.findByText('🗑️');
+    const deleteQuestionButton = await screen.findByTestId('deleteQuestion');
     fireEvent.click(deleteQuestionButton);
     const deletedQuestion = screen.queryByTestId('question');
 
@@ -83,15 +83,15 @@ describe('[SurveyFormPage Test]', () => {
     setUp();
 
     // 1) create 5 questions
-    const addQuestionButton = screen.getByText('+');
+    const addQuestionButton = screen.getByTestId('addQuestion');
     fireEvent.click(addQuestionButton);
     fireEvent.click(addQuestionButton);
     fireEvent.click(addQuestionButton);
     fireEvent.click(addQuestionButton);
     fireEvent.click(addQuestionButton);
 
-    const addQuestionButtons = await screen.findAllByText('+');
-    const deleteQuestionButtons = await screen.findAllByText('🗑️');
+    const addQuestionButtons = await screen.findAllByTestId('addQuestion');
+    const deleteQuestionButtons = await screen.findAllByTestId('deleteQuestion');
     const questionTitles = await screen.findAllByDisplayValue('설문 제목');
 
     // 2) set question title as index for distinction
@@ -113,7 +113,7 @@ describe('[SurveyFormPage Test]', () => {
     setUp();
 
     // 1) create question
-    const addQuestionButton = screen.getByText('+');
+    const addQuestionButton = screen.getByTestId('addQuestion');
     fireEvent.click(addQuestionButton);
 
     // 2) check label of question
@@ -125,7 +125,7 @@ describe('[SurveyFormPage Test]', () => {
     setUp();
 
     // 1) create question
-    const addQuestionButton = screen.getByText('+');
+    const addQuestionButton = screen.getByTestId('addQuestion');
     fireEvent.click(addQuestionButton);
 
     // 2) change question type
@@ -141,7 +141,7 @@ describe('[SurveyFormPage Test]', () => {
     setUp();
 
     // 1) create question
-    const addQuestionButton = screen.getByText('+');
+    const addQuestionButton = screen.getByTestId('addQuestion');
     fireEvent.click(addQuestionButton);
 
     // 2) change question type
@@ -157,7 +157,7 @@ describe('[SurveyFormPage Test]', () => {
     setUp();
 
     // 1) create question
-    const addQuestionButton = screen.getByText('+');
+    const addQuestionButton = screen.getByTestId('addQuestion');
     fireEvent.click(addQuestionButton);
 
     // 2) change question type
@@ -173,7 +173,7 @@ describe('[SurveyFormPage Test]', () => {
     setUp();
 
     // 1) create question
-    const addQuestionButton = screen.getByText('+');
+    const addQuestionButton = screen.getByTestId('addQuestion');
     fireEvent.click(addQuestionButton);
 
     // 2) change question type
@@ -197,7 +197,7 @@ describe('[SurveyFormPage Test]', () => {
     setUp();
 
     // 1) create question
-    const addQuestionButton = screen.getByText('+');
+    const addQuestionButton = screen.getByTestId('addQuestion');
     fireEvent.click(addQuestionButton);
 
     // 2) change question type
@@ -213,7 +213,7 @@ describe('[SurveyFormPage Test]', () => {
     fireEvent.click(addOptionButton);
 
     const options = await screen.findAllByPlaceholderText('문항을 입력해 주세요');
-    const deleteOptionButtons = await screen.findAllByText('X');
+    const deleteOptionButtons = await screen.findAllByTestId('deleteOption');
 
     // 4) set option as index for distinction
     options.forEach((option, index) => {
@@ -352,7 +352,7 @@ describe('[SurveyFormPage Test]', () => {
 
     const startedDate = screen.getByLabelText('시작일 :');
     const endedDate = screen.getByLabelText('종료일 :');
-    const addQuestionButton = screen.getByText('+');
+    const addQuestionButton = screen.getByTestId('addQuestion');
     const submitButton = screen.getByText('제출하기');
 
     // 1) put input on staredDate and enededDate
@@ -395,7 +395,7 @@ describe('[SurveyFormPage Test]', () => {
 
     const startedDate = screen.getByLabelText('시작일 :');
     const endedDate = screen.getByLabelText('종료일 :');
-    const addQuestionButton = screen.getByText('+');
+    const addQuestionButton = screen.getByTestId('addQuestion');
     const submitButton = screen.getByText('제출하기');
 
     // 1) put input on staredDate and enededDate
@@ -420,7 +420,7 @@ describe('[SurveyFormPage Test]', () => {
 
     const startedDate = screen.getByLabelText('시작일 :');
     const endedDate = screen.getByLabelText('종료일 :');
-    const addQuestionButton = screen.getByText('+');
+    const addQuestionButton = screen.getByTestId('addQuestion');
     const submitButton = screen.getByText('제출하기');
 
     // 1) put input on staredDate and enededDate
