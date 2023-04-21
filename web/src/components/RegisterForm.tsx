@@ -65,6 +65,7 @@ const CheckBox = styled.input`
     background-position: 50%;
     background-repeat: no-repeat;
     background-color: limegreen;
+  }
 `;
 
 const CompleteButton = styled.button`

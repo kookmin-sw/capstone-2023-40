@@ -8,7 +8,7 @@ import axios from '../../api/axios';
 import requests from '../../api/request';
 import CertificationList from '../../components/CertificationList';
 import Header from '../../components/Header';
-import SurveyEnterModal from '../../components/Modal/SurveyEnterModal';
+import { SurveyPreviewModal } from '../../components/Modal';
 import Pagination from '../../components/Pagination';
 import SurveyListSkeleton from '../../components/Skeleton/SurveyListSkeleton';
 import { useTheme } from '../../hooks/useTheme';
@@ -253,7 +253,7 @@ export default function SurveyListPage() {
         <Pagination currentPage={page} numOfTotalPage={13} numOfPageToShow={5} setPage={setPage} theme={theme} />
 
         {enterModalOpen && (
-          <SurveyEnterModal
+          <SurveyPreviewModal
             surveyItem={surveys[selectedSurveyIndex]}
             setEnterModalOpen={setEnterModalOpen}
             theme={theme}

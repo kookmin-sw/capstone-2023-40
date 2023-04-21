@@ -5,6 +5,8 @@ import styled, { DefaultTheme } from 'styled-components';
 
 import { useOnClickOutside } from '../../hooks/useOnClickOutside';
 import CertificationList from '../CertificationList';
+import { RectanglePrimaryButton } from '../Styled/Buttons';
+import { DeleteImage } from '../Styled/ImageButtons';
 
 const Container = styled.div`
   width: 100vw;
@@ -115,40 +117,9 @@ const Description = styled.span`
   padding: 1.2vh 1.5vw 1.2vh 1.5vw;
 `;
 
-const Button = styled.button`
-  width: 200px;
-  border: none;
-  padding: 2vh 2vw 2vh 2vw;
-  margin-top: 30px;
-  border-radius: ${(props) => props.theme.borderRadius};
-  font-size: 14px;
-  font-weight: 700;
-  color: ${(props) => props.theme.colors.default};
-  background-color: ${(props) => props.theme.colors.primary};
-  cursor: pointer;
-
-  &:hover {
-    background-color: ${(props) => props.theme.colors.prhover};
-  }
-`;
-
-const EndButton = styled.button`
-  height: 30px;
-  width: 30px;
-  border: none;
-  border-radius: 50%;
-  font-weight: 700;
-  color: ${(props) => props.theme.colors.default};
-  background-color: ${(props) => props.theme.colors.button};
-  cursor: pointer;
-
-  &:hover {
-    background-color: ${(props) => props.theme.colors.btnhover};
-  }
-
-  @media screen and (max-width: 960px) {
-    display: none;
-  }
+const SubmitButton = styled(RectanglePrimaryButton)`
+  width: 30vw;
+  margin-top: 10px;
 `;
 
 interface SurveyItem {
@@ -167,7 +138,7 @@ interface ModalProps {
   theme: DefaultTheme;
 }
 
-export default function SurveyPageResultModal({ surveyItem, setEnterModalOpen, theme }: ModalProps) {
+export default function SurveyPreviewModal({ surveyItem, setEnterModalOpen, theme }: ModalProps) {
   const navigate = useNavigate();
   const modalRef = useRef<HTMLDivElement>(null);
   useOnClickOutside({
@@ -181,9 +152,12 @@ export default function SurveyPageResultModal({ surveyItem, setEnterModalOpen, t
     <Container>
       <ModalContainer ref={modalRef} theme={theme}>
         <EndButtonContainer>
-          <EndButton onClick={() => setEnterModalOpen(false)} theme={theme}>
-            x
-          </EndButton>
+          <DeleteImage
+            data-testid="closeModal"
+            name="closeModal"
+            onClick={() => setEnterModalOpen(false)}
+            theme={theme}
+          />
         </EndButtonContainer>
         <TitleContainer theme={theme}>
           <Title theme={theme}>{surveyItem.title}</Title>
@@ -202,9 +176,9 @@ export default function SurveyPageResultModal({ surveyItem, setEnterModalOpen, t
           </CertificationContainer>
         </BodyContainer>
         <ButtonContainer>
-          <Button onClick={() => navigate(`/survey/${surveyItem.survey_id}`)} theme={theme}>
+          <SubmitButton type="submit" onClick={() => navigate(`/survey/${surveyItem.survey_id}`)} theme={theme}>
             설문 조사 시작하기
-          </Button>
+          </SubmitButton>
         </ButtonContainer>
       </ModalContainer>
     </Container>

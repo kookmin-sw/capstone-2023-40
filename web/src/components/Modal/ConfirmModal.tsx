@@ -3,7 +3,7 @@ import React from 'react';
 import styled, { DefaultTheme } from 'styled-components';
 
 import { Icons } from '../../assets/svg';
-import { RectangleButton } from '../Styled/Buttons';
+import { RectangleButton, RectanglePrimaryButton } from '../Styled/Buttons';
 
 const Container = styled.div`
   width: 100vw;
@@ -19,7 +19,7 @@ const Container = styled.div`
 `;
 
 const Modal = styled.div`
-  width: 50vw;
+  width: 35vw;
   box-shadow: 4px 4px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: ${(props) => props.theme.borderRadius};
   background-color: ${(props) => props.theme.colors.container};
@@ -48,13 +48,10 @@ const BodyContainer = styled.div`
   padding: 1em;
 `;
 
-// TODO: This container is replaced TextContainer, but it isn't perfect UI.
-const ListContainer = styled.ul`
-  list-style-type: none;
-  align-items: center;
-  justify-content: center;
-  font-size: 1em;
-  font-weight: 700;
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
 `;
 
 const TextContainer = styled.span`
@@ -82,22 +79,33 @@ const WarnIcon = styled(Icons.WARN)`
   margin: 1em;
 `;
 
-const Button = styled(RectangleButton)`
-  padding: 1em;
+const CancelButton = styled(RectangleButton)`
+  width: 15vw;
+`;
+
+const SubmitButton = styled(RectanglePrimaryButton)`
+  width: 15vw;
 `;
 
 export type LogLevel = 'ERROR' | 'WARN' | 'INFO';
 
-interface AlertModalProps {
+interface ConfirmModalProps {
   theme: DefaultTheme;
   title: string;
   level: LogLevel;
   text: string;
-  buttonText: string;
-  onClose: () => void;
+  handleCancelClick: () => void;
+  handleConfirmClick: () => void;
 }
 
-export default function AlertModal({ theme, title, level, text, buttonText, onClose }: AlertModalProps) {
+export default function ConfirmModal({
+  theme,
+  title,
+  level,
+  text,
+  handleCancelClick,
+  handleConfirmClick,
+}: ConfirmModalProps) {
   // FIXME: maybe we can refactor this
   const setIcon = (_level: LogLevel) => {
     switch (_level) {
@@ -121,9 +129,14 @@ export default function AlertModal({ theme, title, level, text, buttonText, onCl
         <BodyContainer>
           {/* FIXME: To verification shortcut list */}
           <TextContainer theme={theme}>{text}</TextContainer>
-          <Button theme={theme} onClick={onClose}>
-            {buttonText}
-          </Button>
+          <ButtonContainer>
+            <CancelButton type={undefined} onClick={handleCancelClick} theme={theme}>
+              취소
+            </CancelButton>
+            <SubmitButton type={undefined} onClick={handleConfirmClick} theme={theme}>
+              확인
+            </SubmitButton>
+          </ButtonContainer>
         </BodyContainer>
       </Modal>
     </Container>

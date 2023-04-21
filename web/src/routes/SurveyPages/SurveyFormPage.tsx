@@ -5,15 +5,17 @@ import styled from 'styled-components';
 // import axios from '../../api/axios';
 // import requests from '../../api/request';
 import Header from '../../components/Header';
-import SurveyPageResultModal from '../../components/Modal/SurveyPageResultModal';
-import ChoiceAnswerForm from '../../components/SurveyForm/ChoiceAnswerForm';
-import SubjectiveAnswerForm from '../../components/SurveyForm/SubjectiveAnswerForm';
+import { SurveyPageResultModal, AlertModal, ConfirmModal } from '../../components/Modal';
+import { RectanglePrimaryButton } from '../../components/Styled/Buttons';
+import QuestionForm from '../../components/SurveyForm/QuestionForm';
 import SurveyDataForm from '../../components/SurveyForm/SurveyDataForm';
 import { useTheme } from '../../hooks/useTheme';
 import { QuestionCreateRequest, QuestionType } from '../../types/request/Question';
 import { QuestionOptionCreateRequest } from '../../types/request/QuestionOption';
 import { SurveyCreateRequest } from '../../types/request/Survey';
-import { NumberUtils } from '../../utils/NumberUtils';
+import { ValidationErrorMessage, InputCheckResult } from '../../types/userInputCheck';
+import { scrollToRef, scrollToTop } from '../../utils/scroll';
+import { validateSurveyData } from '../../utils/validate';
 
 // TODO: add media-query for mobile....
 const Container = styled.div`
@@ -27,7 +29,13 @@ const HeadContainer = styled.div`
   background-color: ${(props) => props.theme.colors.container};
 `;
 
-const Title = styled.label`
+const ButtonContainer = styled.div`
+  padding: 10px;
+  display: flex;
+  justify-content: flex-end;
+`;
+
+const Title = styled.span`
   font-size: 30px;
   font-weight: 600;
   color: ${(props) => props.theme.colors.default};
@@ -52,74 +60,10 @@ const SurveyDataContainer = styled(ItemContainer)`
   border-left: 16px solid ${(props) => props.theme.colors.primary};
 `;
 
-const TextInput = styled.input.attrs({ type: 'text', maxLength: 100 })`
-  padding: 1.2vh 1.5vw 1.2vh 1.5vw;
-  border: ${(props) => props.theme.border};
-  border-radius: ${(props) => props.theme.borderRadius};
-  font-weight: 900;
-  color: ${(props) => props.theme.colors.default};
-  background-color: ${(props) => props.theme.colors.inputBackground};
-  cursor: text;
-`;
-
 const QuestionContainer = styled(ItemContainer)``;
 
-const AnswerLabel = styled.label`
-  display: inline-block;
-  width: 30vw;
-  padding: 1.2vh 1.5vw 1.2vh 1.5vw;
-  font-size: 15px;
-  color: ${(props) => props.theme.colors.text};
-  text-decoration: underline;
-  text-decoration-style: dotted;
-  text-decoration-color: currentColor;
-  border: ${(props) => props.theme.border};
-  border-radius: ${(props) => props.theme.borderRadius};
-`;
-
-const OptionContainer = styled.div``;
-
-const OptionInput = styled(TextInput).attrs({ type: 'text' })`
-  width: 30vw;
-  font-size: 13px;
-  margin-top: 3px;
-`;
-
-const DeleteOptionButton = styled.button`
-  font-weight: 900;
-  text-align: center;
-  color: ${(props) => props.theme.colors.text};
-  margin-left: 3px;
-  padding: 10px;
-  background-color: ${(props) => props.theme.colors.button};
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
-  border: none;
-  cursor: pointer;
-
-  &:hover {
-    opacity: 0.8;
-  }
-`;
-
-const SubmitButton = styled.button.attrs({ type: 'submit' })`
+const SubmitButton = styled(RectanglePrimaryButton)`
   width: 15vw;
-  border: none;
-  padding: 2vh 2vw 2vh 2vw;
-  margin-top: 30px;
-  margin-bottom: 30px;
-  margin-left: 69vw;
-  border-radius: ${(props) => props.theme.borderRadius};
-  font-size: 2vh;
-  font-weight: 700;
-  color: ${(props) => props.theme.colors.default};
-  background-color: ${(props) => props.theme.colors.primary};
-  cursor: pointer;
-
-  &:hover {
-    background-color: ${(props) => props.theme.colors.prhover};
-  }
 `;
 
 // TODO: Drag and drop questions order
@@ -128,31 +72,86 @@ export default function SurveyFormPage() {
   const questionRefs = useRef<HTMLDivElement[]>([]);
   const [recentCreate, setRecentCreate] = useState<number>();
   const [resultModalOpen, setResultModalOpen] = useState<boolean>(false);
+  const [alertModalOpen, setAlertModalOpen] = useState<boolean>(false);
+  const [confirmModalOpen, setConfirmModalOpen] = useState<boolean>(false);
+  const [warnText, setWarnText] = useState('');
   const [certificationIsChecked, setCertificationIsChecked] = useState<boolean>(false);
   const [surveyData, setSurveyData] = useState<SurveyCreateRequest>({
     title: '제목 없는 설문',
     description: '설문지 설명',
-    startedDate: '2023-04-04T20:31',
-    endedDate: '2023-04-04T20:31',
+    startedDate: '',
+    endedDate: '',
     certificationTypes: [],
     questions: [],
   });
 
-  const scrollToRecentCreateQuestion = () => {
-    if (typeof recentCreate !== 'undefined') {
-      questionRefs.current[recentCreate].scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'smooth' });
-    }
+  const turnOnAlertNotification = (domIndex: number) => {
+    questionRefs.current[domIndex].style.borderLeft = '15px solid #FF5733';
+  };
+
+  const turnOffAlertNotification = (domIndex: number) => {
+    questionRefs.current[domIndex].style.borderLeft = `15px solid ${theme.colors.primary}`;
+  };
+
+  const setAlertNotification = (errorIndex: number) => {
+    surveyData.questions.forEach((question: QuestionCreateRequest) => {
+      if (question.questionNo === errorIndex) {
+        turnOnAlertNotification(question.questionNo);
+      } else {
+        turnOffAlertNotification(question.questionNo);
+      }
+    });
   };
 
   useEffect(() => {
-    scrollToRecentCreateQuestion();
+    if (typeof recentCreate !== 'undefined') {
+      scrollToRef(questionRefs, recentCreate);
+    }
   }, [recentCreate]);
 
   const handleSubmit = () => {
-    // TODO: Check surveyData is valid
     // TODO: submit surveyData to server
     console.log(surveyData);
+    setConfirmModalOpen(false);
     setResultModalOpen(true);
+  };
+
+  const validation = () => {
+    const checkResult: InputCheckResult = validateSurveyData(surveyData);
+    setAlertNotification(checkResult.index);
+
+    switch (checkResult.message) {
+      case ValidationErrorMessage.NO_QUESTION:
+        setWarnText('하나 이상의 질문을 추가해 주세요');
+        setAlertModalOpen(true);
+        break;
+      case ValidationErrorMessage.NO_OPTION:
+        scrollToRef(questionRefs, checkResult.index);
+        setWarnText('객관식 문항을 추가해 주세요');
+        setAlertModalOpen(true);
+        break;
+      case ValidationErrorMessage.EARLY_START:
+        scrollToTop();
+        setWarnText('설문조사 시작일을 확인해 주세요');
+        setAlertModalOpen(true);
+        break;
+      case ValidationErrorMessage.EARLY_END:
+        scrollToTop();
+        setWarnText('설문조사 종료일이 시작일과 같거나 빠릅니다');
+        setAlertModalOpen(true);
+        break;
+      case ValidationErrorMessage.EMPTY_INPUT:
+        if (checkResult.index !== -1) {
+          scrollToRef(questionRefs, checkResult.index);
+        } else {
+          scrollToTop();
+        }
+        setWarnText('모든 입력을 채워 주세요');
+        setAlertModalOpen(true);
+        break;
+      default:
+        setConfirmModalOpen(true);
+    }
   };
 
   const addQuestionUnderId = (questionId: number) => {
@@ -232,11 +231,11 @@ export default function SurveyFormPage() {
 
   // Update surveyData title | description | startedDate | endedDate
   const handleChangeSurveyData = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
+    const { id, value } = event.target;
     if (typeof surveyData !== 'undefined') {
       setSurveyData({
         ...surveyData,
-        [name]: value,
+        [id]: value,
       });
     }
   };
@@ -259,7 +258,7 @@ export default function SurveyFormPage() {
     setSurveyData({ ...surveyData });
   };
 
-  // update questionList[questionId][optionId] option
+  // Update questionList[questionId][optionId] option
   const handleChangeOption = (event: React.ChangeEvent<HTMLInputElement>, questionId: number, optionId: number) => {
     const { name, value } = event.target;
     const newOptions = surveyData.questions[questionId].questionOptions;
@@ -271,91 +270,14 @@ export default function SurveyFormPage() {
     setSurveyData({ ...surveyData, questions: newQuestions });
   };
 
-  const handleClickButton = (event: React.MouseEvent<HTMLButtonElement>, questionId: number, optionId?: number) => {
-    const { name } = event.target as HTMLInputElement;
-    if (name === 'addQuestion') addQuestionUnderId(questionId);
-    else if (name === 'deleteQuestion') deleteQuestionAtId(questionId);
-    else if (name === 'addOption') addOptionAtBottom(questionId);
-    else if (typeof optionId !== 'undefined') deleteOptionAtId(questionId, optionId);
-  };
-
-  const makeSubjectiveAnswerForm = (questionId: number, selected: number) => {
-    return (
-      <QuestionContainer
-        ref={(element) => {
-          questionRefs.current[questionId] = element as HTMLDivElement;
-        }}
-        theme={theme}
-        key={questionId}
-      >
-        {SubjectiveAnswerForm({
-          surveyData,
-          selected,
-          questionId,
-          handleChangeQuestion,
-          handleChangeQuestionType,
-          handleClickButton,
-          theme,
-        })}
-      </QuestionContainer>
-    );
-  };
-
-  const makeOptionsForm = (questionId: number) => {
-    const tmpOptions = surveyData.questions[questionId].questionOptions;
-    if (typeof tmpOptions !== 'undefined') {
-      if (tmpOptions.length === 0) {
-        return <AnswerLabel theme={theme}>옵션을 추가해 주세요</AnswerLabel>;
-      }
-      return NumberUtils.range(0, tmpOptions.length).map((index: number) => (
-        <OptionContainer theme={theme} key={index}>
-          <OptionInput
-            theme={theme}
-            onChange={(event) => handleChangeOption(event, questionId, index)}
-            name="option"
-            value={tmpOptions[index].option || ''}
-          />
-          <DeleteOptionButton
-            theme={theme}
-            name="deleteOption"
-            onClick={(event) => handleClickButton(event, questionId, index)}
-          >
-            X
-          </DeleteOptionButton>
-        </OptionContainer>
-      ));
+  // Add and delete question and option
+  const handleClickButton = (name: string, questionId?: number, optionId?: number) => {
+    if (typeof questionId !== 'undefined') {
+      if (name === 'addQuestion') addQuestionUnderId(questionId);
+      else if (name === 'deleteQuestion') deleteQuestionAtId(questionId);
+      else if (name === 'addOption') addOptionAtBottom(questionId);
+      else if (typeof optionId !== 'undefined') deleteOptionAtId(questionId, optionId);
     }
-    return <AnswerLabel theme={theme}>옵션을 추가해 주세요</AnswerLabel>;
-  };
-
-  const makeChoiceForm = (questionId: number, selected: number) => {
-    return (
-      <QuestionContainer
-        ref={(element) => {
-          questionRefs.current[questionId] = element as HTMLDivElement;
-        }}
-        theme={theme}
-        key={questionId}
-      >
-        {ChoiceAnswerForm({
-          surveyData,
-          selected,
-          questionId,
-          handleChangeQuestion,
-          handleChangeQuestionType,
-          handleClickButton,
-          makeOptionsForm,
-          theme,
-        })}
-      </QuestionContainer>
-    );
-  };
-
-  const showQuestionForm = (questionType: number, questionId: number) => {
-    if (questionType === QuestionType.LONG_ANSWER || questionType === QuestionType.SHORT_ANSWER) {
-      return makeSubjectiveAnswerForm(questionId, questionType);
-    }
-    return makeChoiceForm(questionId, questionType);
   };
 
   return (
@@ -376,16 +298,54 @@ export default function SurveyFormPage() {
           })}
         </SurveyDataContainer>
 
-        {surveyData.questions.map((question: QuestionCreateRequest) =>
-          showQuestionForm(question.questionType, question.questionNo)
-        )}
-
-        <SubmitButton theme={theme} onClick={handleSubmit}>
-          완료하기
-        </SubmitButton>
+        {surveyData.questions.map((question: QuestionCreateRequest) => (
+          <QuestionContainer
+            ref={(element) => {
+              questionRefs.current[question.questionNo] = element as HTMLDivElement;
+            }}
+            theme={theme}
+            key={question.questionNo}
+          >
+            <QuestionForm
+              surveyData={surveyData}
+              selected={question.questionType}
+              questionId={question.questionNo}
+              handleChangeQuestion={handleChangeQuestion}
+              handleChangeQuestionType={handleChangeQuestionType}
+              handleClickButton={handleClickButton}
+              handleChangeOption={handleChangeOption}
+              theme={theme}
+            />
+          </QuestionContainer>
+        ))}
+        <ButtonContainer>
+          <SubmitButton type="submit" onClick={validation} theme={theme}>
+            제출하기
+          </SubmitButton>
+        </ButtonContainer>
       </BodyContainer>
 
       {resultModalOpen && <SurveyPageResultModal theme={theme} />}
+      {alertModalOpen && (
+        <AlertModal
+          theme={theme}
+          title="경고"
+          level="WARN"
+          text={warnText}
+          buttonText="확인"
+          onClose={() => setAlertModalOpen(false)}
+        />
+      )}
+      {confirmModalOpen && (
+        <ConfirmModal
+          theme={theme}
+          title="확인"
+          level="INFO"
+          text="제출하시겠습니까?"
+          handleCancelClick={() => setConfirmModalOpen(false)}
+          handleConfirmClick={() => handleSubmit()}
+        />
+      )}
     </Container>
   );
 }

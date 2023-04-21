@@ -9,7 +9,9 @@ import requests from '../../api/request';
 import Header from '../../components/Header';
 import SurveyPageResultModal from '../../components/Modal/SurveyPageResultModal';
 import SurveyPageSkeleton from '../../components/Skeleton/SurveyPageSkeleton';
+import { RectanglePrimaryButton } from '../../components/Styled/Buttons';
 import { useTheme } from '../../hooks/useTheme';
+import { scrollToRef } from '../../utils/scroll';
 
 const Container = styled.div`
   width: 100vw;
@@ -20,6 +22,12 @@ const Container = styled.div`
 const HeadContainer = styled.div`
   padding: 6vh 8vw 0vh 8vw;
   background-color: ${(props) => props.theme.colors.container};
+`;
+
+const ButtonContainer = styled.div`
+  padding: 10px;
+  display: flex;
+  justify-content: flex-end;
 `;
 
 const Title = styled.span`
@@ -144,23 +152,8 @@ const RadioCheckmark = styled.span`
   }
 `;
 
-const SubmitButton = styled.button`
-  width: 15vw;
-  border: none;
-  padding: 2vh 2vw 2vh 2vw;
-  margin-top: 30px;
-  margin-bottom: 30px;
-  margin-left: 69vw;
-  border-radius: ${(props) => props.theme.borderRadius};
-  font-size: 2vh;
-  font-weight: 700;
-  color: ${(props) => props.theme.colors.default};
-  background-color: ${(props) => props.theme.colors.primary};
-  cursor: pointer;
-
-  &:hover {
-    background-color: ${(props) => props.theme.colors.prhover};
-  }
+const SubmitButton = styled(RectanglePrimaryButton)`
+  width: 20vw;
 `;
 
 interface QuestionOption {
@@ -234,7 +227,7 @@ export default function SurveyPage() {
 
   const turnOnUserAttention = (domIndex: number) => {
     questionRefs.current[domIndex].style.borderLeft = '15px solid #FF5733';
-    questionRefs.current[domIndex].scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'smooth' });
+    scrollToRef(questionRefs, domIndex);
   };
 
   const turnOffUserAttention = (domIndex: number) => {
@@ -364,9 +357,11 @@ export default function SurveyPage() {
             )}
           </QuestionContainer>
         ))}
-        <SubmitButton onClick={handleSubmitButtonClick} type="submit" theme={theme}>
-          제출하기
-        </SubmitButton>
+        <ButtonContainer>
+          <SubmitButton type="submit" onClick={handleSubmitButtonClick} theme={theme}>
+            제출하기
+          </SubmitButton>
+        </ButtonContainer>
       </BodyContainer>
       {resultModalOpen && <SurveyPageResultModal theme={theme} />}
     </Container>

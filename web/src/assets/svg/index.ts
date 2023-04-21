@@ -9,12 +9,15 @@ import { ReactComponent as Webmail } from './CertificationIcons/webmail-icon.svg
 import { ReactComponent as Free } from './CertificationIcons/x-icon.svg';
 import { ReactComponent as Chart } from './chartImage.svg';
 import { ReactComponent as Check } from './Check-Icon.svg';
+import { ReactComponent as Delete } from './delete-circle.svg';
 import { ReactComponent as Error } from './error-icon.svg';
 import { ReactComponent as Favicon } from './favicon.svg';
 import { ReactComponent as Info } from './info-icon.svg';
 import { ReactComponent as DarkLogo } from './logo-dark.svg';
 import { ReactComponent as LightLogo } from './logo-light.svg';
 import { ReactComponent as Pencil } from './pencil.svg';
+import { ReactComponent as Plus } from './plus-circle.svg';
+import { ReactComponent as Trash } from './trash.svg';
 import { ReactComponent as TwoArrow } from './twoArrow.svg';
 import { ReactComponent as UserImage } from './userBasicImage.svg';
 import { ReactComponent as Warn } from './warn-icon.svg';
@@ -42,4 +45,7 @@ export const Icons: { [src: string]: IconType } = {
   CHART: Chart,
   USERIMAGE: UserImage,
   FREE: Free,
+  TRASH: Trash,
+  PLUS: Plus,
+  DELETE: Delete,
 };
