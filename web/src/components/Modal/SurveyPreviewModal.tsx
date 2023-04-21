@@ -3,8 +3,8 @@ import React, { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
 
+import { Icons } from '../../assets/svg';
 import { useOnClickOutside } from '../../hooks/useOnClickOutside';
-import { SmallCircleButton } from '../Button';
 import CertificationList from '../CertificationList';
 import { RectanglePrimaryButton } from '../Styled/Buttons';
 
@@ -122,6 +122,23 @@ const SubmitButton = styled(RectanglePrimaryButton)`
   margin-top: 10px;
 `;
 
+const DeleteImage = styled(Icons.DELETE).attrs({
+  width: 30,
+  height: 30,
+})`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  padding: 0.5vh;
+  border-radius: 30px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${(props) => props.theme.colors.inputBackground};
+  }
+`;
+
 interface SurveyItem {
   survey_id: string;
   author: number;
@@ -152,12 +169,7 @@ export default function SurveyPreviewModal({ surveyItem, setEnterModalOpen, them
     <Container>
       <ModalContainer ref={modalRef} theme={theme}>
         <EndButtonContainer>
-          <SmallCircleButton
-            displayText="X"
-            name="closeModal"
-            handleClickButton={() => setEnterModalOpen(false)}
-            theme={theme}
-          />
+          <DeleteImage name="closeModal" onClick={() => setEnterModalOpen(false)} theme={theme} />
         </EndButtonContainer>
         <TitleContainer theme={theme}>
           <Title theme={theme}>{surveyItem.title}</Title>

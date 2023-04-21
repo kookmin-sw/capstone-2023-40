@@ -2,9 +2,9 @@ import React from 'react';
 
 import styled, { DefaultTheme } from 'styled-components';
 
+import { Icons } from '../../assets/svg';
 import { SurveyCreateRequest, CertificationType } from '../../types/request/Survey';
 import { NumberUtils } from '../../utils/NumberUtils';
-import { SmallCircleButton } from '../Button';
 import CertificationList from '../CertificationList';
 
 const Container = styled.div`
@@ -118,11 +118,28 @@ const CheckBox = styled.input.attrs({ type: 'checkbox' })`
   }
 `;
 
+const PlusImage = styled(Icons.PLUS).attrs({
+  width: 30,
+  height: 30,
+})`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  padding: 0.5vh;
+  border-radius: 30px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${(props) => props.theme.colors.inputBackground};
+  }
+`;
+
 interface SurveyDataFormProps {
   surveyData: SurveyCreateRequest;
   handleChangeSurveyData: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleChangeCheck: (event: React.ChangeEvent<HTMLInputElement>, value: number) => void;
-  handleClickButton: (event: React.MouseEvent<HTMLButtonElement>, questionId?: number, optionId?: number) => void;
+  handleClickButton: (name: string, questionId?: number, optionId?: number) => void;
   theme: DefaultTheme;
 }
 
@@ -199,13 +216,7 @@ export default function SurveyDataForm({
       </SurveyDateContainer>
 
       <ButtonContainer>
-        <SmallCircleButton
-          displayText="+"
-          name="addQuestion"
-          handleClickButton={handleClickButton}
-          theme={theme}
-          questionId={-1}
-        />
+        <PlusImage onClick={() => handleClickButton('addQuestion', -1)} theme={theme} />
       </ButtonContainer>
     </Container>
   );

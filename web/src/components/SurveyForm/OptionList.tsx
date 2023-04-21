@@ -2,13 +2,18 @@ import React from 'react';
 
 import styled, { DefaultTheme } from 'styled-components';
 
+import { Icons } from '../../assets/svg';
 import { SurveyCreateRequest } from '../../types/request/Survey';
 import { NumberUtils } from '../../utils/NumberUtils';
-import { SmallCircleButton } from '../Button';
-
-const OptionContainer = styled.div``;
 
 const OptionsContainer = styled.div``;
+
+const OptionContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+`;
 
 const TextInput = styled.input.attrs({ type: 'text', maxLength: 100 })`
   padding: 1.2vh 1.5vw 1.2vh 1.5vw;
@@ -39,11 +44,28 @@ const AnswerLabel = styled.label`
   border-radius: ${(props) => props.theme.borderRadius};
 `;
 
+const DeleteImage = styled(Icons.DELETE).attrs({
+  width: 30,
+  height: 30,
+})`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  padding: 0.5vh;
+  border-radius: 30px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${(props) => props.theme.colors.inputBackground};
+  }
+`;
+
 interface OptionListProps {
   surveyData: SurveyCreateRequest;
   questionId: number;
   handleOptionChange: (event: React.ChangeEvent<HTMLInputElement>, questionId: number, optionId: number) => void;
-  handleButtonClick: (event: React.MouseEvent<HTMLButtonElement>, questionId?: number, optionId?: number) => void;
+  handleClickButton: (name: string, questionId?: number, optionId?: number) => void;
   theme: DefaultTheme;
 }
 
@@ -51,7 +73,7 @@ export default function OptionList({
   surveyData,
   questionId,
   handleOptionChange,
-  handleButtonClick,
+  handleClickButton,
   theme,
 }: OptionListProps) {
   const tmpOptions = surveyData.questions[questionId].questionOptions;
@@ -70,14 +92,7 @@ export default function OptionList({
               value={tmpOptions[index].option || ''}
               placeholder="문항을 입력해 주세요"
             />
-            <SmallCircleButton
-              displayText="X"
-              name="deleteOption"
-              handleClickButton={handleButtonClick}
-              theme={theme}
-              questionId={questionId}
-              optionId={index}
-            />
+            <DeleteImage onClick={() => handleClickButton('deleteOption', questionId, index)} theme={theme} />
           </OptionContainer>
         ))}
       </OptionsContainer>

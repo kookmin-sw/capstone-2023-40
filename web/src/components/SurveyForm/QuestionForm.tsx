@@ -2,9 +2,9 @@ import React from 'react';
 
 import styled, { DefaultTheme } from 'styled-components';
 
+import { Icons } from '../../assets/svg';
 import { QuestionType } from '../../types/request/Question';
 import { SurveyCreateRequest } from '../../types/request/Survey';
-import { SmallCircleButton } from '../Button';
 import OptionList from './OptionList';
 import QuestionTypeSelector from './QuestionTypeSelector';
 
@@ -85,13 +85,47 @@ const EmptyObject = styled.button`
   height: 35px;
 `;
 
+const TrashImage = styled(Icons.TRASH).attrs({
+  width: 30,
+  height: 30,
+})`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  padding: 0.5vh;
+  border-radius: 30px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${(props) => props.theme.colors.inputBackground};
+  }
+`;
+
+const PlusImage = styled(Icons.PLUS).attrs({
+  width: 30,
+  height: 30,
+})`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  padding: 0.5vh;
+  border-radius: 30px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${(props) => props.theme.colors.inputBackground};
+  }
+`;
+
 interface SubjectiveAnswerFormProps {
   surveyData: SurveyCreateRequest;
   selected: number;
   questionId: number;
   handleChangeQuestion: (event: React.ChangeEvent<HTMLInputElement>, questionId: number) => void;
   handleChangeQuestionType: (event: React.ChangeEvent<HTMLSelectElement>, questionId: number) => void;
-  handleClickButton: (event: React.MouseEvent<HTMLButtonElement>, questionId?: number, optionId?: number) => void;
+  handleClickButton: (name: string, questionId?: number, optionId?: number) => void;
   handleChangeOption: (event: React.ChangeEvent<HTMLInputElement>, questionId: number, optionId: number) => void;
   theme: DefaultTheme;
 }
@@ -145,12 +179,12 @@ export default function QuestionForm({
           <OptionList
             surveyData={surveyData}
             questionId={questionId}
-            handleButtonClick={handleClickButton}
+            handleClickButton={handleClickButton}
             handleOptionChange={handleChangeOption}
             theme={theme}
           />
           <ButtonContainer>
-            <AddOptionButton theme={theme} name="addOption" onClick={(event) => handleClickButton(event, questionId)}>
+            <AddOptionButton theme={theme} name="addOption" onClick={() => handleClickButton('addOption', questionId)}>
               문항 추가하기
             </AddOptionButton>
           </ButtonContainer>
@@ -159,20 +193,8 @@ export default function QuestionForm({
 
       <ButtonContainer>
         <EmptyObject />
-        <SmallCircleButton
-          displayText="+"
-          name="addQuestion"
-          handleClickButton={handleClickButton}
-          theme={theme}
-          questionId={questionId}
-        />
-        <SmallCircleButton
-          displayText="🗑️"
-          name="deleteQuestion"
-          handleClickButton={handleClickButton}
-          theme={theme}
-          questionId={questionId}
-        />
+        <PlusImage onClick={() => handleClickButton('addQuestion', questionId)} theme={theme} />
+        <TrashImage onClick={() => handleClickButton('deleteQuestion', questionId)} theme={theme} />
       </ButtonContainer>
     </Container>
   );

@@ -271,8 +271,7 @@ export default function SurveyFormPage() {
   };
 
   // Add and delete question and option
-  const handleClickButton = (event: React.MouseEvent<HTMLButtonElement>, questionId?: number, optionId?: number) => {
-    const { name } = event.target as HTMLInputElement;
+  const handleClickButton = (name: string, questionId?: number, optionId?: number) => {
     if (typeof questionId !== 'undefined') {
       if (name === 'addQuestion') addQuestionUnderId(questionId);
       else if (name === 'deleteQuestion') deleteQuestionAtId(questionId);
