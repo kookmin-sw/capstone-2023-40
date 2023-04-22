@@ -2,11 +2,13 @@ package com.thesurvey.api.controller;
 
 import com.thesurvey.api.dto.response.UserResponseDto;
 import com.thesurvey.api.dto.request.UserUpdateRequestDto;
+import com.thesurvey.api.dto.response.UserSurveyTitleDto;
 import com.thesurvey.api.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -72,5 +74,18 @@ public class UserController {
     public ResponseEntity<Void> deleteUser(@ApiIgnore Authentication authentication) {
         userService.deleteUser(authentication);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @ApiOperation(value = "사용자가 설문조사 조회", notes = "사용자가 생성한 설문조사를 조회합니다.")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "요청 성공"),
+        @ApiResponse(code = 400, message = "잘못된 요청"),
+        @ApiResponse(code = 401, message = "사용자 인증 실패"),
+        @ApiResponse(code = 403, message = "접근 권한 없음"),
+        @ApiResponse(code = 404, message = "요청한 리소스 찾을 수 없음")
+    })
+    @GetMapping("/surveys")
+    public ResponseEntity<List<UserSurveyTitleDto>> getUserCreatedSurveys(Authentication authentication) {
+        return ResponseEntity.ok(userService.getUserCreatedSurveys(authentication));
     }
 }

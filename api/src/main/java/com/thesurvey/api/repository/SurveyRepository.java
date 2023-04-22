@@ -1,6 +1,7 @@
 package com.thesurvey.api.repository;
 
 import com.thesurvey.api.domain.Survey;
+import com.thesurvey.api.dto.response.UserSurveyTitleDto;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -21,5 +22,8 @@ public interface SurveyRepository extends JpaRepository<Survey, UUID> {
     List<Integer> findCertificationTypeBySurveyId(@Param("survey_id") UUID surveyId);
 
     Optional<Survey> findBySurveyId(UUID surveyId);
+
+    @Query("SELECT new com.thesurvey.api.dto.response.UserSurveyTitleDto(s.surveyId, s.title) FROM Survey s WHERE s.authorId = :author_Id ORDER BY s.createdDate DESC")
+    List<UserSurveyTitleDto> findUserCreatedSurveysByAuthorID(@Param("author_Id") Long authorId);
     
 }

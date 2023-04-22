@@ -1,6 +1,11 @@
 package com.thesurvey.api.controller;
 
+import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
+import com.thesurvey.api.domain.EnumTypeEntity.QuestionType;
 import com.thesurvey.api.domain.User;
+import com.thesurvey.api.dto.request.QuestionOptionRequestDto;
+import com.thesurvey.api.dto.request.QuestionRequestDto;
+import com.thesurvey.api.dto.request.SurveyRequestDto;
 import com.thesurvey.api.dto.request.UserLoginRequestDto;
 import com.thesurvey.api.dto.request.UserRegisterRequestDto;
 import com.thesurvey.api.dto.request.UserUpdateRequestDto;
@@ -8,6 +13,10 @@ import com.thesurvey.api.repository.UserRepository;
 import com.thesurvey.api.service.AuthenticationService;
 import com.thesurvey.api.service.UserService;
 import com.thesurvey.api.util.UserUtil;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.List;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -71,6 +80,48 @@ public class UserControllerTest extends BaseControllerTest {
             new UsernamePasswordAuthenticationToken(userLoginRequestDto.getEmail(),
                 userLoginRequestDto.getPassword())
         );
+    }
+
+    @Test
+    void testGetUserCreatedSurvey() throws Exception {
+        // given
+        User user = UserUtil.getUserFromAuthentication(authentication);
+
+        QuestionOptionRequestDto questionOptionRequestDto = QuestionOptionRequestDto.builder()
+            .option("This is test option")
+            .description("This is test option description")
+            .build();
+
+        QuestionRequestDto questionRequestDto = QuestionRequestDto.builder()
+            .title("This is test question title")
+            .description("This is test question description")
+            .questionNo(1)
+            .questionType(QuestionType.SINGLE_CHOICE)
+            .questionOptions(List.of(questionOptionRequestDto))
+            .isRequired(true)
+            .build();
+
+        SurveyRequestDto surveyRequestDto = SurveyRequestDto.builder()
+            .title("This is test survey title")
+            .description("This is test survey description")
+            .startedDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")).plusDays(1))
+            .endedDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")).plusDays(2))
+            .certificationTypes(List.of(CertificationType.GOOGLE))
+            .questions(List.of(questionRequestDto))
+            .build();
+        MvcResult createdSurvey = mockCreateSurvey(surveyRequestDto);
+
+        // when
+        MvcResult result = mockMvc.perform(get("/users/surveys")
+                .with(authentication(authentication)))
+            .andExpect(status().isOk())
+            .andReturn();
+        JSONArray content = new JSONArray(result.getResponse().getContentAsString());
+        JSONObject userCreatedSurvey = content.getJSONObject(0);
+
+        // then
+        assertThat(content.length()).isEqualTo(1);
+        assertThat(userCreatedSurvey.get("title")).isEqualTo(surveyRequestDto.getTitle());
     }
 
     @Test
