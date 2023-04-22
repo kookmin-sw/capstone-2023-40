@@ -1,6 +1,8 @@
 package com.thesurvey.api.service;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
 import com.thesurvey.api.domain.EnumTypeEntity.QuestionType;
 import com.thesurvey.api.domain.Survey;
@@ -12,6 +14,8 @@ import com.thesurvey.api.dto.request.QuestionRequestDto;
 import com.thesurvey.api.dto.request.SurveyRequestDto;
 import com.thesurvey.api.dto.request.SurveyUpdateRequestDto;
 import com.thesurvey.api.exception.BadRequestExceptionMapper;
+import com.thesurvey.api.exception.NotFoundExceptionMapper;
+import com.thesurvey.api.repository.SurveyRepository;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
@@ -22,13 +26,21 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(Lifecycle.PER_CLASS)
 public class SurveyServiceTest {
+
+    @Mock
+    SurveyRepository surveyRepository;
 
     @InjectMocks
     SurveyService surveyService;
@@ -236,6 +248,29 @@ public class SurveyServiceTest {
 
         assertThrows(BadRequestExceptionMapper.class,
             () -> surveyService.validateUpdateSurvey(survey, surveyUpdateRequestDto));
+    }
+
+    @Test
+    void testValidateInvalidPageNumber() {
+        // given
+        Survey survey = Survey.builder()
+            .title("This is test survey.")
+            .authorId(1L)
+            .description("This is test description.")
+            .startedDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")))
+            .endedDate(LocalDateTime.now(
+                ZoneId.of("Asia/Seoul")).plusDays(100))
+            .build();
+
+        // when
+        Page<Survey> testSurveyPage = new PageImpl<>(List.of(survey));
+        when(surveyRepository.findAllInDescendingOrder(any())).thenReturn(testSurveyPage);
+
+        // then
+        assertThrows(BadRequestExceptionMapper.class,
+            () -> surveyService.getAllSurvey(-1));
+        assertThrows(NotFoundExceptionMapper.class,
+            () -> surveyService.getAllSurvey(100));
     }
 
 }

@@ -24,7 +24,8 @@ public enum ErrorMessage {
     NO_ONLY_WHITESPACE("공백만 입력할 수 없습니다."),
     CREATOR_CANNOT_ANSWER("설문조사 작성자는 자신의 설문조사에 응답할 수 없습니다."),
     NOT_SURVEY_QUESTION("해당 설문조사의 질문이 아닙니다."),
-    INVALID_REQUEST("유효하지 않은 요청입니다");
+    INVALID_REQUEST("유효하지 않은 요청입니다"),
+    PAGE_NOT_FOUND("존재하지 않는 페이지입니다.");
 
     private final String message;
 

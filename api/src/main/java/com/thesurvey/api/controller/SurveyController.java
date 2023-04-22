@@ -1,13 +1,13 @@
 package com.thesurvey.api.controller;
 
 import com.thesurvey.api.dto.response.AnsweredQuestionResponseDto;
+import com.thesurvey.api.dto.response.SurveyListPageDto;
 import com.thesurvey.api.dto.response.SurveyResponseDto;
 import com.thesurvey.api.dto.request.AnsweredQuestionRequestDto;
 import com.thesurvey.api.dto.request.SurveyRequestDto;
 import com.thesurvey.api.dto.request.SurveyUpdateRequestDto;
 import com.thesurvey.api.service.AnsweredQuestionService;
 import com.thesurvey.api.service.SurveyService;
-import java.util.List;
 import java.util.UUID;
 import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -51,8 +52,8 @@ public class SurveyController {
         @ApiResponse(code = 404, message = "요청한 리소스 찾을 수 없음")
     })
     @GetMapping
-    public ResponseEntity<List<SurveyResponseDto>> getAllSurvey() {
-        return ResponseEntity.ok(surveyService.getAllSurvey());
+    public ResponseEntity<SurveyListPageDto> getAllSurvey(@RequestParam(name = "page", defaultValue = "1") int page) {
+        return ResponseEntity.ok(surveyService.getAllSurvey(page));
     }
 
     @ApiOperation(value = "설문조사 조회", notes = "파라미터로 전달 받은 UUID에 해당하는 설문조사를 조회합니다.")

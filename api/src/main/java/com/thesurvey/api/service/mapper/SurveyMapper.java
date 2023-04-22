@@ -2,6 +2,8 @@ package com.thesurvey.api.service.mapper;
 
 import com.thesurvey.api.domain.Survey;
 import com.thesurvey.api.dto.response.QuestionBankResponseDto;
+import com.thesurvey.api.dto.response.SurveyListPageDto;
+import com.thesurvey.api.dto.response.SurveyPageDto;
 import com.thesurvey.api.dto.response.SurveyResponseDto;
 import com.thesurvey.api.dto.request.SurveyRequestDto;
 import com.thesurvey.api.repository.SurveyRepository;
@@ -9,6 +11,8 @@ import com.thesurvey.api.service.QuestionService;
 import com.thesurvey.api.service.converter.CertificationTypeConverter;
 import com.thesurvey.api.util.StringUtil;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -54,7 +58,7 @@ public class SurveyMapper {
             .createdDate(survey.getCreatedDate())
             .modifiedDate(survey.getModifiedDate())
             .certificationTypes(certificationTypeConverter.toCertificationTypeList(
-                    surveyRepository.findCertificationTypeBySurveyId(survey.getSurveyId())))
+                surveyRepository.findCertificationTypeBySurveyId(survey.getSurveyId())))
             .questions(questionBankResponseDtoList)
             .build();
     }
@@ -70,4 +74,29 @@ public class SurveyMapper {
             .build();
     }
 
+    public SurveyPageDto toSurveyPageDto(Survey survey) {
+        List<Integer> certificationTypes = surveyRepository.findCertificationTypeBySurveyId(
+            survey.getSurveyId());
+        return SurveyPageDto.builder()
+            .surveyId(survey.getSurveyId())
+            .authorId(survey.getAuthorId())
+            .title(survey.getTitle())
+            .description(survey.getDescription())
+            .startedDate(survey.getStartedDate())
+            .endedDate(survey.getEndedDate())
+            .certificationTypes(
+                certificationTypeConverter.toCertificationTypeList(certificationTypes))
+            .modifiedDate(survey.getModifiedDate())
+            .build();
+    }
+
+    public SurveyListPageDto toSurveyListPageDto(List<SurveyPageDto> surveyPageDto, Page<Survey> surveyPage) {
+        Pageable surveyPageable = surveyPage.getPageable();
+        return SurveyListPageDto.builder()
+            .surveys(surveyPageDto)
+            .page(surveyPageable.getPageNumber() + 1)
+            .totalSurveys(surveyPage.getTotalElements())
+            .totalPages(surveyPage.getTotalPages())
+            .build();
+    }
 }

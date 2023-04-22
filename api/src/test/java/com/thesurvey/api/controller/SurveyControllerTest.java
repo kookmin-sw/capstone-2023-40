@@ -150,7 +150,7 @@ public class SurveyControllerTest extends BaseControllerTest {
     }
 
     @Test
-    void testGetSurvey() throws Exception {
+    void testGetSpecificSurvey() throws Exception {
         // given
         UUID surveyId = UUID.fromString(mockSurvey.getString("surveyId"));
 
@@ -224,6 +224,35 @@ public class SurveyControllerTest extends BaseControllerTest {
             content.getString("endedDate"));
         assertThat(LocalDateTime.parse(content.getString("startedDate"))).isBefore(
             LocalDateTime.parse(content.getString("endedDate")));
+    }
+
+    @Test
+    void testGetAllSurvey() throws Exception {
+        // given
+        for (int i = 1; i < 16; i++) { // create test 15 surveys
+            SurveyRequestDto surveyRequestDto = SurveyRequestDto.builder()
+                .title("This is test survey title " + i)
+                .description("This is test survey description")
+                .startedDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")).plusDays(1))
+                .endedDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")).plusDays(2))
+                .certificationTypes(List.of(CertificationType.GOOGLE))
+                .questions(List.of(questionRequestDto))
+                .build();
+            mockCreateSurvey(surveyRequestDto);
+        }
+
+        // when
+        MvcResult result = mockMvc.perform(get("/surveys")
+                .param("page", "2"))
+            .andExpect(status().isOk()).andReturn();
+        JSONObject content = new JSONObject(result.getResponse().getContentAsString());
+        JSONArray paginatedSurveyList = content.getJSONArray("surveys");
+        JSONObject latestSurvey = paginatedSurveyList.getJSONObject(0);
+
+        // then
+        assertThat("This is test survey title 7").isEqualTo(latestSurvey.get("title"));
+        assertThat(content.get("totalSurveys")).isEqualTo(16); // mockSurvey 1 + test surveys 15
+        assertThat(content.get("totalPages")).isEqualTo(2); // total elements / page size
     }
 
     @Test
