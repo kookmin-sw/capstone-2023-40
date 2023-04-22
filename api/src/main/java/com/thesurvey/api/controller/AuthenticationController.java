@@ -4,18 +4,20 @@ import com.thesurvey.api.dto.response.UserResponseDto;
 import com.thesurvey.api.dto.request.UserLoginRequestDto;
 import com.thesurvey.api.dto.request.UserRegisterRequestDto;
 import com.thesurvey.api.service.AuthenticationService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 
-@Api(tags = "인증")
+@Tag(name = "인증", description = "Authentication Controller")
 @RestController
 @RequestMapping("/auth")
 public class AuthenticationController {
@@ -26,12 +28,12 @@ public class AuthenticationController {
         this.authenticationService = authenticationService;
     }
 
-    @ApiOperation(value = "회원가입", notes = "회원가입을 요청합니다.")
+    @Operation(summary = "회원가입", description = "회원가입을 요청합니다.")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "요청 성공"),
-        @ApiResponse(code = 400, message = "잘못된 요청"),
-        @ApiResponse(code = 404, message = "요청한 리소스 찾을 수 없음"),
-        @ApiResponse(code = 500, message = "서버 내부 오류")
+        @ApiResponse(responseCode = "200", description = "요청 성공", useReturnTypeSchema = true),
+        @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @Content(schema = @Schema(hidden = true))),
+        @ApiResponse(responseCode = "404", description = "요청한 리소스 찾을 수 없음", content = @Content(schema = @Schema(hidden = true))),
+        @ApiResponse(responseCode = "500", description = "서버 내부 오류", content = @Content(schema = @Schema(hidden = true)))
     })
     @PostMapping("/register")
     public ResponseEntity<UserResponseDto> register(
@@ -39,12 +41,12 @@ public class AuthenticationController {
         return ResponseEntity.ok(authenticationService.register(userRegisterRequestDto));
     }
 
-    @ApiOperation(value = "로그인", notes = "로그인을 요청합니다.")
+    @Operation(summary = "로그인", description = "로그인을 요청합니다.")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "요청 성공"),
-        @ApiResponse(code = 401, message = "유효하지 않은 인증정보"),
-        @ApiResponse(code = 403, message = "접근 권한 없음"),
-        @ApiResponse(code = 404, message = "요청한 리소스 찾을 수 없음")
+        @ApiResponse(responseCode = "200", description = "요청 성공", useReturnTypeSchema = true),
+        @ApiResponse(responseCode = "401", description = "유효하지 않은 인증정보", content = @Content(schema = @Schema(hidden = true))),
+        @ApiResponse(responseCode = "403", description = "접근 권한 없음", content = @Content(schema = @Schema(hidden = true))),
+        @ApiResponse(responseCode = "404", description = "요청한 리소스 찾을 수 없음", content = @Content(schema = @Schema(hidden = true)))
     })
     @PostMapping("/login")
     public ResponseEntity<UserResponseDto> login(
