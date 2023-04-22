@@ -12,7 +12,6 @@ import com.thesurvey.api.service.converter.CertificationTypeConverter;
 import com.thesurvey.api.util.StringUtil;
 import java.util.List;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -90,11 +89,11 @@ public class SurveyMapper {
             .build();
     }
 
-    public SurveyListPageDto toSurveyListPageDto(List<SurveyPageDto> surveyPageDto, Page<Survey> surveyPage) {
-        Pageable surveyPageable = surveyPage.getPageable();
+    public SurveyListPageDto toSurveyListPageDto(List<SurveyPageDto> surveyPageDto,
+        Page<Survey> surveyPage) {
         return SurveyListPageDto.builder()
             .surveys(surveyPageDto)
-            .page(surveyPageable.getPageNumber() + 1)
+            .page(surveyPage.getPageable().getPageNumber() + 1)
             .totalSurveys(surveyPage.getTotalElements())
             .totalPages(surveyPage.getTotalPages())
             .build();
