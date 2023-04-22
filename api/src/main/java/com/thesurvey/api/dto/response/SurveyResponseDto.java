@@ -32,8 +32,10 @@ public class SurveyResponseDto {
 
     private List<QuestionBankResponseDto> questions;
 
+    @Schema(example = "2023-04-22T00:00:00", description = "생성된 설문조사의 생성일입니다.")
     private LocalDateTime createdDate;
 
+    @Schema(example = "2023-04-22T00:00:00", description = "생성된 설문조사의 수정일입니다.")
     private LocalDateTime modifiedDate;
 
     @Schema(example = "[\"NAVER\", \"KAKAO\"]", description = "생성된 설문조사의 필수인증 목록입니다.")

@@ -25,6 +25,7 @@ public class QuestionBankResponseDto {
 
     private List<QuestionOptionResponseDto> questionOptions;
 
+    @Schema(example = "", description = "질문은행 아이디에 해당하는 질문 유형입니다.")
     private LocalDateTime createdDate;
 
     private LocalDateTime modifiedDate;
