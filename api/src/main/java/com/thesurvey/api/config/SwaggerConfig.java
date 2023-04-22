@@ -1,78 +1,65 @@
 package com.thesurvey.api.config;
 
-import com.fasterxml.classmate.TypeResolver;
-import com.thesurvey.api.dto.request.PageableSwagger;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import org.springframework.data.domain.Pageable;
-import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.schema.AlternateTypeRules;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.ApiKey;
-import springfox.documentation.service.AuthorizationScope;
-import springfox.documentation.service.SecurityReference;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spi.service.contexts.SecurityContext;
-import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.parameters.Parameter;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
+import org.springdoc.core.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@EnableSwagger2
 public class SwaggerConfig {
 
-    private ApiInfo apiInfo() {
-        return new ApiInfoBuilder()
-            .title("the survey API")
-            .description("©copyright 2023 KMU Capstone Team 40")
-            .version("1.0")
-            .build();
-    }
-
-    TypeResolver typeResolver = new TypeResolver();
+    private final String sessionId = "JSESSIONID";
 
     @Bean
-    public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2)
-            .alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(Pageable.class), typeResolver.resolve(
-                PageableSwagger.class)))
-            .consumes(getConsumeContentTypes())
-            .produces(getProduceContentTypes())
-            .apiInfo(apiInfo())
-            .select()
-            .apis(RequestHandlerSelectors.basePackage("com.thesurvey.api.controller"))
-            .paths(PathSelectors.any())
-            .build()
-            .useDefaultResponseMessages(false)
-            .securitySchemes(List.of(new ApiKey("JSESSIONID", "JSESSIONID", "cookie")))
-            .securityContexts(List.of(securityContext()));
-    }
-
-    private Set<String> getConsumeContentTypes() {
-        Set<String> consumes = new HashSet<>();
-        consumes.add("application/json;charset=UTF-8");
-        return consumes;
-    }
-
-    private Set<String> getProduceContentTypes() {
-        Set<String> produces = new HashSet<>();
-        produces.add("application/json;charset=UTF-8");
-        return produces;
-    }
-
-    private SecurityContext securityContext() {
-        return SecurityContext.builder()
-            .securityReferences(defaultAuth())
-            .operationSelector(operationContext -> true)
+    public GroupedOpenApi apiGroup() {
+        return GroupedOpenApi.builder()
+            .group("the survey API")
+            .packagesToScan("com.thesurvey.api.controller")
             .build();
     }
 
-    private List<SecurityReference> defaultAuth() {
-        return List.of(new SecurityReference("JSESSIONID", new AuthorizationScope[0]));
+    @Bean
+    public OpenAPI openAPI() {
+        return new OpenAPI()
+            .info(setInfo())
+            .addSecurityItem(setSecurityItem())
+            .components(setComponents());
     }
 
+    private Info setInfo() {
+        return new Info()
+            .title("the survey API")
+            .description("©copyright 2023 KMU Capstone Team 40")
+            .version("1.0");
+    }
+
+    private SecurityRequirement setSecurityItem() {
+        return new SecurityRequirement().addList(sessionId);
+    }
+
+    private Components setComponents() {
+        return new Components()
+            .addSecuritySchemes(sessionId, setSecurityScheme())
+            .addParameters(sessionId, setSessionParams());
+    }
+
+    private SecurityScheme setSecurityScheme() {
+        return new SecurityScheme()
+            .type(SecurityScheme.Type.APIKEY)
+            .in(SecurityScheme.In.COOKIE)
+            .name(sessionId);
+    }
+
+    private Parameter setSessionParams() {
+        return new Parameter()
+            .in("cookie")
+            .name(sessionId)
+            .description(sessionId)
+            .required(true);
+    }
 }

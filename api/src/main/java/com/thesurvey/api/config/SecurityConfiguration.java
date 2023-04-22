@@ -1,8 +1,7 @@
 package com.thesurvey.api.config;
 
 import com.thesurvey.api.exception.AuthenticationEntryPointHandler;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
 import java.util.Arrays;
 
 import javax.servlet.http.HttpServletResponse;
@@ -82,10 +81,7 @@ public class SecurityConfiguration {
         final CorsConfiguration config = new CorsConfiguration();
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
-        List<String> allowedOrigins = new ArrayList<>();
-        allowedOrigins.add("http://localhost:3000");
-
-        config.setAllowedOrigins(allowedOrigins);
+        config.setAllowedOrigins(Collections.singletonList("*"));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS", "DELETE", "PUT", "PATCH"));
         config.setAllowCredentials(true);
         config.setAllowedHeaders(Arrays.asList("Cache-Control", "Content-Type"));

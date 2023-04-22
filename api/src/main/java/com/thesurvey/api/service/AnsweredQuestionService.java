@@ -81,9 +81,8 @@ public class AnsweredQuestionService {
             validateEmptyAnswer(answeredQuestionDto);
 
             QuestionBank questionBank = questionBankRepository.findByQuestionBankId(
-                    answeredQuestionDto.getQuestionBankId())
-                .orElseThrow(
-                    () -> new NotFoundExceptionMapper(ErrorMessage.QUESTION_BANK_NOT_FOUND));
+                answeredQuestionDto.getQuestionBankId()).orElseThrow(
+                () -> new NotFoundExceptionMapper(ErrorMessage.QUESTION_BANK_NOT_FOUND));
 
             // check if the question is included in the survey.
             if (questionRepository.notExistsBySurveyIdAndQuestionBankId(survey.getSurveyId(),
@@ -91,22 +90,25 @@ public class AnsweredQuestionService {
                 throw new BadRequestExceptionMapper(ErrorMessage.NOT_SURVEY_QUESTION);
             }
 
-            if (answeredQuestionDto.getMultipleChoices() != null
-                && answeredQuestionDto.getMultipleChoices().size() != 0) {
-                List<AnsweredQuestion> answeredQuestionList = answeredQuestionDto.getMultipleChoices()
-                    .stream()
-                    .map(choice -> answeredQuestionMapper.toAnsweredQuestionWithMultipleChoices(
-                        user, survey, questionBank, choice))
-                    .collect(Collectors.toList());
-
-                answeredQuestionRepository.saveAll(answeredQuestionList);
-                participationService.createParticipation(user,
-                    answeredQuestionRequestDto.getCertificationTypes(), survey);
-            } else {
+            // In case it's not multiple choice question
+            if (answeredQuestionDto.getMultipleChoices() == null
+                || answeredQuestionDto.getMultipleChoices().isEmpty()) {
                 answeredQuestionRepository.save(
-                    answeredQuestionMapper.toAnsweredQuestion(answeredQuestionDto, user,
-                        survey, questionBank));
+                    answeredQuestionMapper.toAnsweredQuestion(answeredQuestionDto, user, survey,
+                        questionBank));
+                return;
             }
+
+            // In case it's multiple choice question
+            List<AnsweredQuestion> answeredQuestionList = answeredQuestionDto.getMultipleChoices()
+                .stream()
+                .map(choice -> answeredQuestionMapper.toAnsweredQuestionWithMultipleChoices(
+                    user, survey, questionBank, choice))
+                .collect(Collectors.toList());
+
+            answeredQuestionRepository.saveAll(answeredQuestionList);
+            participationService.createParticipation(user,
+                answeredQuestionRequestDto.getCertificationTypes(), survey);
         }
     }
 

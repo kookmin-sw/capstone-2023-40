@@ -59,22 +59,26 @@ public class SessionFilter extends OncePerRequestFilter {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
-        if (email != null && password != null) {
-            UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                userDetails, password, userDetails.getAuthorities());
+        if (email == null || password == null) {
+            throw new UnauthorizedRequestExceptionMapper(ErrorMessage.FAILED_AUTHENTICATION);
+        }
 
-            try {
-                Authentication authentication = authenticationManager().authenticate(authToken);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+            userDetails, password, userDetails.getAuthorities());
 
-                Optional<Cookie> jSessionIdCookie = getJSessionIdCookie(request);
-                jSessionIdCookie.get().setValue(request.getSession().getId());
-                response.addCookie(jSessionIdCookie.get());
+        try {
+            Authentication authentication = authenticationManager().authenticate(authToken);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            } catch (AuthenticationException e) {
-                throw new UnauthorizedRequestExceptionMapper(ErrorMessage.FAILED_AUTHENTICATION);
-            }
+            getJSessionIdCookie(request)
+                .ifPresent(jSessionIdCookie -> {
+                    jSessionIdCookie.setValue(request.getSession().getId());
+                    response.addCookie(jSessionIdCookie);
+                });
+
+        } catch (AuthenticationException e) {
+            throw new UnauthorizedRequestExceptionMapper(ErrorMessage.FAILED_AUTHENTICATION);
         }
     }
 
