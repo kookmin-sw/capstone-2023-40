@@ -24,7 +24,7 @@ public class QuestionBankUpdateRequestDto {
     private String title;
 
     @Size(max = 255)
-    @Schema(example = "카카오 헤어 서비스 사용자이신가요?", description = "수정하려는 질문 상세내용입니다. 질문 상세내용은 255자 이내여야 합니다.")
+    @Schema(example = "카카오 헤어 서비스 사용자 여부 확인", description = "수정하려는 질문 상세내용입니다. 질문 상세내용은 255자 이내여야 합니다.")
     private String description;
 
     @Valid
