@@ -1,7 +1,7 @@
 package com.thesurvey.api.dto.request;
 
 import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.validation.Valid;
@@ -19,24 +19,25 @@ public class SurveyRequestDto {
 
     @NotBlank
     @Size(max = 100)
-    @ApiModelProperty(name = "설문조사 제목", example = "카카오 사용자분들께 설문 부탁드립니다!", notes = "설문조사 제목은 100자 이내여야 합니다.")
+    @Schema(example = "카카오 사용자분들께 설문 부탁드립니다!", description = "설문조사 제목은 100자 이내여야 합니다.")
     private String title;
 
     @NotBlank
     @Size(max = 255)
-    @ApiModelProperty(name = "설문조사 상세내용", example = "카카오 앱 서비스에 대한 전반적인 만족도 조사입니다.", notes = "설문조사 상세내용은 255자 이내여야 합니다.")
+    @Schema(example = "카카오 앱 서비스에 대한 전반적인 만족도 조사입니다.", description = "설문조사 상세내용은 255자 이내여야 합니다.")
     private String description;
 
     @NotNull
-    @ApiModelProperty(name = "설문조사 시작일", example = "2023-04-01T00:00:00", notes = "설문조사 시작일은 요청시각 기준 5초 이전은 불가능합니다.")
+    @Schema(example = "2030-12-01T00:00:00", description = "설문조사 시작일은 요청시각 기준 5초 이전은 불가능합니다.")
     private LocalDateTime startedDate;
 
     @NotNull
     @Future
-    @ApiModelProperty(name = "설문조사 종료일", example = "2023-04-08T00:00:00", notes = "설문조사 종료일은 설문조사 시작일보다 앞설 수 없습니다.")
+    @Schema(example = "2030-12-12T00:00:00", description = "설문조사 종료일은 설문조사 시작일보다 빠를 수 없습니다.")
     private LocalDateTime endedDate;
 
     @Valid
+    @Schema(example = "[\"NAVER\", \"KAKAO\"]", description = "설문 참가자의 인증 유형을 지정합니다. 인증 유형은 다음의 값들이 올 수 있습니다: [\"NAVER\", \"KAKAO\", \"GOGLE\", \"WEBMAIL\", \"DRIVER_LICENSE\", \"MOBILE_PHONE\"]")
     private List<CertificationType> certificationTypes;
 
     @Valid

@@ -5,6 +5,15 @@ server:
     session:
       timeout: 10m
 
+springdoc:
+  default-produces-media-type: "application/json"
+  swagger-ui:
+    path: /docs
+    enabled: true
+    display-request-duration: true
+  cache:
+    disabled: true
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/the_survey_dev
