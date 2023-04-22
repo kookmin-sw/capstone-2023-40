@@ -1,6 +1,5 @@
 package com.thesurvey.api.controller;
 
-import com.thesurvey.api.dto.response.AnsweredQuestionResponseDto;
 import com.thesurvey.api.dto.response.SurveyListPageDto;
 import com.thesurvey.api.dto.response.SurveyResponseDto;
 import com.thesurvey.api.dto.request.AnsweredQuestionRequestDto;
@@ -130,7 +129,7 @@ public class SurveyController {
         @ApiResponse(responseCode = "404", description = "요청한 리소스 찾을 수 없음", content = @Content(schema = @Schema(hidden = true)))
     })
     @PostMapping("/submit")
-    public ResponseEntity<AnsweredQuestionResponseDto> submitSurvey(
+    public ResponseEntity<Void> submitSurvey(
         @Parameter(hidden = true) Authentication authentication,
         @Valid @RequestBody AnsweredQuestionRequestDto answeredQuestionRequestDto) {
         answeredQuestionService.createAnswer(authentication, answeredQuestionRequestDto);
