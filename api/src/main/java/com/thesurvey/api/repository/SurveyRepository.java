@@ -1,9 +1,11 @@
 package com.thesurvey.api.repository;
 
-import com.thesurvey.api.domain.Survey;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
+import com.thesurvey.api.domain.Survey;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,5 +23,5 @@ public interface SurveyRepository extends JpaRepository<Survey, UUID> {
     List<Integer> findCertificationTypeBySurveyId(@Param("survey_id") UUID surveyId);
 
     Optional<Survey> findBySurveyId(UUID surveyId);
-    
+
 }

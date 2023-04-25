@@ -1,20 +1,24 @@
 package com.thesurvey.api.controller;
 
-import com.thesurvey.api.dto.response.SurveyListPageDto;
-import com.thesurvey.api.dto.response.SurveyResponseDto;
+import java.util.UUID;
+
+import javax.validation.Valid;
+
 import com.thesurvey.api.dto.request.AnsweredQuestionRequestDto;
 import com.thesurvey.api.dto.request.SurveyRequestDto;
 import com.thesurvey.api.dto.request.SurveyUpdateRequestDto;
+import com.thesurvey.api.dto.response.SurveyListPageDto;
+import com.thesurvey.api.dto.response.SurveyResponseDto;
 import com.thesurvey.api.service.AnsweredQuestionService;
 import com.thesurvey.api.service.SurveyService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.UUID;
-import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -27,7 +31,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import io.swagger.v3.oas.annotations.Operation;
 
 @Tag(name = "설문조사", description = "Survey Controller")
 @RestController
@@ -35,6 +38,7 @@ import io.swagger.v3.oas.annotations.Operation;
 public class SurveyController {
 
     private final SurveyService surveyService;
+
     private final AnsweredQuestionService answeredQuestionService;
 
     public SurveyController(SurveyService surveyService,

@@ -1,8 +1,9 @@
 package com.thesurvey.api.dto.response;
 
+import java.time.LocalDateTime;
+
 import com.thesurvey.api.domain.EnumTypeEntity.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
 

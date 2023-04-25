@@ -1,10 +1,13 @@
 package com.thesurvey.api.config;
 
-import com.thesurvey.api.exception.AuthenticationEntryPointHandler;
-import java.util.Collections;
 import java.util.Arrays;
+import java.util.Collections;
 
 import javax.servlet.http.HttpServletResponse;
+
+import com.thesurvey.api.exception.AuthenticationEntryPointHandler;
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -19,7 +22,6 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import lombok.RequiredArgsConstructor;
 
 
 @Configuration

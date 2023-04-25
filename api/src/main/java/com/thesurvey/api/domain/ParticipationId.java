@@ -1,11 +1,13 @@
 package com.thesurvey.api.domain;
 
-import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+
+import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

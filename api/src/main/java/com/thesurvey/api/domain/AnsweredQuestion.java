@@ -9,6 +9,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
+
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,9 +20,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AnsweredQuestion {
-
-    @EmbeddedId
-    private AnsweredQuestionId answeredQuestionId;
 
     @MapsId("surveyId")
     @ManyToOne(fetch = FetchType.LAZY)
@@ -37,6 +35,9 @@ public class AnsweredQuestion {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "question_bank_id")
     public QuestionBank questionBank;
+
+    @EmbeddedId
+    private AnsweredQuestionId answeredQuestionId;
 
     @Column(name = "single_choice", nullable = true)
     private Integer singleChoice;
