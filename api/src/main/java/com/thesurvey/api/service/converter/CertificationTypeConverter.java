@@ -1,8 +1,10 @@
 package com.thesurvey.api.service.converter;
 
-import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
+
 import org.springframework.context.annotation.Configuration;
 
 @Configuration

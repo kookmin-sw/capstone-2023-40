@@ -1,14 +1,16 @@
 package com.thesurvey.api.dto.request;
 
-import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
-import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+
 import javax.validation.Valid;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 

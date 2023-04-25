@@ -1,19 +1,15 @@
 package com.thesurvey.api.service;
 
-import com.thesurvey.api.domain.Survey;
 import com.thesurvey.api.domain.User;
-import com.thesurvey.api.dto.request.SurveyUpdateRequestDto;
-import com.thesurvey.api.dto.response.UserResponseDto;
 import com.thesurvey.api.dto.request.UserUpdateRequestDto;
-import com.thesurvey.api.exception.BadRequestExceptionMapper;
+import com.thesurvey.api.dto.response.UserResponseDto;
 import com.thesurvey.api.exception.ErrorMessage;
 import com.thesurvey.api.exception.NotFoundExceptionMapper;
 import com.thesurvey.api.repository.UserRepository;
 import com.thesurvey.api.service.mapper.UserMapper;
 import com.thesurvey.api.util.StringUtil;
 import com.thesurvey.api.util.UserUtil;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

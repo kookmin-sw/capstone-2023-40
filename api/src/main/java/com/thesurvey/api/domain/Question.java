@@ -1,7 +1,5 @@
 package com.thesurvey.api.domain;
 
-import com.thesurvey.api.exception.BadRequestExceptionMapper;
-import com.thesurvey.api.exception.ErrorMessage;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -12,6 +10,9 @@ import javax.persistence.MapsId;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+
+import com.thesurvey.api.exception.BadRequestExceptionMapper;
+import com.thesurvey.api.exception.ErrorMessage;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,9 +24,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Question {
 
-    @EmbeddedId
-    private QuestionId questionId;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("surveyId")
     @JoinColumn(name = "survey_id")
@@ -35,6 +33,9 @@ public class Question {
     @MapsId("questionBankId")
     @JoinColumn(name = "question_bank_id")
     public QuestionBank questionBank;
+
+    @EmbeddedId
+    private QuestionId questionId;
 
     @NotNull
     @Positive

@@ -1,14 +1,15 @@
 package com.thesurvey.api.service;
 
 import com.thesurvey.api.domain.User;
-import com.thesurvey.api.dto.response.UserResponseDto;
 import com.thesurvey.api.dto.request.UserLoginRequestDto;
 import com.thesurvey.api.dto.request.UserRegisterRequestDto;
-import com.thesurvey.api.exception.ErrorMessage;
+import com.thesurvey.api.dto.response.UserResponseDto;
 import com.thesurvey.api.exception.BadRequestExceptionMapper;
+import com.thesurvey.api.exception.ErrorMessage;
 import com.thesurvey.api.exception.UnauthorizedRequestExceptionMapper;
 import com.thesurvey.api.repository.UserRepository;
 import com.thesurvey.api.service.mapper.UserMapper;
+
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;

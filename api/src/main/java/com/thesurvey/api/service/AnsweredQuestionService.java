@@ -1,13 +1,19 @@
 package com.thesurvey.api.service;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 import com.thesurvey.api.domain.AnsweredQuestion;
 import com.thesurvey.api.domain.QuestionBank;
 import com.thesurvey.api.domain.Survey;
 import com.thesurvey.api.domain.User;
 import com.thesurvey.api.dto.request.AnsweredQuestionDto;
 import com.thesurvey.api.dto.request.AnsweredQuestionRequestDto;
-import com.thesurvey.api.exception.ErrorMessage;
 import com.thesurvey.api.exception.BadRequestExceptionMapper;
+import com.thesurvey.api.exception.ErrorMessage;
 import com.thesurvey.api.exception.ForbiddenRequestExceptionMapper;
 import com.thesurvey.api.exception.NotFoundExceptionMapper;
 import com.thesurvey.api.repository.AnsweredQuestionRepository;
@@ -16,11 +22,7 @@ import com.thesurvey.api.repository.QuestionRepository;
 import com.thesurvey.api.repository.SurveyRepository;
 import com.thesurvey.api.service.mapper.AnsweredQuestionMapper;
 import com.thesurvey.api.util.UserUtil;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,10 +31,15 @@ import org.springframework.transaction.annotation.Transactional;
 public class AnsweredQuestionService {
 
     private final SurveyRepository surveyRepository;
+
     private final AnsweredQuestionRepository answeredQuestionRepository;
+
     private final QuestionBankRepository questionBankRepository;
+
     private final AnsweredQuestionMapper answeredQuestionMapper;
+
     private final QuestionRepository questionRepository;
+
     private final ParticipationService participationService;
 
     public AnsweredQuestionService(SurveyRepository surveyRepository,

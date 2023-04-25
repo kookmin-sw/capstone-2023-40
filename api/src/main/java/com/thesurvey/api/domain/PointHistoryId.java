@@ -3,8 +3,10 @@ package com.thesurvey.api.domain;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

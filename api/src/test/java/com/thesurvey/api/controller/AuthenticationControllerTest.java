@@ -1,7 +1,8 @@
 package com.thesurvey.api.controller;
 
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import java.util.UUID;
+
 import com.thesurvey.api.domain.EnumTypeEntity.Role;
 import com.thesurvey.api.dto.request.UserLoginRequestDto;
 import com.thesurvey.api.dto.request.UserRegisterRequestDto;
@@ -10,11 +11,11 @@ import com.thesurvey.api.service.AuthenticationService;
 import com.thesurvey.api.service.SurveyService;
 import com.thesurvey.api.service.UserService;
 import com.thesurvey.api.service.mapper.UserMapper;
-import java.util.UUID;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,6 +23,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest
 @Transactional
