@@ -32,6 +32,7 @@ public class SurveyRequestDto {
 
     @NotNull
     @Schema(example = "2030-12-01T00:00:00", description = "설문조사 시작일은 요청시각 기준 5초 이전은 불가능합니다.")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime startedDate;
 
     @NotNull
