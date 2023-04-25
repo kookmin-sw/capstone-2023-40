@@ -2,6 +2,7 @@ package com.thesurvey.api.controller;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
@@ -109,6 +110,8 @@ public class SurveyControllerTest extends BaseControllerTest {
 
     Authentication authentication;
 
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+
     @BeforeAll
     void setupBeforeAll() throws Exception {
         UserRegisterRequestDto userRegisterRequestDto = UserRegisterRequestDto.builder()
@@ -136,12 +139,13 @@ public class SurveyControllerTest extends BaseControllerTest {
         surveyRequestDto = SurveyRequestDto.builder()
             .title("This is test survey title")
             .description("This is test survey description")
-            .startedDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")).plusDays(1))
-            .endedDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")).plusDays(2))
+            .startedDate(LocalDateTime.parse(LocalDateTime.now(ZoneId.of("Asia/Seoul"))
+                .plusDays(1).format(formatter)))
+            .endedDate(LocalDateTime.parse(LocalDateTime.now(ZoneId.of("Asia/Seoul"))
+                .plusDays(2).format(formatter)))
             .certificationTypes(List.of(CertificationType.GOOGLE))
             .questions(List.of(questionRequestDto))
             .build();
-
     }
 
     @BeforeEach
@@ -174,8 +178,10 @@ public class SurveyControllerTest extends BaseControllerTest {
         // then
         assertThat(surveyId.toString()).isEqualTo(content.getString("surveyId"));
         assertThat(surveyRequestDto.getTitle()).isEqualTo(content.get("title"));
-        assertThat(surveyRequestDto.getStartedDate()).isEqualTo(content.getString("startedDate"));
-        assertThat(surveyRequestDto.getEndedDate()).isEqualTo(content.getString("endedDate"));
+        assertThat(surveyRequestDto.getStartedDate().format(formatter))
+            .isEqualTo(content.getString("startedDate"));
+        assertThat(surveyRequestDto.getEndedDate().format(formatter))
+            .isEqualTo(content.getString("endedDate"));
         assertThat(LocalDateTime.parse(content.getString("startedDate"))).isBefore(
             LocalDateTime.parse(content.getString("endedDate")));
     }
@@ -230,9 +236,9 @@ public class SurveyControllerTest extends BaseControllerTest {
         assertThat(userId).isEqualTo(authorId);
         assertThat(surveyId.toString()).isEqualTo(content.getString("surveyId"));
         assertThat(surveyUpdateRequestDto.getTitle()).isEqualTo(content.get("title"));
-        assertThat(surveyUpdateRequestDto.getStartedDate().toString()).isEqualTo(
+        assertThat(surveyUpdateRequestDto.getStartedDate().format(formatter)).isEqualTo(
             content.getString("startedDate"));
-        assertThat(surveyUpdateRequestDto.getEndedDate().toString()).isEqualTo(
+        assertThat(surveyUpdateRequestDto.getEndedDate().format(formatter)).isEqualTo(
             content.getString("endedDate"));
         assertThat(LocalDateTime.parse(content.getString("startedDate"))).isBefore(
             LocalDateTime.parse(content.getString("endedDate")));

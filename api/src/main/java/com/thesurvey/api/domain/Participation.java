@@ -11,6 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -37,9 +38,11 @@ public class Participation extends BaseTimeEntity {
     private ParticipationId participationId;
 
     @Column(name = "participate_date", nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime participateDate;
 
     @Column(name = "submitted_date", nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime submittedDate;
 
     @Column(name = "certification_type", insertable = false, updatable = false)
