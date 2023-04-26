@@ -1,21 +1,22 @@
 package com.thesurvey.api.config;
 
-import com.thesurvey.api.domain.User;
-import com.thesurvey.api.exception.ErrorMessage;
-import com.thesurvey.api.exception.UnauthorizedRequestExceptionMapper;
-import com.thesurvey.api.repository.UserRepository;
 import java.io.IOException;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.thesurvey.api.domain.User;
+import com.thesurvey.api.exception.ErrorMessage;
+import com.thesurvey.api.exception.UnauthorizedRequestExceptionMapper;
+import com.thesurvey.api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

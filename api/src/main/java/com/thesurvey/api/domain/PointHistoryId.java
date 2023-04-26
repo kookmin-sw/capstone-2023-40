@@ -3,8 +3,11 @@ package com.thesurvey.api.domain;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,6 +19,7 @@ import lombok.NoArgsConstructor;
 public class PointHistoryId implements Serializable {
 
     @Column(name = "transaction_date")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime transactionDate;
 
     @Column(name = "user_id")

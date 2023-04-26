@@ -1,10 +1,12 @@
 package com.thesurvey.api.dto.response;
 
-import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
-import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -25,18 +27,22 @@ public class SurveyPageDto {
     private String description;
 
     @Schema(example = "2030-12-01T00:00:00", description = "조회된 설문조사의 시작일입니다.")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime startedDate;
 
     @Schema(example = "2030-12-12T00:00:00", description = "조회된 설문조사의 종료일입니다.")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime endedDate;
 
     @Schema(example = "[\"NAVER\", \"KAKAO\"]", description = "조회된 설문조사의 필수인증 목록입니다.")
     private List<CertificationType> certificationTypes;
 
     @Schema(example = "2023-04-22T00:00:00", description = "조회된 설문조사의 생성일입니다.")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdDate;
 
     @Schema(example = "2023-04-22T00:00:00", description = "조회된 설문조사의 수정일입니다.")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime modifiedDate;
 
 

@@ -1,30 +1,34 @@
 package com.thesurvey.api.dto;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import com.thesurvey.api.controller.SurveyController;
-import com.thesurvey.api.domain.EnumTypeEntity.QuestionType;
-import com.thesurvey.api.dto.request.QuestionBankUpdateRequestDto;
-import com.thesurvey.api.dto.request.SurveyUpdateRequestDto;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.UUID;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
+
+import com.thesurvey.api.controller.SurveyController;
+import com.thesurvey.api.domain.EnumTypeEntity.QuestionType;
+import com.thesurvey.api.dto.request.QuestionBankUpdateRequestDto;
+import com.thesurvey.api.dto.request.SurveyUpdateRequestDto;
 import org.junit.jupiter.api.Test;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @WebMvcTest(value = SurveyController.class, useDefaultFilters = false)
 @MockBean(JpaMetamodelMappingContext.class)
 public class SurveyUpdateRequestDtoValidTest {
 
+    final UUID surveyId = UUID.fromString("5eaa47c1-cba3-45da-9533-3528e18563c3");
+
     @Autowired
     private Validator validator;
-
-    final UUID surveyId = UUID.fromString("5eaa47c1-cba3-45da-9533-3528e18563c3");
 
     @Test
     public void testCorrectInput() {

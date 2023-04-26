@@ -4,6 +4,7 @@ import com.thesurvey.api.domain.User;
 import com.thesurvey.api.dto.request.UserRegisterRequestDto;
 import com.thesurvey.api.dto.response.UserResponseDto;
 import com.thesurvey.api.util.StringUtil;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;

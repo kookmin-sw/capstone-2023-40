@@ -1,9 +1,12 @@
 package com.thesurvey.api.exception;
 
 import java.util.Objects;
+
 import javax.validation.ConstraintViolationException;
 import javax.validation.UnexpectedTypeException;
+
 import org.postgresql.util.PSQLException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;

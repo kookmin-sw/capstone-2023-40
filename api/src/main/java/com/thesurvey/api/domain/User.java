@@ -1,11 +1,9 @@
 package com.thesurvey.api.domain;
 
-import com.thesurvey.api.domain.EnumTypeEntity.Role;
-import com.thesurvey.api.exception.BadRequestExceptionMapper;
-import com.thesurvey.api.exception.ErrorMessage;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,10 +18,15 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+
+import com.thesurvey.api.domain.EnumTypeEntity.Role;
+import com.thesurvey.api.exception.BadRequestExceptionMapper;
+import com.thesurvey.api.exception.ErrorMessage;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -97,6 +100,25 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Column(name = "profile_image", nullable = true)
     private String profileImage;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private Role role = Role.USER;
+
+    @Builder
+    public User(List<Participation> participations, List<AnsweredQuestion> answeredQuestions,
+        List<PointHistory> pointHistories, String email, String name, String password,
+        String phoneNumber, String address, String profileImage) {
+        this.participations = participations;
+        this.answeredQuestions = answeredQuestions;
+        this.pointHistories = pointHistories;
+        this.email = email;
+        this.name = name;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.profileImage = profileImage;
+    }
+
     public void changePassword(String password) {
         if (!password.matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[~!@#$%^&*()_+=])\\S{8,25}$")) {
             throw new BadRequestExceptionMapper(ErrorMessage.INVALID_REQUEST);
@@ -124,25 +146,6 @@ public class User extends BaseTimeEntity implements UserDetails {
         }
         this.profileImage = profileImage;
     }
-
-    @Builder
-    public User(List<Participation> participations, List<AnsweredQuestion> answeredQuestions,
-        List<PointHistory> pointHistories, String email, String name, String password,
-        String phoneNumber, String address, String profileImage) {
-        this.participations = participations;
-        this.answeredQuestions = answeredQuestions;
-        this.pointHistories = pointHistories;
-        this.email = email;
-        this.name = name;
-        this.password = password;
-        this.phoneNumber = phoneNumber;
-        this.address = address;
-        this.profileImage = profileImage;
-    }
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false)
-    private Role role = Role.USER;
 
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

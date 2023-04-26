@@ -1,9 +1,11 @@
 package com.thesurvey.api.dto.request;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
+
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 

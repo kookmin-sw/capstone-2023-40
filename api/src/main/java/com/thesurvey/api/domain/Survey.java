@@ -1,10 +1,9 @@
 package com.thesurvey.api.domain;
 
-import com.thesurvey.api.exception.BadRequestExceptionMapper;
-import com.thesurvey.api.exception.ErrorMessage;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,6 +17,10 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.thesurvey.api.exception.BadRequestExceptionMapper;
+import com.thesurvey.api.exception.ErrorMessage;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -66,11 +69,13 @@ public class Survey extends BaseTimeEntity {
 
     @NotNull
     @Column(name = "started_date", nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime startedDate;
 
     @NotNull
     @Future
     @Column(name = "ended_date", nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime endedDate;
 
     @Builder

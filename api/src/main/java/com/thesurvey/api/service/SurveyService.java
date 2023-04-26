@@ -1,25 +1,27 @@
 package com.thesurvey.api.service;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 import com.thesurvey.api.domain.Survey;
 import com.thesurvey.api.domain.User;
+import com.thesurvey.api.dto.request.SurveyRequestDto;
+import com.thesurvey.api.dto.request.SurveyUpdateRequestDto;
 import com.thesurvey.api.dto.response.SurveyListPageDto;
 import com.thesurvey.api.dto.response.SurveyPageDto;
 import com.thesurvey.api.dto.response.SurveyResponseDto;
-import com.thesurvey.api.dto.request.SurveyRequestDto;
-import com.thesurvey.api.dto.request.SurveyUpdateRequestDto;
-import com.thesurvey.api.exception.ErrorMessage;
 import com.thesurvey.api.exception.BadRequestExceptionMapper;
+import com.thesurvey.api.exception.ErrorMessage;
 import com.thesurvey.api.exception.ForbiddenRequestExceptionMapper;
 import com.thesurvey.api.exception.NotFoundExceptionMapper;
 import com.thesurvey.api.repository.SurveyRepository;
 import com.thesurvey.api.service.mapper.SurveyMapper;
 import com.thesurvey.api.util.StringUtil;
 import com.thesurvey.api.util.UserUtil;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
@@ -30,9 +32,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class SurveyService {
 
     private final SurveyRepository surveyRepository;
+
     private final SurveyMapper surveyMapper;
+
     private final QuestionService questionService;
+
     private final ParticipationService participationService;
+
     private final AnsweredQuestionService answeredQuestionService;
 
     public SurveyService(SurveyRepository surveyRepository, SurveyMapper surveyMapper,

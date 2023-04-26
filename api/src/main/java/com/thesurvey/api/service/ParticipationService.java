@@ -1,14 +1,15 @@
 package com.thesurvey.api.service;
 
+import java.util.List;
+import java.util.UUID;
+
 import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
 import com.thesurvey.api.domain.Participation;
 import com.thesurvey.api.domain.Survey;
 import com.thesurvey.api.domain.User;
-import com.thesurvey.api.dto.request.SurveyRequestDto;
 import com.thesurvey.api.repository.ParticipationRepository;
 import com.thesurvey.api.service.mapper.ParticipationMapper;
-import java.util.List;
-import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

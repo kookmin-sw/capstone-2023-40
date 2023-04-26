@@ -1,8 +1,10 @@
 package com.thesurvey.api.dto.response;
 
+import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.thesurvey.api.domain.EnumTypeEntity.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -32,9 +34,11 @@ public class UserResponseDto {
     private String profileImage;
 
     @Schema(example = "2023-04-22T00:00:00", description = "계정의 생성일입니다.")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdDate;
 
     @Schema(example = "2023-04-22T00:00:00", description = "계정의 수정일입니다.")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime modifiedDate;
 
 }

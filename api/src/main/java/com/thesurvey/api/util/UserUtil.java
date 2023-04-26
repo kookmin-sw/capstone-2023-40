@@ -5,6 +5,7 @@ import com.thesurvey.api.exception.ErrorMessage;
 import com.thesurvey.api.exception.NotFoundExceptionMapper;
 import com.thesurvey.api.exception.UnauthorizedRequestExceptionMapper;
 import com.thesurvey.api.repository.UserRepository;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 

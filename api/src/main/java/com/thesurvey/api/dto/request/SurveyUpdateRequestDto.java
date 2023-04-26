@@ -1,14 +1,17 @@
 package com.thesurvey.api.dto.request;
 
-import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
-import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+
 import javax.validation.Valid;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -29,10 +32,12 @@ public class SurveyUpdateRequestDto {
     private String description;
 
     @Schema(example = "2030-12-01T00:00:00", description = "설문조사 시작일은 요청시각 기준 5초 이전은 불가능합니다.")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime startedDate;
 
     @Future
     @Schema(example = "2030-12-12T00:00:00", description = "설문조사 종료일은 설문조사 시작일보다 빠를 수 없습니다.")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime endedDate;
 
     @Valid
