@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 
 import { Icons } from '../../assets/svg/index';
@@ -9,7 +10,14 @@ import { KAKAO_AUTH_URL } from '../../components/authlist/kakaoAuth';
 import Header from '../../components/Header';
 import { useTheme } from '../../hooks/useTheme';
 import { RootState } from '../../reducers';
-import { authKakao, authDriver, authGoogle, authIdentity, authNaver, authWebMail } from '../../types/auth';
+import {
+  setAuthKakao,
+  setAuthGoogle,
+  setAuthNaver,
+  setAuthDriver,
+  setAuthIdentity,
+  setAuthWebMail,
+} from '../../types/auth';
 
 const rotate = keyframes`
   0% {
@@ -90,24 +98,46 @@ const Button = styled.button`
 export default function AuthenticationPage() {
   const [theme, toggleTheme] = useTheme();
   const navigate = useNavigate();
-  const [completeAuth, setCompleteAuth] = useState<boolean>(true);
-  const authState = useSelector((state: RootState) => state.header);
-  const dispatch = useDispatch;
-  const texta = '인증사이트';
+  const [completeAuth, setCompleteAuth] = useState<boolean>(false);
+  const authState = useSelector((state: RootState) => state.auth);
+  const location = useLocation();
+  const dispatch = useDispatch();
+  const state = { ...location.state };
 
-  const handleClick = () => {
-    dispatch();
+  const handleClick = (title: string) => {
+    switch (title) {
+      case '카카오':
+        dispatch(setAuthKakao(authState.kakao));
+        break;
+      case '네이버':
+        dispatch(setAuthNaver(authState.naver));
+        break;
+      case '구글':
+        dispatch(setAuthGoogle(authState.google));
+        break;
+      case '신분증':
+        dispatch(setAuthIdentity(authState.identityCard));
+        break;
+      case '운전면허':
+        dispatch(setAuthDriver(authState.driverLicense));
+        break;
+      case '웹메일':
+        dispatch(setAuthWebMail(authState.webmail));
+        break;
+      default:
+        break;
+    }
     navigate('../mypage/auth-list');
   };
 
-  if (completeAuth) {
+  if (!completeAuth) {
     return (
       <Container theme={theme}>
         <Header theme={theme} toggleTheme={toggleTheme} />
         <AuthenticationContainer theme={theme}>
           <Form>
-            <TextType theme={theme}>인증이 완료되었습니다!</TextType>
-            <Button theme={theme} onClick={handleClick}>
+            <TextType theme={theme}>{state.title} 인증이 완료되었습니다!</TextType>
+            <Button theme={theme} onClick={() => handleClick(state.title)}>
               돌아가기
             </Button>
           </Form>
@@ -124,7 +154,7 @@ export default function AuthenticationPage() {
           <WaitingImage>
             <circle cx="50" cy="50" r="50" />
           </WaitingImage>
-          <TextType theme={theme}>{texta}에서 인증을 완료해주세요.</TextType>
+          <TextType theme={theme}>{state.title}에서 인증을 완료해주세요.</TextType>
         </Form>
       </AuthenticationContainer>
     </Container>
