@@ -4,6 +4,8 @@ import { Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 
 import GlobalStyle from './components/GlobalStyle';
+import ProtectedRoute from './contexts/ProtectedRoute';
+import { AuthProvider } from './hooks/useAuth';
 import { useTheme } from './hooks/useTheme';
 import LoginPage from './routes/LoginPage';
 import MainPage from './routes/MainPage';
@@ -21,22 +23,73 @@ function App() {
   const [theme] = useTheme();
 
   return (
-    <ThemeProvider theme={theme}>
-      <GlobalStyle />
-      <Routes>
-        <Route path="/" element={<MainPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/survey" element={<SurveyListPage />} />
-        <Route path="/survey/:id" element={<SurveyPage />} />
-        <Route path="/survey/form" element={<SurveyFormPage />} />
-        <Route path="/survey/login-required" element={<SurveyLoginRequiredPage />} />
-        <Route path="/mypage" element={<ProfilePage />} />
-        <Route path="/mypage/auth-list" element={<AuthListPage />} />
-        <Route path="/mypage/survey-result/:id" element={<SurveyResultPage />} />
-        <Route path="/*" element={<NotFound />} />
-      </Routes>
-    </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <Routes>
+          <Route path="/" element={<MainPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route
+            path="/survey"
+            element={
+              <ProtectedRoute>
+                <SurveyListPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/survey/:id"
+            element={
+              <ProtectedRoute>
+                <SurveyPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/survey/form"
+            element={
+              <ProtectedRoute>
+                <SurveyFormPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/survey/login-required"
+            element={
+              <ProtectedRoute>
+                <SurveyLoginRequiredPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/mypage"
+            element={
+              <ProtectedRoute>
+                <ProfilePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/mypage/auth-list"
+            element={
+              <ProtectedRoute>
+                <AuthListPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/mypage/survey-result/:id"
+            element={
+              <ProtectedRoute>
+                <SurveyResultPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/*" element={<NotFound />} />
+        </Routes>
+      </ThemeProvider>
+    </AuthProvider>
   );
 }
 
