@@ -1,5 +1,12 @@
 import { AuthAction, AuthState } from '../types/auth';
 
+/**
+ * A reducer that manages state of authentication provider according to action type.
+ *
+ * @param {AuthState} state - Current state of auth provider if authenticated.
+ * @param {AuthAction} action - The type of auth provider to check
+ * @returns {AuthState} Updated state
+ */
 export const authReducer = (state: AuthState, action: AuthAction): AuthState => {
   switch (action.type) {
     case 'AUTH_KAKAO':

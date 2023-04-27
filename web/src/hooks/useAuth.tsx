@@ -10,6 +10,12 @@ import { UserLoginRequest, UserRegisterRequest } from '../types/request/Authenti
 import { UserResponse } from '../types/response/User';
 import { isEmptyString } from '../utils/validate';
 
+/**
+ * Topmost provider that provides auth context.
+ *
+ * @param {ReactNode} children - Children components to be managed by this provider.
+ * @returns Auth context provider
+ */
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AxiosResponse<UserResponse>>();
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
