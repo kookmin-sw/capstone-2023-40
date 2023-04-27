@@ -2,7 +2,6 @@ export interface UserRegisterRequest {
   name: string;
   email: string;
   password: string;
-  role: string;
   phoneNumber: string;
   address?: string;
   profileImage?: string;
