@@ -1,7 +1,8 @@
 import * as types from '../types/request';
 
 /**
- * Declare API request snippets.
+ * Declare API request snippets. This should follow
+ * {@link https://api.thesurvey.kr/v1/swagger-ui/index.html}
  */
 export const requests = {
   /**
