@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
 
 import axios from '../api/axios';
-import requests from '../api/request';
+import { requests } from '../api/request';
 import { formReducer } from '../reducers/form';
 import { FormState } from '../types/form';
 import { UserRegisterRequest } from '../types/request/Authentication';

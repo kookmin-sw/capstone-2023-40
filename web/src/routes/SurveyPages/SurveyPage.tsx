@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import axios from '../../api/axios';
-import requests from '../../api/request';
+import { requests } from '../../api/request';
 import Header from '../../components/Header';
 import SurveyPageResultModal from '../../components/Modal/SurveyPageResultModal';
 import SurveyPageSkeleton from '../../components/Skeleton/SurveyPageSkeleton';
