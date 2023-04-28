@@ -5,8 +5,8 @@ export interface SurveyResponse extends BaseTime {
   surveyId: string;
   title: string;
   description: string;
-  startedDate: Date;
-  endedDate: Date;
+  startedDate: Date | string;
+  endedDate: Date | string;
   questions: Array<QuestionBankResponse>;
   certificationTypes: Array<CertificationType>;
 }
