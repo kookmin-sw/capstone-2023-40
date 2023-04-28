@@ -3,6 +3,7 @@ import React from 'react';
 import styled, { DefaultTheme } from 'styled-components';
 
 import { NumberUtils } from '../../utils/NumberUtils';
+import { skeletonItem } from '../Styled/Animation';
 
 const Container = styled.div`
   width: 100vw;
@@ -22,7 +23,7 @@ const BodyContainer = styled.div`
   background-color: ${(props) => props.theme.colors.container};
 `;
 
-const QuestionContainer = styled.div`
+const QuestionContainer = styled(skeletonItem)`
   height: 150px;
   margin-top: 23px;
   border-radius: ${(props) => props.theme.borderRadius};
