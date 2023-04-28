@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 
 import styled from 'styled-components';
 
+import axios from '../../api/axios';
+import requests from '../../api/request';
 import { RectanglePrimaryButton } from '../../components/Button/Buttons';
 import Header from '../../components/Header';
 import { SurveyPageResultModal, AlertModal, ConfirmModal } from '../../components/Modal';
@@ -110,6 +112,14 @@ export default function SurveyFormPage() {
   const handleSubmit = () => {
     // TODO: submit surveyData to server
     console.log(surveyData);
+    axios
+      .post(requests.createSurvey, surveyData)
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     setConfirmModalOpen(false);
     setResultModalOpen(true);
   };
