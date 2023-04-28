@@ -1,6 +1,6 @@
 import React from 'react';
 
-import styled, { DefaultTheme } from 'styled-components';
+import styled, { DefaultTheme, keyframes } from 'styled-components';
 
 import { NumberUtils } from '../../utils/NumberUtils';
 
@@ -21,7 +21,17 @@ const ListRow = styled.tr`
   justify-content: center;
 `;
 
+const skeletonKeyframes = keyframes`
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: calc(1000px + 100%) 0;
+  }
+`;
+
 const Item = styled.td`
+  display: inline-block;
   height: 22px;
   margin: 2px;
   padding: 18px;
@@ -30,6 +40,15 @@ const Item = styled.td`
   font-weight: bold;
   border-radius: 5px;
   background-color: ${(props) => props.theme.colors.background};
+  background-image: linear-gradient(
+    90deg,
+    ${(props) => props.theme.colors.background},
+    #a0a0a0,
+    ${(props) => props.theme.colors.background}
+  );
+  background-repeat: no-repeat;
+  background-size: 1000px 100%;
+  animation: ${skeletonKeyframes} 1300ms ease-in-out infinite;
 `;
 
 const HeadItem = styled.th`
@@ -46,7 +65,7 @@ const Title = styled(Item)`
   flex: 1;
 `;
 
-const Authlist = styled(Item)`
+const AuthList = styled(Item)`
   min-width: 100px;
   width: 20vw;
 `;
@@ -99,7 +118,7 @@ export default function SurveyListSkeleton({ numOfSurveyRow, theme }: SkeletonPr
         {NumberUtils.range(numOfSurveyRow).map((index: number) => (
           <ListRow key={index} theme={theme}>
             <Title theme={theme} />
-            <Authlist theme={theme} />
+            <AuthList theme={theme} />
             <EndDate theme={theme} />
           </ListRow>
         ))}
