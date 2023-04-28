@@ -11,7 +11,10 @@ import Header from '../../components/Header';
 import { SurveyPreviewModal } from '../../components/Modal';
 import Pagination from '../../components/Pagination';
 import SurveyListSkeleton from '../../components/Skeleton/SurveyListSkeleton';
+import { RectangleButton } from '../../components/Styled/Buttons';
 import { useTheme } from '../../hooks/useTheme';
+import { CertificationType } from '../../types/request/Survey';
+import { SurveyResponse } from '../../types/response/Survey';
 
 const Container = styled.div`
   width: 100vw;
@@ -120,44 +123,20 @@ const Label = styled.label`
   }
 `;
 
-const Button = styled.button`
-  display: inline-flex;
-  font-size: 20px;
-  font-weight: 700;
-  align-items: center;
-  border-radius: 10px;
-  border-style: none;
-  height: 50px;
-  padding: 20px;
-  margin: 10px;
-  transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1), opacity 15ms linear 30ms,
-    transform 270ms cubic-bezier(0, 0, 0.2, 1) 0ms;
-  cursor: pointer;
-  color: ${(props) => props.theme.colors.default};
-  background-color: ${(props) => props.theme.colors.primary};
+const Button = styled(RectangleButton)``;
 
-  &:hover {
-    background-color: ${(props) => props.theme.colors.prhover};
-  }
-  @media screen and (max-width: 700px) {
-    font-size: 18px;
-  }
-`;
-
-interface SurveyItem {
-  survey_id: string;
-  author: number;
-  title: string;
-  description: string;
-  created_date: string;
-  ended_date: string;
-  required_authentications: Array<string>;
+interface SurveyList {
+  surveys: SurveyResponse[];
+  page: number;
+  totalSurveys: number;
+  totalPages: number;
 }
 
 export default function SurveyListPage() {
   const [theme, toggleTheme] = useTheme();
-  const [surveys, setSurveys] = useState<SurveyItem[]>([]);
+  const [surveys, setSurveys] = useState<SurveyResponse[]>([]);
   const [page, setPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [enterModalOpen, setEnterModalOpen] = useState<boolean>(false);
   const [selectedSurveyIndex, setSelectedSurveyIndex] = useState<number>(0);
@@ -167,17 +146,11 @@ export default function SurveyListPage() {
   const fetchSurveyList = async (abortSignal: AbortSignal): Promise<void> => {
     setIsLoading(true);
     try {
-      // const request: AxiosResponse<SurveyItem[]> = await axios.get<SurveyItem[]>(requests.getSurvey + page, {
-      //   signal: abortSignal,
-      // });
-      // for test
-      const request: AxiosResponse<SurveyItem[]> = await axios.get<SurveyItem[]>(
-        `https://capstone-mock-api.fly.dev/api/survey?page=${page}`,
-        {
-          signal: abortSignal,
-        }
-      );
-      setSurveys(request.data);
+      const request: AxiosResponse<SurveyList> = await axios.get<SurveyList>(requests.getSurvey + page, {
+        signal: abortSignal,
+      });
+      setSurveys(request.data.surveys);
+      setTotalPages(request.data.totalPages);
       setIsLoading(false);
     } catch (error) {
       const { name } = error as unknown as AxiosError;
@@ -232,19 +205,19 @@ export default function SurveyListPage() {
           </ListHead>
 
           <ListBody>
-            {surveys.map((survey: SurveyItem, index: number) => (
-              <ListRow key={survey.survey_id} theme={theme}>
-                <Title onClick={() => handleButtonClick(index)} theme={theme}>
+            {surveys.map((survey: SurveyResponse, index: number) => (
+              <ListRow key={survey.surveyId} theme={theme}>
+                <Title role="button" onClick={() => handleButtonClick(index)} theme={theme}>
                   {survey.title}
                 </Title>
                 <AuthList theme={theme}>
-                  {survey.required_authentications.length === 0
+                  {survey.certificationTypes.length === 0
                     ? CertificationList({ label: '', iconOption: true })
-                    : survey.required_authentications.map((label) =>
-                        CertificationList({ label: label, iconOption: true })
+                    : survey.certificationTypes.map((label) =>
+                        CertificationList({ label: CertificationType[label], iconOption: true })
                       )}
                 </AuthList>
-                <EndDate theme={theme}>{survey.ended_date.substring(0, 10)}</EndDate>
+                <EndDate theme={theme}>{`${survey.endedDate}`}</EndDate>
               </ListRow>
             ))}
           </ListBody>

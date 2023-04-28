@@ -11,6 +11,10 @@ import Header from '../../components/Header';
 import SurveyPageResultModal from '../../components/Modal/SurveyPageResultModal';
 import SurveyPageSkeleton from '../../components/Skeleton/SurveyPageSkeleton';
 import { useTheme } from '../../hooks/useTheme';
+import { QuestionType } from '../../types/request/Question';
+import { QuestionBankResponse } from '../../types/response/QuestionBank';
+import { QuestionOptionResponse } from '../../types/response/QuestionOption';
+import { SurveyResponse } from '../../types/response/Survey';
 import { scrollToRef } from '../../utils/scroll';
 
 const Container = styled.div`
@@ -156,37 +160,13 @@ const SubmitButton = styled(RectanglePrimaryButton)`
   width: 20vw;
 `;
 
-interface QuestionOption {
-  option_number: number;
-  text: string;
-}
-
-interface SurveyQuestion {
-  question_id: number;
-  type: string;
-  title: string;
-  description: string;
-  options: Array<QuestionOption>;
-}
-
-interface SurveyData {
-  survey_id: string;
-  author: number;
-  title: string;
-  description: string;
-  created_date: string;
-  ended_date: string;
-  required_authentications: Array<string>;
-  questions: Array<SurveyQuestion>;
-}
-
 export default function SurveyPage() {
   const nowDate = new Date();
   const { id } = useParams();
   const [theme, toggleTheme] = useTheme();
   const questionRefs = useRef<HTMLDivElement[]>([]);
 
-  const [surveyData, setSurveyData] = useState<SurveyData>();
+  const [surveyData, setSurveyData] = useState<SurveyResponse>();
   const [endedDate, setEndedDate] = useState<string>('');
   const [userAnswers, setUserAnswers] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -205,7 +185,7 @@ export default function SurveyPage() {
   const fetchSurveyData = async () => {
     setIsLoading(true);
     try {
-      const request: AxiosResponse<SurveyData> = await axios.get<SurveyData>(requests.getSurvey + id);
+      const request: AxiosResponse<SurveyResponse> = await axios.get<SurveyResponse>(requests.getSurvey + id);
       setSurveyData(request.data);
       setIsLoading(false);
     } catch (error) {
@@ -270,8 +250,8 @@ export default function SurveyPage() {
   };
 
   // TODO: show current and max text count
-  const makeTextArea = (question: SurveyQuestion, index: number) => {
-    if (question.type === 'LONG_ANSWER') {
+  const makeTextArea = (question: QuestionBankResponse, index: number) => {
+    if (question.questionType === QuestionType.LONG_ANSWER) {
       return (
         <LongAnswer
           onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -301,7 +281,7 @@ export default function SurveyPage() {
 
   useEffect(() => {
     if (typeof surveyData !== 'undefined') {
-      setEndedDate(surveyData.ended_date.substring(0, 10));
+      setEndedDate(`${surveyData.endedDate}`);
     }
   }, [surveyData]);
 
@@ -324,10 +304,10 @@ export default function SurveyPage() {
       </HeadContainer>
 
       <BodyContainer theme={theme}>
-        {surveyData?.questions?.map((question: SurveyQuestion, index) => (
+        {surveyData?.questions?.map((question: QuestionBankResponse, index) => (
           <QuestionContainer
             theme={theme}
-            key={question.question_id}
+            key={question.questionBankId}
             ref={(element) => {
               questionRefs.current[index] = element as HTMLDivElement;
             }}
@@ -335,20 +315,21 @@ export default function SurveyPage() {
             <QuestionTitle theme={theme}>
               {index + 1}.&nbsp;&nbsp;{question.title}
             </QuestionTitle>
-            {question.type === 'MULTIPLE_CHOICE' ? (
+            {question.questionType === QuestionType.MULTIPLE_CHOICE ||
+            question.questionType === QuestionType.SINGLE_CHOICE ? (
               <MultipleChoiceContainer theme={theme}>
-                {question.options.map((option: QuestionOption) => (
-                  <RadioContainer theme={theme} key={option.option_number}>
+                {question.questionOptions.map((option: QuestionOptionResponse) => (
+                  <RadioContainer theme={theme} key={option.questionOptionId}>
                     <RadioInput
                       theme={theme}
                       name={question.title}
                       onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                         handleAnswerChange(index, event);
                       }}
-                      value={`${option.option_number}`}
+                      value={`${option.questionOptionId}`}
                     />
                     <RadioCheckmark theme={theme} />
-                    {option.text}
+                    {option.option}
                   </RadioContainer>
                 ))}
               </MultipleChoiceContainer>

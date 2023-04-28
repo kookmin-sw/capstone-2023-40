@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
 
 import { useOnClickOutside } from '../../hooks/useOnClickOutside';
+import { CertificationType } from '../../types/request/Survey';
+import { SurveyResponse } from '../../types/response/Survey';
 import { RectanglePrimaryButton } from '../Button/Buttons';
 import { DeleteImage } from '../Button/ImageButtons';
 import CertificationList from '../CertificationList';
@@ -122,18 +124,8 @@ const SubmitButton = styled(RectanglePrimaryButton)`
   margin-top: 10px;
 `;
 
-interface SurveyItem {
-  survey_id: string;
-  author: number;
-  title: string;
-  description: string;
-  created_date: string;
-  ended_date: string;
-  required_authentications: Array<string>;
-}
-
 interface ModalProps {
-  surveyItem: SurveyItem;
+  surveyItem: SurveyResponse;
   setEnterModalOpen: (arg: boolean) => void;
   theme: DefaultTheme;
 }
@@ -161,22 +153,22 @@ export default function SurveyPreviewModal({ surveyItem, setEnterModalOpen, them
         </EndButtonContainer>
         <TitleContainer theme={theme}>
           <Title theme={theme}>{surveyItem.title}</Title>
-          <EndDate theme={theme}>~ {surveyItem.ended_date.substring(0, 10)}</EndDate>
+          <EndDate theme={theme}>~ {`${surveyItem.endedDate}`}</EndDate>
         </TitleContainer>
         <BodyContainer theme={theme}>
           <Subtitle theme={theme}>설문조사 상세내용</Subtitle>
           <Description theme={theme}>{surveyItem.description}</Description>
           <Subtitle theme={theme}>필수인증 목록</Subtitle>
           <CertificationContainer>
-            {surveyItem.required_authentications.length === 0
+            {surveyItem.certificationTypes.length === 0
               ? CertificationList({ label: '', iconOption: true })
-              : surveyItem.required_authentications.map((label) =>
-                  CertificationList({ label: label, iconOption: true })
+              : surveyItem.certificationTypes.map((index) =>
+                  CertificationList({ label: CertificationType[index], iconOption: true })
                 )}
           </CertificationContainer>
         </BodyContainer>
         <ButtonContainer>
-          <SubmitButton type="submit" onClick={() => navigate(`/survey/${surveyItem.survey_id}`)} theme={theme}>
+          <SubmitButton type="submit" onClick={() => navigate(`/survey/${surveyItem.surveyId}`)} theme={theme}>
             설문 조사 시작하기
           </SubmitButton>
         </ButtonContainer>
