@@ -1,8 +1,9 @@
 import React from 'react';
 
-import styled, { DefaultTheme, keyframes } from 'styled-components';
+import styled, { DefaultTheme } from 'styled-components';
 
 import { NumberUtils } from '../../utils/NumberUtils';
+import { skeletonItem } from '../Styled/Animation';
 
 const ListTable = styled.table`
   display: flex;
@@ -21,16 +22,7 @@ const ListRow = styled.tr`
   justify-content: center;
 `;
 
-const skeletonKeyframes = keyframes`
-  0% {
-    background-position: -1000px 0;
-  }
-  100% {
-    background-position: calc(1000px + 100%) 0;
-  }
-`;
-
-const Item = styled.td`
+const Item = styled(skeletonItem)`
   display: inline-block;
   height: 22px;
   margin: 2px;
@@ -40,15 +32,6 @@ const Item = styled.td`
   font-weight: bold;
   border-radius: 5px;
   background-color: ${(props) => props.theme.colors.background};
-  background-image: linear-gradient(
-    90deg,
-    ${(props) => props.theme.colors.background},
-    #a0a0a0,
-    ${(props) => props.theme.colors.background}
-  );
-  background-repeat: no-repeat;
-  background-size: 1000px 100%;
-  animation: ${skeletonKeyframes} 1300ms ease-in-out infinite;
 `;
 
 const HeadItem = styled.th`

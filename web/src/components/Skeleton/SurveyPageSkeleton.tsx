@@ -1,17 +1,9 @@
 import React from 'react';
 
-import styled, { DefaultTheme, keyframes } from 'styled-components';
+import styled, { DefaultTheme } from 'styled-components';
 
 import { NumberUtils } from '../../utils/NumberUtils';
-
-const skeletonKeyframes = keyframes`
-  0% {
-    background-position: -1000px 0;
-  }
-  100% {
-    background-position: calc(1000px + 100%) 0;
-  }
-`;
+import { skeletonItem } from '../Styled/Animation';
 
 const Container = styled.div`
   width: 100vw;
@@ -31,7 +23,7 @@ const BodyContainer = styled.div`
   background-color: ${(props) => props.theme.colors.container};
 `;
 
-const QuestionContainer = styled.div`
+const QuestionContainer = styled(skeletonItem)`
   height: 150px;
   margin-top: 23px;
   border-radius: ${(props) => props.theme.borderRadius};
@@ -39,15 +31,6 @@ const QuestionContainer = styled.div`
   padding: 1.2vh 2vw 1.2vh 2vw;
   color: ${(props) => props.theme.colors.default};
   background-color: ${(props) => props.theme.colors.background};
-  background-image: linear-gradient(
-    90deg,
-    ${(props) => props.theme.colors.background},
-    #a0a0a0,
-    ${(props) => props.theme.colors.background}
-  );
-  background-repeat: no-repeat;
-  background-size: 1000px 100%;
-  animation: ${skeletonKeyframes} 1300ms ease-in-out infinite;
 `;
 
 const QuestionTitle = styled.div`
