@@ -146,9 +146,12 @@ export default function SurveyListPage() {
   const fetchSurveyList = async (abortSignal: AbortSignal): Promise<void> => {
     setIsLoading(true);
     try {
-      const request: AxiosResponse<SurveyList> = await axios.get<SurveyList>(requests.getSurvey + page, {
-        signal: abortSignal,
-      });
+      const request: AxiosResponse<SurveyList> = await axios.get<SurveyList>(
+        `${requests.getSurvey}?페이지%20번호=${page}`,
+        {
+          signal: abortSignal,
+        }
+      );
       setSurveys(request.data.surveys);
       setTotalPages(request.data.totalPages);
       setIsLoading(false);
