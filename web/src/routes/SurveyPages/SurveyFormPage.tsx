@@ -95,10 +95,10 @@ export default function SurveyFormPage() {
 
   const setAlertNotification = (errorIndex: number) => {
     surveyData.questions.forEach((question: QuestionCreateRequest) => {
-      if (question.questionNo === errorIndex) {
-        turnOnAlertNotification(question.questionNo);
+      if (question.questionNo - 1 === errorIndex) {
+        turnOnAlertNotification(question.questionNo - 1);
       } else {
-        turnOffAlertNotification(question.questionNo);
+        turnOffAlertNotification(question.questionNo - 1);
       }
     });
   };
@@ -164,14 +164,14 @@ export default function SurveyFormPage() {
 
   const addQuestionUnderId = (questionId: number) => {
     for (let i = questionId + 1; i < surveyData.questions.length; i += 1) {
-      surveyData.questions[i] = { ...surveyData.questions[i], questionNo: i + 1 };
+      surveyData.questions[i] = { ...surveyData.questions[i], questionNo: surveyData.questions[i].questionNo + 1 };
     }
     const newQuestions = [...surveyData.questions];
     const newQuestion: QuestionCreateRequest = {
       title: '설문 제목',
       description: '설문 설명',
       questionType: QuestionType.LONG_ANSWER,
-      questionNo: questionId + 1,
+      questionNo: questionId + 2,
       isRequired: true,
     };
 
@@ -182,7 +182,7 @@ export default function SurveyFormPage() {
 
   const deleteQuestionAtId = (questionId: number) => {
     for (let i = questionId + 1; i < surveyData.questions.length; i += 1) {
-      surveyData.questions[i] = { ...surveyData.questions[i], questionNo: i - 1 };
+      surveyData.questions[i] = { ...surveyData.questions[i], questionNo: surveyData.questions[i].questionNo - 1 };
     }
     const newQuestions = [...surveyData.questions];
     newQuestions.splice(questionId, 1);
@@ -309,15 +309,15 @@ export default function SurveyFormPage() {
         {surveyData.questions.map((question: QuestionCreateRequest) => (
           <QuestionContainer
             ref={(element) => {
-              questionRefs.current[question.questionNo] = element as HTMLDivElement;
+              questionRefs.current[question.questionNo - 1] = element as HTMLDivElement;
             }}
             theme={theme}
-            key={question.questionNo}
+            key={question.questionNo - 1}
           >
             <QuestionForm
               surveyData={surveyData}
               selected={question.questionType}
-              questionId={question.questionNo}
+              questionId={question.questionNo - 1}
               handleChangeQuestion={handleChangeQuestion}
               handleChangeQuestionType={handleChangeQuestionType}
               handleClickButton={handleClickButton}
