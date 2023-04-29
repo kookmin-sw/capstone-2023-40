@@ -3,10 +3,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
 import axios from '../../api/axios';
-import requests from '../../api/request';
+import { requests } from '../../api/request';
+import RectangleButton from '../../components/Button/RectangleButton';
 import Header from '../../components/Header';
 import { SurveyPageResultModal, AlertModal, ConfirmModal } from '../../components/Modal';
-import RectangleButton from '../../components/Styled/RectangleButton';
 import QuestionForm from '../../components/SurveyForm/QuestionForm';
 import SurveyDataForm from '../../components/SurveyForm/SurveyDataForm';
 import { useTheme } from '../../hooks/useTheme';

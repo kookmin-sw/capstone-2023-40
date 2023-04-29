@@ -7,8 +7,8 @@ import { useOnClickOutside } from '../../hooks/useOnClickOutside';
 import { CertificationType } from '../../types/request/Survey';
 import { SurveyResponse } from '../../types/response/Survey';
 import { DeleteImage } from '../Button/ImageButtons';
+import RectangleButton from '../Button/RectangleButton';
 import CertificationList from '../CertificationList';
-import RectangleButton from '../Styled/RectangleButton';
 
 const Container = styled.div`
   width: 100vw;
