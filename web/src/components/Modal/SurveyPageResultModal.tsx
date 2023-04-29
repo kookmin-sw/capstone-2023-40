@@ -62,11 +62,12 @@ export default function SurveyPageResultModal({ theme }: ModalProps) {
       <ModalContainer theme={theme}>
         <Label theme={theme}>🥳</Label>
         <RectangleButton
-          buttonBgColor={theme.colors.primary}
-          buttonText="완료하기"
+          backgroundColor={theme.colors.primary}
+          hoverColor={theme.colors.prhover}
+          text="완료하기"
           theme={theme}
           handleClick={() => navigate('/survey')}
-          buttonWidth="15vw"
+          width="15vw"
         />
       </ModalContainer>
     </Container>

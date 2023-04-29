@@ -184,9 +184,10 @@ export default function SurveyListPage() {
             <Label theme={theme}>😥 참여가능한 설문이 없습니다...</Label>
             <br />
             <RectangleButton
-              buttonText="설문 만들러 가기"
-              buttonWidth="250px"
-              buttonBgColor={theme.colors.primary}
+              text="설문 만들러 가기"
+              width="250px"
+              backgroundColor={theme.colors.primary}
+              hoverColor={theme.colors.prhover}
               handleClick={() => navigate('/survey/form')}
               theme={theme}
             />
@@ -227,9 +228,10 @@ export default function SurveyListPage() {
 
         <Pagination currentPage={page} numOfTotalPage={13} numOfPageToShow={5} setPage={setPage} theme={theme} />
         <RectangleButton
-          buttonText="설문 만들기"
-          buttonWidth="150px"
-          buttonBgColor={theme.colors.button}
+          text="설문 만들기"
+          width="150px"
+          backgroundColor={theme.colors.button}
+          hoverColor={theme.colors.prhover}
           handleClick={() => navigate('/survey/form')}
           theme={theme}
         />
