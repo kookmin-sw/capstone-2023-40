@@ -108,9 +108,9 @@ public class SurveyService {
                 questionBank.getQuestionBankId());
 
             if (questionBank.getQuestionType() == QuestionType.SINGLE_CHOICE) {
-                List<Long[]> answeredChoicesList = answeredQuestionService.getSingleChoiceResult(
+                List<Long[]> answeredChoiceList = answeredQuestionService.getSingleChoiceResult(
                     questionBank.getQuestionBankId());
-                for (Long[] answeredChoiceResult : answeredChoicesList) {
+                for (Long[] answeredChoiceResult : answeredChoiceList) {
                     Long questionOptionId = answeredChoiceResult[0];
                     Long responseNumber = answeredChoiceResult[1];
                     questionOptionAnswerDtoList.add(
@@ -123,9 +123,9 @@ public class SurveyService {
                     );
                 }
             } else if (questionBank.getQuestionType() == QuestionType.MULTIPLE_CHOICE) {
-                List<Long[]> answeredChoicesList = answeredQuestionService.getMultipleChoiceResult(
+                List<Long[]> answeredChoiceList = answeredQuestionService.getMultipleChoiceResult(
                     questionBank.getQuestionBankId());
-                for (Long[] answeredChoiceResult : answeredChoicesList) {
+                for (Long[] answeredChoiceResult : answeredChoiceList) {
                     Long questionOptionId = answeredChoiceResult[0];
                     Long responseNumber = answeredChoiceResult[1];
                     questionOptionAnswerDtoList.add(
