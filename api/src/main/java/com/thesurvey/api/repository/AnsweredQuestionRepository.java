@@ -1,6 +1,7 @@
 package com.thesurvey.api.repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import com.thesurvey.api.domain.AnsweredQuestion;
@@ -16,6 +17,16 @@ public interface AnsweredQuestionRepository extends
     @Query("SELECT aq FROM AnsweredQuestion aq WHERE aq.answeredQuestionId.surveyId = :surveyId")
     List<AnsweredQuestion> findAllBySurveyId(UUID surveyId);
 
+    @Query("SELECT aq FROM AnsweredQuestion aq WHERE aq.answeredQuestionId.questionBankId = :questionBankId")
+    List<AnsweredQuestion> findAllByQuestionBankId(Long questionBankId);
+
     @Query("SELECT CASE WHEN COUNT(aq) > 0 THEN true ELSE false END FROM AnsweredQuestion aq WHERE aq.answeredQuestionId.userId = :userId AND aq.answeredQuestionId.surveyId = :surveyId")
     boolean existsByUserIdAndSurveyId(Long userId, UUID surveyId);
+
+    @Query("SELECT aq.singleChoice, COUNT(aq) FROM AnsweredQuestion aq WHERE aq.questionBank.questionBankId = :questionBankId GROUP BY aq.singleChoice")
+    Optional<List<Long[]>> countSingleChoiceByQuestionBankId(Long questionBankId);
+
+    @Query("SELECT aq.multipleChoice, COUNT(aq) FROM AnsweredQuestion aq WHERE aq.questionBank.questionBankId = :questionBankId GROUP BY aq.multipleChoice")
+    Optional<List<Long[]>> countMultipleChoiceByQuestionBankId(Long questionBankId);
+
 }

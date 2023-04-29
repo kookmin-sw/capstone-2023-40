@@ -30,6 +30,12 @@ public class QuestionOptionService {
         this.questionOptionRepository = questionOptionRepository;
     }
 
+    @Transactional(readOnly = true)
+    public String getOptionByQuestionOptionId(Long questionOptionId) {
+        return questionOptionRepository.findOptionByQuestionOptionId(questionOptionId)
+            .orElseThrow(() -> new NotFoundExceptionMapper(ErrorMessage.QUESTION_OPTION_NOT_FOUND));
+    }
+
     @Transactional
     public void createQuestionOption(QuestionRequestDto questionRequestDto,
         QuestionBank questionBank) {

@@ -1,5 +1,6 @@
 package com.thesurvey.api.service;
 
+import com.thesurvey.api.exception.NotFoundExceptionMapper;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -47,11 +48,23 @@ public class QuestionService {
     }
 
     @Transactional(readOnly = true)
+    public List<QuestionBank> getAllQuestionBankBySurveyId(UUID surveyId) {
+        return questionBankRepository.findAllBySurveyId(surveyId);
+    }
+
+    @Transactional(readOnly = true)
     public List<QuestionBankResponseDto> getQuestionBankInfoDtoListBySurveyId(UUID surveyId) {
         return questionBankRepository.findAllBySurveyId(surveyId)
             .stream()
             .map(questionBankMapper::toQuestionBankResponseDto)
             .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public Integer getQuestionNoByQuestionBankId(Long questionBankId) {
+        return questionRepository.findQuestionNoByQuestionBankId(questionBankId).orElseThrow(
+            () -> new NotFoundExceptionMapper(ErrorMessage.QUESTION_NOT_FOUND)
+        );
     }
 
     @Transactional
