@@ -3,6 +3,7 @@ import React from 'react';
 import styled, { DefaultTheme } from 'styled-components';
 
 import { NumberUtils } from '../../utils/NumberUtils';
+import { skeletonItem } from '../Styled/Animation';
 
 const ListTable = styled.table`
   display: flex;
@@ -21,7 +22,8 @@ const ListRow = styled.tr`
   justify-content: center;
 `;
 
-const Item = styled.td`
+const Item = styled(skeletonItem)`
+  display: inline-block;
   height: 22px;
   margin: 2px;
   padding: 18px;
@@ -46,7 +48,7 @@ const Title = styled(Item)`
   flex: 1;
 `;
 
-const Authlist = styled(Item)`
+const AuthList = styled(Item)`
   min-width: 100px;
   width: 20vw;
 `;
@@ -99,7 +101,7 @@ export default function SurveyListSkeleton({ numOfSurveyRow, theme }: SkeletonPr
         {NumberUtils.range(numOfSurveyRow).map((index: number) => (
           <ListRow key={index} theme={theme}>
             <Title theme={theme} />
-            <Authlist theme={theme} />
+            <AuthList theme={theme} />
             <EndDate theme={theme} />
           </ListRow>
         ))}
