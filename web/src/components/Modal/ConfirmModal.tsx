@@ -3,7 +3,7 @@ import React from 'react';
 import styled, { DefaultTheme } from 'styled-components';
 
 import { Icons } from '../../assets/svg';
-import { RectangleButton, RectanglePrimaryButton } from '../Button/Buttons';
+import RectangleButton from '../Styled/RectangleButton';
 
 const Container = styled.div`
   width: 100vw;
@@ -79,14 +79,6 @@ const WarnIcon = styled(Icons.WARN)`
   margin: 1em;
 `;
 
-const CancelButton = styled(RectangleButton)`
-  width: 15vw;
-`;
-
-const SubmitButton = styled(RectanglePrimaryButton)`
-  width: 15vw;
-`;
-
 export type LogLevel = 'ERROR' | 'WARN' | 'INFO';
 
 interface ConfirmModalProps {
@@ -130,12 +122,20 @@ export default function ConfirmModal({
           {/* FIXME: To verification shortcut list */}
           <TextContainer theme={theme}>{text}</TextContainer>
           <ButtonContainer>
-            <CancelButton type={undefined} onClick={handleCancelClick} theme={theme}>
-              취소
-            </CancelButton>
-            <SubmitButton type={undefined} onClick={handleConfirmClick} theme={theme}>
-              확인
-            </SubmitButton>
+            <RectangleButton
+              buttonBgColor={theme.colors.button}
+              buttonText="취소"
+              theme={theme}
+              handleClick={handleCancelClick}
+              buttonWidth="15vw"
+            />
+            <RectangleButton
+              buttonBgColor={theme.colors.primary}
+              buttonText="확인"
+              theme={theme}
+              handleClick={handleConfirmClick}
+              buttonWidth="15vw"
+            />
           </ButtonContainer>
         </BodyContainer>
       </Modal>
