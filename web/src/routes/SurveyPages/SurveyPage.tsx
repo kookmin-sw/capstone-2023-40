@@ -6,10 +6,10 @@ import styled from 'styled-components';
 
 import axios from '../../api/axios';
 import { requests } from '../../api/request';
+import RectangleButton from '../../components/Button/RectangleButton';
 import Header from '../../components/Header';
 import SurveyPageResultModal from '../../components/Modal/SurveyPageResultModal';
 import SurveyPageSkeleton from '../../components/Skeleton/SurveyPageSkeleton';
-import RectangleButton from '../../components/Styled/RectangleButton';
 import { useTheme } from '../../hooks/useTheme';
 import { QuestionType } from '../../types/request/Question';
 import { QuestionBankResponse } from '../../types/response/QuestionBank';

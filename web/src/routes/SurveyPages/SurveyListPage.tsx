@@ -6,12 +6,12 @@ import styled from 'styled-components';
 
 import axios from '../../api/axios';
 import { requests } from '../../api/request';
+import RectangleButton from '../../components/Button/RectangleButton';
 import CertificationList from '../../components/CertificationList';
 import Header from '../../components/Header';
 import { SurveyPreviewModal } from '../../components/Modal';
 import Pagination from '../../components/Pagination';
 import SurveyListSkeleton from '../../components/Skeleton/SurveyListSkeleton';
-import RectangleButton from '../../components/Styled/RectangleButton';
 import { useTheme } from '../../hooks/useTheme';
 import { CertificationType } from '../../types/request/Survey';
 import { SurveyResponse } from '../../types/response/Survey';
@@ -144,7 +144,7 @@ export default function SurveyListPage() {
   const fetchSurveyList = async (abortSignal: AbortSignal): Promise<void> => {
     setIsLoading(true);
     try {
-      const request: AxiosResponse<SurveyList> = await axios.get<SurveyList>(`${requests.getSurveyPage}?page=${page}`, {
+      const request: AxiosResponse<SurveyList> = await axios.get<SurveyList>(`${requests.getSurvey}?page=${page}`, {
         signal: abortSignal,
       });
       setSurveys(request.data.surveys);
