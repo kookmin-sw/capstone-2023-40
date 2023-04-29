@@ -1,26 +1,37 @@
 package com.thesurvey.api.service;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
+import com.thesurvey.api.domain.AnsweredQuestion;
+import com.thesurvey.api.domain.EnumTypeEntity.QuestionType;
+import com.thesurvey.api.domain.QuestionBank;
 import com.thesurvey.api.domain.Survey;
 import com.thesurvey.api.domain.User;
-import com.thesurvey.api.dto.request.SurveyRequestDto;
-import com.thesurvey.api.dto.request.SurveyUpdateRequestDto;
+import com.thesurvey.api.dto.response.QuestionBankAnswerDto;
+import com.thesurvey.api.dto.response.QuestionOptionAnswerDto;
 import com.thesurvey.api.dto.response.SurveyListPageDto;
 import com.thesurvey.api.dto.response.SurveyPageDto;
 import com.thesurvey.api.dto.response.SurveyResponseDto;
-import com.thesurvey.api.exception.BadRequestExceptionMapper;
+import com.thesurvey.api.dto.request.SurveyRequestDto;
+import com.thesurvey.api.dto.request.SurveyUpdateRequestDto;
+import com.thesurvey.api.dto.response.UserSurveyResultDto;
+import com.thesurvey.api.dto.response.UserSurveyTitleDto;
 import com.thesurvey.api.exception.ErrorMessage;
+import com.thesurvey.api.exception.BadRequestExceptionMapper;
 import com.thesurvey.api.exception.ForbiddenRequestExceptionMapper;
 import com.thesurvey.api.exception.NotFoundExceptionMapper;
+import com.thesurvey.api.repository.QuestionBankRepository;
+import com.thesurvey.api.repository.QuestionRepository;
 import com.thesurvey.api.repository.SurveyRepository;
 import com.thesurvey.api.service.mapper.SurveyMapper;
 import com.thesurvey.api.util.StringUtil;
 import com.thesurvey.api.util.UserUtil;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,22 +43,20 @@ import org.springframework.transaction.annotation.Transactional;
 public class SurveyService {
 
     private final SurveyRepository surveyRepository;
-
     private final SurveyMapper surveyMapper;
-
     private final QuestionService questionService;
-
+    private final QuestionOptionService questionOptionService;
     private final ParticipationService participationService;
-
     private final AnsweredQuestionService answeredQuestionService;
 
     public SurveyService(SurveyRepository surveyRepository, SurveyMapper surveyMapper,
         QuestionService questionService,
-        ParticipationService participationService,
+        QuestionOptionService questionOptionService, ParticipationService participationService,
         AnsweredQuestionService answeredQuestionService) {
         this.surveyRepository = surveyRepository;
         this.surveyMapper = surveyMapper;
         this.questionService = questionService;
+        this.questionOptionService = questionOptionService;
         this.participationService = participationService;
         this.answeredQuestionService = answeredQuestionService;
     }
@@ -72,6 +81,82 @@ public class SurveyService {
         Survey survey = surveyRepository.findBySurveyId(surveyId)
             .orElseThrow(() -> new NotFoundExceptionMapper(ErrorMessage.SURVEY_NOT_FOUND));
         return surveyMapper.toSurveyResponseDto(survey);
+    }
+
+    @Transactional(readOnly = true)
+    public List<UserSurveyTitleDto> getUserCreatedSurveys(Authentication authentication) {
+        return surveyRepository.findUserCreatedSurveysByAuthorID(
+            UserUtil.getUserIdFromAuthentication(authentication));
+    }
+
+    @Transactional(readOnly = true)
+    public UserSurveyResultDto getUserCreatedSurveyResult(Authentication authentication,
+        UUID surveyId) {
+        Survey survey = surveyRepository.findBySurveyId(surveyId)
+            .orElseThrow(() -> new NotFoundExceptionMapper(ErrorMessage.SURVEY_NOT_FOUND));
+        validateSurveyAuthor(UserUtil.getUserIdFromAuthentication(authentication),
+            survey.getAuthorId());
+
+        List<QuestionBank> questionBanks = questionService.getAllQuestionBankBySurveyId(surveyId);
+        List<QuestionBankAnswerDto> questionBankAnswerDtoList = new ArrayList<>();
+        for (QuestionBank questionBank : questionBanks) {
+            List<String> shortLongAnswerList = new ArrayList<>();
+            List<QuestionOptionAnswerDto> questionOptionAnswerDtoList = new ArrayList<>();
+            Integer questionNo = questionService.getQuestionNoByQuestionBankId(
+                questionBank.getQuestionBankId());
+            List<AnsweredQuestion> answeredQuestionList = answeredQuestionService.getAnswerQuestionByQuestionBankId(
+                questionBank.getQuestionBankId());
+
+            if (questionBank.getQuestionType() == QuestionType.SINGLE_CHOICE) {
+                List<Long[]> answeredChoicesList = answeredQuestionService.getSingleChoiceResult(
+                    questionBank.getQuestionBankId());
+                for (Long[] answeredChoiceResult : answeredChoicesList) {
+                    Long questionOptionId = answeredChoiceResult[0];
+                    Long responseNumber = answeredChoiceResult[1];
+                    questionOptionAnswerDtoList.add(
+                        QuestionOptionAnswerDto.builder()
+                            .questionOptionId(questionOptionId)
+                            .option(questionOptionService.getOptionByQuestionOptionId(
+                                questionOptionId))
+                            .responseNumber(responseNumber)
+                            .build()
+                    );
+                }
+            } else if (questionBank.getQuestionType() == QuestionType.MULTIPLE_CHOICE) {
+                List<Long[]> answeredChoicesList = answeredQuestionService.getMultipleChoiceResult(
+                    questionBank.getQuestionBankId());
+                for (Long[] answeredChoiceResult : answeredChoicesList) {
+                    Long questionOptionId = answeredChoiceResult[0];
+                    Long responseNumber = answeredChoiceResult[1];
+                    questionOptionAnswerDtoList.add(
+                        QuestionOptionAnswerDto.builder()
+                            .questionOptionId(questionOptionId)
+                            .option(questionOptionService.getOptionByQuestionOptionId(
+                                questionOptionId))
+                            .responseNumber(responseNumber)
+                            .build()
+                    );
+                }
+            } else if (questionBank.getQuestionType() == QuestionType.SHORT_ANSWER){
+                shortLongAnswerList = answeredQuestionList.stream()
+                    .map(AnsweredQuestion::getShortAnswer)
+                    .collect(Collectors.toList());
+            } else if (questionBank.getQuestionType() == QuestionType.LONG_ANSWER){
+                shortLongAnswerList = answeredQuestionList.stream()
+                    .map(AnsweredQuestion::getLongAnswer)
+                    .collect(Collectors.toList());
+            }
+            questionBankAnswerDtoList.add(QuestionBankAnswerDto.builder()
+                .questionBankId(questionBank.getQuestionBankId())
+                .questionTitle(questionBank.getTitle())
+                .questionDescription(questionBank.getDescription())
+                .questionType(questionBank.getQuestionType())
+                .questionNo(questionNo)
+                .textAnswers(shortLongAnswerList)
+                .optionAnswers(questionOptionAnswerDtoList)
+                .build());
+        }
+        return surveyMapper.toUserSurveyResultDto(survey, questionBankAnswerDtoList);
     }
 
     @Transactional

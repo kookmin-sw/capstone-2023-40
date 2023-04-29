@@ -3,15 +3,13 @@ package com.thesurvey.api.service;
 import com.thesurvey.api.domain.User;
 import com.thesurvey.api.dto.response.UserResponseDto;
 import com.thesurvey.api.dto.request.UserUpdateRequestDto;
-import com.thesurvey.api.dto.response.UserSurveyTitleDto;
 import com.thesurvey.api.exception.ErrorMessage;
 import com.thesurvey.api.exception.NotFoundExceptionMapper;
-import com.thesurvey.api.repository.SurveyRepository;
 import com.thesurvey.api.repository.UserRepository;
 import com.thesurvey.api.service.mapper.UserMapper;
 import com.thesurvey.api.util.StringUtil;
 import com.thesurvey.api.util.UserUtil;
-import java.util.List;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,13 +19,10 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    private final SurveyRepository surveyRepository;
-
     private final UserMapper userMapper;
 
-    public UserService(UserRepository userRepository, SurveyRepository surveyRepository, UserMapper userMapper) {
+    public UserService(UserRepository userRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
-        this.surveyRepository = surveyRepository;
         this.userMapper = userMapper;
     }
 
@@ -41,12 +36,6 @@ public class UserService {
     @Transactional(readOnly = true)
     public UserResponseDto getUserProfile(Authentication authentication) {
         return userMapper.toUserResponseDto(UserUtil.getUserFromAuthentication(authentication));
-    }
-
-    @Transactional(readOnly = true)
-    public List<UserSurveyTitleDto> getUserCreatedSurveys(Authentication authentication) {
-        return surveyRepository.findUserCreatedSurveysByAuthorID(
-            UserUtil.getUserIdFromAuthentication(authentication));
     }
 
     @Transactional
