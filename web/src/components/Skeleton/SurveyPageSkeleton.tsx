@@ -3,7 +3,7 @@ import React from 'react';
 import styled, { DefaultTheme } from 'styled-components';
 
 import { NumberUtils } from '../../utils/NumberUtils';
-import { skeletonItem } from '../Styled/Animation';
+import { skeletonItem } from './Animation';
 
 const Container = styled.div`
   width: 100vw;
