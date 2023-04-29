@@ -6,9 +6,9 @@ import styled, { DefaultTheme } from 'styled-components';
 import { useOnClickOutside } from '../../hooks/useOnClickOutside';
 import { CertificationType } from '../../types/request/Survey';
 import { SurveyResponse } from '../../types/response/Survey';
-import { RectanglePrimaryButton } from '../Button/Buttons';
 import { DeleteImage } from '../Button/ImageButtons';
 import CertificationList from '../CertificationList';
+import RectangleButton from '../Styled/RectangleButton';
 
 const Container = styled.div`
   width: 100vw;
@@ -119,11 +119,6 @@ const Description = styled.span`
   padding: 1.2vh 1.5vw 1.2vh 1.5vw;
 `;
 
-const SubmitButton = styled(RectanglePrimaryButton)`
-  width: 30vw;
-  margin-top: 10px;
-`;
-
 interface ModalProps {
   surveyItem: SurveyResponse;
   setEnterModalOpen: (arg: boolean) => void;
@@ -168,9 +163,13 @@ export default function SurveyPreviewModal({ surveyItem, setEnterModalOpen, them
           </CertificationContainer>
         </BodyContainer>
         <ButtonContainer>
-          <SubmitButton type="submit" onClick={() => navigate(`/survey/${surveyItem.surveyId}`)} theme={theme}>
-            설문 조사 시작하기
-          </SubmitButton>
+          <RectangleButton
+            buttonBgColor={theme.colors.primary}
+            buttonText="설문 조사 시작하기"
+            theme={theme}
+            handleClick={() => navigate(`/survey/${surveyItem.surveyId}`)}
+            buttonWidth="30vw"
+          />
         </ButtonContainer>
       </ModalContainer>
     </Container>

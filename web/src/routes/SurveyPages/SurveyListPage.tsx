@@ -11,7 +11,7 @@ import Header from '../../components/Header';
 import { SurveyPreviewModal } from '../../components/Modal';
 import Pagination from '../../components/Pagination';
 import SurveyListSkeleton from '../../components/Skeleton/SurveyListSkeleton';
-import { RectangleButton } from '../../components/Styled/Buttons';
+import RectangleButton from '../../components/Styled/RectangleButton';
 import { useTheme } from '../../hooks/useTheme';
 import { CertificationType } from '../../types/request/Survey';
 import { SurveyResponse } from '../../types/response/Survey';
@@ -123,8 +123,6 @@ const Label = styled.label`
   }
 `;
 
-const Button = styled(RectangleButton)``;
-
 interface SurveyList {
   surveys: SurveyResponse[];
   page: number;
@@ -146,12 +144,9 @@ export default function SurveyListPage() {
   const fetchSurveyList = async (abortSignal: AbortSignal): Promise<void> => {
     setIsLoading(true);
     try {
-      const request: AxiosResponse<SurveyList> = await axios.get<SurveyList>(
-        `${requests.getSurvey}?페이지%20번호=${page}`,
-        {
-          signal: abortSignal,
-        }
-      );
+      const request: AxiosResponse<SurveyList> = await axios.get<SurveyList>(`${requests.getSurveyPage}?page=${page}`, {
+        signal: abortSignal,
+      });
       setSurveys(request.data.surveys);
       setTotalPages(request.data.totalPages);
       setIsLoading(false);
@@ -188,9 +183,13 @@ export default function SurveyListPage() {
           <Notification theme={theme}>
             <Label theme={theme}>😥 참여가능한 설문이 없습니다...</Label>
             <br />
-            <Button theme={theme} onClick={() => navigate('/survey/form')}>
-              설문 만들러 가기
-            </Button>
+            <RectangleButton
+              buttonText="설문 만들러 가기"
+              buttonWidth="250px"
+              buttonBgColor={theme.colors.primary}
+              handleClick={() => navigate('/survey/form')}
+              theme={theme}
+            />
           </Notification>
         </Container>
       );
@@ -227,6 +226,13 @@ export default function SurveyListPage() {
         </ListTable>
 
         <Pagination currentPage={page} numOfTotalPage={13} numOfPageToShow={5} setPage={setPage} theme={theme} />
+        <RectangleButton
+          buttonText="설문 만들기"
+          buttonWidth="150px"
+          buttonBgColor={theme.colors.button}
+          handleClick={() => navigate('/survey/form')}
+          theme={theme}
+        />
 
         {enterModalOpen && (
           <SurveyPreviewModal
