@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled, { DefaultTheme } from 'styled-components';
 
-const Button = styled.button<{ width: string; backgroundColor: string }>`
+const Button = styled.button<{ width: string; backgroundColor: string; backgroundHover: string }>`
   padding: 2vh 2vw 2vh 2vw;
   width: ${(props) => props.width};
   font-size: 18px;
@@ -15,28 +15,36 @@ const Button = styled.button<{ width: string; backgroundColor: string }>`
   cursor: pointer;
 
   &:hover {
-    opacity: 0.8;
+    background-color: ${(props) => props.backgroundHover};
   }
 `;
 
 interface RectangleButtonProps {
-  buttonText: string;
-  buttonWidth: string;
-  buttonBgColor: string;
+  text: string;
+  width: string;
+  backgroundColor: string;
+  hoverColor: string;
   handleClick: () => void;
   theme: DefaultTheme;
 }
 
 export default function RectangleButton({
-  buttonText,
-  buttonWidth,
-  buttonBgColor,
+  text,
+  width,
+  backgroundColor,
+  hoverColor,
   handleClick,
   theme,
 }: RectangleButtonProps) {
   return (
-    <Button theme={theme} width={buttonWidth} backgroundColor={buttonBgColor} onClick={handleClick}>
-      {buttonText}
+    <Button
+      theme={theme}
+      width={width}
+      backgroundColor={backgroundColor}
+      backgroundHover={hoverColor}
+      onClick={handleClick}
+    >
+      {text}
     </Button>
   );
 }

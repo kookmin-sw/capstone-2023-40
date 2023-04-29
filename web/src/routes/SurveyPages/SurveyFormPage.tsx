@@ -324,11 +324,12 @@ export default function SurveyFormPage() {
         ))}
         <ButtonContainer>
           <RectangleButton
-            buttonBgColor={theme.colors.primary}
-            buttonText="완료하기"
+            backgroundColor={theme.colors.primary}
+            hoverColor={theme.colors.prhover}
+            text="완료하기"
             theme={theme}
             handleClick={validation}
-            buttonWidth="15vw"
+            width="15vw"
           />
         </ButtonContainer>
       </BodyContainer>

@@ -336,11 +336,12 @@ export default function SurveyPage() {
         ))}
         <ButtonContainer>
           <RectangleButton
-            buttonBgColor={theme.colors.primary}
-            buttonText="제출하기"
+            backgroundColor={theme.colors.primary}
+            hoverColor={theme.colors.prhover}
+            text="제출하기"
             theme={theme}
             handleClick={handleSubmitButtonClick}
-            buttonWidth="20vw"
+            width="20vw"
           />
         </ButtonContainer>
       </BodyContainer>

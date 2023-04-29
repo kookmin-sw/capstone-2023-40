@@ -164,11 +164,12 @@ export default function SurveyPreviewModal({ surveyItem, setEnterModalOpen, them
         </BodyContainer>
         <ButtonContainer>
           <RectangleButton
-            buttonBgColor={theme.colors.primary}
-            buttonText="설문 조사 시작하기"
+            backgroundColor={theme.colors.primary}
+            hoverColor={theme.colors.prhover}
+            text="설문 조사 시작하기"
             theme={theme}
             handleClick={() => navigate(`/survey/${surveyItem.surveyId}`)}
-            buttonWidth="30vw"
+            width="30vw"
           />
         </ButtonContainer>
       </ModalContainer>

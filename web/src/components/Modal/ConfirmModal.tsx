@@ -123,18 +123,20 @@ export default function ConfirmModal({
           <TextContainer theme={theme}>{text}</TextContainer>
           <ButtonContainer>
             <RectangleButton
-              buttonBgColor={theme.colors.button}
-              buttonText="취소"
+              backgroundColor={theme.colors.button}
+              hoverColor={theme.colors.btnhover}
+              text="취소"
               theme={theme}
               handleClick={handleCancelClick}
-              buttonWidth="15vw"
+              width="15vw"
             />
             <RectangleButton
-              buttonBgColor={theme.colors.primary}
-              buttonText="확인"
+              backgroundColor={theme.colors.primary}
+              hoverColor={theme.colors.prhover}
+              text="확인"
               theme={theme}
               handleClick={handleConfirmClick}
-              buttonWidth="15vw"
+              width="15vw"
             />
           </ButtonContainer>
         </BodyContainer>
