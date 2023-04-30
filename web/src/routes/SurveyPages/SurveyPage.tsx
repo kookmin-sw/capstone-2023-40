@@ -157,6 +157,7 @@ const RadioCheckmark = styled.span`
   }
 `;
 
+// TODO: disable submit button after click
 export default function SurveyPage() {
   const nowDate = new Date();
   const { id } = useParams();
