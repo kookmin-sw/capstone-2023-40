@@ -6,7 +6,7 @@ import { SurveyCreateRequest } from '../../types/request/Survey';
 import { NumberUtils } from '../../utils/NumberUtils';
 import { DeleteImage } from '../Button/ImageButtons';
 
-const OptionsContainer = styled.div``;
+const Container = styled.div``;
 
 const OptionContainer = styled.div`
   display: flex;
@@ -62,10 +62,10 @@ export default function OptionList({
   const tmpOptions = surveyData.questions[questionId].questionOptions;
   if (typeof tmpOptions !== 'undefined') {
     if (tmpOptions.length === 0) {
-      return <AnswerLabel theme={theme}>옵션을 추가해 주세요</AnswerLabel>;
+      return <AnswerLabel theme={theme}>문항을 추가해 주세요</AnswerLabel>;
     }
     return (
-      <OptionsContainer>
+      <Container>
         {NumberUtils.range(0, tmpOptions.length).map((index: number) => (
           <OptionContainer theme={theme} key={index}>
             <OptionInput
@@ -82,7 +82,7 @@ export default function OptionList({
             />
           </OptionContainer>
         ))}
-      </OptionsContainer>
+      </Container>
     );
   }
   return <AnswerLabel theme={theme}>문항을 추가해 주세요</AnswerLabel>;

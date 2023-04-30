@@ -25,7 +25,7 @@ const HeadContainer = styled.div`
   justify-content: space-between;
 `;
 
-const SubjectiveQuestion = styled.div``;
+const OptionListContainer = styled.div``;
 
 const TextInput = styled.input.attrs({ type: 'text', maxLength: 100 })`
   flex-basis: 80%;
@@ -137,7 +137,7 @@ export default function QuestionForm({
       {selected === QuestionType.LONG_ANSWER || selected === QuestionType.SHORT_ANSWER ? (
         <AnswerLabel theme={theme}>{answerLabel}</AnswerLabel>
       ) : (
-        <SubjectiveQuestion>
+        <OptionListContainer>
           <OptionList
             surveyData={surveyData}
             questionId={questionId}
@@ -150,7 +150,7 @@ export default function QuestionForm({
               문항 추가하기
             </AddOptionButton>
           </ButtonContainer>
-        </SubjectiveQuestion>
+        </OptionListContainer>
       )}
 
       <ButtonContainer>
