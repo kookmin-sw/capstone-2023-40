@@ -18,11 +18,11 @@ public class AnsweredQuestionDto {
 
     @Positive
     @Schema(example = "2", description = "응답하려는 단일 선택 항목의 번호입니다.")
-    private Integer singleChoice;
+    private Long singleChoice;
 
     @Size(min = 1)
     @Schema(example = "[1, 3]", description = "응답하려는 복수 선택 항목의 번호입니다.")
-    private List<Integer> multipleChoices;
+    private List<Long> multipleChoices;
 
     @Size(max = 100)
     @Schema(example = "단답형 응답 내용입니다.", description = "응답하려는 단답형 내용입니다. 단답형 내용은 100자 이내여야 합니다.")
