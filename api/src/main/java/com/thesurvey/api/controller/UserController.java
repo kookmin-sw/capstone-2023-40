@@ -1,8 +1,12 @@
 package com.thesurvey.api.controller;
 
-import com.thesurvey.api.dto.request.UserUpdateRequestDto;
+import com.thesurvey.api.dto.response.UserSurveyResultDto;
 import com.thesurvey.api.dto.response.UserResponseDto;
+import com.thesurvey.api.dto.request.UserUpdateRequestDto;
+import com.thesurvey.api.dto.response.UserSurveyTitleDto;
+import com.thesurvey.api.service.SurveyService;
 import com.thesurvey.api.service.UserService;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -11,12 +15,16 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+import java.util.List;
+import java.util.UUID;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,8 +36,11 @@ public class UserController {
 
     private final UserService userService;
 
-    public UserController(UserService userService) {
+    private final SurveyService surveyService;
+
+    public UserController(UserService userService, SurveyService surveyService) {
         this.userService = userService;
+        this.surveyService = surveyService;
     }
 
     @Operation(summary = "사용자 정보 조회", description = "요청한 사용자의 정보를 가져옵니다.")
@@ -44,6 +55,36 @@ public class UserController {
     public ResponseEntity<UserResponseDto> getUserProfile(
         @Parameter(hidden = true) Authentication authentication) {
         return ResponseEntity.ok(userService.getUserProfile(authentication));
+    }
+
+    @Operation(summary = "사용자 설문조사 목록 조회", description = "사용자가 생성한 설문조사 목록을 가져옵니다.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "요청 성공"),
+        @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @Content(schema = @Schema(hidden = true))),
+        @ApiResponse(responseCode = "401", description = "사용자 인증 실패", content = @Content(schema = @Schema(hidden = true))),
+        @ApiResponse(responseCode = "403", description = "접근 권한 없음", content = @Content(schema = @Schema(hidden = true))),
+        @ApiResponse(responseCode = "404", description = "요청한 리소스 찾을 수 없음", content = @Content(schema = @Schema(hidden = true)))
+    })
+    @GetMapping("/surveys")
+    public ResponseEntity<List<UserSurveyTitleDto>> getUserCreatedSurveys(
+        @Parameter(hidden = true) Authentication authentication) {
+        return ResponseEntity.ok(surveyService.getUserCreatedSurveys(authentication));
+    }
+
+    @Operation(summary = "사용자 설문조사 결과 조회", description = "사용자가 생성한 설문조사 결과를 가져옵니다.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "요청 성공"),
+        @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @Content(schema = @Schema(hidden = true))),
+        @ApiResponse(responseCode = "401", description = "사용자 인증 실패", content = @Content(schema = @Schema(hidden = true))),
+        @ApiResponse(responseCode = "403", description = "접근 권한 없음", content = @Content(schema = @Schema(hidden = true))),
+        @ApiResponse(responseCode = "404", description = "요청한 리소스 찾을 수 없음", content = @Content(schema = @Schema(hidden = true)))
+    })
+    @GetMapping("/surveys/{surveyId}")
+    public ResponseEntity<UserSurveyResultDto> getUserCreatedSurveyResult(
+        @Parameter(hidden = true) Authentication authentication,
+        @PathVariable("surveyId") UUID surveyId) {
+        return ResponseEntity.ok(
+            surveyService.getUserCreatedSurveyResult(authentication, surveyId));
     }
 
     @Operation(summary = "사용자 정보 수정", description = "요청한 사용자의 정보를 수정합니다.")

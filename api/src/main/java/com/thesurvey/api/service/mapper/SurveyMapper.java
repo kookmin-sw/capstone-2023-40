@@ -3,11 +3,13 @@ package com.thesurvey.api.service.mapper;
 import java.util.List;
 
 import com.thesurvey.api.domain.Survey;
-import com.thesurvey.api.dto.request.SurveyRequestDto;
+import com.thesurvey.api.dto.response.QuestionBankAnswerDto;
 import com.thesurvey.api.dto.response.QuestionBankResponseDto;
 import com.thesurvey.api.dto.response.SurveyListPageDto;
 import com.thesurvey.api.dto.response.SurveyPageDto;
 import com.thesurvey.api.dto.response.SurveyResponseDto;
+import com.thesurvey.api.dto.request.SurveyRequestDto;
+import com.thesurvey.api.dto.response.UserSurveyResultDto;
 import com.thesurvey.api.repository.SurveyRepository;
 import com.thesurvey.api.service.QuestionService;
 import com.thesurvey.api.service.converter.CertificationTypeConverter;
@@ -20,9 +22,7 @@ import org.springframework.stereotype.Component;
 public class SurveyMapper {
 
     private final SurveyRepository surveyRepository;
-
     private final QuestionService questionService;
-
     private final CertificationTypeConverter certificationTypeConverter;
 
     public SurveyMapper(SurveyRepository surveyRepository, QuestionService questionService,
@@ -102,4 +102,13 @@ public class SurveyMapper {
             .totalPages(surveyPage.getTotalPages())
             .build();
     }
+
+    public UserSurveyResultDto toUserSurveyResultDto(Survey survey, List<QuestionBankAnswerDto> questionBankAnswerDtoList) {
+        return UserSurveyResultDto.builder()
+            .surveyId(survey.getSurveyId())
+            .surveyTitle(survey.getTitle())
+            .results(questionBankAnswerDtoList)
+            .build();
+    }
+
 }

@@ -28,7 +28,7 @@ public class AnsweredQuestionMapper {
     }
 
     public AnsweredQuestion toAnsweredQuestionWithMultipleChoices(User user, Survey survey,
-        QuestionBank questionBank, int multipleChoice) {
+        QuestionBank questionBank, Long multipleChoice) {
         return AnsweredQuestion
             .builder()
             .user(user)

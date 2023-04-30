@@ -57,6 +57,23 @@ public class AnsweredQuestionService {
     }
 
     @Transactional
+    public List<AnsweredQuestion> getAnswerQuestionByQuestionBankId(Long questionBankId) {
+        return answeredQuestionRepository.findAllByQuestionBankId(questionBankId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Long[]> getSingleChoiceResult(Long questionBankId) {
+        return answeredQuestionRepository.countSingleChoiceByQuestionBankId(questionBankId)
+            .orElseThrow(() -> new NotFoundExceptionMapper(ErrorMessage.QUESTION_OPTION_NOT_FOUND));
+    }
+
+    @Transactional(readOnly = true)
+    public List<Long[]> getMultipleChoiceResult(Long questionBankId) {
+        return answeredQuestionRepository.countMultipleChoiceByQuestionBankId(questionBankId)
+            .orElseThrow(() -> new NotFoundExceptionMapper(ErrorMessage.QUESTION_OPTION_NOT_FOUND));
+    }
+
+    @Transactional
     public void createAnswer(Authentication authentication,
         AnsweredQuestionRequestDto answeredQuestionRequestDto) {
         User user = UserUtil.getUserFromAuthentication(authentication);
@@ -103,17 +120,16 @@ public class AnsweredQuestionService {
                 answeredQuestionRepository.save(
                     answeredQuestionMapper.toAnsweredQuestion(answeredQuestionDto, user, survey,
                         questionBank));
-                return;
+            } else {
+                // In case it's multiple choice question
+                List<AnsweredQuestion> answeredQuestionList = answeredQuestionDto.getMultipleChoices()
+                    .stream()
+                    .map(choice -> answeredQuestionMapper.toAnsweredQuestionWithMultipleChoices(
+                        user, survey, questionBank, choice))
+                    .collect(Collectors.toList());
+
+                answeredQuestionRepository.saveAll(answeredQuestionList);
             }
-
-            // In case it's multiple choice question
-            List<AnsweredQuestion> answeredQuestionList = answeredQuestionDto.getMultipleChoices()
-                .stream()
-                .map(choice -> answeredQuestionMapper.toAnsweredQuestionWithMultipleChoices(
-                    user, survey, questionBank, choice))
-                .collect(Collectors.toList());
-
-            answeredQuestionRepository.saveAll(answeredQuestionList);
             participationService.createParticipation(user,
                 answeredQuestionRequestDto.getCertificationTypes(), survey);
         }

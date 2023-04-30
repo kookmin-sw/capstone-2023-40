@@ -4,7 +4,7 @@ public class EnumTypeEntity {
 
     public enum QuestionType {
         SINGLE_CHOICE,
-        MULTIPLE_CHOICE,
+        MULTIPLE_CHOICES,
         SHORT_ANSWER,
         LONG_ANSWER
     }

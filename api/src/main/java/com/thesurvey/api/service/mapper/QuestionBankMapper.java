@@ -3,6 +3,8 @@ package com.thesurvey.api.service.mapper;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.thesurvey.api.exception.ErrorMessage;
+import com.thesurvey.api.exception.NotFoundExceptionMapper;
 import com.thesurvey.api.domain.QuestionBank;
 import com.thesurvey.api.domain.QuestionOption;
 import com.thesurvey.api.dto.request.QuestionRequestDto;
@@ -35,8 +37,9 @@ public class QuestionBankMapper {
     }
 
     public QuestionBankResponseDto toQuestionBankResponseDto(QuestionBank questionBank) {
-        List<QuestionOption> questionOptionList = questionOptionRepository.findByQuestionBankId(
-            questionBank.getQuestionBankId());
+        List<QuestionOption> questionOptionList = questionOptionRepository.findAllByQuestionBankId(
+            questionBank.getQuestionBankId()).orElseThrow(() -> new NotFoundExceptionMapper(
+            ErrorMessage.QUESTION_OPTION_NOT_FOUND));
         List<QuestionOptionResponseDto> questionOptionResponseDtoList = null;
         if (questionOptionList != null && questionOptionList.size() != 0) {
             questionOptionResponseDtoList = questionOptionList
@@ -55,5 +58,4 @@ public class QuestionBankMapper {
             .modifiedDate(questionBank.getModifiedDate())
             .build();
     }
-
 }

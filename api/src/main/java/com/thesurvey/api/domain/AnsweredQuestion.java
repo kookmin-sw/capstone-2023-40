@@ -40,10 +40,10 @@ public class AnsweredQuestion {
     private AnsweredQuestionId answeredQuestionId;
 
     @Column(name = "single_choice", nullable = true)
-    private Integer singleChoice;
+    private Long singleChoice;
 
     @Column(name = "multiple_choices", nullable = true)
-    private Integer multipleChoice;
+    private Long multipleChoice;
 
     @Size(max = 100)
     @Column(name = "short_answer", nullable = true)
@@ -54,7 +54,7 @@ public class AnsweredQuestion {
     private String longAnswer;
 
     @Builder
-    public AnsweredQuestion(Integer singleChoice, Integer multipleChoice, String shortAnswer,
+    public AnsweredQuestion(Long singleChoice, Long multipleChoice, String shortAnswer,
         String longAnswer, Survey survey, User user, QuestionBank questionBank) {
         this.user = user;
         this.survey = survey;
