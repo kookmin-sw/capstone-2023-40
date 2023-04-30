@@ -6,6 +6,7 @@ import styled, { DefaultTheme } from 'styled-components';
 import { useOnClickOutside } from '../../hooks/useOnClickOutside';
 import { CertificationType } from '../../types/request/Survey';
 import { SurveyAbstractResponse } from '../../types/response/Survey';
+import { dateFormatUpToMinute } from '../../utils/dateFormat';
 import { DeleteImage } from '../Button/ImageButtons';
 import RectangleButton from '../Button/RectangleButton';
 import CertificationList from '../CertificationList';
@@ -121,17 +122,17 @@ const Description = styled.span`
 
 interface ModalProps {
   surveyItem: SurveyAbstractResponse;
-  setEnterModalOpen: (arg: boolean) => void;
+  setPreviewModalOpen: (arg: boolean) => void;
   theme: DefaultTheme;
 }
 
-export default function SurveyPreviewModal({ surveyItem, setEnterModalOpen, theme }: ModalProps) {
+export default function SurveyPreviewModal({ surveyItem, setPreviewModalOpen, theme }: ModalProps) {
   const navigate = useNavigate();
   const modalRef = useRef<HTMLDivElement>(null);
   useOnClickOutside({
     ref: modalRef,
     handler: () => {
-      setEnterModalOpen(false);
+      setPreviewModalOpen(false);
     },
   });
 
@@ -142,13 +143,13 @@ export default function SurveyPreviewModal({ surveyItem, setEnterModalOpen, them
           <DeleteImage
             data-testid="closeModal"
             name="closeModal"
-            onClick={() => setEnterModalOpen(false)}
+            onClick={() => setPreviewModalOpen(false)}
             theme={theme}
           />
         </EndButtonContainer>
         <TitleContainer theme={theme}>
           <Title theme={theme}>{surveyItem.title}</Title>
-          <EndDate theme={theme}>~ {`${surveyItem.endedDate}`}</EndDate>
+          <EndDate theme={theme}>~ {dateFormatUpToMinute(`${surveyItem.endedDate}`)}</EndDate>
         </TitleContainer>
         <BodyContainer theme={theme}>
           <Subtitle theme={theme}>설문조사 상세내용</Subtitle>
