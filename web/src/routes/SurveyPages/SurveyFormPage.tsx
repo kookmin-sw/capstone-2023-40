@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import Header from '../../components/Header';
-import SurveyForm from '../../components/SurveyForm/SurveyForm';
+import SurveyCreateForm from '../../components/SurveyCreateForm/SurveyCreateForm';
 import { useTheme } from '../../hooks/useTheme';
 
 // TODO: add media-query for mobile....
@@ -34,7 +34,7 @@ export default function SurveyFormPage() {
       <HeadContainer theme={theme}>
         <Title theme={theme}>설문조사 작성</Title>
       </HeadContainer>
-      <SurveyForm theme={theme} />
+      <SurveyCreateForm theme={theme} />
     </Container>
   );
 }
