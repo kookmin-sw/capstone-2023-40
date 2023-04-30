@@ -2,7 +2,7 @@ import { BaseTime } from './BaseTime';
 import { QuestionOptionResponse } from './QuestionOption';
 
 export interface QuestionBankResponse extends BaseTime {
-  questionBankId: string;
+  questionBankId: number;
   title: string;
   description: string;
   questionType: QuestionType;
