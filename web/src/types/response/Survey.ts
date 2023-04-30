@@ -3,6 +3,7 @@ import { QuestionBankResponse } from './QuestionBank';
 
 export interface SurveyResponse extends BaseTime {
   surveyId: string;
+  authorId: number;
   title: string;
   description: string;
   startedDate: Date | string;
