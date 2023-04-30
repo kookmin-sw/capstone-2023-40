@@ -267,12 +267,12 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
             <CheckBoxLabel htmlFor="checkbox" theme={theme} />
           </CheckBoxWrapper>
 
-          {currentLocation === '/mypage' ? (
+          {currentLocation === '/mypage' || currentLocation === '/mypage/' ? (
             <CustomButton theme={theme} onClick={() => navigate('../mypage')}>
               개인정보 저장하기
             </CustomButton>
           ) : undefined}
-          {currentLocation === '/survey' ? (
+          {currentLocation === '/survey' || currentLocation === '/survey/' ? (
             <CustomButton theme={theme} onClick={() => navigate('/survey/form')}>
               설문 만들기
             </CustomButton>
