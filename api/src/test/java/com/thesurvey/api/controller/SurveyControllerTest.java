@@ -6,6 +6,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
+import com.thesurvey.api.domain.AnsweredQuestion;
+import com.thesurvey.api.dto.request.AnsweredQuestionDto;
+import com.thesurvey.api.dto.request.AnsweredQuestionRequestDto;
+import com.thesurvey.api.service.AnsweredQuestionService;
 import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
 import com.thesurvey.api.domain.EnumTypeEntity.QuestionType;
 import com.thesurvey.api.dto.request.QuestionBankUpdateRequestDto;
@@ -28,8 +32,10 @@ import com.thesurvey.api.service.mapper.QuestionBankMapper;
 import com.thesurvey.api.service.mapper.QuestionMapper;
 import com.thesurvey.api.service.mapper.SurveyMapper;
 import com.thesurvey.api.util.UserUtil;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -49,9 +55,11 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -100,6 +108,9 @@ public class SurveyControllerTest extends BaseControllerTest {
     @Autowired
     AuthenticationManager authenticationManager;
 
+    @Autowired
+    AnsweredQuestionService answeredQuestionService;
+
     SurveyRequestDto surveyRequestDto;
 
     QuestionRequestDto questionRequestDto;
@@ -140,7 +151,7 @@ public class SurveyControllerTest extends BaseControllerTest {
             .title("This is test survey title")
             .description("This is test survey description")
             .startedDate(LocalDateTime.parse(LocalDateTime.now(ZoneId.of("Asia/Seoul"))
-                .plusDays(1).format(formatter)))
+                .format(formatter)).plusDays(1))
             .endedDate(LocalDateTime.parse(LocalDateTime.now(ZoneId.of("Asia/Seoul"))
                 .plusDays(2).format(formatter)))
             .certificationTypes(List.of(CertificationType.GOOGLE))
@@ -187,11 +198,79 @@ public class SurveyControllerTest extends BaseControllerTest {
     }
 
     @Test
+    void testSubmitSurvey() throws Exception {
+        // given
+        // Create a survey in progress.
+        SurveyRequestDto surveyRequestDto = SurveyRequestDto.builder()
+            .title("This is test survey title")
+            .description("This is test survey description")
+            .startedDate(LocalDateTime.parse(LocalDateTime.now(ZoneId.of("Asia/Seoul"))
+                .format(formatter))) // set to current time
+            .endedDate(LocalDateTime.parse(LocalDateTime.now(ZoneId.of("Asia/Seoul"))
+                .plusDays(2).format(formatter)))
+            .certificationTypes(List.of(CertificationType.GOOGLE))
+            .questions(List.of(questionRequestDto))
+            .build();
+
+        MvcResult createdSurvey = mockCreateSurvey(surveyRequestDto);
+        mockSurvey = new JSONObject(createdSurvey.getResponse().getContentAsString());
+
+        mockMvc.perform(get("/auth/logout"))
+            .andExpect(status().isOk());
+
+        UserRegisterRequestDto submitAnswerUserRegisterRequestDto = UserRegisterRequestDto.builder()
+            .name("submitAnswerUser")
+            .email("submitAnswerUserUser@gmail.com")
+            .password("Password40@")
+            .phoneNumber("01012345678")
+            .build();
+        mockRegister(submitAnswerUserRegisterRequestDto, true);
+
+        UserLoginRequestDto submitAnswerUserLoginRequestDto = UserLoginRequestDto.builder()
+            .email("submitAnswerUserUser@gmail.com")
+            .password("Password40@")
+            .build();
+        mockLogin(submitAnswerUserLoginRequestDto, true);
+        Authentication authentication = authenticationService.authenticate(
+            new UsernamePasswordAuthenticationToken(submitAnswerUserLoginRequestDto.getEmail(),
+                submitAnswerUserLoginRequestDto.getPassword())
+        );
+
+        JSONArray questions = mockSurvey.getJSONArray("questions");
+        JSONObject questionBank = questions.getJSONObject(0);
+        JSONArray questionOptions = questionBank.getJSONArray("questionOptions");
+        JSONObject questionOption = questionOptions.getJSONObject(0);
+        AnsweredQuestionDto answeredQuestionDto = AnsweredQuestionDto.builder()
+            .questionBankId(questionBank.getLong("questionBankId"))
+            .singleChoice(questionOption.getLong("questionOptionId"))
+            .build();
+        AnsweredQuestionRequestDto answeredQuestionRequestDto = AnsweredQuestionRequestDto.builder()
+            .surveyId(UUID.fromString(mockSurvey.get("surveyId").toString()))
+            .certificationTypes(List.of(CertificationType.GOOGLE))
+            .answers(List.of(answeredQuestionDto))
+            .build();
+
+        // when
+        mockMvc.perform(post("/surveys/submit")
+                .with(authentication(authentication))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(answeredQuestionRequestDto)))
+            .andExpect(status().isNoContent());
+
+        // then
+        List<AnsweredQuestion> resultAnsweredQuestion = answeredQuestionService.getAnswerQuestionByQuestionBankId(
+            questionBank.getLong("questionBankId"));
+        assertThat(resultAnsweredQuestion.size()).isEqualTo(1);
+        assertThat(resultAnsweredQuestion.get(0).getSingleChoice()).isEqualTo(questionOption.getLong("questionOptionId"));
+    }
+
+    @Test
     void testUpdateSurvey() throws Exception {
         // given
         UUID surveyId = UUID.fromString(mockSurvey.getString("surveyId"));
         Long userId = UserUtil.getUserIdFromAuthentication(authentication);
         Long authorId = mockSurvey.getLong("authorId");
+
         JSONArray questions = mockSurvey.getJSONArray("questions");
         JSONObject questionBank = (JSONObject) questions.get(0);
         Long questionBankId = questionBank.getLong("questionBankId");
