@@ -5,7 +5,7 @@ import styled, { DefaultTheme } from 'styled-components';
 
 import { useOnClickOutside } from '../../hooks/useOnClickOutside';
 import { CertificationType } from '../../types/request/Survey';
-import { SurveyResponse } from '../../types/response/Survey';
+import { SurveyAbstractResponse } from '../../types/response/Survey';
 import { DeleteImage } from '../Button/ImageButtons';
 import RectangleButton from '../Button/RectangleButton';
 import CertificationList from '../CertificationList';
@@ -120,7 +120,7 @@ const Description = styled.span`
 `;
 
 interface ModalProps {
-  surveyItem: SurveyResponse;
+  surveyItem: SurveyAbstractResponse;
   setEnterModalOpen: (arg: boolean) => void;
   theme: DefaultTheme;
 }
