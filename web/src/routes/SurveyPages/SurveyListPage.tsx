@@ -1,21 +1,17 @@
 import React, { useState, useEffect } from 'react';
 
 import { AxiosError, AxiosResponse } from 'axios';
-import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import axios from '../../api/axios';
 import { requests } from '../../api/request';
-import RectangleButton from '../../components/Button/RectangleButton';
-import CertificationList from '../../components/CertificationList';
 import Header from '../../components/Header';
 import { SurveyPreviewModal } from '../../components/Modal';
 import Pagination from '../../components/Pagination';
 import SurveyListSkeleton from '../../components/Skeleton/SurveyListSkeleton';
+import SurveyListTable from '../../components/SurveyListTable';
 import { useTheme } from '../../hooks/useTheme';
-import { CertificationType } from '../../types/request/Survey';
 import { SurveyAbstractResponse } from '../../types/response/Survey';
-import { dateFormatUpToMinute } from '../../utils/dateFormat';
 
 const Container = styled.div`
   width: 100vw;
@@ -23,124 +19,15 @@ const Container = styled.div`
   background-color: ${(props) => props.theme.colors.container};
 `;
 
-const BottomContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-`;
-
-const ListTable = styled.table`
-  display: flex;
-  flex-direction: column;
-  padding: 3vh 5vw 1vh 5vw;
-  background-color: ${(props) => props.theme.colors.container};
-`;
-
-const ListHead = styled.thead``;
-
-const ListBody = styled.tbody``;
-
-const ListRow = styled.tr`
-  display: flex;
-  flex-direction: row;
-`;
-
-const Item = styled.td`
-  height: 22px;
-  margin: 2px;
-  padding: 18px;
-  padding-bottom: 19px;
-  font-size: 17px;
-  font-weight: bold;
-  border-radius: 5px;
-  color: ${(props) => props.theme.colors.default};
-  background-color: ${(props) => props.theme.colors.background};
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-
-const HeadItem = styled.th`
-  margin: 2px;
-  padding: 18px;
-  font-size: 17px;
-  font-weight: bold;
-  text-align: center;
-  color: ${(props) => props.theme.colors.default};
-`;
-
-const Title = styled(Item)`
-  min-width: 15vh;
-  flex: 1;
-  cursor: pointer;
-
-  &:hover {
-    background-color: ${(props) => props.theme.colors.btnhover};
-  }
-`;
-
-const AuthList = styled(Item)`
-  min-width: 100px;
-  width: 20vw;
-`;
-
-const EndDate = styled(Item)`
-  min-width: 150px;
-  width: 13vw;
-  text-align: center;
-
-  @media screen and (max-width: 900px) {
-    display: none;
-  }
-`;
-
-const HeadTitle = styled(HeadItem)`
-  min-width: 15vh;
-  flex: 1;
-`;
-
-const HeadAuthList = styled(HeadItem)`
-  min-width: 100px;
-  width: 20vw;
-`;
-
-const HeadEndDate = styled(HeadItem)`
-  min-width: 150px;
-  width: 13vw;
-
-  @media screen and (max-width: 900px) {
-    display: none;
-  }
-`;
-
-const Notification = styled.div`
-  text-align: center;
-  margin-top: 35vh;
-  padding: 10px;
-`;
-
-const Label = styled.label`
-  font-size: 50px;
-  font-weight: 700;
-  color: ${(props) => props.theme.colors.default};
-  text-align: center;
-
-  @media screen and (max-width: 700px) {
-    font-size: 30px;
-  }
-`;
-
 export default function SurveyListPage() {
   const [theme, toggleTheme] = useTheme();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [abortController, setAbortController] = useState<AbortController>(new AbortController());
   const [surveys, setSurveys] = useState<SurveyAbstractResponse[]>([]);
   const [page, setPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(0);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [enterModalOpen, setEnterModalOpen] = useState<boolean>(false);
+  const [previewModalOpen, setPreviewModalOpen] = useState<boolean>(false);
   const [selectedSurveyIndex, setSelectedSurveyIndex] = useState<number>(0);
-  const [abortController, setAbortController] = useState<AbortController>(new AbortController());
-  const navigate = useNavigate();
 
   const fetchSurveyList = async (abortSignal: AbortSignal): Promise<void> => {
     setIsLoading(true);
@@ -238,11 +125,6 @@ export default function SurveyListPage() {
     }
   };
 
-  const handleButtonClick = (index: number) => {
-    setSelectedSurveyIndex(index);
-    setEnterModalOpen(true);
-  };
-
   useEffect(() => {
     if (isLoading) {
       abortController.abort();
@@ -253,84 +135,38 @@ export default function SurveyListPage() {
     fetchSurveyList(signal);
   }, [page]);
 
-  // After get data from api server
-  if (!isLoading) {
-    if (surveys.length === 0) {
-      return (
-        <Container theme={theme}>
-          <Header theme={theme} toggleTheme={toggleTheme} />
-          <Notification theme={theme}>
-            <Label theme={theme}>😥 참여가능한 설문이 없습니다...</Label>
-            <br />
-            <RectangleButton
-              text="설문 만들러 가기"
-              width="250px"
-              backgroundColor={theme.colors.primary}
-              hoverColor={theme.colors.prhover}
-              handleClick={() => navigate('/survey/form')}
-              theme={theme}
-            />
-          </Notification>
-        </Container>
-      );
-    }
-    return (
-      <Container theme={theme}>
-        <Header theme={theme} toggleTheme={toggleTheme} />
-
-        <ListTable theme={theme}>
-          <ListHead>
-            <ListRow>
-              <HeadTitle theme={theme}>설문 제목</HeadTitle>
-              <HeadAuthList theme={theme}>필수인증</HeadAuthList>
-              <HeadEndDate theme={theme}>설문 종료일</HeadEndDate>
-            </ListRow>
-          </ListHead>
-
-          <ListBody>
-            {surveys.map((survey: SurveyAbstractResponse, index: number) => (
-              <ListRow key={survey.surveyId} theme={theme}>
-                <Title role="button" onClick={() => handleButtonClick(index)} theme={theme}>
-                  {survey.title}
-                </Title>
-                <AuthList theme={theme}>
-                  {survey.certificationTypes.length === 0
-                    ? CertificationList({ label: '', iconOption: true })
-                    : survey.certificationTypes.map((label) =>
-                        CertificationList({ label: CertificationType[label], iconOption: true })
-                      )}
-                </AuthList>
-                <EndDate theme={theme}>{dateFormatUpToMinute(`${survey.endedDate}`)}</EndDate>
-              </ListRow>
-            ))}
-          </ListBody>
-        </ListTable>
-
-        <BottomContainer>
-          <Pagination
-            currentPage={page}
-            numOfTotalPage={totalPages}
-            numOfPageToShow={5}
-            setPage={setPage}
-            theme={theme}
-          />
-        </BottomContainer>
-
-        {enterModalOpen && (
-          <SurveyPreviewModal
-            surveyItem={surveys[selectedSurveyIndex]}
-            setEnterModalOpen={setEnterModalOpen}
-            theme={theme}
-          />
-        )}
-      </Container>
-    );
-  }
-  // Before get data from api server
   return (
     <Container theme={theme}>
       <Header theme={theme} toggleTheme={toggleTheme} />
-      <SurveyListSkeleton numOfSurveyRow={8} theme={theme} />
+
+      {isLoading ? (
+        <SurveyListSkeleton numOfSurveyRow={10} theme={theme} />
+      ) : (
+        <SurveyListTable
+          theme={theme}
+          surveys={surveys}
+          setSelectedSurveyIndex={setSelectedSurveyIndex}
+          setPreviewModalOpen={setPreviewModalOpen}
+        />
+      )}
+
+      {!isLoading && surveys.length !== 0 && (
+        <Pagination
+          currentPage={page}
+          numOfTotalPage={totalPages}
+          numOfPageToShow={5}
+          setPage={setPage}
+          theme={theme}
+        />
+      )}
+
+      {previewModalOpen && (
+        <SurveyPreviewModal
+          surveyItem={surveys[selectedSurveyIndex]}
+          setPreviewModalOpen={setPreviewModalOpen}
+          theme={theme}
+        />
+      )}
     </Container>
   );
 }
