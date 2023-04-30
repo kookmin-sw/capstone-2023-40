@@ -22,6 +22,13 @@ const Container = styled.div`
   background-color: ${(props) => props.theme.colors.container};
 `;
 
+const BottomContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+`;
+
 const ListTable = styled.table`
   display: flex;
   flex-direction: column;
@@ -127,7 +134,7 @@ export default function SurveyListPage() {
   const [theme, toggleTheme] = useTheme();
   const [surveys, setSurveys] = useState<SurveyAbstractResponse[]>([]);
   const [page, setPage] = useState<number>(1);
-  const [totalPages, setTotalPages] = useState<number>();
+  const [totalPages, setTotalPages] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [enterModalOpen, setEnterModalOpen] = useState<boolean>(false);
   const [selectedSurveyIndex, setSelectedSurveyIndex] = useState<number>(0);
@@ -215,8 +222,8 @@ export default function SurveyListPage() {
           },
         ],
         page: 1,
-        totalSurveys: 80,
-        totalPages: 10,
+        totalSurveys: 6,
+        totalPages: 5,
       };
       setSurveys(request.surveys);
       setTotalPages(request.totalPages);
@@ -269,6 +276,7 @@ export default function SurveyListPage() {
     return (
       <Container theme={theme}>
         <Header theme={theme} toggleTheme={toggleTheme} />
+
         <ListTable theme={theme}>
           <ListHead>
             <ListRow>
@@ -297,15 +305,15 @@ export default function SurveyListPage() {
           </ListBody>
         </ListTable>
 
-        <Pagination currentPage={page} numOfTotalPage={13} numOfPageToShow={5} setPage={setPage} theme={theme} />
-        <RectangleButton
-          text="설문 만들기"
-          width="150px"
-          backgroundColor={theme.colors.button}
-          hoverColor={theme.colors.prhover}
-          handleClick={() => navigate('/survey/form')}
-          theme={theme}
-        />
+        <BottomContainer>
+          <Pagination
+            currentPage={page}
+            numOfTotalPage={totalPages}
+            numOfPageToShow={5}
+            setPage={setPage}
+            theme={theme}
+          />
+        </BottomContainer>
 
         {enterModalOpen && (
           <SurveyPreviewModal
