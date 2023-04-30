@@ -1,7 +1,6 @@
 package com.thesurvey.api.service;
 
 import com.thesurvey.api.domain.AnsweredQuestion;
-import com.thesurvey.api.domain.EnumTypeEntity.QuestionType;
 import com.thesurvey.api.domain.QuestionBank;
 import com.thesurvey.api.domain.Survey;
 import com.thesurvey.api.domain.User;
@@ -95,6 +94,11 @@ public class SurveyService {
         validateSurveyAuthor(UserUtil.getUserIdFromAuthentication(authentication),
             survey.getAuthorId());
 
+        // validate if the survey has not yet started
+        if (survey.getStartedDate().isAfter(LocalDateTime.now(ZoneId.of("Asia/Seoul")))) {
+            throw new BadRequestExceptionMapper(ErrorMessage.SURVEY_NOT_STARTED);
+        }
+
         List<QuestionBank> questionBanks = questionService.getAllQuestionBankBySurveyId(surveyId);
         List<QuestionBankAnswerDto> questionBankAnswerDtoList = new ArrayList<>();
         for (QuestionBank questionBank : questionBanks) {
@@ -104,45 +108,27 @@ public class SurveyService {
                 questionBank.getQuestionBankId());
             List<AnsweredQuestion> answeredQuestionList = answeredQuestionService.getAnswerQuestionByQuestionBankId(
                 questionBank.getQuestionBankId());
-
-            if (questionBank.getQuestionType() == QuestionType.SINGLE_CHOICE) {
-                List<Long[]> answeredChoiceList = answeredQuestionService.getSingleChoiceResult(
-                    questionBank.getQuestionBankId());
-                for (Long[] answeredChoiceResult : answeredChoiceList) {
-                    Long questionOptionId = answeredChoiceResult[0];
-                    Long responseNumber = answeredChoiceResult[1];
-                    questionOptionAnswerDtoList.add(
-                        QuestionOptionAnswerDto.builder()
-                            .questionOptionId(questionOptionId)
-                            .option(questionOptionService.getOptionByQuestionOptionId(
-                                questionOptionId))
-                            .responseNumber(responseNumber)
-                            .build()
-                    );
-                }
-            } else if (questionBank.getQuestionType() == QuestionType.MULTIPLE_CHOICES) {
-                List<Long[]> answeredChoiceList = answeredQuestionService.getMultipleChoiceResult(
-                    questionBank.getQuestionBankId());
-                for (Long[] answeredChoiceResult : answeredChoiceList) {
-                    Long questionOptionId = answeredChoiceResult[0];
-                    Long responseNumber = answeredChoiceResult[1];
-                    questionOptionAnswerDtoList.add(
-                        QuestionOptionAnswerDto.builder()
-                            .questionOptionId(questionOptionId)
-                            .option(questionOptionService.getOptionByQuestionOptionId(
-                                questionOptionId))
-                            .responseNumber(responseNumber)
-                            .build()
-                    );
-                }
-            } else if (questionBank.getQuestionType() == QuestionType.SHORT_ANSWER){
-                shortLongAnswerList = answeredQuestionList.stream()
-                    .map(AnsweredQuestion::getShortAnswer)
-                    .collect(Collectors.toList());
-            } else if (questionBank.getQuestionType() == QuestionType.LONG_ANSWER){
-                shortLongAnswerList = answeredQuestionList.stream()
-                    .map(AnsweredQuestion::getLongAnswer)
-                    .collect(Collectors.toList());
+            switch (questionBank.getQuestionType()) {
+                case SINGLE_CHOICE:
+                    List<Long[]> answeredSingleChoiceList = answeredQuestionService.getSingleChoiceResult(
+                        questionBank.getQuestionBankId());
+                    questionOptionAnswerDtoList = getQuestionOptionAnswerDtoList(answeredSingleChoiceList);
+                    break;
+                case MULTIPLE_CHOICES:
+                    List<Long[]> answeredMultipleChoiceList = answeredQuestionService.getMultipleChoiceResult(
+                        questionBank.getQuestionBankId());
+                    questionOptionAnswerDtoList = getQuestionOptionAnswerDtoList(answeredMultipleChoiceList);
+                    break;
+                case SHORT_ANSWER:
+                    shortLongAnswerList = answeredQuestionList.stream()
+                        .map(AnsweredQuestion::getShortAnswer)
+                        .collect(Collectors.toList());
+                    break;
+                case LONG_ANSWER:
+                    shortLongAnswerList = answeredQuestionList.stream()
+                        .map(AnsweredQuestion::getLongAnswer)
+                        .collect(Collectors.toList());
+                    break;
             }
             questionBankAnswerDtoList.add(QuestionBankAnswerDto.builder()
                 .questionBankId(questionBank.getQuestionBankId())
@@ -256,4 +242,18 @@ public class SurveyService {
         }
     }
 
+    private List<QuestionOptionAnswerDto> getQuestionOptionAnswerDtoList(
+        List<Long[]> answeredChoiceList) {
+        return answeredChoiceList.stream()
+            .map(answeredChoiceResult -> {
+                Long questionOptionId = answeredChoiceResult[0];
+                Long responseNumber = answeredChoiceResult[1];
+                return QuestionOptionAnswerDto.builder()
+                    .questionOptionId(questionOptionId)
+                    .option(questionOptionService.getOptionByQuestionOptionId(questionOptionId))
+                    .responseNumber(responseNumber)
+                    .build();
+            })
+            .collect(Collectors.toList());
+    }
 }
