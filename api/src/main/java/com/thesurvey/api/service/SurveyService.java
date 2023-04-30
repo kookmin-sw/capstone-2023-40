@@ -18,8 +18,6 @@ import com.thesurvey.api.exception.ErrorMessage;
 import com.thesurvey.api.exception.BadRequestExceptionMapper;
 import com.thesurvey.api.exception.ForbiddenRequestExceptionMapper;
 import com.thesurvey.api.exception.NotFoundExceptionMapper;
-import com.thesurvey.api.repository.QuestionBankRepository;
-import com.thesurvey.api.repository.QuestionRepository;
 import com.thesurvey.api.repository.SurveyRepository;
 import com.thesurvey.api.service.mapper.SurveyMapper;
 import com.thesurvey.api.util.StringUtil;
@@ -122,7 +120,7 @@ public class SurveyService {
                             .build()
                     );
                 }
-            } else if (questionBank.getQuestionType() == QuestionType.MULTIPLE_CHOICE) {
+            } else if (questionBank.getQuestionType() == QuestionType.MULTIPLE_CHOICES) {
                 List<Long[]> answeredChoiceList = answeredQuestionService.getMultipleChoiceResult(
                     questionBank.getQuestionBankId());
                 for (Long[] answeredChoiceResult : answeredChoiceList) {
