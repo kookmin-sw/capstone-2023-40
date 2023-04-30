@@ -161,12 +161,81 @@ export default function SurveyPage() {
   const { id } = useParams();
   const [theme, toggleTheme] = useTheme();
   const questionRefs = useRef<HTMLDivElement[]>([]);
-
-  const [surveyData, setSurveyData] = useState<SurveyResponse>();
   const [endedDate, setEndedDate] = useState<string>('');
   const [userAnswers, setUserAnswers] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [resultModalOpen, setResultModalOpen] = useState<boolean>(false);
+  const [surveyData, setSurveyData] = useState<SurveyResponse>({
+    surveyId: '93c0a231-207e-4190-aee9-0a5f78cafc44',
+    authorId: 1,
+    title: '카카오 사용자분들께 설문 부탁드립니다!',
+    description: '카카오 앱 서비스에 대한 전반적인 만족도 조사입니다.',
+    startedDate: '2023-04-30T09:00:01.082Z',
+    endedDate: '2023-04-30T09:00:01.082Z',
+    questions: [
+      {
+        questionBankId: 1,
+        title: '카카오톡 서비스 사용자이신가요?',
+        description: '카카오톡 사용자여부 확인',
+        questionType: 0,
+        questionOptions: [
+          {
+            questionOptionId: 1,
+            option: '예',
+            description: '사용자',
+          },
+          {
+            questionOptionId: 2,
+            option: '아니요',
+            description: '사용자',
+          },
+        ],
+        createdDate: '2023-04-30T09:00:01.082Z',
+        modifiedDate: '2023-04-30T09:00:01.082Z',
+      },
+      {
+        questionBankId: 1,
+        title: '카카오톡 서비스 사용자이신가요?',
+        description: '카카오톡 사용자여부 확인',
+        questionType: 1,
+        questionOptions: [
+          {
+            questionOptionId: 1,
+            option: '예',
+            description: '사용자',
+          },
+          {
+            questionOptionId: 2,
+            option: '아니요',
+            description: '사용자',
+          },
+        ],
+        createdDate: '2023-04-30T09:00:01.082Z',
+        modifiedDate: '2023-04-30T09:00:01.082Z',
+      },
+      {
+        questionBankId: 1,
+        title: '카카오톡 서비스 사용자이신가요?',
+        description: '카카오톡 사용자여부 확인',
+        questionType: 2,
+        questionOptions: [],
+        createdDate: '2023-04-30T09:00:01.082Z',
+        modifiedDate: '2023-04-30T09:00:01.082Z',
+      },
+      {
+        questionBankId: 1,
+        title: '카카오톡 서비스 사용자이신가요?',
+        description: '카카오톡 사용자여부 확인',
+        questionType: 3,
+        questionOptions: [],
+        createdDate: '2023-04-30T09:00:01.082Z',
+        modifiedDate: '2023-04-30T09:00:01.082Z',
+      },
+    ],
+    createdDate: '2023-04-30T09:00:01.082Z',
+    modifiedDate: '2023-04-30T09:00:01.082Z',
+    certificationTypes: [1, 2],
+  });
 
   const getDateDiff = (date: string) => {
     const endDate = new Date(date);
@@ -181,8 +250,8 @@ export default function SurveyPage() {
   const fetchSurveyData = async () => {
     setIsLoading(true);
     try {
-      const request: AxiosResponse<SurveyResponse> = await axios.get<SurveyResponse>(requests.getSurvey + id);
-      setSurveyData(request.data);
+      // const request: AxiosResponse<SurveyResponse> = await axios.get<SurveyResponse>(requests.getSurvey + id);
+      // setSurveyData(request.data);
       setIsLoading(false);
     } catch (error) {
       const { name } = error as unknown as AxiosError;
