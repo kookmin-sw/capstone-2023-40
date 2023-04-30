@@ -40,7 +40,7 @@ interface SurveyFormProps {
   theme: DefaultTheme;
 }
 
-export default function SurveyForm({ theme }: SurveyFormProps) {
+export default function SurveyCreateForm({ theme }: SurveyFormProps) {
   const questionRefs = useRef<HTMLDivElement[]>([]);
   const [recentCreate, setRecentCreate] = useState<number>();
   const [certificationIsChecked, setCertificationIsChecked] = useState<boolean>(false);
