@@ -15,6 +15,7 @@ import { QuestionType } from '../../types/request/Question';
 import { QuestionBankResponse } from '../../types/response/QuestionBank';
 import { QuestionOptionResponse } from '../../types/response/QuestionOption';
 import { SurveyResponse } from '../../types/response/Survey';
+import { dateFormatUpToDate } from '../../utils/dateFormat';
 import { scrollToRef } from '../../utils/scroll';
 
 const Container = styled.div`
@@ -56,7 +57,7 @@ const BodyContainer = styled.div`
 const QuestionContainer = styled.div`
   margin-top: 23px;
   border-radius: ${(props) => props.theme.borderRadius};
-  border-left: 10px solid ${(props) => props.theme.colors.primary};
+  border-left: 16px solid ${(props) => props.theme.colors.primary};
   padding: 1.2vh 2vw 1.2vh 2vw;
   color: ${(props) => props.theme.colors.default};
   background-color: ${(props) => props.theme.colors.background};
@@ -171,7 +172,7 @@ export default function SurveyPage() {
     title: '카카오 사용자분들께 설문 부탁드립니다!',
     description: '카카오 앱 서비스에 대한 전반적인 만족도 조사입니다.',
     startedDate: '2023-04-30T09:00:01.082Z',
-    endedDate: '2023-04-30T09:00:01.082Z',
+    endedDate: '2023-05-30T19:00:01.082Z',
     questions: [
       {
         questionBankId: 1,
@@ -194,7 +195,7 @@ export default function SurveyPage() {
         modifiedDate: '2023-04-30T09:00:01.082Z',
       },
       {
-        questionBankId: 1,
+        questionBankId: 2,
         title: '카카오톡 서비스 사용자이신가요?',
         description: '카카오톡 사용자여부 확인',
         questionType: 1,
@@ -214,7 +215,7 @@ export default function SurveyPage() {
         modifiedDate: '2023-04-30T09:00:01.082Z',
       },
       {
-        questionBankId: 1,
+        questionBankId: 3,
         title: '카카오톡 서비스 사용자이신가요?',
         description: '카카오톡 사용자여부 확인',
         questionType: 2,
@@ -223,7 +224,7 @@ export default function SurveyPage() {
         modifiedDate: '2023-04-30T09:00:01.082Z',
       },
       {
-        questionBankId: 1,
+        questionBankId: 4,
         title: '카카오톡 서비스 사용자이신가요?',
         description: '카카오톡 사용자여부 확인',
         questionType: 3,
@@ -271,12 +272,12 @@ export default function SurveyPage() {
   };
 
   const turnOnUserAttention = (domIndex: number) => {
-    questionRefs.current[domIndex].style.borderLeft = '15px solid #FF5733';
+    questionRefs.current[domIndex].style.borderLeft = '16px solid #FF5733';
     scrollToRef(questionRefs, domIndex);
   };
 
   const turnOffUserAttention = (domIndex: number) => {
-    questionRefs.current[domIndex].style.borderLeft = `10px solid ${theme.colors.primary}`;
+    questionRefs.current[domIndex].style.borderLeft = `16px solid ${theme.colors.primary}`;
   };
 
   const checkAnswers = () => {
@@ -364,7 +365,7 @@ export default function SurveyPage() {
       <HeadContainer theme={theme}>
         <Title theme={theme}>{surveyData?.title}</Title>
         <EndDate theme={theme}>
-          ~ {endedDate} (D-{remainDate})
+          ~ {dateFormatUpToDate(endedDate)} (D-{remainDate})
         </EndDate>
       </HeadContainer>
 
