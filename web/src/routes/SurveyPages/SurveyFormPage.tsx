@@ -25,6 +25,7 @@ const Title = styled.span`
 `;
 
 // TODO: Drag and drop questions order
+// TODO: disable submit button after click
 export default function SurveyFormPage() {
   const [theme, toggleTheme] = useTheme();
 
