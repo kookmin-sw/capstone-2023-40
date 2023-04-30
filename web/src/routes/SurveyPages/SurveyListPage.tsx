@@ -15,6 +15,7 @@ import SurveyListSkeleton from '../../components/Skeleton/SurveyListSkeleton';
 import { useTheme } from '../../hooks/useTheme';
 import { CertificationType } from '../../types/request/Survey';
 import { SurveyAbstractResponse } from '../../types/response/Survey';
+import { dateFormatUpToMinute } from '../../utils/dateFormat';
 
 const Container = styled.div`
   width: 100vw;
@@ -299,7 +300,7 @@ export default function SurveyListPage() {
                         CertificationList({ label: CertificationType[label], iconOption: true })
                       )}
                 </AuthList>
-                <EndDate theme={theme}>{`${survey.endedDate}`}</EndDate>
+                <EndDate theme={theme}>{dateFormatUpToMinute(`${survey.endedDate}`)}</EndDate>
               </ListRow>
             ))}
           </ListBody>
