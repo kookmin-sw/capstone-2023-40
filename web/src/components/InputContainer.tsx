@@ -110,6 +110,11 @@ interface InputContainerProps {
   buttonOptions?: ButtonOptions;
 }
 
+/**
+ * Topmost input container that handles user input from RegisterForm page.
+ *
+ * @param {InputContainerProps} props - Props for prefix, input, and button options
+ */
 export default function InputContainer(props: InputContainerProps) {
   return (
     <Container>
