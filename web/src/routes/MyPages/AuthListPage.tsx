@@ -6,8 +6,8 @@ import styled from 'styled-components';
 import { Icons } from '../../assets/svg/index';
 import Header from '../../components/Header';
 import { useTheme } from '../../hooks/useTheme';
-import { authReducer } from '../../reducers/auth';
-import { AuthState } from '../../types/auth';
+import { surveyAuthReducer } from '../../reducers/survey';
+import { SurveyAuthState } from '../../types/surveyAuth';
 
 const KakaoImage = styled(Icons.KAKAO).attrs({
   width: 30,
@@ -89,7 +89,6 @@ const Container = styled.div`
 
 const AuthListContainer = styled.div`
   padding: 5vw;
-  min-width: 40vh;
   height: 80vh;
   background-color: ${(props) => props.theme.colors.container};
 `;
@@ -143,14 +142,13 @@ const TextType = styled.span`
   font-size: calc(1vh + 1.4vmin);
   font-weight: 900;
   min-width: 80px;
-  max-width: 40vw;
   width: fit-content;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 `;
 
-const initialState: AuthState = {
+const initialState: SurveyAuthState = {
   kakao: false,
   naver: false,
   google: false,
@@ -162,10 +160,10 @@ const initialState: AuthState = {
 export default function MyPage() {
   const [theme, toggleTheme] = useTheme();
   const navigate = useNavigate();
-  const [state, dispatch] = useReducer(authReducer, initialState);
+  const [state, dispatch] = useReducer(surveyAuthReducer, initialState);
 
   // FIXME: To API data
-  const authState = [
+  const surveyAuthState = [
     {
       number: 1,
       image: <KakaoImage />,
@@ -226,7 +224,7 @@ export default function MyPage() {
             </MypageText>
             <AuthInformationText theme={theme}> &gt; 인증정보 목록</AuthInformationText>
           </AuthListTitle>
-          {authState.map(({ number, image, title, checkAuth, pageNavigate }) => (
+          {surveyAuthState.map(({ number, image, title, checkAuth, pageNavigate }) => (
             <ContainerBox key={number} theme={theme} onClick={pageNavigate} disabled={checkAuth}>
               {image}
               <TextType

@@ -7,7 +7,7 @@ import styled, { DefaultTheme } from 'styled-components';
 import axios from '../api/axios';
 import { requests } from '../api/request';
 import { formReducer } from '../reducers/form';
-import { FormState } from '../types/form';
+import { RegisterFormState } from '../types/registerForm';
 import { UserRegisterRequest } from '../types/request/Authentication';
 import { UserResponse } from '../types/response/User';
 import { isEmptyString, validateEmail, validatePassword, validatePhoneNumber } from '../utils/validate';
@@ -90,7 +90,7 @@ interface RegisterFormProps {
   theme: DefaultTheme;
 }
 
-const initialFormState: FormState = {
+const initialFormState: RegisterFormState = {
   /**
    * Initial state for inputs.
    */
@@ -116,6 +116,9 @@ export default function RegisterForm(props: RegisterFormProps) {
   const [isAlertModal, setIsAlertModal] = useState<boolean>(false);
   const [titleAlert, setTitleAlert] = useState('');
   const [textAlert, setTextAlert] = useState('');
+
+  // FIXME: Test AuthKey production(인증번호) = 1234
+  const testNumber = 1234;
 
   const setInputValue = (name: string, value: string) => {
     switch (name) {
@@ -146,9 +149,6 @@ export default function RegisterForm(props: RegisterFormProps) {
     const { name, value } = e.target;
     setInputValue(name, value);
   };
-
-  // FIXME: Test AuthKey production(인증번호) = 1234
-  const testNumber = 1234;
 
   // FIXME: It will have to Add connect User DataBase - Email
   const sendEmailAuthentication = (email: string): void => {
@@ -228,7 +228,7 @@ export default function RegisterForm(props: RegisterFormProps) {
   };
 
   const sendAuthenticationNumber = () => {
-    if (isEmptyString(state.phoneNumber) || validatePhoneNumber(state.phoneNumber)) {
+    if (isEmptyString(state.phoneNumber) || !validatePhoneNumber(state.phoneNumber)) {
       setTitleAlert('회원가입 오류');
       setTextAlert('휴대폰 번호를 확인해주세요.');
     } else {
@@ -253,29 +253,38 @@ export default function RegisterForm(props: RegisterFormProps) {
     setIsAlertModal(true);
   };
 
+  async function register(body: UserRegisterRequest) {
+    await axios
+      .post(requests.register, body)
+      .then((_user: AxiosResponse<UserResponse>) => {
+        // setUser(_user);
+      })
+      .catch((_error: AxiosError) => {
+        // setError(_error);
+      })
+      .finally();
+  }
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
   };
 
   const handleOnSubmit = async () => {
     if (checkUserInput()) {
-      const body: UserRegisterRequest = {
+      const userRegisterRequest: UserRegisterRequest = {
         name: state.name,
         email: state.email,
         password: state.password,
-        role: 'USER',
         phoneNumber: state.phoneNumber,
       };
 
-      const response: AxiosResponse<UserResponse> = await axios.post<UserResponse>(requests.register, body);
-      if (response.status === 200) {
-        setTitleAlert('회원가입');
-        setTextAlert('회원가입이 완료되었습니다.');
-        setIsAlertModal(true);
-        navigate('../login');
-      } else {
-        // TODO: would this be necessary?
-      }
+      register(userRegisterRequest);
+
+      // FIXME: belows are not validated and synchronous
+      setTitleAlert('회원가입');
+      setTextAlert('회원가입이 완료되었습니다.');
+      setIsAlertModal(true);
+      navigate('../login');
     }
   };
 
