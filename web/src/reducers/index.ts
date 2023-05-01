@@ -2,8 +2,8 @@ import { combineReducers } from 'redux';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
-import { authReducer } from './auth';
 import { headerReducer } from './header';
+import { userReducer } from './user';
 
 /**
  * Maintaining all status through redux
@@ -22,7 +22,7 @@ export const persistConfig = {
  */
 export const rootReducer = combineReducers({
   header: headerReducer,
-  auth: authReducer,
+  user: userReducer,
 });
 
 export const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -1,10 +1,10 @@
-export type AuthState = {
+export type UserState = {
   email: string;
   name: string;
   profileImage: string;
 };
 
-export type AuthAction =
+export type UserAction =
   | { type: 'EMAIL'; payload: string }
   | { type: 'NAME'; payload: string }
   | { type: 'PROFILE_IMAGE'; payload: string };

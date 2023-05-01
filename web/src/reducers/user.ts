@@ -1,12 +1,12 @@
-import { AuthAction, AuthState } from '../types/auth';
+import { UserAction, UserState } from '../types/user';
 
-const initialState: AuthState = {
+const initialState: UserState = {
   email: '',
   name: '',
   profileImage: '',
 };
 
-const initialAction: AuthAction = {
+const initialAction: UserAction = {
   type: 'PROFILE_IMAGE',
   payload: 'https://images2.alphacoders.com/130/1306410.png',
 };
@@ -14,11 +14,11 @@ const initialAction: AuthAction = {
 /**
  * A reducer that manages state of user's authentication.
  *
- * @param {AuthState} state - Current state of user.
- * @param {AuthAction} action - Information of current user.
- * @returns {AuthState} Updated user's state
+ * @param {UserState} state - Current state of user.
+ * @param {UserAction} action - Information of current user.
+ * @returns {UserState} Updated user's state
  */
-export const authReducer = (state: AuthState = initialState, action: AuthAction = initialAction): AuthState => {
+export const userReducer = (state: UserState = initialState, action: UserAction = initialAction): UserState => {
   switch (action.type) {
     case 'EMAIL':
       return { ...state, email: action.payload };
