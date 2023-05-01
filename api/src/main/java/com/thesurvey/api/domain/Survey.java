@@ -19,7 +19,7 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.thesurvey.api.exception.BadRequestExceptionMapper;
+import com.thesurvey.api.exception.mapper.BadRequestExceptionMapper;
 import com.thesurvey.api.exception.ErrorMessage;
 import lombok.AccessLevel;
 import lombok.Builder;

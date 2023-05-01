@@ -1,12 +1,12 @@
 package com.thesurvey.api.service;
 
 import com.thesurvey.api.domain.User;
-import com.thesurvey.api.dto.request.UserLoginRequestDto;
-import com.thesurvey.api.dto.request.UserRegisterRequestDto;
-import com.thesurvey.api.dto.response.UserResponseDto;
-import com.thesurvey.api.exception.BadRequestExceptionMapper;
+import com.thesurvey.api.dto.request.user.UserLoginRequestDto;
+import com.thesurvey.api.dto.request.user.UserRegisterRequestDto;
+import com.thesurvey.api.dto.response.user.UserResponseDto;
+import com.thesurvey.api.exception.mapper.BadRequestExceptionMapper;
 import com.thesurvey.api.exception.ErrorMessage;
-import com.thesurvey.api.exception.UnauthorizedRequestExceptionMapper;
+import com.thesurvey.api.exception.mapper.UnauthorizedRequestExceptionMapper;
 import com.thesurvey.api.repository.UserRepository;
 import com.thesurvey.api.service.mapper.UserMapper;
 

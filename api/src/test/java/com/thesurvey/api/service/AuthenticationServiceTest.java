@@ -1,8 +1,8 @@
 package com.thesurvey.api.service;
 
-import com.thesurvey.api.dto.request.UserLoginRequestDto;
-import com.thesurvey.api.dto.request.UserRegisterRequestDto;
-import com.thesurvey.api.dto.response.UserResponseDto;
+import com.thesurvey.api.dto.request.user.UserLoginRequestDto;
+import com.thesurvey.api.dto.request.user.UserRegisterRequestDto;
+import com.thesurvey.api.dto.response.user.UserResponseDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;

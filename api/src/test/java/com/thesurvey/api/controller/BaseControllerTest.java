@@ -1,9 +1,9 @@
 package com.thesurvey.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.thesurvey.api.dto.request.SurveyRequestDto;
-import com.thesurvey.api.dto.request.UserLoginRequestDto;
-import com.thesurvey.api.dto.request.UserRegisterRequestDto;
+import com.thesurvey.api.dto.request.survey.SurveyRequestDto;
+import com.thesurvey.api.dto.request.user.UserLoginRequestDto;
+import com.thesurvey.api.dto.request.user.UserRegisterRequestDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

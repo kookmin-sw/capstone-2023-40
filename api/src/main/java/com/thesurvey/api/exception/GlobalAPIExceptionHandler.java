@@ -1,5 +1,9 @@
 package com.thesurvey.api.exception;
 
+import com.thesurvey.api.exception.mapper.BadRequestExceptionMapper;
+import com.thesurvey.api.exception.mapper.ForbiddenRequestExceptionMapper;
+import com.thesurvey.api.exception.mapper.NotFoundExceptionMapper;
+import com.thesurvey.api.exception.mapper.UnauthorizedRequestExceptionMapper;
 import java.util.Objects;
 
 import javax.validation.ConstraintViolationException;

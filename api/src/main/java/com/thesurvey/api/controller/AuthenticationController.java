@@ -2,9 +2,9 @@ package com.thesurvey.api.controller;
 
 import javax.validation.Valid;
 
-import com.thesurvey.api.dto.request.UserLoginRequestDto;
-import com.thesurvey.api.dto.request.UserRegisterRequestDto;
-import com.thesurvey.api.dto.response.UserResponseDto;
+import com.thesurvey.api.dto.request.user.UserLoginRequestDto;
+import com.thesurvey.api.dto.request.user.UserRegisterRequestDto;
+import com.thesurvey.api.dto.response.user.UserResponseDto;
 import com.thesurvey.api.service.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

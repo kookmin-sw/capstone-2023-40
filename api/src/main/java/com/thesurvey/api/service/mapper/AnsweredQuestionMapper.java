@@ -4,7 +4,7 @@ import com.thesurvey.api.domain.AnsweredQuestion;
 import com.thesurvey.api.domain.QuestionBank;
 import com.thesurvey.api.domain.Survey;
 import com.thesurvey.api.domain.User;
-import com.thesurvey.api.dto.request.AnsweredQuestionDto;
+import com.thesurvey.api.dto.request.answeredQuestion.AnsweredQuestionDto;
 import com.thesurvey.api.util.StringUtil;
 
 import org.springframework.stereotype.Component;

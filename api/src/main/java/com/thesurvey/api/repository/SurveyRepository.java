@@ -1,7 +1,7 @@
 package com.thesurvey.api.repository;
 
 import com.thesurvey.api.domain.Survey;
-import com.thesurvey.api.dto.response.UserSurveyTitleDto;
+import com.thesurvey.api.dto.response.user.UserSurveyTitleDto;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;

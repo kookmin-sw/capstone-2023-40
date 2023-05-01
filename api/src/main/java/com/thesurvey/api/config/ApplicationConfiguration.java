@@ -1,7 +1,7 @@
 package com.thesurvey.api.config;
 
 import com.thesurvey.api.exception.ErrorMessage;
-import com.thesurvey.api.exception.NotFoundExceptionMapper;
+import com.thesurvey.api.exception.mapper.NotFoundExceptionMapper;
 import com.thesurvey.api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 

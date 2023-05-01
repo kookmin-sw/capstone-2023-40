@@ -1,6 +1,6 @@
 package com.thesurvey.api.util;
 
-import com.thesurvey.api.exception.BadRequestExceptionMapper;
+import com.thesurvey.api.exception.mapper.BadRequestExceptionMapper;
 import com.thesurvey.api.exception.ErrorMessage;
 
 public class StringUtil {

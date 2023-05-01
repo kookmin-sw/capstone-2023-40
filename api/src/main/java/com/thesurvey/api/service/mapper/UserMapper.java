@@ -1,8 +1,8 @@
 package com.thesurvey.api.service.mapper;
 
 import com.thesurvey.api.domain.User;
-import com.thesurvey.api.dto.request.UserRegisterRequestDto;
-import com.thesurvey.api.dto.response.UserResponseDto;
+import com.thesurvey.api.dto.request.user.UserRegisterRequestDto;
+import com.thesurvey.api.dto.response.user.UserResponseDto;
 import com.thesurvey.api.util.StringUtil;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
