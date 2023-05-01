@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
+import { authReducer } from './auth';
 import { headerReducer } from './header';
 
 /**
@@ -21,6 +22,7 @@ export const persistConfig = {
  */
 export const rootReducer = combineReducers({
   header: headerReducer,
+  auth: authReducer,
 });
 
 export const persistedReducer = persistReducer(persistConfig, rootReducer);

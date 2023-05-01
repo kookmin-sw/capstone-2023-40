@@ -1,6 +1,6 @@
-import { UserInfoState, UserInfoAction } from '../types/userInfo';
+import { ProfileState, ProfileAction } from '../types/profile';
 
-export const userInfoReducer = (state: UserInfoState, action: UserInfoAction): UserInfoState => {
+export const profileReducer = (state: ProfileState, action: ProfileAction): ProfileState => {
   switch (action.type) {
     case 'CHANGE_POINT':
       return { ...state, password: action.payload };

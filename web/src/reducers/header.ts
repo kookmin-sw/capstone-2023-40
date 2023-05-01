@@ -19,26 +19,26 @@ export const initialAction: HeaderAction = {
 };
 
 export interface HeaderState {
-  isLogin: boolean;
+  isLoggedIn: boolean;
   isSubPageOpen: boolean;
 }
 
 export const initialState: HeaderState = {
-  isLogin: false,
+  isLoggedIn: false,
   isSubPageOpen: false,
 };
 
 /**
  * Check login status and Open status of SubPage
  *
- * @param {HeaderState} state: State value of Check Login and Opened SubPage
- * @param {HeaderAction} action: Action method for setLogin and setSubPageOpen
+ * @param {HeaderState} state State value of Check Login and Opened SubPage
+ * @param {HeaderAction} action Action method for setLogin and setSubPageOpen
  * @returns {HeaderState} state Updated state value of Check Login and Opened SubPage
  */
 export const headerReducer = (state: HeaderState = initialState, action: HeaderAction = initialAction): HeaderState => {
   switch (action.type) {
     case 'SETLOGIN':
-      return { ...state, isLogin: !state.isLogin };
+      return { ...state, isLoggedIn: !state.isLoggedIn };
     case 'SETSUBPAGE':
       return { ...state, isSubPageOpen: !state.isSubPageOpen };
     default:

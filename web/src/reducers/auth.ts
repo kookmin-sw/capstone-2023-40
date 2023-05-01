@@ -1,26 +1,31 @@
 import { AuthAction, AuthState } from '../types/auth';
 
+const initialState: AuthState = {
+  email: '',
+  name: '',
+  profileImage: '',
+};
+
+const initialAction: AuthAction = {
+  type: 'PROFILE_IMAGE',
+  payload: 'https://images2.alphacoders.com/130/1306410.png',
+};
+
 /**
- * A reducer that manages state of authentication provider according to action type.
+ * A reducer that manages state of user's authentication.
  *
- * @param {AuthState} state - Current state of auth provider if authenticated.
- * @param {AuthAction} action - The type of auth provider to check
- * @returns {AuthState} Updated state
+ * @param {AuthState} state - Current state of user.
+ * @param {AuthAction} action - Information of current user.
+ * @returns {AuthState} Updated user's state
  */
-export const authReducer = (state: AuthState, action: AuthAction): AuthState => {
+export const authReducer = (state: AuthState = initialState, action: AuthAction = initialAction): AuthState => {
   switch (action.type) {
-    case 'AUTH_KAKAO':
-      return { ...state, kakao: action.payload };
-    case 'AUTH_NAVER':
-      return { ...state, naver: action.payload };
-    case 'AUTH_GOOGLE':
-      return { ...state, google: action.payload };
-    case 'AUTH_IDENTITY':
-      return { ...state, identityCard: action.payload };
-    case 'AUTH_DRIVER':
-      return { ...state, driverLicense: action.payload };
-    case 'AUTH_WEBMAIL':
-      return { ...state, webmail: action.payload };
+    case 'EMAIL':
+      return { ...state, email: action.payload };
+    case 'NAME':
+      return { ...state, name: action.payload };
+    case 'PROFILE_IMAGE':
+      return { ...state, profileImage: action.payload };
     default:
       return state;
   }
