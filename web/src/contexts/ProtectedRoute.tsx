@@ -13,7 +13,7 @@ import { RootState } from '../reducers';
  * @returns
  */
 export default function ProtectedRoute({ children }: { children: JSX.Element }) {
-  const { isLoggedIn } = useSelector((state: RootState) => state.auth.isLoggedIn);
+  const isLoggedIn = useSelector((state: RootState) => state.header.isLoggedIn);
   const prevRoute = useLocation();
 
   if (!isLoggedIn) {
