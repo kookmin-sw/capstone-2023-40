@@ -253,39 +253,37 @@ export default function RegisterForm(props: RegisterFormProps) {
     setIsAlertModal(true);
   };
 
-  async function register(body: UserRegisterRequest) {
-    await axios
-      .post(requests.register, body)
-      .then((_user: AxiosResponse<UserResponse>) => {
-        // setUser(_user);
-      })
-      .catch((_error: AxiosError) => {
-        // setError(_error);
-      })
-      .finally();
-  }
+  const register = async (body: UserRegisterRequest) => {
+    const res = await axios.post<UserResponse>(requests.register, body);
+    if (res.status === 200) {
+      navigate('../login', { replace: true });
+    }
+  };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
   };
 
   const handleOnSubmit = async () => {
-    if (checkUserInput()) {
-      const userRegisterRequest: UserRegisterRequest = {
-        name: state.name,
-        email: state.email,
-        password: state.password,
-        phoneNumber: state.phoneNumber,
-      };
-
-      register(userRegisterRequest);
-
-      // FIXME: belows are not validated and synchronous
-      setTitleAlert('회원가입');
-      setTextAlert('회원가입이 완료되었습니다.');
-      setIsAlertModal(true);
-      navigate('../login');
+    if (!checkUserInput()) {
+      // FIXME: to logger
+      throw new Error('Registeration failed');
     }
+
+    const userRegisterRequest: UserRegisterRequest = {
+      name: state.name,
+      email: state.email,
+      password: state.password,
+      phoneNumber: state.phoneNumber,
+    };
+
+    register(userRegisterRequest);
+
+    // FIXME: belows are not validated and synchronous
+    setTitleAlert('회원가입');
+    setTextAlert('회원가입이 완료되었습니다.');
+    setIsAlertModal(true);
+    navigate('../login');
   };
 
   const closeAlertModal = () => {
