@@ -17,7 +17,7 @@ import {
   setAuthDriver,
   setAuthIdentity,
   setAuthWebMail,
-} from '../../types/auth';
+} from '../../types/profileAuth';
 
 const rotate = keyframes`
   0% {
