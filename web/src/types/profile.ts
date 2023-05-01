@@ -1,4 +1,4 @@
-export type UserInfoState = {
+export type ProfileState = {
   point: string;
   email: string;
   password: string;
@@ -12,7 +12,7 @@ export type UserInfoState = {
   addressDisabled: boolean;
 };
 
-export type UserInfoAction =
+export type ProfileAction =
   | { type: 'CHANGE_POINT'; payload: string }
   | { type: 'CHANGE_EMAIL'; payload: string }
   | { type: 'CHANGE_PASSWORD'; payload: string }
