@@ -2,7 +2,8 @@ import axios, { AxiosError, AxiosInstance, AxiosResponse, InternalAxiosRequestCo
 
 const instance: AxiosInstance = axios.create({
   // baseURL: 'https://capstone-mock-api.fly.dev',
-  baseURL: 'http://localhost:8080',
+  // baseURL: 'http://localhost:8080',
+  baseURL: 'https://api.thesurvey.kr/v1',
   // timeout: 15000,
 });
 

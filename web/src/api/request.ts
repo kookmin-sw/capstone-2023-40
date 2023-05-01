@@ -2,97 +2,97 @@ import * as types from '../types/request';
 
 /**
  * Declare API request snippets. This should follow
- * {@link https://api.thesurvey.kr/v1/swagger-ui/index.html}
+ * {@link https://api.thesurvey.kr/vi/swagger-ui/index.html}
  */
 export const requests = {
   /**
    * Register a new user.
    *
    * @method `POST`
-   * @endpoint `/v1/auth/register`
+   * @endpoint `/auth/register`
    * @body {@link types.UserRegisterRequest} - The user information to register.
    */
-  register: '/v1/auth/register',
+  register: '/auth/register',
   /**
    * Sign in with email and password.
    *
    * @method `POST`
-   * @endpoint `/v1/auth/login`
+   * @endpoint `/auth/login`
    * @body {@link types.UserLoginRequest} - The email address and password of user to sign in.
    */
-  login: '/v1/auth/login',
+  login: '/auth/login',
   /**
    * Sign out from currently signed in user. This will remove JSESSIONID from
    * API Server.
    *
    * @method `GET`
-   * @endpoint `/v1/auth/logout`
+   * @endpoint `/auth/logout`
    */
-  logout: '/v1/auth/logout',
+  logout: '/auth/logout',
   /**
    * Get profile information of currently signed in user. This requires user
    * to be signed in.
    *
    * @method `GET`
-   * @endpoint `/v1/users/profile`
+   * @endpoint `/users/profile`
    */
-  getUserProfile: '/v1/users/profile',
+  getUserProfile: '/users/profile',
   /**
    * Update profile information of currently signed in user. This requires user
    * to be signed in.
    *
    * @method `PATCH`
-   * @endpoint `/v1/users/profile`
+   * @endpoint `/users/profile`
    * @body {@link types.UserUpdateRequest} - The user information to update.
    */
-  updateUserProfile: '/v1/users/profile',
+  updateUserProfile: '/users/profile',
   /**
    * Delete currently signed in user. This requires user
    * to be signed in.
    *
    * @method `DELETE`
-   * @endpoint `/v1/users`
+   * @endpoint `/users`
    */
-  deleteUser: '/v1/users',
+  deleteUser: '/users',
   /**
    * Get paginated survey list. This requires user to be signed in.
    * You can set `pageNum` from 1(default). Page list size is fixed to 8.
    *
    * @method `GET`
-   * @endpoint `/v1/surveys?page={pageNum}`
+   * @endpoint `/surveys?page={pageNum}`
    */
-  getSurvey: '/v1/surveys?page=',
+  getSurvey: '/surveys?page=',
   /**
    * Create a new survey with questions. This requires user to be signed in.
    *
    * @method `POST`
-   * @endpoint `/v1/surveys`
+   * @endpoint `/surveys`
    * @body {@link types.SurveyCreateRequest} - The survey information to create.
    */
-  createSurvey: '/v1/surveys',
+  createSurvey: '/surveys',
   /**
    * Update the survey of `surveyId`. This requires user to be signed in
    * and the author of `surveyId` should match with the requested `userId`.
    *
    * @method `PATCH`
-   * @endpoint `/v1/surveys/:surveyId`
+   * @endpoint `/surveys/:surveyId`
    * @body {@link types.SurveyUpdateRequest} - The survey information to update.
    */
-  updateSurvey: '/v1/surveys/',
+  updateSurvey: '/surveys/',
   /**
    * Delete the survey of `surveyId`. This requires user to be signed in
    * and the author of `surveyId` should match with the requested `userId`.
    *
    * @method `DELETE`
-   * @endpoint `/v1/surveys/:surveyId`
+   * @endpoint `/surveys/:surveyId`
    */
-  deleteSurvey: '/v1/surveys/',
+  deleteSurvey: '/surveys/',
   /**
    * Submit answer of the survey of `surveyId`. This requires user to be signed in.
    *
    * @method `POST`
-   * @endpoint `/v1/surveys/:surveyId`
+   * @endpoint `/surveys/:surveyId`
    * @body {@link types.SurveySubmitRequest} - The survey information to submit.
    */
-  submitSurvey: '/v1/surveys/submit/',
+  submitSurvey: '/surveys/submit/',
 };
