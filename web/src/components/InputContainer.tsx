@@ -49,10 +49,10 @@ const Input = styled.input`
 
 const Button = styled.button`
   border: none;
-  min-width: 70px;
+  min-width: 100px;
   width: 10vw;
   height: 100%;
-  padding: 1.9vh;
+  padding: 1.3em;
   margin-left: 1vh;
   font-size: 1.4vh;
   font-weight: 700;
