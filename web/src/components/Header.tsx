@@ -13,7 +13,7 @@ import HeaderModal from './Modal/HeaderModal';
 
 const HeaderContainer = styled.header<{ isTransitionEnabled: boolean }>`
   position: sticky;
-  top: 0;
+  height: 70px;
   width: 100vw;
   display: flex;
   flex-direction: row;
@@ -25,9 +25,15 @@ const HeaderContainer = styled.header<{ isTransitionEnabled: boolean }>`
   -ms-transition: ${(props) => (props.isTransitionEnabled ? 'background-color 300ms linear' : 'none')};
 `;
 
+const LogoWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const LogoLightContainer = styled(Icons.LIGHT_LOGO)`
   margin-left: 2vw;
-  width: 150px;
+  width: 130px;
   height: fit-content;
   cursor: pointer;
 
@@ -38,7 +44,7 @@ const LogoLightContainer = styled(Icons.LIGHT_LOGO)`
 
 const LogoDarkContainer = styled(Icons.DARK_LOGO)`
   margin-left: 2vw;
-  width: 150px;
+  width: 130px;
   height: fit-content;
   cursor: pointer;
 
@@ -48,7 +54,6 @@ const LogoDarkContainer = styled(Icons.DARK_LOGO)`
 `;
 
 const FaviconContainer = styled(Icons.FAVICON)`
-  margin: 1vw;
   margin-left: 3vw;
   width: 40px;
   height: fit-content;
@@ -161,14 +166,14 @@ const LoginInformation = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(1.5vh + 0.5vmin);
+  font-size: 1em;
   font-weight: 800;
   color: ${(props) => props.theme.colors.text};
   margin: 10px;
   margin-right: 2vw;
   border: none;
   border-radius: ${(props) => props.theme.borderRadius};
-  padding: 1vw;
+  padding: 0.8em;
   cursor: pointer;
   background-color: ${(props) => props.theme.colors.button};
 
@@ -204,7 +209,7 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
   const navigate = useNavigate();
   const currentLocation = useLocation().pathname;
   const [isTransitionEnabled, setIsTransitionEnabled] = useState<boolean>(false);
-  const isLogin = useSelector((state: RootState) => state.header.isLogin);
+  const isLoggedIn = useSelector((state: RootState) => state.header.isLoggedIn);
   const isSubPageOpen = useSelector((state: RootState) => state.header.isSubPageOpen);
   const dispatch = useDispatch();
 
@@ -213,19 +218,14 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
     toggleTheme();
   };
 
+  const LogoContainer = theme.alt === 'light' ? LogoLightContainer : LogoDarkContainer;
+
   return (
     <HeaderContainer theme={theme} isTransitionEnabled={isTransitionEnabled}>
-      {theme.alt === 'light' ? (
-        <>
-          <LogoLightContainer onClick={() => navigate('/')} title="logo" />
-          <FaviconContainer onClick={() => navigate('/')} title="logo" />
-        </>
-      ) : (
-        <>
-          <LogoDarkContainer onClick={() => navigate('/')} title="logo" />
-          <FaviconContainer onClick={() => navigate('/')} title="logo" />
-        </>
-      )}
+      <LogoWrapper>
+        <LogoContainer onClick={() => navigate('/')} title="logo" />
+        <FaviconContainer onClick={() => navigate('/')} title="logo" />
+      </LogoWrapper>
       <NavigatorContainer theme={theme}>
         <Navigator
           currentLocation={currentLocation}
@@ -252,7 +252,7 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
               개인정보 저장하기
             </SaveUserInformationButton>
           ) : undefined}
-          {isLogin ? (
+          {isLoggedIn ? (
             <UserImage onClick={() => dispatch(setSubPageOpen(!isSubPageOpen))} />
           ) : (
             <LoginInformation onClick={() => navigate('/login')} theme={theme}>

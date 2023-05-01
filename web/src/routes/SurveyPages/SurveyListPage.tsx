@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import axios from '../../api/axios';
-import requests from '../../api/request';
+import { requests } from '../../api/request';
 import CertificationList from '../../components/CertificationList';
 import Header from '../../components/Header';
 import { SurveyPreviewModal } from '../../components/Modal';

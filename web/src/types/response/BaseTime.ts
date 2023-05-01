@@ -1,4 +1,4 @@
 export interface BaseTime {
-  createdDate: Date;
-  modifiedDate: Date;
+  createdDate: Date | string;
+  modifiedDate: Date | string;
 }

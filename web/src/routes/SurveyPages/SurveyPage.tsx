@@ -5,11 +5,11 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import axios from '../../api/axios';
-import requests from '../../api/request';
+import { requests } from '../../api/request';
+import { RectanglePrimaryButton } from '../../components/Button/Buttons';
 import Header from '../../components/Header';
 import SurveyPageResultModal from '../../components/Modal/SurveyPageResultModal';
 import SurveyPageSkeleton from '../../components/Skeleton/SurveyPageSkeleton';
-import { RectanglePrimaryButton } from '../../components/Styled/Buttons';
 import { useTheme } from '../../hooks/useTheme';
 import { scrollToRef } from '../../utils/scroll';
 

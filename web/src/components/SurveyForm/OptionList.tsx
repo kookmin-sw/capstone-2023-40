@@ -4,7 +4,7 @@ import styled, { DefaultTheme } from 'styled-components';
 
 import { SurveyCreateRequest } from '../../types/request/Survey';
 import { NumberUtils } from '../../utils/NumberUtils';
-import { DeleteImage } from '../Styled/ImageButtons';
+import { DeleteImage } from '../Button/ImageButtons';
 
 const OptionsContainer = styled.div``;
 

@@ -3,7 +3,7 @@ import React from 'react';
 import styled, { DefaultTheme } from 'styled-components';
 
 import { Icons } from '../../assets/svg';
-import { RectangleButton } from '../Styled/Buttons';
+import { RectangleButton } from '../Button/Buttons';
 
 const Container = styled.div`
   width: 100vw;
@@ -46,15 +46,6 @@ const BodyContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   padding: 1em;
-`;
-
-// TODO: This container is replaced TextContainer, but it isn't perfect UI.
-const ListContainer = styled.ul`
-  list-style-type: none;
-  align-items: center;
-  justify-content: center;
-  font-size: 1em;
-  font-weight: 700;
 `;
 
 const TextContainer = styled.span`

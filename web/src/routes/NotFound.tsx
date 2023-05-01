@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import NotFoundImage from '../assets/not-found.webp';
@@ -48,6 +49,7 @@ const Button = styled.button`
 
 export default function NotFound() {
   const [theme, toggleTheme] = useTheme();
+  const navigate = useNavigate();
 
   return (
     <Container theme={theme}>
@@ -56,7 +58,9 @@ export default function NotFound() {
       <Content theme={theme}>
         <Image src={NotFoundImage} alt="not-found-image" />
         <ButtonContainer>
-          <Button theme={theme}>홈 화면으로 돌아가기</Button>
+          <Button theme={theme} onClick={() => navigate('/')}>
+            홈 화면으로 돌아가기
+          </Button>
         </ButtonContainer>
       </Content>
     </Container>

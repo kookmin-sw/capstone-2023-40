@@ -4,7 +4,7 @@ import styled, { DefaultTheme } from 'styled-components';
 
 import { QuestionType } from '../../types/request/Question';
 import { SurveyCreateRequest } from '../../types/request/Survey';
-import { PlusImage, TrashImage } from '../Styled/ImageButtons';
+import { PlusImage, TrashImage } from '../Button/ImageButtons';
 import OptionList from './OptionList';
 import QuestionTypeSelector from './QuestionTypeSelector';
 
@@ -106,12 +106,8 @@ export default function QuestionForm({
   handleChangeOption,
   theme,
 }: SubjectiveAnswerFormProps) {
-  let answerLabel = '';
-  if (selected === QuestionType.LONG_ANSWER) {
-    answerLabel = '장문형 답변이 입력됩니다.';
-  } else {
-    answerLabel = '단답형 답변이 입력됩니다.';
-  }
+  const answerLabel = selected === QuestionType.LONG_ANSWER ? '장문형 답변이 입력됩니다.' : '단답형 답변이 입력됩니다.';
+
   return (
     <Container data-testid="question">
       <HeadContainer>

@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { FormState, FormAction } from '../types/form';
+import { RegisterFormState, RegisterFormAction } from '../types/registerForm';
 
-export const formReducer = (state: FormState, action: FormAction): FormState => {
+export const formReducer = (state: RegisterFormState, action: RegisterFormAction): RegisterFormState => {
   switch (action.type) {
     case 'SET_EMAIL':
       return { ...state, email: action.payload };

@@ -1,4 +1,4 @@
-export type AuthState = {
+export type SurveyAuthState = {
   kakao: boolean;
   naver: boolean;
   google: boolean;
@@ -7,7 +7,7 @@ export type AuthState = {
   webmail: boolean;
 };
 
-export type AuthAction =
+export type SurveyAuthAction =
   | { type: 'AUTH_KAKAO'; payload: boolean }
   | { type: 'AUTH_NAVER'; payload: boolean }
   | { type: 'AUTH_GOOGLE'; payload: boolean }
