@@ -3,7 +3,7 @@ import React from 'react';
 import styled, { DefaultTheme } from 'styled-components';
 
 import { Icons } from '../../assets/svg';
-import { RectangleButton, RectanglePrimaryButton } from '../Styled/Buttons';
+import { RectangleButton, RectanglePrimaryButton } from '../Button/Buttons';
 
 const Container = styled.div`
   width: 100vw;

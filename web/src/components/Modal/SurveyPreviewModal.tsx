@@ -4,9 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
 
 import { useOnClickOutside } from '../../hooks/useOnClickOutside';
+import { RectanglePrimaryButton } from '../Button/Buttons';
+import { DeleteImage } from '../Button/ImageButtons';
 import CertificationList from '../CertificationList';
-import { RectanglePrimaryButton } from '../Styled/Buttons';
-import { DeleteImage } from '../Styled/ImageButtons';
 
 const Container = styled.div`
   width: 100vw;
