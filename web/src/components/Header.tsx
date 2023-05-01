@@ -14,6 +14,7 @@ import HeaderModal from './Modal/HeaderModal';
 const HeaderContainer = styled.header<{ isTransitionEnabled: boolean }>`
   position: sticky;
   top: 0;
+  height: 70px;
   width: 100vw;
   display: flex;
   flex-direction: row;
@@ -27,7 +28,7 @@ const HeaderContainer = styled.header<{ isTransitionEnabled: boolean }>`
 
 const LogoLightContainer = styled(Icons.LIGHT_LOGO)`
   margin-left: 2vw;
-  width: 150px;
+  width: 130px;
   height: fit-content;
   cursor: pointer;
 
@@ -38,7 +39,7 @@ const LogoLightContainer = styled(Icons.LIGHT_LOGO)`
 
 const LogoDarkContainer = styled(Icons.DARK_LOGO)`
   margin-left: 2vw;
-  width: 150px;
+  width: 130px;
   height: fit-content;
   cursor: pointer;
 
@@ -48,6 +49,9 @@ const LogoDarkContainer = styled(Icons.DARK_LOGO)`
 `;
 
 const FaviconContainer = styled(Icons.FAVICON)`
+  display: flex;
+  justify-content: center;
+
   margin: 1vw;
   margin-left: 3vw;
   width: 40px;
@@ -204,7 +208,7 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
   const navigate = useNavigate();
   const currentLocation = useLocation().pathname;
   const [isTransitionEnabled, setIsTransitionEnabled] = useState<boolean>(false);
-  const isLogin = useSelector((state: RootState) => state.header.isLogin);
+  const isLoggedIn = useSelector((state: RootState) => state.header.isLoggedIn);
   const isSubPageOpen = useSelector((state: RootState) => state.header.isSubPageOpen);
   const dispatch = useDispatch();
 
@@ -213,19 +217,14 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
     toggleTheme();
   };
 
+  const LogoContainer = theme.alt === 'light' ? LogoLightContainer : LogoDarkContainer;
+
   return (
     <HeaderContainer theme={theme} isTransitionEnabled={isTransitionEnabled}>
-      {theme.alt === 'light' ? (
-        <>
-          <LogoLightContainer onClick={() => navigate('/')} title="logo" />
-          <FaviconContainer onClick={() => navigate('/')} title="logo" />
-        </>
-      ) : (
-        <>
-          <LogoDarkContainer onClick={() => navigate('/')} title="logo" />
-          <FaviconContainer onClick={() => navigate('/')} title="logo" />
-        </>
-      )}
+      <>
+        <LogoContainer onClick={() => navigate('/')} title="logo" />
+        <FaviconContainer onClick={() => navigate('/')} title="logo" />
+      </>
       <NavigatorContainer theme={theme}>
         <Navigator
           currentLocation={currentLocation}
@@ -252,7 +251,7 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
               개인정보 저장하기
             </SaveUserInformationButton>
           ) : undefined}
-          {isLogin ? (
+          {isLoggedIn ? (
             <UserImage onClick={() => dispatch(setSubPageOpen(!isSubPageOpen))} />
           ) : (
             <LoginInformation onClick={() => navigate('/login')} theme={theme}>
