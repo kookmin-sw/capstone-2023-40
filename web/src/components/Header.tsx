@@ -13,7 +13,6 @@ import HeaderModal from './Modal/HeaderModal';
 
 const HeaderContainer = styled.header<{ isTransitionEnabled: boolean }>`
   position: sticky;
-  top: 0;
   height: 70px;
   width: 100vw;
   display: flex;
@@ -24,6 +23,12 @@ const HeaderContainer = styled.header<{ isTransitionEnabled: boolean }>`
   -ms-transition: ${(props) => (props.isTransitionEnabled ? 'background-color 300ms linear' : 'none')};
   -o-transition: ${(props) => (props.isTransitionEnabled ? 'background-color 300ms linear' : 'none')};
   -ms-transition: ${(props) => (props.isTransitionEnabled ? 'background-color 300ms linear' : 'none')};
+`;
+
+const LogoWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const LogoLightContainer = styled(Icons.LIGHT_LOGO)`
@@ -49,10 +54,6 @@ const LogoDarkContainer = styled(Icons.DARK_LOGO)`
 `;
 
 const FaviconContainer = styled(Icons.FAVICON)`
-  display: flex;
-  justify-content: center;
-
-  margin: 1vw;
   margin-left: 3vw;
   width: 40px;
   height: fit-content;
@@ -165,14 +166,14 @@ const LoginInformation = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(1.5vh + 0.5vmin);
+  font-size: 1em;
   font-weight: 800;
   color: ${(props) => props.theme.colors.text};
   margin: 10px;
   margin-right: 2vw;
   border: none;
   border-radius: ${(props) => props.theme.borderRadius};
-  padding: 1vw;
+  padding: 0.8em;
   cursor: pointer;
   background-color: ${(props) => props.theme.colors.button};
 
@@ -221,10 +222,10 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
 
   return (
     <HeaderContainer theme={theme} isTransitionEnabled={isTransitionEnabled}>
-      <>
+      <LogoWrapper>
         <LogoContainer onClick={() => navigate('/')} title="logo" />
         <FaviconContainer onClick={() => navigate('/')} title="logo" />
-      </>
+      </LogoWrapper>
       <NavigatorContainer theme={theme}>
         <Navigator
           currentLocation={currentLocation}

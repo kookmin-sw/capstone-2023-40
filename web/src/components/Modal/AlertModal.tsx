@@ -48,15 +48,6 @@ const BodyContainer = styled.div`
   padding: 1em;
 `;
 
-// TODO: This container is replaced TextContainer, but it isn't perfect UI.
-const ListContainer = styled.ul`
-  list-style-type: none;
-  align-items: center;
-  justify-content: center;
-  font-size: 1em;
-  font-weight: 700;
-`;
-
 const TextContainer = styled.span`
   list-style-type: none;
   align-items: center;

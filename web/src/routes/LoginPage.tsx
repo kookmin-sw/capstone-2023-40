@@ -24,7 +24,7 @@ export default function LoginPage() {
   return (
     <Container>
       <Header theme={theme} toggleTheme={toggleTheme} />
-      <LoginForm />
+      <LoginForm theme={theme} />
     </Container>
   );
 }

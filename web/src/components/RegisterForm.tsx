@@ -21,6 +21,11 @@ const Container = styled.div`
   margin-top: calc(2vh - 2vmin);
   min-width: 30vh;
   height: 80vh;
+
+  @media screen and (max-width: 800px) {
+    margin-left: 5vw;
+    margin-right: 5vw;
+  }
 `;
 
 const Form = styled.form`

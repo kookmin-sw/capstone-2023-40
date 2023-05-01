@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { DefaultTheme } from 'styled-components';
 
 import axios from '../api/axios';
 import { requests } from '../api/request';
@@ -17,11 +17,15 @@ const LoginContainer = styled.div`
   margin-left: 20vw;
   margin-right: 20vw;
   margin-top: 2vw;
-  min-width: 20vh;
   height: 50vh;
   border-radius: ${(props) => props.theme.borderRadius};
   background-color: ${(props) => props.theme.colors.container};
   box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
+
+  @media screen and (max-width: 800px) {
+    margin-left: 10vw;
+    margin-right: 10vw;
+  }
 `;
 
 const Form = styled.form`
@@ -86,8 +90,11 @@ const Button = styled.button`
   }
 `;
 
-export default function LoginForm() {
-  const [theme] = useTheme();
+interface LoginFormProps {
+  theme: DefaultTheme;
+}
+
+export default function LoginForm({ theme }: LoginFormProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isAlertModal, setIsAlertModal] = useState<boolean>(false);
