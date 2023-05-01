@@ -1,8 +1,9 @@
 import React from 'react';
 
+import { useSelector } from 'react-redux';
 import { Navigate, useLocation } from 'react-router-dom';
 
-import useAuth from '../hooks/useAuth';
+import { RootState } from '../reducers';
 
 /**
  * The protected route that should be only allowed for authenticated users.
@@ -12,10 +13,10 @@ import useAuth from '../hooks/useAuth';
  * @returns
  */
 export default function ProtectedRoute({ children }: { children: JSX.Element }) {
-  const { user } = useAuth();
+  const { isLoggedIn } = useSelector((state: RootState) => state.auth.isLoggedIn);
   const prevRoute = useLocation();
 
-  if (!user) {
+  if (!isLoggedIn) {
     return <Navigate to="/login" state={{ prevRoute }} />;
   }
 
