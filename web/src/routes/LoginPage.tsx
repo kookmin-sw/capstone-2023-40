@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
-import axios from 'axios';
-import { useSelector, useDispatch } from 'react-redux';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
+import axios from '../api/axios';
+import { requests } from '../api/request';
 import BackgroundImage from '../assets/main-page.webp';
 import Header from '../components/Header';
 import AlertModal from '../components/Modal/AlertModal';
 import { useTheme } from '../hooks/useTheme';
-import { RootState } from '../reducers';
 import { setLogin } from '../reducers/header';
+import { UserResponse } from '../types/response/User';
 import { isEmptyString } from '../utils/validate';
 
 const Container = styled.div`
@@ -106,43 +107,35 @@ export default function LoginPage() {
   const [isAlertModal, setIsAlertModal] = useState<boolean>(false);
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
-  const isLogin = useSelector((state: RootState) => state.header.isLogin);
   const dispatch = useDispatch();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
   };
 
-  // TODO: It will have to Add connect User DataBase - Email & Password
-  const loginFunction = () => {
-    // Check isEmpty Email or Password
+  const checkLoginInput = (): boolean => {
     if (isEmptyString(email) || isEmptyString(password)) {
       setTitle('로그인 오류');
       setText('아이디 또는 비밀번호를 확인해주세요.');
-    } else {
-      // const loginRequestBody = {
-      //   email,
-      //   password,
-      // };
-      // axios.post(`https://capstone-mock-api.fly.dev/api/auth/login`, loginRequestBody).then((res) => {
-      //   console.log(res.data.message);
-      //   // TODO: add to other response [ 존재하지 않는 email, Password가 틀림 ]
-      //   if (res.data.code === 200) {
-      //     setTitle('로그인 성공');
-      //     setText('로그인에 성공했습니다!');
-      //     dispatch(setLogin(!isLogin));
-      //     navigate('../../');
-      //   } else {
-      //     setTitle('로그인 오류');
-      //     setText('아이디 또는 비밀번호를 확인해주세요.');
-      //   }
-      // });
-      setTitle('로그인 성공');
-      setText('로그인에 성공했습니다!');
-      dispatch(setLogin(!isLogin));
+      setIsAlertModal(true);
+      return false;
+    }
+    return true;
+  };
+
+  const handleLogin = async () => {
+    if (!checkLoginInput()) {
+      // FIXME: to logger
+      throw new Error('Login failed');
+    }
+
+    const loginRequestBody = { email, password };
+    const res = await axios.post<UserResponse>(requests.login, loginRequestBody);
+
+    if (res.status === 200) {
+      dispatch(setLogin(true));
       navigate('../../');
     }
-    setIsAlertModal(true);
   };
 
   const closeAlertModal = () => {
@@ -173,7 +166,7 @@ export default function LoginPage() {
             theme={theme}
             placeholder="비밀번호를 입력하세요."
           />
-          <Button onClick={() => loginFunction()} theme={theme}>
+          <Button onClick={() => handleLogin()} theme={theme}>
             로그인
           </Button>
           {isAlertModal && (
