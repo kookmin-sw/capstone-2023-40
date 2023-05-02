@@ -23,7 +23,7 @@ public interface SurveyRepository extends JpaRepository<Survey, UUID> {
 
     Optional<Survey> findBySurveyId(UUID surveyId);
 
-    @Query("SELECT new com.thesurvey.api.dto.response.UserSurveyTitleDto(s.surveyId, s.title) FROM Survey s WHERE s.authorId = :author_Id ORDER BY s.createdDate DESC")
+    @Query("SELECT new com.thesurvey.api.dto.response.user.UserSurveyTitleDto(s.surveyId, s.title) FROM Survey s WHERE s.authorId = :author_Id ORDER BY s.createdDate DESC")
     List<UserSurveyTitleDto> findUserCreatedSurveysByAuthorID(@Param("author_Id") Long authorId);
     
 }
