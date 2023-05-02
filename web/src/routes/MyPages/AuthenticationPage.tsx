@@ -17,7 +17,7 @@ import {
   setAuthDriver,
   setAuthIdentity,
   setAuthWebMail,
-} from '../../types/profileAuth';
+} from '../../types/surveyAuth';
 
 const rotate = keyframes`
   0% {
@@ -99,7 +99,7 @@ export default function AuthenticationPage() {
   const [theme, toggleTheme] = useTheme();
   const navigate = useNavigate();
   const [completeAuth, setCompleteAuth] = useState<boolean>(false);
-  const authState = useSelector((state: RootState) => state.auth);
+  const surveyAuthState = useSelector((state: RootState) => state.surveyAuth);
   const location = useLocation();
   const dispatch = useDispatch();
   const state = { ...location.state };
@@ -107,22 +107,22 @@ export default function AuthenticationPage() {
   const handleClick = (title: string) => {
     switch (title) {
       case '카카오':
-        dispatch(setAuthKakao(authState.kakao));
+        dispatch(setAuthKakao(surveyAuthState.kakao));
         break;
       case '네이버':
-        dispatch(setAuthNaver(authState.naver));
+        dispatch(setAuthNaver(surveyAuthState.naver));
         break;
       case '구글':
-        dispatch(setAuthGoogle(authState.google));
+        dispatch(setAuthGoogle(surveyAuthState.google));
         break;
       case '신분증':
-        dispatch(setAuthIdentity(authState.identityCard));
+        dispatch(setAuthIdentity(surveyAuthState.identityCard));
         break;
       case '운전면허':
-        dispatch(setAuthDriver(authState.driverLicense));
+        dispatch(setAuthDriver(surveyAuthState.driverLicense));
         break;
       case '웹메일':
-        dispatch(setAuthWebMail(authState.webmail));
+        dispatch(setAuthWebMail(surveyAuthState.webmail));
         break;
       default:
         break;

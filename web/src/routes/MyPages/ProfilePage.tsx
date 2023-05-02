@@ -3,10 +3,13 @@ import React, { useReducer, SyntheticEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
+import axios from '../../api/axios';
+import { requests } from '../../api/request';
 import { Icons } from '../../assets/svg/index';
 import Header from '../../components/Header';
 import { useTheme } from '../../hooks/useTheme';
 import { profileReducer } from '../../reducers/profile';
+import { UserResponse } from '../../types/response/User';
 
 const PencilImage = styled(Icons.PENCIL).attrs({
   width: 30,
@@ -192,6 +195,8 @@ export default function MyPage() {
     event.preventDefault();
   };
 
+  const res = axios.get<UserResponse>(requests.getUserProfile);
+  console.log(res);
   // containerBox list
   const myProfileInformation = [
     {

@@ -71,6 +71,14 @@ function App() {
           }
         />
         <Route
+          path="/mypage/authentication"
+          element={
+            <ProtectedRoute>
+              <AuthenticationPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/mypage/survey-result/:id"
           element={
             <ProtectedRoute>
