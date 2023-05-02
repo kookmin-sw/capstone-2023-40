@@ -4,8 +4,8 @@ package com.thesurvey.api.controller;
 import java.util.UUID;
 
 import com.thesurvey.api.domain.EnumTypeEntity.Role;
-import com.thesurvey.api.dto.request.UserLoginRequestDto;
-import com.thesurvey.api.dto.request.UserRegisterRequestDto;
+import com.thesurvey.api.dto.request.user.UserLoginRequestDto;
+import com.thesurvey.api.dto.request.user.UserRegisterRequestDto;
 import com.thesurvey.api.repository.UserRepository;
 import com.thesurvey.api.service.AuthenticationService;
 import com.thesurvey.api.service.SurveyService;

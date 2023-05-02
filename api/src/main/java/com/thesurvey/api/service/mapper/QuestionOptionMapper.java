@@ -2,8 +2,8 @@ package com.thesurvey.api.service.mapper;
 
 import com.thesurvey.api.domain.QuestionBank;
 import com.thesurvey.api.domain.QuestionOption;
-import com.thesurvey.api.dto.request.QuestionOptionRequestDto;
-import com.thesurvey.api.dto.response.QuestionOptionResponseDto;
+import com.thesurvey.api.dto.request.question.QuestionOptionRequestDto;
+import com.thesurvey.api.dto.response.question.QuestionOptionResponseDto;
 import com.thesurvey.api.util.StringUtil;
 
 import org.springframework.stereotype.Component;

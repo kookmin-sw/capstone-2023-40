@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.thesurvey.api.domain.User;
 import com.thesurvey.api.exception.ErrorMessage;
-import com.thesurvey.api.exception.UnauthorizedRequestExceptionMapper;
+import com.thesurvey.api.exception.mapper.UnauthorizedRequestExceptionMapper;
 import com.thesurvey.api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 

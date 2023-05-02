@@ -4,11 +4,11 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
-import com.thesurvey.api.dto.request.AnsweredQuestionRequestDto;
-import com.thesurvey.api.dto.request.SurveyRequestDto;
-import com.thesurvey.api.dto.request.SurveyUpdateRequestDto;
-import com.thesurvey.api.dto.response.SurveyListPageDto;
-import com.thesurvey.api.dto.response.SurveyResponseDto;
+import com.thesurvey.api.dto.request.answeredQuestion.AnsweredQuestionRequestDto;
+import com.thesurvey.api.dto.request.survey.SurveyRequestDto;
+import com.thesurvey.api.dto.request.survey.SurveyUpdateRequestDto;
+import com.thesurvey.api.dto.response.survey.SurveyListPageDto;
+import com.thesurvey.api.dto.response.survey.SurveyResponseDto;
 import com.thesurvey.api.service.AnsweredQuestionService;
 import com.thesurvey.api.service.SurveyService;
 import io.swagger.v3.oas.annotations.Operation;

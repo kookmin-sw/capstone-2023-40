@@ -2,8 +2,8 @@ package com.thesurvey.api.util;
 
 import com.thesurvey.api.domain.User;
 import com.thesurvey.api.exception.ErrorMessage;
-import com.thesurvey.api.exception.NotFoundExceptionMapper;
-import com.thesurvey.api.exception.UnauthorizedRequestExceptionMapper;
+import com.thesurvey.api.exception.mapper.NotFoundExceptionMapper;
+import com.thesurvey.api.exception.mapper.UnauthorizedRequestExceptionMapper;
 import com.thesurvey.api.repository.UserRepository;
 
 import org.springframework.security.core.Authentication;

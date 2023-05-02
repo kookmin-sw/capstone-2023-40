@@ -1,9 +1,9 @@
 package com.thesurvey.api.controller;
 
-import com.thesurvey.api.dto.response.UserSurveyResultDto;
-import com.thesurvey.api.dto.response.UserResponseDto;
-import com.thesurvey.api.dto.request.UserUpdateRequestDto;
-import com.thesurvey.api.dto.response.UserSurveyTitleDto;
+import com.thesurvey.api.dto.response.user.UserSurveyResultDto;
+import com.thesurvey.api.dto.response.user.UserResponseDto;
+import com.thesurvey.api.dto.request.user.UserUpdateRequestDto;
+import com.thesurvey.api.dto.response.user.UserSurveyTitleDto;
 import com.thesurvey.api.service.SurveyService;
 import com.thesurvey.api.service.UserService;
 

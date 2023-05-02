@@ -5,10 +5,10 @@ import java.util.stream.Collectors;
 
 import com.thesurvey.api.domain.QuestionBank;
 import com.thesurvey.api.domain.QuestionOption;
-import com.thesurvey.api.dto.request.QuestionOptionUpdateRequestDto;
-import com.thesurvey.api.dto.request.QuestionRequestDto;
+import com.thesurvey.api.dto.request.question.QuestionOptionUpdateRequestDto;
+import com.thesurvey.api.dto.request.question.QuestionRequestDto;
 import com.thesurvey.api.exception.ErrorMessage;
-import com.thesurvey.api.exception.NotFoundExceptionMapper;
+import com.thesurvey.api.exception.mapper.NotFoundExceptionMapper;
 import com.thesurvey.api.repository.QuestionOptionRepository;
 import com.thesurvey.api.service.mapper.QuestionOptionMapper;
 import com.thesurvey.api.util.StringUtil;
