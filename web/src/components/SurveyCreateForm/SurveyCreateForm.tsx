@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled, { DefaultTheme } from 'styled-components';
 
 import axios from '../../api/axios';
-import requests from '../../api/request';
+import { requests } from '../../api/request';
 import { QuestionCreateRequest, QuestionType } from '../../types/request/Question';
 import { QuestionOptionCreateRequest } from '../../types/request/QuestionOption';
 import { SurveyCreateRequest } from '../../types/request/Survey';

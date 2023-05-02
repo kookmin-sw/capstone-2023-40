@@ -13,7 +13,7 @@ const Container = styled.div`
   background-color: ${(props) => props.theme.colors.container};
 `;
 
-const HeadContainer = styled.div`
+const TitleContainer = styled.div`
   padding: 3vh 8vw 0vh 8vw;
   background-color: ${(props) => props.theme.colors.container};
 `;
@@ -32,9 +32,9 @@ export default function SurveyFormPage() {
   return (
     <Container theme={theme}>
       <Header theme={theme} toggleTheme={toggleTheme} />
-      <HeadContainer theme={theme}>
+      <TitleContainer theme={theme}>
         <Title theme={theme}>설문조사 작성</Title>
-      </HeadContainer>
+      </TitleContainer>
       <SurveyCreateForm theme={theme} />
     </Container>
   );

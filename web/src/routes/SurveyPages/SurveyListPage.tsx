@@ -11,7 +11,7 @@ import Pagination from '../../components/Pagination';
 import SurveyListSkeleton from '../../components/Skeleton/SurveyListSkeleton';
 import SurveyListTable from '../../components/SurveyListTable';
 import { useTheme } from '../../hooks/useTheme';
-import { SurveyAbstractResponse } from '../../types/response/Survey';
+import { SurveyAbstractResponse, SurveyPageResponse } from '../../types/response/Survey';
 
 const Container = styled.div`
   width: 100vw;
@@ -32,9 +32,10 @@ export default function SurveyListPage() {
   const fetchSurveyList = async (abortSignal: AbortSignal): Promise<void> => {
     setIsLoading(true);
     try {
-      // const request: AxiosResponse<SurveyPageResponse> = await axios.get<SurveyPageResponse>(`${requests.getSurveyPage}?page=${page}`, {
-      //   signal: abortSignal,
-      // });
+      // const request: AxiosResponse<SurveyPageResponse> = await axios.get<SurveyPageResponse>(
+      //   `${requests.getSurvey}${page}`,
+      //   { signal: abortSignal, }
+      // );
       const request = {
         surveys: [
           {
