@@ -2,11 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 
 import styled from 'styled-components';
 
-// import axios from '../../api/axios';
-// import requests from '../../api/request';
+import { RectanglePrimaryButton } from '../../components/Button/Buttons';
 import Header from '../../components/Header';
 import { SurveyPageResultModal, AlertModal, ConfirmModal } from '../../components/Modal';
-import { RectanglePrimaryButton } from '../../components/Styled/Buttons';
 import QuestionForm from '../../components/SurveyForm/QuestionForm';
 import SurveyDataForm from '../../components/SurveyForm/SurveyDataForm';
 import { useTheme } from '../../hooks/useTheme';

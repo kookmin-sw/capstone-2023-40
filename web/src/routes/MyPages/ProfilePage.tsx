@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { Icons } from '../../assets/svg/index';
 import Header from '../../components/Header';
 import { useTheme } from '../../hooks/useTheme';
-import { userInfoReducer } from '../../reducers/userInfo';
+import { profileReducer } from '../../reducers/profile';
 
 const PencilImage = styled(Icons.PENCIL).attrs({
   width: 30,
@@ -50,7 +50,6 @@ const Container = styled.div`
 
 const MypageContainer = styled.div`
   padding: 5vw;
-  min-width: 40vh;
   height: 80vh;
   background-color: ${(props) => props.theme.colors.container};
 `;
@@ -154,8 +153,7 @@ const formatPhoneNumber = (value: string): string => {
 export default function MyPage() {
   const [theme, toggleTheme] = useTheme();
   const navigate = useNavigate();
-
-  const [state, dispatch] = useReducer(userInfoReducer, initalState);
+  const [state, dispatch] = useReducer(profileReducer, initalState);
 
   // Input Data list
   const handleInputChange = (e: SyntheticEvent<HTMLInputElement>) => {

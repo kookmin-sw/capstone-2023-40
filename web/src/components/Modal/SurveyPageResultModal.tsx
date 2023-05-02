@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
 
-import { RectanglePrimaryButton } from '../Styled/Buttons';
+import { RectanglePrimaryButton } from '../Button/Buttons';
 
 const Container = styled.div`
   width: 100vw;

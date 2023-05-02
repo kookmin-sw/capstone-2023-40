@@ -50,12 +50,12 @@ interface HeaderProps {
 
 export default function Header({ theme }: HeaderProps) {
   const navigate = useNavigate();
-  const isLogin = useSelector((state: RootState) => state.header.isLogin);
+  const isLoggedIn = useSelector((state: RootState) => state.header.isLoggedIn);
   const isSubPageOpen = useSelector((state: RootState) => state.header.isSubPageOpen);
   const dispatch = useDispatch();
 
   const logoutClick = () => {
-    dispatch(setLogin(!isLogin));
+    dispatch(setLogin(!isLoggedIn));
     dispatch(setSubPageOpen(!isSubPageOpen));
     navigate('../../../');
   };

@@ -1,4 +1,4 @@
-export interface FormState {
+export interface RegisterFormState {
   /**
    * Initial state for inputs.
    */
@@ -18,7 +18,7 @@ export interface FormState {
   isUserInfoConsentChecked: boolean;
 }
 
-export type FormAction =
+export type RegisterFormAction =
   | { type: 'SET_EMAIL'; payload: string }
   | { type: 'SET_PASSWORD'; payload: string }
   | { type: 'SET_CONFIRM_PASSWORD'; payload: string }

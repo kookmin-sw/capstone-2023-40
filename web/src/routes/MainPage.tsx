@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -8,7 +8,6 @@ import BackgroundImage from '../assets/main-page.webp';
 import Header from '../components/Header';
 import { useTheme } from '../hooks/useTheme';
 import { RootState } from '../reducers';
-import { setLogin } from '../reducers/header';
 
 const Container = styled.div`
   width: 100vw;
@@ -61,8 +60,7 @@ const Button = styled.button`
 export default function MainPage() {
   const [theme, toggleTheme] = useTheme();
   const navigate = useNavigate();
-  const isLogin = useSelector((state: RootState) => state.header.isLogin);
-  const dispatch = useDispatch();
+  const isLoggedIn = useSelector((state: RootState) => state.header.isLoggedIn);
 
   return (
     <Container>
@@ -74,15 +72,9 @@ export default function MainPage() {
           <AppTitle>더 서베이</AppTitle>
           에서 쉽고 간편하게
         </Description>
-        {!isLogin ? (
-          <Button onClick={() => navigate('/login')} theme={theme}>
-            바로 설문하기
-          </Button>
-        ) : (
-          <Button onClick={() => navigate('/survey')} theme={theme}>
-            바로 설문하기
-          </Button>
-        )}
+        <Button onClick={() => navigate(isLoggedIn ? '/survey' : '/login')} theme={theme}>
+          바로 설문하기
+        </Button>
       </Introduction>
     </Container>
   );

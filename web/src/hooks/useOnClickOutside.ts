@@ -12,7 +12,6 @@ export const useOnClickOutside = ({ ref, handler }: Props) => {
         return;
       }
       handler();
-      console.log('클릭됨');
     };
     window.addEventListener('mousedown', listener);
     return () => {
