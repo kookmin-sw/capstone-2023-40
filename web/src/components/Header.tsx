@@ -1,14 +1,17 @@
-import React, { useReducer, useState } from 'react';
+import React, { useState } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
 
+import axios from '../api/axios';
+import { requests } from '../api/request';
 import DarkModeIcon from '../assets/darkmode.webp';
 import LightModeIcon from '../assets/lightmode.webp';
 import { Icons } from '../assets/svg';
 import { setSubPageOpen } from '../reducers/header';
 import { RootState } from '../reducers/index';
+import { UserResponse } from '../types/response/User';
 import HeaderModal from './Modal/HeaderModal';
 
 const HeaderContainer = styled.header<{ isTransitionEnabled: boolean }>`
@@ -209,6 +212,9 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
   const navigate = useNavigate();
   const currentLocation = useLocation().pathname;
   const [isTransitionEnabled, setIsTransitionEnabled] = useState<boolean>(false);
+  const password = useSelector((state: RootState) => state.profile.password);
+  const phoneNumber = useSelector((state: RootState) => state.profile.phoneNumber);
+  const address = useSelector((state: RootState) => state.profile.address);
   const isLoggedIn = useSelector((state: RootState) => state.header.isLoggedIn);
   const isSubPageOpen = useSelector((state: RootState) => state.header.isSubPageOpen);
   const dispatch = useDispatch();
@@ -218,7 +224,13 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
     toggleTheme();
   };
 
-  const handleUserInformationSave = () => {};
+  const profileImage = 'https://images2.alphacoders.com/130/1306410.png';
+
+  const handleUserInformationSave = async () => {
+    const profilePatchBody = { password, phoneNumber, address, profileImage };
+    const res = await axios.patch<UserResponse>(requests.updateUserProfile, profilePatchBody);
+    console.log(res.data);
+  };
 
   const LogoContainer = theme.alt === 'light' ? LogoLightContainer : LogoDarkContainer;
 
