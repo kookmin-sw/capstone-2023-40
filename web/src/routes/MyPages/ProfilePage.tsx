@@ -209,12 +209,6 @@ export default function MyPage() {
     setIsAlertModal(false);
   };
 
-  useEffect(() => {
-    const res = axios.get<UserResponse>(requests.getUserProfile);
-    // setUserProfile(res);
-    console.log(res);
-  }, []); // 여기에 dependency를 넣는데, 이걸 (원래는 별로 안 좋은 습관이지만) 일단 userProfile로 설정
-
   // containerBox list
   const myProfileInformation = [
     {
