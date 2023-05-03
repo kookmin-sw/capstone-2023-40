@@ -73,6 +73,7 @@ const Form = styled.form`
 
 const Input = styled.input`
   max-width: 50vw;
+  min-width: 5vw;
   padding: 1.3vh;
   margin-top: 10px;
   margin-bottom: 10px;
@@ -145,14 +146,13 @@ const changePhoneNumber = (value: string): string => {
 export default function MyPage() {
   const [theme, toggleTheme] = useTheme();
   const navigate = useNavigate();
-  const [userProfile, setUserProfile] = useState();
   const [passwordDisabled, setPasswordDisabled] = useState(false);
   const [phoneNumberDisabled, setPhoneNumberDisabled] = useState(false);
   const [addressDisabled, setAddressDisabled] = useState(false);
   const [titleAlert, setTitleAlert] = useState('');
   const [textAlert, setTextAlert] = useState('');
   const [isAlertModal, setIsAlertModal] = useState(false);
-  const profileState = useSelector((state: RootState) => state.profile);
+  const userState = useSelector((state: RootState) => state.userInformation);
   const dispatch = useDispatch();
 
   // Input Data list
@@ -181,7 +181,7 @@ export default function MyPage() {
   // Change Editable profile text [password, phoneNumber, address]
   const handleEditTextClick = (text: string) => {
     if (text === 'password') {
-      if (!validatePassword(profileState.password) && passwordDisabled) {
+      if (!validatePassword(userState.password) && passwordDisabled) {
         setTitleAlert('개인정보 수정오류');
         setTextAlert('비밀번호를 다시 확인해주세요.');
         setIsAlertModal(true);
@@ -189,7 +189,7 @@ export default function MyPage() {
         setPasswordDisabled(!passwordDisabled);
       }
     } else if (text === 'phoneNumber') {
-      if (!validatePhoneNumber(profileState.phoneNumber) && phoneNumberDisabled) {
+      if (!validatePhoneNumber(userState.phoneNumber) && phoneNumberDisabled) {
         setTitleAlert('개인정보 수정오류');
         setTextAlert('전화번호를 다시 확인해주세요.');
         setIsAlertModal(true);
@@ -222,7 +222,7 @@ export default function MyPage() {
       title: '포인트',
       name: 'point',
       type: 'point',
-      information: profileState.point,
+      information: userState.point,
       isDisabled: false,
     },
     {
@@ -230,7 +230,7 @@ export default function MyPage() {
       title: '이메일',
       name: 'email',
       type: 'email',
-      information: profileState.email,
+      information: userState.email,
       isDisabled: false,
     },
     {
@@ -238,7 +238,7 @@ export default function MyPage() {
       title: '이름',
       name: 'name',
       type: 'text',
-      information: profileState.name,
+      information: userState.name,
       disabled: false,
     },
     {
@@ -246,7 +246,7 @@ export default function MyPage() {
       title: '비밀번호',
       name: 'password',
       type: 'password',
-      information: profileState.password,
+      information: userState.password,
       isDisabled: passwordDisabled,
     },
     {
@@ -254,7 +254,7 @@ export default function MyPage() {
       title: '전화번호',
       name: 'phoneNumber',
       type: 'text',
-      information: changePhoneNumber(profileState.phoneNumber),
+      information: changePhoneNumber(userState.phoneNumber),
       isDisabled: phoneNumberDisabled,
     },
     {
@@ -262,7 +262,7 @@ export default function MyPage() {
       title: '주소',
       name: 'address',
       type: 'text',
-      information: profileState.address,
+      information: userState.address,
       isDisabled: addressDisabled,
     },
   ];
