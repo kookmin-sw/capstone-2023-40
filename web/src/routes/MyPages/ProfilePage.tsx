@@ -134,13 +134,10 @@ const PurchaseButton = styled.div`
   }
 `;
 
-const formatPhoneNumber = (value: string): string => {
+const changePhoneNumber = (value: string): string => {
   const phone = value.replace(/[^0-9]/g, '');
   if (phone.length >= 10 && phone.length < 13) {
     return phone.replace(/(\d{3})(\d{3,4})(\d{4})/, '$1-$2-$3');
-  }
-  if (phone.length === 13) {
-    return phone.replace(/(\d{3})(\d{3,4})(\d{4})/, '$1$2$3');
   }
   return phone;
 };
@@ -170,7 +167,7 @@ export default function MyPage() {
           dispatch({ type: 'CHANGE_PASSWORD', payload: value });
           break;
         case 'phoneNumber':
-          dispatch({ type: 'CHANGE_PHONE_NUMBER', payload: value });
+          dispatch({ type: 'CHANGE_PHONE_NUMBER', payload: value.replace(/-/g, '') });
           break;
         case 'address':
           dispatch({ type: 'CHANGE_ADDRESS', payload: value });
@@ -196,7 +193,6 @@ export default function MyPage() {
         setTitleAlert('개인정보 수정오류');
         setTextAlert('전화번호를 다시 확인해주세요.');
         setIsAlertModal(true);
-        console.log(profileState.phoneNumber);
       } else {
         setPhoneNumberDisabled(!phoneNumberDisabled);
       }
@@ -258,7 +254,7 @@ export default function MyPage() {
       title: '전화번호',
       name: 'phoneNumber',
       type: 'text',
-      information: formatPhoneNumber(profileState.phoneNumber),
+      information: changePhoneNumber(profileState.phoneNumber),
       isDisabled: phoneNumberDisabled,
     },
     {
