@@ -212,9 +212,10 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
   const navigate = useNavigate();
   const currentLocation = useLocation().pathname;
   const [isTransitionEnabled, setIsTransitionEnabled] = useState<boolean>(false);
-  const password = useSelector((state: RootState) => state.profile.password);
-  const phoneNumber = useSelector((state: RootState) => state.profile.phoneNumber);
-  const address = useSelector((state: RootState) => state.profile.address);
+  const password = useSelector((state: RootState) => state.userInformation.password);
+  const phoneNumber = useSelector((state: RootState) => state.userInformation.phoneNumber);
+  const address = useSelector((state: RootState) => state.userInformation.address);
+  const profileImage = useSelector((state: RootState) => state.userInformation.profileImage);
   const isLoggedIn = useSelector((state: RootState) => state.header.isLoggedIn);
   const isSubPageOpen = useSelector((state: RootState) => state.header.isSubPageOpen);
   const dispatch = useDispatch();
@@ -223,8 +224,6 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
     setIsTransitionEnabled(true);
     toggleTheme();
   };
-
-  const profileImage = 'https://images2.alphacoders.com/130/1306410.png';
 
   const handleUserInformationSave = async () => {
     const profilePatchBody = { password, phoneNumber, address, profileImage };

@@ -6,9 +6,9 @@ import styled, { DefaultTheme } from 'styled-components';
 
 import axios from '../api/axios';
 import { requests } from '../api/request';
-import { useTheme } from '../hooks/useTheme';
-import { setLogin } from '../reducers/header';
+import { setLoggedIn } from '../reducers/header';
 import { UserResponse } from '../types/response/User';
+import HandleLoggedIn from '../utils/LoggedIn';
 import { isEmptyString } from '../utils/validate';
 import { AlertModal } from './Modal';
 
@@ -98,15 +98,15 @@ export default function LoginForm({ theme }: LoginFormProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isAlertModal, setIsAlertModal] = useState<boolean>(false);
-  const [title, setTitle] = useState('');
-  const [text, setText] = useState('');
+  const [alertTitle, setAlertTitle] = useState('');
+  const [alertText, setAlertText] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const checkLoginInput = (): boolean => {
     if (isEmptyString(email) || isEmptyString(password)) {
-      setTitle('로그인 오류');
-      setText('아이디 또는 비밀번호를 확인해주세요.');
+      setAlertTitle('로그인 오류');
+      setAlertText('아이디 또는 비밀번호를 확인해주세요.');
       setIsAlertModal(true);
       return false;
     }
@@ -123,7 +123,8 @@ export default function LoginForm({ theme }: LoginFormProps) {
     const res = await axios.post<UserResponse>(requests.login, loginRequestBody);
 
     if (res.status === 200) {
-      dispatch(setLogin(true));
+      HandleLoggedIn(res.data, password, dispatch);
+      dispatch(setLoggedIn(true));
       navigate('../../');
     }
   };
@@ -164,9 +165,9 @@ export default function LoginForm({ theme }: LoginFormProps) {
         {isAlertModal && (
           <AlertModal
             theme={theme}
-            title={title}
+            title={alertTitle}
             level="INFO"
-            text={text}
+            text={alertText}
             buttonText="확인"
             onClose={closeAlertModal}
           />

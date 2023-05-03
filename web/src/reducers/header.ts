@@ -1,8 +1,8 @@
-const SETLOGIN = 'SETLOGIN' as const;
+const SETLOGGEDIN = 'SETLOGGEDIN' as const;
 const SETSUBPAGE = 'SETSUBPAGE' as const;
 
-export const setLogin = (payload: boolean) => ({
-  type: SETLOGIN,
+export const setLoggedIn = (payload: boolean) => ({
+  type: SETLOGGEDIN,
   payload: !payload,
 });
 
@@ -11,7 +11,7 @@ export const setSubPageOpen = (payload: boolean) => ({
   payload: !payload,
 });
 
-export type HeaderAction = ReturnType<typeof setLogin> | ReturnType<typeof setSubPageOpen>;
+export type HeaderAction = ReturnType<typeof setLoggedIn> | ReturnType<typeof setSubPageOpen>;
 
 export const initialAction: HeaderAction = {
   type: 'SETSUBPAGE',
@@ -37,7 +37,7 @@ export const initialState: HeaderState = {
  */
 export const headerReducer = (state: HeaderState = initialState, action: HeaderAction = initialAction): HeaderState => {
   switch (action.type) {
-    case 'SETLOGIN':
+    case 'SETLOGGEDIN':
       return { ...state, isLoggedIn: !state.isLoggedIn };
     case 'SETSUBPAGE':
       return { ...state, isSubPageOpen: !state.isSubPageOpen };
