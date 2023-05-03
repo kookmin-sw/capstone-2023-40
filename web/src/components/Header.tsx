@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useReducer, useState } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -218,6 +218,8 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
     toggleTheme();
   };
 
+  const handleUserInformationSave = () => {};
+
   const LogoContainer = theme.alt === 'light' ? LogoLightContainer : LogoDarkContainer;
 
   return (
@@ -248,7 +250,7 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
             <CheckBoxLabel htmlFor="checkbox" theme={theme} />
           </CheckBoxWrapper>
           {currentLocation === '/mypage' ? (
-            <SaveUserInformationButton theme={theme} onClick={() => navigate('../mypage')}>
+            <SaveUserInformationButton theme={theme} onClick={handleUserInformationSave}>
               개인정보 저장하기
             </SaveUserInformationButton>
           ) : undefined}
