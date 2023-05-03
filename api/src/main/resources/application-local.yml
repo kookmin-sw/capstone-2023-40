@@ -1,0 +1,42 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /v1
+    session:
+      timeout: 10m
+
+springdoc:
+  default-produces-media-type: "application/json"
+  swagger-ui:
+    path: /docs
+    enabled: true
+    display-request-duration: true
+  cache:
+    disabled: true
+
+spring:
+  datasource:
+    url: jdbc:postgresql://db:5432/the_survey_dev
+    username: the_survey_dev
+    password: the_survey_dev
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: create
+    show-sql: false
+    properties:
+      hibernate:
+        show_sql: false
+        format_sql: true
+        jdbc:
+          lob:
+            non_contextual_creation: true
+    open-in-view: false
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+logging:
+  level:
+    org.hibernate.sql: debug
+    org.hibernate.type.descriptor.sql: trace
