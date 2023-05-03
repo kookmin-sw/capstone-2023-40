@@ -3,9 +3,8 @@ import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
 import { headerReducer } from './header';
-import { profileReducer } from './profile';
 import { surveyAuthReducer } from './survey';
-import { userReducer } from './user';
+import { userInformationReducer } from './userInfo';
 
 /**
  * Maintaining all status through redux
@@ -24,9 +23,8 @@ export const persistConfig = {
  */
 export const rootReducer = combineReducers({
   header: headerReducer,
-  user: userReducer,
   surveyAuth: surveyAuthReducer,
-  profile: profileReducer,
+  userInformation: userInformationReducer,
 });
 
 export const persistedReducer = persistReducer(persistConfig, rootReducer);
