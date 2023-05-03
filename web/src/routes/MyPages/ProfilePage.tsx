@@ -1,5 +1,6 @@
-import React, { useReducer, SyntheticEvent } from 'react';
+import React, { useState, useEffect, SyntheticEvent } from 'react';
 
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -7,9 +8,11 @@ import axios from '../../api/axios';
 import { requests } from '../../api/request';
 import { Icons } from '../../assets/svg/index';
 import Header from '../../components/Header';
+import { AlertModal } from '../../components/Modal';
 import { useTheme } from '../../hooks/useTheme';
-import { profileReducer } from '../../reducers/profile';
+import { RootState } from '../../reducers';
 import { UserResponse } from '../../types/response/User';
+import { validatePassword, validatePhoneNumber } from '../../utils/validate';
 
 const PencilImage = styled(Icons.PENCIL).attrs({
   width: 30,
@@ -131,24 +134,13 @@ const PurchaseButton = styled.div`
   }
 `;
 
-const initalState = {
-  point: '0',
-  email: 'test@gmail.com',
-  password: 'asdf1234!',
-  name: 'jsontest',
-  phoneNumber: '010-1234-5678',
-  address: '서울특별시 성북구 정릉동 국민대학교 기숙사',
-  emailDisabled: false,
-  passwordDisabled: false,
-  nameDisabled: false,
-  phoneNumberDisabled: false,
-  addressDisabled: false,
-};
-
 const formatPhoneNumber = (value: string): string => {
   const phone = value.replace(/[^0-9]/g, '');
-  if (phone.length >= 10) {
+  if (phone.length >= 10 && phone.length < 13) {
     return phone.replace(/(\d{3})(\d{3,4})(\d{4})/, '$1-$2-$3');
+  }
+  if (phone.length === 13) {
+    return phone.replace(/(\d{3})(\d{3,4})(\d{4})/, '$1$2$3');
   }
   return phone;
 };
@@ -156,7 +148,15 @@ const formatPhoneNumber = (value: string): string => {
 export default function MyPage() {
   const [theme, toggleTheme] = useTheme();
   const navigate = useNavigate();
-  const [state, dispatch] = useReducer(profileReducer, initalState);
+  const [userProfile, setUserProfile] = useState();
+  const [passwordDisabled, setPasswordDisabled] = useState(false);
+  const [phoneNumberDisabled, setPhoneNumberDisabled] = useState(false);
+  const [addressDisabled, setAddressDisabled] = useState(false);
+  const [titleAlert, setTitleAlert] = useState('');
+  const [textAlert, setTextAlert] = useState('');
+  const [isAlertModal, setIsAlertModal] = useState(false);
+  const profileState = useSelector((state: RootState) => state.profile);
+  const dispatch = useDispatch();
 
   // Input Data list
   const handleInputChange = (e: SyntheticEvent<HTMLInputElement>) => {
@@ -170,7 +170,7 @@ export default function MyPage() {
           dispatch({ type: 'CHANGE_PASSWORD', payload: value });
           break;
         case 'phoneNumber':
-          dispatch({ type: 'CHANGE_PHONE_NUMBER', payload: formatPhoneNumber(value) });
+          dispatch({ type: 'CHANGE_PHONE_NUMBER', payload: value });
           break;
         case 'address':
           dispatch({ type: 'CHANGE_ADDRESS', payload: value });
@@ -181,13 +181,27 @@ export default function MyPage() {
     }
   };
 
+  // Change Editable profile text [password, phoneNumber, address]
   const handleEditTextClick = (text: string) => {
     if (text === 'password') {
-      dispatch({ type: 'SET_CHANGE_PASSWORD', payload: !state.passwordDisabled });
+      if (!validatePassword(profileState.password) && passwordDisabled) {
+        setTitleAlert('개인정보 수정오류');
+        setTextAlert('비밀번호를 다시 확인해주세요.');
+        setIsAlertModal(true);
+      } else {
+        setPasswordDisabled(!passwordDisabled);
+      }
     } else if (text === 'phoneNumber') {
-      dispatch({ type: 'SET_CHANGE_PHONE_NUMBER', payload: !state.phoneNumberDisabled });
+      if (!validatePhoneNumber(profileState.phoneNumber) && phoneNumberDisabled) {
+        setTitleAlert('개인정보 수정오류');
+        setTextAlert('전화번호를 다시 확인해주세요.');
+        setIsAlertModal(true);
+        console.log(profileState.phoneNumber);
+      } else {
+        setPhoneNumberDisabled(!phoneNumberDisabled);
+      }
     } else if (text === 'address') {
-      dispatch({ type: 'SET_CHANGE_ADDRESS', payload: !state.addressDisabled });
+      setAddressDisabled(!addressDisabled);
     }
   };
 
@@ -195,8 +209,16 @@ export default function MyPage() {
     event.preventDefault();
   };
 
-  const res = axios.get<UserResponse>(requests.getUserProfile);
-  console.log(res);
+  const closeAlertModal = () => {
+    setIsAlertModal(false);
+  };
+
+  useEffect(() => {
+    const res = axios.get<UserResponse>(requests.getUserProfile);
+    // setUserProfile(res);
+    console.log(res);
+  }, []); // 여기에 dependency를 넣는데, 이걸 (원래는 별로 안 좋은 습관이지만) 일단 userProfile로 설정
+
   // containerBox list
   const myProfileInformation = [
     {
@@ -204,54 +226,48 @@ export default function MyPage() {
       title: '포인트',
       name: 'point',
       type: 'point',
-      information: state.point,
+      information: profileState.point,
       isDisabled: false,
-      isPointComponent: true,
     },
     {
       number: 2,
       title: '이메일',
       name: 'email',
       type: 'email',
-      information: state.email,
-      isDisabled: state.emailDisabled,
-      isPointComponent: false,
+      information: profileState.email,
+      isDisabled: false,
     },
     {
       number: 3,
       title: '이름',
       name: 'name',
       type: 'text',
-      information: state.name,
-      disabled: state.nameDisabled,
-      isPointComponent: false,
+      information: profileState.name,
+      disabled: false,
     },
     {
       number: 4,
       title: '비밀번호',
       name: 'password',
-      type: state.passwordDisabled ? 'text' : 'password',
-      information: state.password,
-      isDisabled: state.passwordDisabled,
-      isPointComponent: false,
+      type: 'password',
+      information: profileState.password,
+      isDisabled: passwordDisabled,
     },
     {
       number: 5,
       title: '전화번호',
       name: 'phoneNumber',
       type: 'text',
-      information: state.phoneNumber,
-      isDisabled: state.phoneNumberDisabled,
-      isPointComponent: false,
+      information: formatPhoneNumber(profileState.phoneNumber),
+      isDisabled: phoneNumberDisabled,
     },
     {
       number: 6,
       title: '주소',
       name: 'address',
       type: 'text',
-      information: state.address,
-      isDisabled: state.addressDisabled,
-      isPointComponent: false,
+      information: profileState.address,
+      isDisabled: addressDisabled,
     },
   ];
 
@@ -261,7 +277,17 @@ export default function MyPage() {
       <MypageContainer theme={theme}>
         <Form onSubmit={handleSubmit}>
           <MyPageTitle theme={theme}>마이페이지</MyPageTitle>
-          {myProfileInformation.map(({ number, title, name, type, information, isDisabled, isPointComponent }) => (
+          {isAlertModal && (
+            <AlertModal
+              theme={theme}
+              title={titleAlert}
+              level="INFO"
+              text={textAlert}
+              buttonText="확인"
+              onClose={closeAlertModal}
+            />
+          )}
+          {myProfileInformation.map(({ number, title, name, type, information, isDisabled }) => (
             <ContainerBox key={number} theme={theme}>
               <FontText theme={theme}>{title}</FontText>
               <Input
@@ -273,6 +299,7 @@ export default function MyPage() {
                 onBlur={handleInputChange}
                 theme={theme}
                 disabled={!isDisabled}
+                maxLength={title === '전화번호' ? 13 : undefined}
                 style={{ width: `${(information.length + 1) * 10}px` }}
               />
               {title === '포인트' ? <PurchaseButton theme={theme}>기프티콘 구매</PurchaseButton> : undefined}
