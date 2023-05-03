@@ -1,0 +1,38 @@
+version: "3.9"
+
+services:
+  web:
+    container_name: web
+    build: ./web
+    network_mode: bridge
+    ports:
+      - 3000:3000
+
+  db:
+    container_name: db
+    image: postgres:14-alpine
+    network_mode: bridge
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+         - POSTGRES_PASSWORD=the_survey_dev
+         - POSTGRES_USER=the_survey_dev
+         - POSTGRES_DB=the_survey_dev
+    restart: unless-stopped
+
+  api:
+    container_name: api
+    build: ./api
+    network_mode: bridge
+    ports:
+      - 8080:8080
+    restart: unless-stopped
+    depends_on:
+      - db
+    links:
+      - db
+
+volumes:
+  postgres: {}
