@@ -3,6 +3,7 @@ import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
 import { headerReducer } from './header';
+import { profileReducer } from './profile';
 import { surveyAuthReducer } from './survey';
 import { userReducer } from './user';
 
@@ -25,6 +26,7 @@ export const rootReducer = combineReducers({
   header: headerReducer,
   user: userReducer,
   surveyAuth: surveyAuthReducer,
+  profile: profileReducer,
 });
 
 export const persistedReducer = persistReducer(persistConfig, rootReducer);
