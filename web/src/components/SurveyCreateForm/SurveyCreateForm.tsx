@@ -166,7 +166,7 @@ export default function SurveyCreateForm({ theme }: SurveyFormProps) {
     let newOptions = surveyData.questions[questionId].questionOptions;
     const newOption: QuestionOptionCreateRequest = {
       option: '객관식 문항',
-      description: '',
+      description: 'NULL',
     };
 
     if (newOptions) {
