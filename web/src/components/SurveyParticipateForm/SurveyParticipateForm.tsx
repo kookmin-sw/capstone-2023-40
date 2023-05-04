@@ -1,19 +1,15 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
-import { AxiosError, AxiosResponse } from 'axios';
 import styled, { DefaultTheme } from 'styled-components';
 
-import axios from '../../api/axios';
-import { requests } from '../../api/request';
 import { QuestionType } from '../../types/request';
 import { QuestionBankResponse } from '../../types/response/QuestionBank';
 import { QuestionOptionResponse } from '../../types/response/QuestionOption';
 import { SurveyResponse } from '../../types/response/Survey';
-import { dateFormatUpToDate } from '../../utils/dateFormat';
+import { dateFormatUpToDate, getDDay } from '../../utils/dateFormat';
 import { scrollToRef } from '../../utils/scroll';
 import RectangleButton from '../Button/RectangleButton';
 import { SurveyPageResultModal } from '../Modal';
-import SurveyPageSkeleton from '../Skeleton/SurveyPageSkeleton';
 
 const Container = styled.div``;
 
@@ -151,41 +147,18 @@ const RadioCheckmark = styled.span`
 `;
 
 interface SurveyParticipateFormProps {
-  surveyId: string;
+  surveyData: SurveyResponse;
   theme: DefaultTheme;
 }
 
-export default function SurveyParticipateForm({ surveyId, theme }: SurveyParticipateFormProps) {
+export default function SurveyParticipateForm({ surveyData, theme }: SurveyParticipateFormProps) {
   const nowDate = new Date();
   const questionRefs = useRef<HTMLDivElement[]>([]);
   const [endedDate, setEndedDate] = useState<string>('');
   const [userAnswers, setUserAnswers] = useState<string[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [resultModalOpen, setResultModalOpen] = useState<boolean>(false);
-  const [surveyData, setSurveyData] = useState<SurveyResponse>();
 
-  const getDateDiff = (date: string) => {
-    const endDate = new Date(date);
-
-    const dateDiff = endDate.getTime() - nowDate.getTime();
-
-    return Math.floor(Math.abs(dateDiff / (1000 * 60 * 60 * 24)));
-  };
-
-  const remainDate = useMemo(() => getDateDiff(endedDate), [endedDate]);
-
-  const fetchSurveyData = async () => {
-    setIsLoading(true);
-    try {
-      const request: AxiosResponse<SurveyResponse> = await axios.get<SurveyResponse>(requests.getSurvey + surveyId);
-
-      setSurveyData(request.data);
-      setIsLoading(false);
-    } catch (error) {
-      const { name } = error as unknown as AxiosError;
-      // TODO: handle error while fetching data
-    }
-  };
+  const remainDate = useMemo(() => getDDay(endedDate), [endedDate]);
 
   const postSurveyAnswers = async () => {
     console.log(userAnswers);
@@ -197,10 +170,6 @@ export default function SurveyParticipateForm({ surveyId, theme }: SurveyPartici
       setResultModalOpen(true);
     }
   };
-
-  useEffect(() => {
-    fetchSurveyData();
-  }, []);
 
   const turnOnUserAttention = (domIndex: number) => {
     questionRefs.current[domIndex].style.borderLeft = '16px solid #FF5733';
@@ -277,10 +246,6 @@ export default function SurveyParticipateForm({ surveyId, theme }: SurveyPartici
       setEndedDate(`${surveyData.endedDate}`);
     }
   }, [surveyData]);
-
-  if (isLoading) {
-    return <SurveyPageSkeleton theme={theme} />;
-  }
 
   return (
     <Container>
