@@ -1,8 +1,9 @@
 package com.thesurvey.api.dto.response.question;
 
+import java.util.List;
+
 import com.thesurvey.api.domain.EnumTypeEntity.QuestionType;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -28,11 +29,6 @@ public class QuestionBankAnswerDto {
     @Schema(example = "[\"편리합니다\", \"좋아요!\"]", description = "주관식 답변 모음입니다.")
     List<String> textAnswers;
 
-    @Schema(example = "["
-        + "[\"questionOptionId\": 2,\n"
-        + "\"option\": \"예\",\n"
-        + "\"responseNumber\": 1]]", description = "객관식 답변 모음입니다.")
     List<QuestionOptionAnswerDto> optionAnswers;
-
 
 }
