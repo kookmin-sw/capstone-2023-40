@@ -3,7 +3,6 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
 
-import { CertificationType } from '../types/request/Survey';
 import { SurveyAbstractResponse } from '../types/response/Survey';
 import { dateFormatUpToMinute } from '../utils/dateFormat';
 import RectangleButton from './Button/RectangleButton';
@@ -168,9 +167,9 @@ export default function SurveyListTable({
             </Title>
             <AuthList theme={theme}>
               {survey.certificationTypes.length === 0
-                ? CertificationList({ label: '', iconOption: true })
-                : survey.certificationTypes.map((label) =>
-                    CertificationList({ label: CertificationType[label], iconOption: true })
+                ? CertificationList({ iconOption: true })
+                : survey.certificationTypes.map((label: number) =>
+                    CertificationList({ label: label, iconOption: true })
                   )}
             </AuthList>
             <EndDate theme={theme}>{dateFormatUpToMinute(`${survey.endedDate}`)}</EndDate>

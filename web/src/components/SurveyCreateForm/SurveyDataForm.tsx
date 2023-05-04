@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled, { DefaultTheme } from 'styled-components';
 
-import { SurveyCreateRequest, CertificationType } from '../../types/request/Survey';
+import { SurveyCreateRequest } from '../../types/request/Survey';
 import { NumberUtils } from '../../utils/NumberUtils';
 import { PlusImage } from '../Button/ImageButtons';
 import CertificationList from '../CertificationList';
@@ -155,7 +155,7 @@ export default function SurveyDataForm({
           <GuideLabel theme={theme}>필수 인증 목록 : </GuideLabel>
           {surveyData.certificationTypes?.map((auth: number) => (
             <SelectedCertification theme={theme} key={auth}>
-              {CertificationList({ label: CertificationType[auth], iconOption: true })}
+              {CertificationList({ label: auth, iconOption: true })}
             </SelectedCertification>
           ))}
         </SelectedCertificationsContainer>
@@ -169,7 +169,7 @@ export default function SurveyDataForm({
                     checked={surveyData.certificationTypes?.includes(index)}
                     onChange={(e) => handleChangeCheck(e, index)}
                   />
-                  {CertificationList({ label: CertificationType[index], iconOption: false })}
+                  {CertificationList({ label: index, iconOption: false })}
                 </CertificationLabel>
               </ListItem>
             );
