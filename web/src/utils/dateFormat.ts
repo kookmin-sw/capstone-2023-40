@@ -27,3 +27,15 @@ export const dateFormatUpToMinute = (date: string): string => {
 export const dateFormatUpToDate = (date: string): string => {
   return date.substring(0, 10);
 };
+
+/**
+ * Return date difference between date1 and date2
+ *
+ * @param {string | Date} dDate yyyy-mm-ddThh:MM:ss.zzzZ
+ * @returns {number} difference date
+ */
+export const getDDay = (dDate: string | Date): number => {
+  const dateDiff = new Date(dDate).getTime() - new Date().getTime();
+
+  return Math.floor(Math.abs(dateDiff / (1000 * 60 * 60 * 24)));
+};
