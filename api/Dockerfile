@@ -2,8 +2,8 @@ FROM adoptopenjdk/openjdk11 AS builder
 
 WORKDIR /usr/src/api
 COPY . ./
-RUN chmod +x gradlew
-RUN ./gradlew bootJAR
+RUN chmod +x gradlew && \
+	./gradlew bootJAR
 
 FROM adoptopenjdk/openjdk11 AS runner
 
