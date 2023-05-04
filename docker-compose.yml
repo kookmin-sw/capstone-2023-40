@@ -1,12 +1,12 @@
 version: "3.9"
 
 services:
-  web:
-    container_name: web
-    build: ./web
-    network_mode: bridge
-    ports:
-      - 3000:3000
+  # web:
+  #   container_name: web
+  #   build: ./web
+  #   network_mode: bridge
+  #   ports:
+  #     - 3000:3000
 
   db:
     container_name: db
