@@ -61,7 +61,14 @@ export const requests = {
    * @method `GET`
    * @endpoint `/surveys?page={pageNum}`
    */
-  getSurvey: '/surveys?page=',
+  getSurveyPage: '/surveys?page=',
+  /**
+   * Get each survey. This requires user to be signed in.
+   *
+   * @method `GET`
+   * @endpoint `/surveys/{pageNum}`
+   */
+  getSurvey: '/surveys/',
   /**
    * Create a new survey with questions. This requires user to be signed in.
    *
