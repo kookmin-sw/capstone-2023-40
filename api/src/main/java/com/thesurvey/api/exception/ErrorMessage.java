@@ -6,7 +6,7 @@ public enum ErrorMessage {
     FAILED_AUTHENTICATION("사용자 인증에 실패했습니다."),
     UNAUTHORIZED_REQUEST("인증되지 않은 요청입니다. 로그인 후 다시 시도해주세요."),
     INVALID_CREDENTIALS("이메일 혹은 비밀번호가 정확하지 않습니다."),
-    AUTHOR_NOT_MATCHING("해당 설문조사를 수정 및 삭제할 권한이 없습니다."),
+    AUTHOR_NOT_MATCHING("해당 설문조사를 조회 및 수정, 삭제할 권한이 없습니다."),
     MAX_SIZE_EXCEEDED("{0} 은(는) {1} 자를 초과할 수 없습니다."),
     POSITIVE_VALUE_REQUIRED("{0} 은(는) 양수여야 합니다."),
     SURVEY_NOT_FOUND("설문조사 정보를 찾을 수 없습니다."),
