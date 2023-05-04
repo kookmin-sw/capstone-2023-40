@@ -7,6 +7,9 @@ const instance: AxiosInstance = axios.create({
   // timeout: 15000,
 });
 
+// Activate cookie for maintain session
+instance.defaults.withCredentials = true;
+
 // 요청 인터셉터 추가하기
 instance.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
