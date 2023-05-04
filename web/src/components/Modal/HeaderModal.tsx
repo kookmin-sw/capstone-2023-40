@@ -7,7 +7,7 @@ import styled, { DefaultTheme } from 'styled-components';
 import { useOnClickOutside } from '../../hooks/useOnClickOutside';
 import { RootState } from '../../reducers';
 import { setLoggedIn, setSubPageOpen } from '../../reducers/header';
-import HandleLogout from '../../utils/Logout';
+import { clearUserInformation } from '../../utils/UserUtils';
 
 const SubPageContainer = styled.div`
   display: flex;
@@ -58,7 +58,7 @@ export default function Header({ theme }: HeaderProps) {
   const logoutClick = () => {
     dispatch(setLoggedIn(!isLoggedIn));
     dispatch(setSubPageOpen(!isSubPageOpen));
-    HandleLogout(dispatch);
+    clearUserInformation(dispatch);
     navigate('../../../');
   };
 
