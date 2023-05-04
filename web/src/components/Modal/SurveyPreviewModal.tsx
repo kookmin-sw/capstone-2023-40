@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
 
 import { useOnClickOutside } from '../../hooks/useOnClickOutside';
-import { CertificationType } from '../../types/request/Survey';
 import { SurveyAbstractResponse } from '../../types/response/Survey';
 import { dateFormatUpToMinute } from '../../utils/dateFormat';
 import { DeleteImage } from '../Button/ImageButtons';
@@ -157,9 +156,9 @@ export default function SurveyPreviewModal({ surveyItem, setPreviewModalOpen, th
           <Subtitle theme={theme}>필수인증 목록</Subtitle>
           <CertificationContainer>
             {surveyItem.certificationTypes.length === 0
-              ? CertificationList({ label: '', iconOption: true })
-              : surveyItem.certificationTypes.map((index) =>
-                  CertificationList({ label: CertificationType[index], iconOption: true })
+              ? CertificationList({ iconOption: true })
+              : surveyItem.certificationTypes.map((index: number) =>
+                  CertificationList({ label: index, iconOption: true })
                 )}
           </CertificationContainer>
         </BodyContainer>

@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import { Icons } from '../assets/svg';
 import { AuthLabel } from '../types/labels';
+import { CertificationType } from '../types/request';
 
 const Kakao = styled(Icons.KAKAO).attrs({
   width: 27,
@@ -26,7 +27,7 @@ const Webmail = styled(Icons.WEBMAIL).attrs({
   margin-right: 5px;
 `;
 
-const NAVER = styled(Icons.NAVER).attrs({
+const Naver = styled(Icons.NAVER).attrs({
   width: 27,
   height: 27,
 })`
@@ -57,41 +58,49 @@ const AuthNone = styled(Icons.FREE).attrs({
 const Label = styled.label``;
 
 interface CertificationListProps {
-  label: string;
+  label?: CertificationType;
   iconOption: boolean;
 }
 
 export default function CertificationList({ label, iconOption }: CertificationListProps) {
+  // FIXME: CertificationType allow both number and string... it makes happen with switch function
+  let tmpLabel: any;
+  if (typeof label === 'string') {
+    tmpLabel = CertificationType[label];
+  } else {
+    tmpLabel = label;
+  }
+
   if (iconOption) {
-    switch (label) {
-      case 'KAKAO':
-        return <Kakao key={label}>{AuthLabel.KAKAO}</Kakao>;
-      case 'GOOGLE':
-        return <Google key={label}>{AuthLabel.GOOGLE}</Google>;
-      case 'WEBMAIL':
-        return <Webmail key={label}>{AuthLabel.WEBMAIL}</Webmail>;
-      case 'NAVER':
-        return <NAVER key={label}>{AuthLabel.NAVER}</NAVER>;
-      case 'MOBILE_PHONE':
-        return <MobilePhone key={label}>{AuthLabel.MOBILE_PHONE}</MobilePhone>;
-      case 'DRIVER_LICENSE':
-        return <DriverLicense key={label}>{AuthLabel.DRIVER_LICENSE}</DriverLicense>;
+    switch (tmpLabel) {
+      case CertificationType.KAKAO:
+        return <Kakao key={label} />;
+      case CertificationType.GOOGLE:
+        return <Google key={label} />;
+      case CertificationType.WEBMAIL:
+        return <Webmail key={label} />;
+      case CertificationType.NAVER:
+        return <Naver key={label} />;
+      case CertificationType.MOBILE_PHONE:
+        return <MobilePhone key={label} />;
+      case CertificationType.DRIVER_LICENSE:
+        return <DriverLicense key={label} />;
       default:
-        return <AuthNone key={label}>{AuthLabel.NULL}</AuthNone>;
+        return <AuthNone key={label} />;
     }
   }
-  switch (label) {
-    case 'KAKAO':
+  switch (tmpLabel) {
+    case CertificationType.KAKAO:
       return <Label key={label}>{AuthLabel.KAKAO}</Label>;
-    case 'GOOGLE':
+    case CertificationType.GOOGLE:
       return <Label key={label}>{AuthLabel.GOOGLE}</Label>;
-    case 'WEBMAIL':
+    case CertificationType.WEBMAIL:
       return <Label key={label}>{AuthLabel.WEBMAIL}</Label>;
-    case 'NAVER':
+    case CertificationType.NAVER:
       return <Label key={label}>{AuthLabel.NAVER}</Label>;
-    case 'MOBILE_PHONE':
+    case CertificationType.MOBILE_PHONE:
       return <Label key={label}>{AuthLabel.MOBILE_PHONE}</Label>;
-    case 'DRIVER_LICENSE':
+    case CertificationType.DRIVER_LICENSE:
       return <Label key={label}>{AuthLabel.DRIVER_LICENSE}</Label>;
     default:
       return <Label key={label}>{AuthLabel.NULL}</Label>;
