@@ -13,6 +13,7 @@ import { ReactComponent as Delete } from './delete-circle.svg';
 import { ReactComponent as Error } from './error-icon.svg';
 import { ReactComponent as Favicon } from './favicon.svg';
 import { ReactComponent as Info } from './info-icon.svg';
+import { ReactComponent as Loading } from './LoadingImage.svg';
 import { ReactComponent as DarkLogo } from './logo-dark.svg';
 import { ReactComponent as LightLogo } from './logo-light.svg';
 import { ReactComponent as Pencil } from './pencil.svg';
@@ -20,7 +21,6 @@ import { ReactComponent as Plus } from './plus-circle.svg';
 import { ReactComponent as Trash } from './trash.svg';
 import { ReactComponent as TwoArrow } from './twoArrow.svg';
 import { ReactComponent as UserImage } from './userBasicImage.svg';
-import { ReactComponent as Waiting } from './WaitingImage.svg';
 import { ReactComponent as Warn } from './warn-icon.svg';
 
 export type IconType = React.FunctionComponent<React.SVGProps<SVGSVGElement> & { title?: string | undefined }>;
@@ -49,5 +49,5 @@ export const Icons: { [src: string]: IconType } = {
   TRASH: Trash,
   PLUS: Plus,
   DELETE: Delete,
-  WAITING: Waiting,
+  LOADING: Loading,
 };

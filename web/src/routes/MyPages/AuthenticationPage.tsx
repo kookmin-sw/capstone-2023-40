@@ -37,7 +37,7 @@ const Container = styled.div`
   background-color: ${(props) => props.theme.colors.container};
 `;
 
-const WaitingImage = styled(Icons.WAITING).attrs({
+const LoadingImage = styled(Icons.LOADING).attrs({
   width: 150,
   height: 150,
 })`
@@ -151,9 +151,9 @@ export default function AuthenticationPage() {
       <Header theme={theme} toggleTheme={toggleTheme} />
       <AuthenticationContainer theme={theme}>
         <Form>
-          <WaitingImage>
+          <LoadingImage>
             <circle cx="50" cy="50" r="50" />
-          </WaitingImage>
+          </LoadingImage>
           <TextType theme={theme}>{state.title}에서 인증을 완료해주세요.</TextType>
         </Form>
       </AuthenticationContainer>

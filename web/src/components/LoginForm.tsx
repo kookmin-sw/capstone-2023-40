@@ -8,7 +8,7 @@ import axios from '../api/axios';
 import { requests } from '../api/request';
 import { setLoggedIn } from '../reducers/header';
 import { UserResponse } from '../types/response/User';
-import HandleLoggedIn from '../utils/LoggedIn';
+import { setUserInformation } from '../utils/UserUtils';
 import { isEmptyString } from '../utils/validate';
 import { AlertModal } from './Modal';
 
@@ -123,7 +123,7 @@ export default function LoginForm({ theme }: LoginFormProps) {
     const res = await axios.post<UserResponse>(requests.login, loginRequestBody);
 
     if (res.status === 200) {
-      HandleLoggedIn(res.data, password, dispatch);
+      setUserInformation(res.data, password, dispatch);
       dispatch(setLoggedIn(true));
       navigate('../../');
     }
