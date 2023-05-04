@@ -185,7 +185,7 @@ const LoginInformation = styled.div`
   }
 `;
 
-const SaveUserInformationButton = styled.div`
+const UpdateInformationButton = styled.div`
   margin: 1vw;
   display: flex;
   padding: 1vh;
@@ -260,9 +260,9 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
             <CheckBoxLabel htmlFor="checkbox" theme={theme} />
           </CheckBoxWrapper>
           {currentLocation === '/mypage' ? (
-            <SaveUserInformationButton theme={theme} onClick={updateUserInformation}>
+            <UpdateInformationButton theme={theme} onClick={updateUserInformation}>
               개인정보 저장하기
-            </SaveUserInformationButton>
+            </UpdateInformationButton>
           ) : undefined}
           {isLoggedIn ? (
             <UserImage onClick={() => dispatch(setSubPageOpen(!isSubPageOpen))} />
