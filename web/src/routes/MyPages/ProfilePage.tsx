@@ -1,17 +1,14 @@
-import React, { useState, useEffect, SyntheticEvent } from 'react';
+import React, { useState, SyntheticEvent } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import axios from '../../api/axios';
-import { requests } from '../../api/request';
 import { Icons } from '../../assets/svg/index';
 import Header from '../../components/Header';
 import { AlertModal } from '../../components/Modal';
 import { useTheme } from '../../hooks/useTheme';
 import { RootState } from '../../reducers';
-import { UserResponse } from '../../types/response/User';
 import { validatePassword, validatePhoneNumber } from '../../utils/validate';
 
 const PencilImage = styled(Icons.PENCIL).attrs({
@@ -136,22 +133,22 @@ const PurchaseButton = styled.div`
 `;
 
 const changePhoneNumber = (value: string): string => {
-  const phone = value.replace(/[^0-9]/g, '');
-  if (phone.length >= 10 && phone.length < 13) {
-    return phone.replace(/(\d{3})(\d{3,4})(\d{4})/, '$1-$2-$3');
+  const phoneNumber = value.replace(/[^0-9]/g, '');
+  if (phoneNumber.length >= 10 && phoneNumber.length < 13) {
+    return phoneNumber.replace(/(\d{3})(\d{3,4})(\d{4})/, '$1-$2-$3');
   }
-  return phone;
+  return phoneNumber;
 };
 
 export default function MyPage() {
   const [theme, toggleTheme] = useTheme();
   const navigate = useNavigate();
-  const [passwordDisabled, setPasswordDisabled] = useState(false);
-  const [phoneNumberDisabled, setPhoneNumberDisabled] = useState(false);
-  const [addressDisabled, setAddressDisabled] = useState(false);
-  const [titleAlert, setTitleAlert] = useState('');
-  const [textAlert, setTextAlert] = useState('');
-  const [isAlertModal, setIsAlertModal] = useState(false);
+  const [changePasswordDisabled, setChangePasswordDisabled] = useState(false);
+  const [changePhoneNumberDisabled, setChangePhoneNumberDisabled] = useState(false);
+  const [changeAddressDisabled, setChangeAddressDisabled] = useState(false);
+  const [alertTitle, setAlertTitle] = useState('');
+  const [alertText, setAlertText] = useState('');
+  const [showAlertModal, setShowAlertModal] = useState(false);
   const userState = useSelector((state: RootState) => state.userInformation);
   const dispatch = useDispatch();
 
@@ -181,23 +178,23 @@ export default function MyPage() {
   // Change Editable profile text [password, phoneNumber, address]
   const handleEditTextClick = (text: string) => {
     if (text === 'password') {
-      if (!validatePassword(userState.password) && passwordDisabled) {
-        setTitleAlert('개인정보 수정오류');
-        setTextAlert('비밀번호를 다시 확인해주세요.');
-        setIsAlertModal(true);
+      if (!validatePassword(userState.password) && changePasswordDisabled) {
+        setAlertTitle('개인정보 수정오류');
+        setAlertText('비밀번호를 다시 확인해주세요.');
+        setShowAlertModal(true);
       } else {
-        setPasswordDisabled(!passwordDisabled);
+        setChangePasswordDisabled(!changePasswordDisabled);
       }
     } else if (text === 'phoneNumber') {
-      if (!validatePhoneNumber(userState.phoneNumber) && phoneNumberDisabled) {
-        setTitleAlert('개인정보 수정오류');
-        setTextAlert('전화번호를 다시 확인해주세요.');
-        setIsAlertModal(true);
+      if (!validatePhoneNumber(userState.phoneNumber) && changePhoneNumberDisabled) {
+        setAlertTitle('개인정보 수정오류');
+        setAlertText('전화번호를 다시 확인해주세요.');
+        setShowAlertModal(true);
       } else {
-        setPhoneNumberDisabled(!phoneNumberDisabled);
+        setChangePhoneNumberDisabled(!changePhoneNumberDisabled);
       }
     } else if (text === 'address') {
-      setAddressDisabled(!addressDisabled);
+      setChangeAddressDisabled(!changeAddressDisabled);
     }
   };
 
@@ -206,7 +203,7 @@ export default function MyPage() {
   };
 
   const closeAlertModal = () => {
-    setIsAlertModal(false);
+    setShowAlertModal(false);
   };
 
   // containerBox list
@@ -241,7 +238,7 @@ export default function MyPage() {
       name: 'password',
       type: 'password',
       information: userState.password,
-      isDisabled: passwordDisabled,
+      isDisabled: changePasswordDisabled,
     },
     {
       number: 5,
@@ -249,7 +246,7 @@ export default function MyPage() {
       name: 'phoneNumber',
       type: 'text',
       information: changePhoneNumber(userState.phoneNumber),
-      isDisabled: phoneNumberDisabled,
+      isDisabled: changePhoneNumberDisabled,
     },
     {
       number: 6,
@@ -257,7 +254,7 @@ export default function MyPage() {
       name: 'address',
       type: 'text',
       information: userState.address,
-      isDisabled: addressDisabled,
+      isDisabled: changeAddressDisabled,
     },
   ];
 
@@ -267,12 +264,12 @@ export default function MyPage() {
       <MypageContainer theme={theme}>
         <Form onSubmit={handleSubmit}>
           <MyPageTitle theme={theme}>마이페이지</MyPageTitle>
-          {isAlertModal && (
+          {showAlertModal && (
             <AlertModal
               theme={theme}
-              title={titleAlert}
+              title={alertTitle}
               level="INFO"
-              text={textAlert}
+              text={alertText}
               buttonText="확인"
               onClose={closeAlertModal}
             />

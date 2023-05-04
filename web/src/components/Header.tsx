@@ -225,10 +225,9 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
     toggleTheme();
   };
 
-  const handleUserInformationSave = async () => {
+  const updateUserInformation = async () => {
     const profilePatchBody = { password, phoneNumber, address, profileImage };
     const res = await axios.patch<UserResponse>(requests.updateUserProfile, profilePatchBody);
-    console.log(res.data);
   };
 
   const LogoContainer = theme.alt === 'light' ? LogoLightContainer : LogoDarkContainer;
@@ -261,7 +260,7 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
             <CheckBoxLabel htmlFor="checkbox" theme={theme} />
           </CheckBoxWrapper>
           {currentLocation === '/mypage' ? (
-            <SaveUserInformationButton theme={theme} onClick={handleUserInformationSave}>
+            <SaveUserInformationButton theme={theme} onClick={updateUserInformation}>
               개인정보 저장하기
             </SaveUserInformationButton>
           ) : undefined}
