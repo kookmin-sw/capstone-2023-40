@@ -1,11 +1,11 @@
-import React, { useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
 
 import { useOnClickOutside } from '../../hooks/useOnClickOutside';
 import { SurveyAbstractResponse } from '../../types/response/Survey';
-import { dateFormatUpToMinute } from '../../utils/dateFormat';
+import { dateFormatUpToMinute, getDDay } from '../../utils/dateFormat';
 import { DeleteImage } from '../Button/ImageButtons';
 import RectangleButton from '../Button/RectangleButton';
 import CertificationList from '../CertificationList';
@@ -126,8 +126,10 @@ interface ModalProps {
 }
 
 export default function SurveyPreviewModal({ surveyItem, setPreviewModalOpen, theme }: ModalProps) {
+  const remainDate = useMemo(() => getDDay(surveyItem.endedDate), [surveyItem.endedDate]);
   const navigate = useNavigate();
   const modalRef = useRef<HTMLDivElement>(null);
+
   useOnClickOutside({
     ref: modalRef,
     handler: () => {
@@ -148,7 +150,9 @@ export default function SurveyPreviewModal({ surveyItem, setPreviewModalOpen, th
         </EndButtonContainer>
         <TitleContainer theme={theme}>
           <Title theme={theme}>{surveyItem.title}</Title>
-          <EndDate theme={theme}>~ {dateFormatUpToMinute(`${surveyItem.endedDate}`)}</EndDate>
+          <EndDate theme={theme}>
+            ~ {dateFormatUpToMinute(`${surveyItem.endedDate}`)} (D-{remainDate})
+          </EndDate>
         </TitleContainer>
         <BodyContainer theme={theme}>
           <Subtitle theme={theme}>설문조사 상세내용</Subtitle>
