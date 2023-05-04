@@ -1,16 +1,23 @@
 package com.thesurvey.api.service;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 import com.thesurvey.api.domain.AnsweredQuestion;
 import com.thesurvey.api.domain.QuestionBank;
 import com.thesurvey.api.domain.Survey;
 import com.thesurvey.api.domain.User;
+import com.thesurvey.api.dto.request.survey.SurveyRequestDto;
+import com.thesurvey.api.dto.request.survey.SurveyUpdateRequestDto;
 import com.thesurvey.api.dto.response.question.QuestionBankAnswerDto;
 import com.thesurvey.api.dto.response.question.QuestionOptionAnswerDto;
 import com.thesurvey.api.dto.response.survey.SurveyListPageDto;
 import com.thesurvey.api.dto.response.survey.SurveyPageDto;
 import com.thesurvey.api.dto.response.survey.SurveyResponseDto;
-import com.thesurvey.api.dto.request.survey.SurveyRequestDto;
-import com.thesurvey.api.dto.request.survey.SurveyUpdateRequestDto;
 import com.thesurvey.api.dto.response.user.UserSurveyResultDto;
 import com.thesurvey.api.dto.response.user.UserSurveyTitleDto;
 import com.thesurvey.api.exception.ErrorMessage;
@@ -22,14 +29,6 @@ import com.thesurvey.api.service.mapper.SurveyMapper;
 import com.thesurvey.api.util.StringUtil;
 import com.thesurvey.api.util.UserUtil;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
@@ -40,10 +39,15 @@ import org.springframework.transaction.annotation.Transactional;
 public class SurveyService {
 
     private final SurveyRepository surveyRepository;
+
     private final SurveyMapper surveyMapper;
+
     private final QuestionService questionService;
+
     private final QuestionOptionService questionOptionService;
+
     private final ParticipationService participationService;
+
     private final AnsweredQuestionService answeredQuestionService;
 
     public SurveyService(SurveyRepository surveyRepository, SurveyMapper surveyMapper,
@@ -247,11 +251,11 @@ public class SurveyService {
         return answeredChoiceList.stream()
             .map(answeredChoiceResult -> {
                 Long questionOptionId = answeredChoiceResult[0];
-                Long responseNumber = answeredChoiceResult[1];
+                Long totalResponseCount = answeredChoiceResult[1];
                 return QuestionOptionAnswerDto.builder()
                     .questionOptionId(questionOptionId)
                     .option(questionOptionService.getOptionByQuestionOptionId(questionOptionId))
-                    .responseNumber(responseNumber)
+                    .totalResponseCount(totalResponseCount)
                     .build();
             })
             .collect(Collectors.toList());

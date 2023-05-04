@@ -229,7 +229,7 @@ public class UserControllerTest extends BaseControllerTest {
         JSONArray optionAnswers = questionAnswer.getJSONArray("optionAnswers");
         JSONObject optionAnswer = optionAnswers.getJSONObject(0);
         assertThat(optionAnswer.get("option")).isEqualTo(questionOptionRequestDto.getOption());
-        assertThat(optionAnswer.get("responseNumber")).isEqualTo(1);
+        assertThat(optionAnswer.get("totalResponseCount")).isEqualTo(1);
     }
 
     @Test

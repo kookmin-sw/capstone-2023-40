@@ -15,6 +15,6 @@ public class QuestionOptionAnswerDto {
     private String option;
 
     @Schema(example = "3", description = "조회된 질문에 속하는 선택 항목의 총 응답 수 입니다.")
-    private Long responseNumber;
+    private Long totalResponseCount;
 
 }
