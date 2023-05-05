@@ -32,21 +32,6 @@ public class SurveyMapper {
         this.certificationTypeConverter = certificationTypeConverter;
     }
 
-    public SurveyResponseDto toSurveyResponseDto(Survey survey) {
-        return SurveyResponseDto.builder()
-            .surveyId(survey.getSurveyId())
-            .authorId(survey.getAuthorId())
-            .title(survey.getTitle())
-            .description(survey.getDescription())
-            .startedDate(survey.getStartedDate())
-            .endedDate(survey.getEndedDate())
-            .createdDate(survey.getCreatedDate())
-            .modifiedDate(survey.getModifiedDate())
-            .certificationTypes(certificationTypeConverter.toCertificationTypeList(
-                surveyRepository.findCertificationTypeBySurveyId(survey.getSurveyId())))
-            .build();
-    }
-
     public SurveyResponseDto toSurveyResponseDto(Survey survey, Long authorId) {
         List<QuestionBankResponseDto> questionBankResponseDtoList = questionService.getQuestionBankInfoDtoListBySurveyId(
             survey.getSurveyId());
