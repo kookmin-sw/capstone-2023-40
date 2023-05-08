@@ -10,6 +10,12 @@ import {
   setUserProfileImage,
 } from '../types/user';
 
+/**
+ * if we complete logged in this service, userData update in userInformatonReducer
+ * @param data : UserInformation list [point, email, name, phoneNumber, address, profileImage]
+ * @param password : Save password for updating information on My Page
+ * @param dispatch : Function for updating information on react-redux
+ */
 export const setUserInformation = (data: any, password: string, dispatch = useDispatch()) => {
   dispatch(setUserPoint('0'));
   dispatch(setUserEmail(data.email));
@@ -20,6 +26,7 @@ export const setUserInformation = (data: any, password: string, dispatch = useDi
   dispatch(setUserProfileImage('https://images2.alphacoders.com/130/1306410.png'));
 };
 
+// if we logout in this service, initialize userData in local.
 export const clearUserInformation = (dispatch = useDispatch()) => {
   dispatch(setUserEmail(''));
   dispatch(setUserPassword(''));
