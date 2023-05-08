@@ -1,5 +1,5 @@
 export interface AnsweredQuestion {
-  quesitonTitle: string;
+  questionTitle: string;
   questionDescription: string;
   singleChoice?: string;
   multipleChoices?: Array<string>;
