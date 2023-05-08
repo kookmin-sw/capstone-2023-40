@@ -169,28 +169,24 @@ export default function MyPage() {
       image: <KakaoImage />,
       title: '카카오',
       checkAuth: state.kakao,
-      pageNavigate: () => navigate('../mypage/authentication'),
     },
     {
       number: 2,
       image: <NaverImage />,
       title: '네이버',
       checkAuth: state.naver,
-      pageNavigate: () => navigate('../mypage/auth-list'),
     },
     {
       number: 3,
       image: <GoogleImage />,
       title: '구글',
       checkAuth: state.google,
-      pageNavigate: () => navigate('../mypage/auth-list'),
     },
     {
       number: 4,
       image: <IdCardImage />,
       title: '신분증',
       checkAuth: state.identityCard,
-      pageNavigate: () => navigate('../mypage/auth-list'),
     },
     {
       number: 5,
@@ -198,16 +194,18 @@ export default function MyPage() {
       image: <DriverLicenseImage />,
       title: '운전면허',
       checkAuth: state.driverLicense,
-      pageNavigate: () => navigate('../mypage/auth-list'),
     },
     {
       number: 6,
       image: <WebmailImage />,
       title: '웹메일',
       checkAuth: state.webmail,
-      pageNavigate: () => navigate('../mypage/auth-list'),
     },
   ];
+
+  const handleClick = (title: string) => {
+    navigate('../mypage/authentication', { state: { title } });
+  };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -224,8 +222,8 @@ export default function MyPage() {
             </MypageText>
             <AuthInformationText theme={theme}> &gt; 인증정보 목록</AuthInformationText>
           </AuthListTitle>
-          {surveyAuthState.map(({ number, image, title, checkAuth, pageNavigate }) => (
-            <ContainerBox key={number} theme={theme} onClick={pageNavigate} disabled={checkAuth}>
+          {surveyAuthState.map(({ number, image, title, checkAuth }) => (
+            <ContainerBox key={number} theme={theme} onClick={() => handleClick(title)} disabled={checkAuth}>
               {image}
               <TextType
                 theme={theme}
