@@ -2,8 +2,10 @@ package com.thesurvey.api.dto.response.user;
 
 import com.thesurvey.api.dto.response.question.QuestionBankAnswerDto;
 import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.util.List;
 import java.util.UUID;
+
 import lombok.Builder;
 import lombok.Getter;
 
