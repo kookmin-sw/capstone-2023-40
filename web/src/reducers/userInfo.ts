@@ -33,6 +33,8 @@ export const userInformationReducer = (
       return { ...state, email: action.payload };
     case 'CHANGE_PASSWORD':
       return { ...state, password: action.payload };
+    case 'CHANGE_NAME':
+      return { ...state, name: action.payload };
     case 'CHANGE_PHONE_NUMBER':
       return { ...state, phoneNumber: action.payload };
     case 'CHANGE_ADDRESS':

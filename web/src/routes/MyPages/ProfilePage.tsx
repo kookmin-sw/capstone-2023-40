@@ -157,6 +157,7 @@ export default function MyPage() {
   const [showAlertModal, setShowAlertModal] = useState(false);
   const userState = useSelector((state: RootState) => state.userInformation);
   const dispatch = useDispatch();
+  console.log(userState);
 
   // Input Data list
   const handleInputChange = (e: SyntheticEvent<HTMLInputElement>) => {
