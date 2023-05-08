@@ -195,6 +195,7 @@ public class SurveyControllerTest extends BaseControllerTest {
             .isEqualTo(content.getString("endedDate"));
         assertThat(LocalDateTime.parse(content.getString("startedDate"))).isBefore(
             LocalDateTime.parse(content.getString("endedDate")));
+        assertThat(content.getJSONArray("questions")).isNotNull();
     }
 
     @Test

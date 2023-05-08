@@ -77,7 +77,7 @@ public class SurveyService {
     public SurveyResponseDto getSurveyBySurveyIdWithRelatedQuestion(UUID surveyId) {
         Survey survey = surveyRepository.findBySurveyId(surveyId)
             .orElseThrow(() -> new NotFoundExceptionMapper(ErrorMessage.SURVEY_NOT_FOUND));
-        return surveyMapper.toSurveyResponseDto(survey);
+        return surveyMapper.toSurveyResponseDto(survey, survey.getAuthorId());
     }
 
     @Transactional(readOnly = true)
