@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -6,7 +6,8 @@ import styled, { DefaultTheme } from 'styled-components';
 
 import { useOnClickOutside } from '../../hooks/useOnClickOutside';
 import { RootState } from '../../reducers';
-import { setLogin, setSubPageOpen } from '../../reducers/header';
+import { setLoggedIn, setSubPageOpen } from '../../reducers/header';
+import { clearUserInformation } from '../../utils/UserUtils';
 
 const SubPageContainer = styled.div`
   display: flex;
@@ -55,8 +56,9 @@ export default function Header({ theme }: HeaderProps) {
   const dispatch = useDispatch();
 
   const logoutClick = () => {
-    dispatch(setLogin(!isLoggedIn));
+    dispatch(setLoggedIn(!isLoggedIn));
     dispatch(setSubPageOpen(!isSubPageOpen));
+    clearUserInformation(dispatch);
     navigate('../../../');
   };
 

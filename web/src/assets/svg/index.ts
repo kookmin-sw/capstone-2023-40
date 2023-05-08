@@ -13,6 +13,7 @@ import { ReactComponent as Delete } from './delete-circle.svg';
 import { ReactComponent as Error } from './error-icon.svg';
 import { ReactComponent as Favicon } from './favicon.svg';
 import { ReactComponent as Info } from './info-icon.svg';
+import { ReactComponent as Loading } from './LoadingImage.svg';
 import { ReactComponent as DarkLogo } from './logo-dark.svg';
 import { ReactComponent as LightLogo } from './logo-light.svg';
 import { ReactComponent as Pencil } from './pencil.svg';
@@ -48,4 +49,5 @@ export const Icons: { [src: string]: IconType } = {
   TRASH: Trash,
   PLUS: Plus,
   DELETE: Delete,
+  LOADING: Loading,
 };

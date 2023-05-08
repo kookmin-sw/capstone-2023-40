@@ -4,11 +4,15 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
 
+import axios from '../api/axios';
+import { requests } from '../api/request';
 import DarkModeIcon from '../assets/darkmode.webp';
 import LightModeIcon from '../assets/lightmode.webp';
 import { Icons } from '../assets/svg';
 import { setSubPageOpen } from '../reducers/header';
 import { RootState } from '../reducers/index';
+import { UserUpdateRequest } from '../types/request';
+import { UserResponse } from '../types/response/User';
 import HeaderModal from './Modal/HeaderModal';
 
 const HeaderContainer = styled.header<{ isTransitionEnabled: boolean }>`
@@ -182,7 +186,7 @@ const LoginInformation = styled.div`
   }
 `;
 
-const SaveUserInformationButton = styled.div`
+const UpdateInformationButton = styled.div`
   margin: 1vw;
   display: flex;
   padding: 1vh;
@@ -209,6 +213,10 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
   const navigate = useNavigate();
   const currentLocation = useLocation().pathname;
   const [isTransitionEnabled, setIsTransitionEnabled] = useState<boolean>(false);
+  const password = useSelector((state: RootState) => state.userInformation.password);
+  const phoneNumber = useSelector((state: RootState) => state.userInformation.phoneNumber);
+  const address = useSelector((state: RootState) => state.userInformation.address);
+  const profileImage = useSelector((state: RootState) => state.userInformation.profileImage);
   const isLoggedIn = useSelector((state: RootState) => state.header.isLoggedIn);
   const isSubPageOpen = useSelector((state: RootState) => state.header.isSubPageOpen);
   const dispatch = useDispatch();
@@ -216,6 +224,17 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
   const handleClick = () => {
     setIsTransitionEnabled(true);
     toggleTheme();
+  };
+
+  // FIXME: Update user information value [ password, phoneNumber, address, profileImage ]
+  const updateUserInformation = async () => {
+    const profileUpdateBody = { password, phoneNumber, address, profileImage };
+    const res = await axios.patch<UserUpdateRequest>(requests.updateUserProfile, profileUpdateBody);
+    if (res.status === 200) {
+      console.log('update Success!');
+    } else if (res.status === 401) {
+      console.log('failed to user Authentication');
+    }
   };
 
   const LogoContainer = theme.alt === 'light' ? LogoLightContainer : LogoDarkContainer;
@@ -248,9 +267,9 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
             <CheckBoxLabel htmlFor="checkbox" theme={theme} />
           </CheckBoxWrapper>
           {currentLocation === '/mypage' ? (
-            <SaveUserInformationButton theme={theme} onClick={() => navigate('../mypage')}>
+            <UpdateInformationButton theme={theme} onClick={updateUserInformation}>
               개인정보 저장하기
-            </SaveUserInformationButton>
+            </UpdateInformationButton>
           ) : undefined}
           {isLoggedIn ? (
             <UserImage onClick={() => dispatch(setSubPageOpen(!isSubPageOpen))} />

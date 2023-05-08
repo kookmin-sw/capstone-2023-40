@@ -1,10 +1,53 @@
-export type UserState = {
+export type UserInformationState = {
   email: string;
   name: string;
+  point: string;
+  password: string;
+  phoneNumber: string;
+  address: string;
   profileImage: string;
 };
 
-export type UserAction =
-  | { type: 'EMAIL'; payload: string }
-  | { type: 'NAME'; payload: string }
-  | { type: 'PROFILE_IMAGE'; payload: string };
+export const setUserPoint = (payload: string) => ({
+  type: 'CHANGE_POINT',
+  payload: payload,
+});
+
+export const setUserEmail = (payload: string) => ({
+  type: 'CHANGE_EMAIL',
+  payload: payload,
+});
+
+export const setUserPassword = (payload: string) => ({
+  type: 'CHANGE_PASSWORD',
+  payload: payload,
+});
+
+export const setUserName = (payload: string) => ({
+  type: 'CHANGE_NAME',
+  payload: payload,
+});
+
+export const setPhoneNumber = (payload: string) => ({
+  type: 'CHANGE_PHONE_NUMBER',
+  payload: payload,
+});
+
+export const setUserAddress = (payload: string) => ({
+  type: 'CHANGE_ADDRESS',
+  payload: payload,
+});
+
+export const setUserProfileImage = (payload: string) => ({
+  type: 'CHANGE_PROFILEIMAGE',
+  payload: payload,
+});
+
+export type UserInformationAction =
+  | ReturnType<typeof setUserPoint>
+  | ReturnType<typeof setUserEmail>
+  | ReturnType<typeof setUserPassword>
+  | ReturnType<typeof setUserName>
+  | ReturnType<typeof setPhoneNumber>
+  | ReturnType<typeof setUserAddress>
+  | ReturnType<typeof setUserProfileImage>;
