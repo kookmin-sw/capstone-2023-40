@@ -296,7 +296,7 @@ export default function MyPage() {
                 theme={theme}
                 disabled={!isDisabled}
                 maxLength={title === '전화번호' ? 13 : undefined}
-                style={{ width: `${(information.length + 1) * 10}px` }}
+                style={{ width: `${(information.length + 1) * 15}px` }}
               />
               {title === '포인트' ? <PurchaseButton theme={theme}>기프티콘 구매</PurchaseButton> : undefined}
               {!(title === '포인트' || title === '이메일' || title === '이름') ? (

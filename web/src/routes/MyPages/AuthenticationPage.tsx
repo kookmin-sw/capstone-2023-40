@@ -6,7 +6,6 @@ import { useLocation } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 
 import { Icons } from '../../assets/svg/index';
-import { KAKAO_AUTH_URL } from '../../components/authlist/kakaoAuth';
 import Header from '../../components/Header';
 import { useTheme } from '../../hooks/useTheme';
 import { RootState } from '../../reducers';
@@ -104,25 +103,27 @@ export default function AuthenticationPage() {
   const dispatch = useDispatch();
   const state = { ...location.state };
 
+  const handleSummit = () => {};
+
   const handleClick = (title: string) => {
     switch (title) {
       case '카카오':
-        dispatch(setAuthKakao(surveyAuthState.kakao));
+        dispatch(setAuthKakao(!surveyAuthState.kakao));
         break;
       case '네이버':
-        dispatch(setAuthNaver(surveyAuthState.naver));
+        dispatch(setAuthNaver(!surveyAuthState.naver));
         break;
       case '구글':
-        dispatch(setAuthGoogle(surveyAuthState.google));
+        dispatch(setAuthGoogle(!surveyAuthState.google));
         break;
       case '신분증':
-        dispatch(setAuthIdentity(surveyAuthState.identityCard));
+        dispatch(setAuthIdentity(!surveyAuthState.identityCard));
         break;
       case '운전면허':
-        dispatch(setAuthDriver(surveyAuthState.driverLicense));
+        dispatch(setAuthDriver(!surveyAuthState.driverLicense));
         break;
       case '웹메일':
-        dispatch(setAuthWebMail(surveyAuthState.webmail));
+        dispatch(setAuthWebMail(!surveyAuthState.webmail));
         break;
       default:
         break;
@@ -130,7 +131,7 @@ export default function AuthenticationPage() {
     navigate('../mypage/auth-list');
   };
 
-  if (!completeAuth) {
+  if (completeAuth) {
     return (
       <Container theme={theme}>
         <Header theme={theme} toggleTheme={toggleTheme} />

@@ -9,32 +9,32 @@ export type SurveyAuthState = {
 
 export const setAuthKakao = (payload: boolean) => ({
   type: 'AUTH_KAKAO',
-  payload: !payload,
+  payload: payload,
 });
 
 export const setAuthGoogle = (payload: boolean) => ({
   type: 'AUTH_GOOGLE',
-  payload: !payload,
+  payload: payload,
 });
 
 export const setAuthNaver = (payload: boolean) => ({
   type: 'AUTH_NAVER',
-  payload: !payload,
+  payload: payload,
 });
 
 export const setAuthIdentity = (payload: boolean) => ({
   type: 'AUTH_IDENTITY',
-  payload: !payload,
+  payload: payload,
 });
 
 export const setAuthDriver = (payload: boolean) => ({
   type: 'AUTH_DRIVER',
-  payload: !payload,
+  payload: payload,
 });
 
 export const setAuthWebMail = (payload: boolean) => ({
   type: 'AUTH_WEBMAIL',
-  payload: !payload,
+  payload: payload,
 });
 
 export type SurveyAuthAction =

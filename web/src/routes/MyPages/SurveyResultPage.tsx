@@ -135,12 +135,7 @@ export default function MyPage() {
   };
 
   const resultList = [
-    {
-      id: 1,
-      title:
-        'test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1',
-      resultClick: resultClickFirst,
-    },
+    { id: 1, title: 'test1', resultClick: resultClickFirst },
     { id: 2, title: 'test2', resultClick: resultClickSecond },
   ];
 
