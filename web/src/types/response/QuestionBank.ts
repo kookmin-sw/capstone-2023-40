@@ -6,7 +6,7 @@ export interface QuestionBankResponse extends BaseTime {
   title: string;
   description: string;
   questionType: QuestionType;
-  questionOptions: Array<QuestionOptionResponse>;
+  questionOptions: Array<QuestionOptionResponse> | null;
 }
 
 enum QuestionType {
