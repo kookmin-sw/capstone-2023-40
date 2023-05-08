@@ -1,7 +1,7 @@
 import { QuestionOptionUpdateRequest } from './QuestionOption';
 
 export interface QuestionBankUpdateRequest {
-  questionBankId: string;
+  questionBankId: number;
   title: string;
   description: string;
   questionType: QuestionType;
