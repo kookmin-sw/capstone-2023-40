@@ -1,6 +1,7 @@
 package com.thesurvey.api.dto.question;
 
 import com.thesurvey.api.dto.CommonTestMethod;
+
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
