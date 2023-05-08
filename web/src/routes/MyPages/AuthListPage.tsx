@@ -1,12 +1,13 @@
-import React, { useReducer } from 'react';
+import React from 'react';
 
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Icons } from '../../assets/svg/index';
 import Header from '../../components/Header';
 import { useTheme } from '../../hooks/useTheme';
-import { surveyAuthReducer } from '../../reducers/survey';
+import { RootState } from '../../reducers';
 import { SurveyAuthState } from '../../types/surveyAuth';
 
 const KakaoImage = styled(Icons.KAKAO).attrs({
@@ -160,46 +161,46 @@ const initialState: SurveyAuthState = {
 export default function MyPage() {
   const [theme, toggleTheme] = useTheme();
   const navigate = useNavigate();
-  const [state, dispatch] = useReducer(surveyAuthReducer, initialState);
+  const surveyAuthState = useSelector((state: RootState) => state.surveyAuth);
 
   // FIXME: To API data
-  const surveyAuthState = [
+  const surveyAuthList = [
     {
       number: 1,
       image: <KakaoImage />,
       title: '카카오',
-      checkAuth: state.kakao,
+      checkAuth: surveyAuthState.kakao,
     },
     {
       number: 2,
       image: <NaverImage />,
       title: '네이버',
-      checkAuth: state.naver,
+      checkAuth: surveyAuthState.naver,
     },
     {
       number: 3,
       image: <GoogleImage />,
       title: '구글',
-      checkAuth: state.google,
+      checkAuth: surveyAuthState.google,
     },
     {
       number: 4,
       image: <IdCardImage />,
       title: '신분증',
-      checkAuth: state.identityCard,
+      checkAuth: surveyAuthState.identityCard,
     },
     {
       number: 5,
 
       image: <DriverLicenseImage />,
       title: '운전면허',
-      checkAuth: state.driverLicense,
+      checkAuth: surveyAuthState.driverLicense,
     },
     {
       number: 6,
       image: <WebmailImage />,
       title: '웹메일',
-      checkAuth: state.webmail,
+      checkAuth: surveyAuthState.webmail,
     },
   ];
 
@@ -211,6 +212,7 @@ export default function MyPage() {
     event.preventDefault();
   };
 
+  // FIXME: 인증과정 구현 후에 인증완료 버튼을 disabled 하기.
   return (
     <Container theme={theme}>
       <Header theme={theme} toggleTheme={toggleTheme} />
@@ -222,8 +224,8 @@ export default function MyPage() {
             </MypageText>
             <AuthInformationText theme={theme}> &gt; 인증정보 목록</AuthInformationText>
           </AuthListTitle>
-          {surveyAuthState.map(({ number, image, title, checkAuth }) => (
-            <ContainerBox key={number} theme={theme} onClick={() => handleClick(title)} disabled={checkAuth}>
+          {surveyAuthList.map(({ number, image, title, checkAuth }) => (
+            <ContainerBox key={number} theme={theme} onClick={() => handleClick(title)}>
               {image}
               <TextType
                 theme={theme}
