@@ -24,7 +24,6 @@ export const setUserInformation = (data: any, password: string, dispatch = useDi
   dispatch(setPhoneNumber(data.phoneNumber));
   dispatch(setUserAddress(data.address === null ? '주소를 입력해주세요' : data.address));
   dispatch(setUserProfileImage('https://images2.alphacoders.com/130/1306410.png'));
-  console.log(data);
 };
 
 // if we logout in this service, initialize userData in local.
