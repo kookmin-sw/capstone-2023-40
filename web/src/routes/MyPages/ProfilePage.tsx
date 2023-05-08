@@ -132,9 +132,15 @@ const PurchaseButton = styled.div`
   }
 `;
 
-const changePhoneNumber = (value: string): string => {
+/**
+ * This function is Replaced value with phoneNumber format.
+ * example)) 01012341234 => 010-1234-1234
+ * @param value : it is phoneNumer only number[0-9].
+ * @returns phoneNumber format string.
+ */
+const formatPhoneNumber = (value: string): string => {
   const phoneNumber = value.replace(/[^0-9]/g, '');
-  if (phoneNumber.length >= 10 && phoneNumber.length < 13) {
+  if (phoneNumber.length >= 10) {
     return phoneNumber.replace(/(\d{3})(\d{3,4})(\d{4})/, '$1-$2-$3');
   }
   return phoneNumber;
@@ -143,9 +149,9 @@ const changePhoneNumber = (value: string): string => {
 export default function MyPage() {
   const [theme, toggleTheme] = useTheme();
   const navigate = useNavigate();
-  const [changePasswordDisabled, setChangePasswordDisabled] = useState(false);
-  const [changePhoneNumberDisabled, setChangePhoneNumberDisabled] = useState(false);
-  const [changeAddressDisabled, setChangeAddressDisabled] = useState(false);
+  const [updatePasswordDisabled, setUpdatePasswordDisabled] = useState(false);
+  const [updatePhoneNumberDisabled, setUpdatePhoneNumberDisabled] = useState(false);
+  const [updateAddressDisabled, setUpdateAddressDisabled] = useState(false);
   const [alertTitle, setAlertTitle] = useState('');
   const [alertText, setAlertText] = useState('');
   const [showAlertModal, setShowAlertModal] = useState(false);
@@ -174,27 +180,30 @@ export default function MyPage() {
       }
     }
   };
-
-  // Change Editable profile text [password, phoneNumber, address]
+  /**
+   * Change Editable profile text [password, phoneNumber, address]
+   * if we edit text, edit text put into th regular expression [validatePassword, validatePhoneNumber]
+   * @param text : text is Editable string in profileList[password, phoneNumber, address].
+   */
   const handleEditTextClick = (text: string) => {
     if (text === 'password') {
-      if (!validatePassword(userState.password) && changePasswordDisabled) {
+      if (!validatePassword(userState.password) && updatePasswordDisabled) {
         setAlertTitle('개인정보 수정오류');
         setAlertText('비밀번호를 다시 확인해주세요.');
         setShowAlertModal(true);
       } else {
-        setChangePasswordDisabled(!changePasswordDisabled);
+        setUpdatePasswordDisabled(!updatePasswordDisabled);
       }
     } else if (text === 'phoneNumber') {
-      if (!validatePhoneNumber(userState.phoneNumber) && changePhoneNumberDisabled) {
+      if (!validatePhoneNumber(userState.phoneNumber) && updatePhoneNumberDisabled) {
         setAlertTitle('개인정보 수정오류');
         setAlertText('전화번호를 다시 확인해주세요.');
         setShowAlertModal(true);
       } else {
-        setChangePhoneNumberDisabled(!changePhoneNumberDisabled);
+        setUpdatePhoneNumberDisabled(!updatePhoneNumberDisabled);
       }
     } else if (text === 'address') {
-      setChangeAddressDisabled(!changeAddressDisabled);
+      setUpdateAddressDisabled(!updateAddressDisabled);
     }
   };
 
@@ -238,15 +247,15 @@ export default function MyPage() {
       name: 'password',
       type: 'password',
       information: userState.password,
-      isDisabled: changePasswordDisabled,
+      isDisabled: updatePasswordDisabled,
     },
     {
       number: 5,
       title: '전화번호',
       name: 'phoneNumber',
       type: 'text',
-      information: changePhoneNumber(userState.phoneNumber),
-      isDisabled: changePhoneNumberDisabled,
+      information: formatPhoneNumber(userState.phoneNumber),
+      isDisabled: updatePhoneNumberDisabled,
     },
     {
       number: 6,
@@ -254,7 +263,7 @@ export default function MyPage() {
       name: 'address',
       type: 'text',
       information: userState.address,
-      isDisabled: changeAddressDisabled,
+      isDisabled: updateAddressDisabled,
     },
   ];
 

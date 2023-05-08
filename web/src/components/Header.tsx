@@ -225,6 +225,7 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
     toggleTheme();
   };
 
+  // FIXME: Update user information value [ password, phoneNumber, address, profileImage ]
   const updateUserInformation = async () => {
     const profilePatchBody = { password, phoneNumber, address, profileImage };
     const res = await axios.patch<UserResponse>(requests.updateUserProfile, profilePatchBody);
