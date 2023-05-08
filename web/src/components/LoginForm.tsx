@@ -121,7 +121,6 @@ export default function LoginForm({ theme }: LoginFormProps) {
 
     const loginRequestBody = { email, password };
     const res = await axios.post<UserResponse>(requests.login, loginRequestBody);
-    console.log(res.status);
     if (res.status === 200) {
       setUserInformation(res.data, password, dispatch);
       dispatch(setLoggedIn(true));

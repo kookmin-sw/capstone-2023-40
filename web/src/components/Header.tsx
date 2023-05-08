@@ -11,6 +11,7 @@ import LightModeIcon from '../assets/lightmode.webp';
 import { Icons } from '../assets/svg';
 import { setSubPageOpen } from '../reducers/header';
 import { RootState } from '../reducers/index';
+import { UserUpdateRequest } from '../types/request';
 import { UserResponse } from '../types/response/User';
 import HeaderModal from './Modal/HeaderModal';
 
@@ -227,8 +228,13 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
 
   // FIXME: Update user information value [ password, phoneNumber, address, profileImage ]
   const updateUserInformation = async () => {
-    const profilePatchBody = { password, phoneNumber, address, profileImage };
-    const res = await axios.patch<UserResponse>(requests.updateUserProfile, profilePatchBody);
+    const profileUpdateBody = { password, phoneNumber, address, profileImage };
+    const res = await axios.patch<UserUpdateRequest>(requests.updateUserProfile, profileUpdateBody);
+    if (res.status === 200) {
+      console.log('update Success!');
+    } else if (res.status === 401) {
+      console.log('failed to user Authentication');
+    }
   };
 
   const LogoContainer = theme.alt === 'light' ? LogoLightContainer : LogoDarkContainer;
