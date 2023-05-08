@@ -64,8 +64,10 @@ interface CertificationListProps {
 
 export default function CertificationList({ label, iconOption }: CertificationListProps) {
   // FIXME: CertificationType allow both number and string... it makes happen with switch function
-  let tmpLabel: any;
-  if (typeof label === 'string') {
+  let tmpLabel: number | string;
+  if (typeof label === 'undefined') {
+    tmpLabel = -1;
+  } else if (typeof label === 'string') {
     tmpLabel = CertificationType[label];
   } else {
     tmpLabel = label;
