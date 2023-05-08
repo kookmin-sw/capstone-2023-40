@@ -1,5 +1,7 @@
 package com.thesurvey.api.service;
 
+import com.thesurvey.api.domain.EnumTypeEntity.QuestionType;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -81,7 +83,7 @@ public class SurveyService {
     public SurveyResponseDto getSurveyBySurveyIdWithRelatedQuestion(UUID surveyId) {
         Survey survey = surveyRepository.findBySurveyId(surveyId)
             .orElseThrow(() -> new NotFoundExceptionMapper(ErrorMessage.SURVEY_NOT_FOUND));
-        return surveyMapper.toSurveyResponseDto(survey);
+        return surveyMapper.toSurveyResponseDto(survey, survey.getAuthorId());
     }
 
     @Transactional(readOnly = true)
@@ -90,11 +92,20 @@ public class SurveyService {
             UserUtil.getUserIdFromAuthentication(authentication));
     }
 
+    /**
+     * Returns a {@link UserSurveyResultDto} that represents the answers to the survey.
+     *
+     * @param authentication authentication of the requesting user
+     * @param surveyId the ID of survey to get result
+     * @return UserSurveyResultDto
+     */
     @Transactional(readOnly = true)
     public UserSurveyResultDto getUserCreatedSurveyResult(Authentication authentication,
         UUID surveyId) {
         Survey survey = surveyRepository.findBySurveyId(surveyId)
             .orElseThrow(() -> new NotFoundExceptionMapper(ErrorMessage.SURVEY_NOT_FOUND));
+
+        // validate survey author from current user
         validateSurveyAuthor(UserUtil.getUserIdFromAuthentication(authentication),
             survey.getAuthorId());
 
@@ -103,47 +114,12 @@ public class SurveyService {
             throw new BadRequestExceptionMapper(ErrorMessage.SURVEY_NOT_STARTED);
         }
 
+        // fetch all QuestionBanks by "surveyId"
         List<QuestionBank> questionBanks = questionService.getAllQuestionBankBySurveyId(surveyId);
-        List<QuestionBankAnswerDto> questionBankAnswerDtoList = new ArrayList<>();
-        for (QuestionBank questionBank : questionBanks) {
-            List<String> shortLongAnswerList = new ArrayList<>();
-            List<QuestionOptionAnswerDto> questionOptionAnswerDtoList = new ArrayList<>();
-            Integer questionNo = questionService.getQuestionNoByQuestionBankId(
-                questionBank.getQuestionBankId());
-            List<AnsweredQuestion> answeredQuestionList = answeredQuestionService.getAnswerQuestionByQuestionBankId(
-                questionBank.getQuestionBankId());
-            switch (questionBank.getQuestionType()) {
-                case SINGLE_CHOICE:
-                    List<Long[]> answeredSingleChoiceList = answeredQuestionService.getSingleChoiceResult(
-                        questionBank.getQuestionBankId());
-                    questionOptionAnswerDtoList = getQuestionOptionAnswerDtoList(answeredSingleChoiceList);
-                    break;
-                case MULTIPLE_CHOICES:
-                    List<Long[]> answeredMultipleChoiceList = answeredQuestionService.getMultipleChoiceResult(
-                        questionBank.getQuestionBankId());
-                    questionOptionAnswerDtoList = getQuestionOptionAnswerDtoList(answeredMultipleChoiceList);
-                    break;
-                case SHORT_ANSWER:
-                    shortLongAnswerList = answeredQuestionList.stream()
-                        .map(AnsweredQuestion::getShortAnswer)
-                        .collect(Collectors.toList());
-                    break;
-                case LONG_ANSWER:
-                    shortLongAnswerList = answeredQuestionList.stream()
-                        .map(AnsweredQuestion::getLongAnswer)
-                        .collect(Collectors.toList());
-                    break;
-            }
-            questionBankAnswerDtoList.add(QuestionBankAnswerDto.builder()
-                .questionBankId(questionBank.getQuestionBankId())
-                .questionTitle(questionBank.getTitle())
-                .questionDescription(questionBank.getDescription())
-                .questionType(questionBank.getQuestionType())
-                .questionNo(questionNo)
-                .textAnswers(shortLongAnswerList)
-                .optionAnswers(questionOptionAnswerDtoList)
-                .build());
-        }
+
+        // fetch all QuestionBankAnswerDtos by "questionbanks"
+        List<QuestionBankAnswerDto> questionBankAnswerDtoList = getQuestionBankAnswerDtoList(questionBanks);
+
         return surveyMapper.toUserSurveyResultDto(survey, questionBankAnswerDtoList);
     }
 
@@ -238,6 +214,12 @@ public class SurveyService {
             throw new BadRequestExceptionMapper(ErrorMessage.STARTEDDATE_ISAFTER_ENDEDDATE);
         }
 
+        // `startedDate` is only allowed to be within 5 seconds from now or later.
+        if (surveyUpdateRequestDto.getStartedDate()
+            .isBefore(LocalDateTime.now(ZoneId.of("Asia/Seoul")).minusSeconds(5))) {
+            throw new BadRequestExceptionMapper(ErrorMessage.STARTEDDATE_ISBEFORE_CURRENTDATE);
+        }
+
     }
 
     private void validateSurveyAuthor(Long userId, Long authorId) {
@@ -246,18 +228,138 @@ public class SurveyService {
         }
     }
 
-    private List<QuestionOptionAnswerDto> getQuestionOptionAnswerDtoList(
-        List<Long[]> answeredChoiceList) {
-        return answeredChoiceList.stream()
-            .map(answeredChoiceResult -> {
-                Long questionOptionId = answeredChoiceResult[0];
-                Long totalResponseCount = answeredChoiceResult[1];
-                return QuestionOptionAnswerDto.builder()
+    /**
+     * Returns a list of {@link QuestionBankAnswerDto} based on the provided list of {@link QuestionBank}.
+     * For each QuestionBank, this method fetches the question number and answered questions, and then builds a
+     * {@link QuestionBankAnswerDto}.
+     *
+     * @param questionBankList a list of QuestionBanks fetched by {@code surveyId}
+     * @return List<QuestionBankAnswerDto>
+     */
+    private List<QuestionBankAnswerDto> getQuestionBankAnswerDtoList(List<QuestionBank> questionBankList) {
+
+        /*
+         * In this loop, fetch the QuestionNo and AnsweredQuestion
+         * for each QuestionBank.
+         * then build a QuestionBankAnswerDto and add to 'questionBankAnswerDtoList'.
+         */
+        List<QuestionBankAnswerDto> questionBankAnswerDtoList = new ArrayList<>();
+        for (QuestionBank questionBank : questionBankList) {
+
+            // get QuestionNo by "questionBankId"
+            Integer questionNo = questionService.getQuestionNoByQuestionBankId(
+                questionBank.getQuestionBankId());
+
+            // fetch all AnsweredQuestions by "questionBankId"
+            List<AnsweredQuestion> answeredQuestionList = answeredQuestionService.getAnswerQuestionByQuestionBankId(
+                questionBank.getQuestionBankId());
+
+            // get current QuestionBank's QuestionType
+            QuestionType questionType = questionBank.getQuestionType();
+
+            List<QuestionOptionAnswerDto> questionOptionAnswerDtoList = new ArrayList<>();
+            List<String> shortLongAnswerList = new ArrayList<>();
+
+            // In case it's choice answer
+            if (questionType == QuestionType.SINGLE_CHOICE
+                || questionType == QuestionType.MULTIPLE_CHOICES) {
+                questionOptionAnswerDtoList = getQuestionOptionAnswerDtoList(
+                    questionBank.getQuestionBankId(), questionBank.getQuestionType());
+            }
+            // In case it's short or long answer
+            else if (questionType == QuestionType.SHORT_ANSWER
+                || questionType == QuestionType.LONG_ANSWER) {
+                shortLongAnswerList =
+                    getShortLongAnswerList(questionBank.getQuestionType(), answeredQuestionList);
+            }
+
+            questionBankAnswerDtoList.add(
+                // build QuestionBankAnswerDto
+                QuestionBankAnswerDto.builder()
+                    .questionBankId(questionBank.getQuestionBankId())
+                    .questionTitle(questionBank.getTitle())
+                    .questionDescription(questionBank.getDescription())
+                    .questionType(questionBank.getQuestionType())
+                    .questionNo(questionNo)
+                    .textAnswers(shortLongAnswerList)
+                    .optionAnswers(questionOptionAnswerDtoList)
+                    .build()
+            );
+        } // end loop
+
+        return questionBankAnswerDtoList;
+    }
+
+    /**
+     * Returns a list of {@link QuestionOptionAnswerDto} containing the answer data
+     * for a given {@code Long questionBankId} and {@code QuestionType questionType}.
+     *
+     * @param questionBankId the ID of the question bank for which to retrieve answer data
+     * @param questionType  the type of question for which to retrieve answer data,
+     * either {@code QuestionType.SINGLE_CHOICE} or {@code QuestionType.MULTIPLE_CHOICES}
+     * @return List<QuestionOptionAnswerDto>
+     */
+    private List<QuestionOptionAnswerDto> getQuestionOptionAnswerDtoList(Long questionBankId,
+        QuestionType questionType) {
+
+        /*
+         * "List<Long[]> answeredChoiceList" is a list containing arrays of
+         * [questionOptionId, totalResponseCount].
+         */
+        System.out.println("now questionId = " + questionBankId);
+        System.out.println("now questionType = " + questionType);
+
+        List<Long[]> answeredChoiceList = new ArrayList<>();
+        if (questionType == QuestionType.SINGLE_CHOICE) {
+            answeredChoiceList = answeredQuestionService.getSingleChoiceResult(
+                questionBankId);
+        } else if (questionType == QuestionType.MULTIPLE_CHOICES) {
+            answeredChoiceList = answeredQuestionService.getMultipleChoiceResult(
+                questionBankId);
+        }
+
+        List<QuestionOptionAnswerDto> questionOptionAnswerDtoList = new ArrayList<>();
+        for (Long[] answeredChoiceResult : answeredChoiceList) {
+            Long questionOptionId = answeredChoiceResult[0];
+            Long totalResponseCount = answeredChoiceResult[1];
+            questionOptionAnswerDtoList.add(
+                // build QuestionOptionAnswerDto
+                QuestionOptionAnswerDto.builder()
                     .questionOptionId(questionOptionId)
                     .option(questionOptionService.getOptionByQuestionOptionId(questionOptionId))
                     .totalResponseCount(totalResponseCount)
-                    .build();
-            })
-            .collect(Collectors.toList());
+                    .build()
+            );
+        }
+
+        return questionOptionAnswerDtoList;
     }
+
+    /**
+     * Returns a list of short or long answer strings
+     * based on the provided {@code QuestionType questionType} and
+     * {@code List<AnsweredQuestion>answeredQuestionList}.
+     *
+     * @param questionType the type of question for which to retrieve answer data,
+     * either {@code QuestionType.SHORT_ANSWER} or {@code QuestionType.LONG_ANSWER}
+     * @param answeredQuestionList a list of {@code AnsweredQuestion}
+     * @return List<String>
+     */
+    private List<String> getShortLongAnswerList(QuestionType questionType,
+        List<AnsweredQuestion> answeredQuestionList) {
+
+        List<String> shortLongAnswerList = new ArrayList<>();
+        if (questionType == QuestionType.SHORT_ANSWER) {
+            shortLongAnswerList = answeredQuestionList.stream()
+                .map(AnsweredQuestion::getShortAnswer)
+                .collect(Collectors.toList());
+        } else if (questionType == QuestionType.LONG_ANSWER) {
+            shortLongAnswerList = answeredQuestionList.stream()
+                .map(AnsweredQuestion::getLongAnswer)
+                .collect(Collectors.toList());
+        }
+
+        return shortLongAnswerList;
+    }
+
 }
