@@ -22,7 +22,9 @@ import org.springframework.stereotype.Component;
 public class SurveyMapper {
 
     private final SurveyRepository surveyRepository;
+
     private final QuestionService questionService;
+
     private final CertificationTypeConverter certificationTypeConverter;
 
     public SurveyMapper(SurveyRepository surveyRepository, QuestionService questionService,
