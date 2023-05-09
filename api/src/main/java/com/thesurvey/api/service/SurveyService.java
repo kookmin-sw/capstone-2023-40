@@ -306,9 +306,6 @@ public class SurveyService {
          * "List<Long[]> answeredChoiceList" is a list containing arrays of
          * [questionOptionId, totalResponseCount].
          */
-        System.out.println("now questionId = " + questionBankId);
-        System.out.println("now questionType = " + questionType);
-
         List<Long[]> answeredChoiceList = new ArrayList<>();
         if (questionType == QuestionType.SINGLE_CHOICE) {
             answeredChoiceList = answeredQuestionService.getSingleChoiceResult(
