@@ -5,7 +5,7 @@ import styled, { DefaultTheme } from 'styled-components';
 import { QuestionType } from '../../types/request';
 import { QuestionOptionResponse } from '../../types/response/QuestionOption';
 
-const MultipleChoiceContainer = styled.div`
+const ChoiceContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -98,19 +98,22 @@ interface ResponseInputFormProps {
   questionType: QuestionType;
   options: Array<QuestionOptionResponse> | null;
   questionBankId: number;
-  handleInputChange: (arg: React.ChangeEvent<HTMLTextAreaElement> | React.ChangeEvent<HTMLInputElement>) => void;
+  handleInputChange: (arg1: React.ChangeEvent<HTMLTextAreaElement> | React.ChangeEvent<HTMLInputElement>) => void;
+  handleChangeCheck: (arg1: React.ChangeEvent<HTMLInputElement>, arg2: number) => void;
   theme: DefaultTheme;
 }
+
 export default function ResponseInputForm({
   questionType,
   options,
   questionBankId,
   handleInputChange,
+  handleChangeCheck,
   theme,
 }: ResponseInputFormProps) {
   if (questionType === QuestionType.SINGLE_CHOICE || questionType === QuestionType.MULTIPLE_CHOICE) {
     return (
-      <MultipleChoiceContainer theme={theme}>
+      <ChoiceContainer theme={theme}>
         {options?.map((option: QuestionOptionResponse) => (
           <ChoiceLabel theme={theme} key={option.questionOptionId}>
             {questionType === QuestionType.SINGLE_CHOICE ? (
@@ -127,16 +130,16 @@ export default function ResponseInputForm({
                 theme={theme}
                 name={String(questionBankId)}
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                  handleInputChange(event);
+                  handleChangeCheck(event, option.questionOptionId);
                 }}
-                value={`${option.questionOptionId}`}
+                id={`${option.questionOptionId}`}
               />
             )}
             <Checkmark theme={theme} />
             {option.option}
           </ChoiceLabel>
         ))}
-      </MultipleChoiceContainer>
+      </ChoiceContainer>
     );
   }
 
