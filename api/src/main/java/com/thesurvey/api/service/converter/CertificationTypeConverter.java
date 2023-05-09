@@ -31,7 +31,7 @@ public class CertificationTypeConverter {
                     case 4:
                         return CertificationType.DRIVER_LICENSE;
                     case 5:
-                        return CertificationType.MOBILE_PHONE;
+                        return CertificationType.IDENTITY_CARD;
                     default:
                         return null;
                 }
