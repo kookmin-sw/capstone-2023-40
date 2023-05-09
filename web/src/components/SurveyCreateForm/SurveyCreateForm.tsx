@@ -58,8 +58,6 @@ export default function SurveyCreateForm({ theme }: SurveyFormProps) {
   });
 
   const handleSubmit = () => {
-    // TODO: submit surveyData to server
-    console.log(surveyData);
     axios
       .post(requests.createSurvey, surveyData)
       .then(function (response) {
@@ -203,6 +201,7 @@ export default function SurveyCreateForm({ theme }: SurveyFormProps) {
       }
     }
   };
+
   const handleChangeCheck = (event: React.ChangeEvent<HTMLInputElement>, value: number) => {
     setCertificationIsChecked(!certificationIsChecked);
     editRequiredCertificationList(value, event.target.checked);
