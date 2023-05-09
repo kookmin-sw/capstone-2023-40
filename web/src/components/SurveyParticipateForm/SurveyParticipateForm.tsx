@@ -2,6 +2,9 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import styled, { DefaultTheme } from 'styled-components';
 
+import axios from '../../api/axios';
+import { requests } from '../../api/request';
+import { AnsweredQuestion, SurveySubmitRequest } from '../../types/request';
 import { QuestionBankResponse } from '../../types/response/QuestionBank';
 import { SurveyResponse } from '../../types/response/Survey';
 import { dateFormatUpToDate, getDDay } from '../../utils/dateFormat';
@@ -59,20 +62,27 @@ interface SurveyParticipateFormProps {
 export default function SurveyParticipateForm({ surveyData, theme }: SurveyParticipateFormProps) {
   const questionRefs = useRef<HTMLDivElement[]>([]);
   const [endedDate, setEndedDate] = useState<string>('');
-  const [userResponses, setUserResponses] = useState<string[]>([]);
   const [resultModalOpen, setResultModalOpen] = useState<boolean>(false);
+  const [userAnswers, setUserAnswers] = useState<AnsweredQuestion[]>([]);
 
   const remainDate = useMemo(() => getDDay(endedDate), [endedDate]);
 
   const postSurveyAnswers = async () => {
-    console.log(userResponses);
-    // FIXME: post answers to server
-    // axios.post(requests.postSurvey)
+    const surveySubmitData: SurveySubmitRequest = {
+      surveyId: surveyData.surveyId,
+      answers: userAnswers,
+      certificationTypes: surveyData.certificationTypes,
+    };
+    axios
+      .post(requests.submitSurvey, surveySubmitData)
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
 
-    // FIXME: when post server success
-    if (true) {
-      setResultModalOpen(true);
-    }
+    setResultModalOpen(true);
   };
 
   const turnOnUserAttention = (domIndex: number) => {
@@ -89,7 +99,7 @@ export default function SurveyParticipateForm({ surveyData, theme }: SurveyParti
     if (typeof surveyData !== 'undefined') {
       for (let i = 0; i < surveyData.questions.length; i += 1) {
         // TODO: response validation will be needed
-        if (typeof userResponses[i] === 'undefined' || userResponses[i] === '') {
+        if (typeof userAnswers[i] === 'undefined') {
           turnOnUserAttention(i);
           answersVerification = false;
           break;
@@ -137,8 +147,8 @@ export default function SurveyParticipateForm({ surveyData, theme }: SurveyParti
               key={question.questionBankId}
               question={question}
               index={index}
-              userResponses={userResponses}
-              setUserResponses={setUserResponses}
+              userAnswers={userAnswers}
+              setUserAnswers={setUserAnswers}
               theme={theme}
             />
           </QuestionContainer>
