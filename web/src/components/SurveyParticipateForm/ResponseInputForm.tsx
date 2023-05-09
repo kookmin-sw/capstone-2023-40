@@ -12,7 +12,6 @@ const ChoiceContainer = styled.div`
   align-items: flex-start;
 `;
 
-// FIXME: radio button is working but need refactoring
 const ChoiceLabel = styled.label`
   display: inline-flex;
   align-items: center;
@@ -48,7 +47,7 @@ const Radio = styled(Input).attrs({ type: 'radio' })``;
 
 const CheckBox = styled(Input).attrs({ type: 'checkbox' })``;
 
-const Checkmark = styled.span`
+const ChoiceMark = styled.span`
   position: relative;
   display: inline-block;
   height: 20px;
@@ -135,7 +134,7 @@ export default function ResponseInputForm({
                 id={`${option.questionOptionId}`}
               />
             )}
-            <Checkmark theme={theme} />
+            <ChoiceMark theme={theme} />
             {option.option}
           </ChoiceLabel>
         ))}
