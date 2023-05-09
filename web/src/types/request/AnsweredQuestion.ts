@@ -1,8 +1,7 @@
 export interface AnsweredQuestion {
-  questionTitle: string;
-  questionDescription: string;
-  singleChoice?: string;
-  multipleChoices?: Array<string>;
+  questionBankId: number;
+  singleChoice?: number;
+  multipleChoices?: Array<number>;
   shortAnswer?: string;
   longAnswer?: string;
 }
