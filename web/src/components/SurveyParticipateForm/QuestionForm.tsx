@@ -44,34 +44,34 @@ const Description = styled(TextLabel)`
 interface QuestionFormProps {
   question: QuestionBankResponse;
   index: number;
-  userResponses: AnsweredQuestion[];
-  setUserResponses: (arg: AnsweredQuestion[]) => void;
+  userAnswers: AnsweredQuestion[];
+  setUserAnswers: (arg: AnsweredQuestion[]) => void;
   theme: DefaultTheme;
 }
 
-export default function QuestionForm({ question, index, userResponses, setUserResponses, theme }: QuestionFormProps) {
+export default function QuestionForm({ question, index, userAnswers, setUserAnswers, theme }: QuestionFormProps) {
   const [choiceIsChecked, setChoiceIsChecked] = useState<boolean>(false);
 
   const editSelectedChoiceList = (value: number, isChecked: boolean) => {
-    const newUserResponses = [...userResponses];
+    const newUserAnswers = [...userAnswers];
 
-    if (typeof newUserResponses[index] === 'undefined') {
-      newUserResponses[index] = { questionBankId: question.questionBankId };
+    if (typeof newUserAnswers[index] === 'undefined') {
+      newUserAnswers[index] = { questionBankId: question.questionBankId };
     }
 
     if (isChecked) {
-      newUserResponses[index] = {
+      newUserAnswers[index] = {
         questionBankId: question.questionBankId,
-        multipleChoices: [...(newUserResponses[index].multipleChoices || []), value],
+        multipleChoices: [...(newUserAnswers[index].multipleChoices || []), value],
       };
     } else {
-      newUserResponses[index] = {
+      newUserAnswers[index] = {
         questionBankId: question.questionBankId,
-        multipleChoices: newUserResponses[index].multipleChoices?.filter((item: number) => item !== value),
+        multipleChoices: newUserAnswers[index].multipleChoices?.filter((item: number) => item !== value),
       };
     }
 
-    setUserResponses(newUserResponses);
+    setUserAnswers(newUserAnswers);
   };
 
   const handleChangeCheck = (event: React.ChangeEvent<HTMLInputElement>, value: number) => {
@@ -80,21 +80,21 @@ export default function QuestionForm({ question, index, userResponses, setUserRe
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement> | React.ChangeEvent<HTMLInputElement>) => {
-    const newUserResponses = [...userResponses];
+    const newUserAnswers = [...userAnswers];
     switch (question.questionType) {
       case QuestionType.SINGLE_CHOICE:
-        newUserResponses[index] = { questionBankId: question.questionBankId, singleChoice: Number(event.target.value) };
+        newUserAnswers[index] = { questionBankId: question.questionBankId, singleChoice: Number(event.target.value) };
         break;
       case QuestionType.SHORT_ANSWER:
-        newUserResponses[index] = { questionBankId: question.questionBankId, shortAnswer: event.target.value };
+        newUserAnswers[index] = { questionBankId: question.questionBankId, shortAnswer: event.target.value };
         break;
       case QuestionType.LONG_ANSWER:
-        newUserResponses[index] = { questionBankId: question.questionBankId, longAnswer: event.target.value };
+        newUserAnswers[index] = { questionBankId: question.questionBankId, longAnswer: event.target.value };
         break;
       default:
         break;
     }
-    setUserResponses(newUserResponses);
+    setUserAnswers(newUserAnswers);
   };
 
   // TODO: show current and max text count
