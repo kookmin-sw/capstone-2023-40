@@ -102,7 +102,7 @@ public class SurveyService {
     }
 
     /**
-     * Returns survey results  the answers to the survey.
+     * Returns survey results and the answers created by the user.
      *
      * @param authentication authentication of the requesting user
      * @param surveyId the ID of survey to get result
