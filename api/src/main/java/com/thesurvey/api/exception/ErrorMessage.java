@@ -26,7 +26,10 @@ public enum ErrorMessage {
     NOT_SURVEY_QUESTION("해당 설문조사의 질문이 아닙니다."),
     INVALID_REQUEST("유효하지 않은 요청입니다"),
     PAGE_NOT_FOUND("존재하지 않는 페이지입니다."),
-    USER_CREATED_SURVEY_NOT_FOUND("생성한 설문조사가 없습니다.");
+    USER_CREATED_SURVEY_NOT_FOUND("생성한 설문조사가 없습니다."),
+    CERTIFICATION_NOT_FOUND("인증 정보를 찾을 수 없습니다."),
+    PARTICIPATION_NOT_FOUND("설문 참여 정보를 찾을 수 없습니다."),
+    ANSWERED_QUESTION_NOT_FOUND("설문 응답 정보를 찾을 수 없습니다.");
 
     private final String message;
 
