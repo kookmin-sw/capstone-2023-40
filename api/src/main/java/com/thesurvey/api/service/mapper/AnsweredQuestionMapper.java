@@ -12,10 +12,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class AnsweredQuestionMapper {
 
-    public AnsweredQuestion toAnsweredQuestion(
-        AnsweredQuestionDto answeredQuestionRequestDto, User user, Survey survey,
-        QuestionBank questionBank) {
-
+    public AnsweredQuestion toAnsweredQuestion(AnsweredQuestionDto answeredQuestionRequestDto,
+        User user, Survey survey, QuestionBank questionBank) {
         return AnsweredQuestion
             .builder()
             .user(user)
