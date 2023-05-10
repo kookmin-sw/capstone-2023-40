@@ -11,6 +11,7 @@ import {
   setAuthWebMail,
   setCompleteAuth,
   setAuthService,
+  setSuccessAuth,
 } from '../types/surveyAuth';
 
 // FIXME: 다른 사용자 인증 과정 추가 구현하기.
@@ -65,6 +66,7 @@ export const AuthComplete = (
       break;
   }
   dispatch(setCompleteAuth(false));
+  dispatch(setSuccessAuth(false));
   dispatch(setAuthService(''));
   navigate('../mypage/auth-list');
 };
