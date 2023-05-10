@@ -9,6 +9,7 @@ const initialState: SurveyAuthState = {
   webmail: false,
 
   checkCompleteAuth: false,
+  checkSuccessAuth: false,
   checkAuthService: '',
 };
 
@@ -46,6 +47,8 @@ export const surveyAuthReducer = (
       return { ...state, webmail: !!action.payload };
     case 'COMPLETE_AUTH':
       return { ...state, checkCompleteAuth: !!action.payload };
+    case 'SUCCESS_AUTH':
+      return { ...state, checkSuccessAuth: !!action.payload };
     case 'SET_AUTH_SERVICE':
       return { ...state, checkAuthService: action.payload.toString() };
     default:

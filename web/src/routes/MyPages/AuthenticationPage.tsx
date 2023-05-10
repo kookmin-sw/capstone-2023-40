@@ -114,7 +114,9 @@ export default function AuthenticationPage() {
         <Header theme={theme} toggleTheme={toggleTheme} />
         <AuthenticationContainer theme={theme}>
           <Form>
-            <TextType theme={theme}>인증이 완료되었습니다!</TextType>
+            <TextType theme={theme}>
+              {!surveyAuthState.checkSuccessAuth ? `사용자 인증에 실패했습니다.` : `인증이 완료되었습니다!`}!
+            </TextType>
             <Button
               theme={theme}
               onClick={() => AuthComplete(checkAuthServiceTitle, surveyAuthState, dispatch, navigate)}
