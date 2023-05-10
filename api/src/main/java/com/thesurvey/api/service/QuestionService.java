@@ -68,8 +68,7 @@ public class QuestionService {
             .stream()
             .map(questionBank -> {
                 List<QuestionOption> questionOptionList = questionOptionRepository
-                    .findAllByQuestionBankId(questionBank.getQuestionBankId())
-                    .orElseThrow(() -> new NotFoundExceptionMapper(ErrorMessage.QUESTION_OPTION_NOT_FOUND));
+                    .findAllByQuestionBankId(questionBank.getQuestionBankId());
 
                 List<QuestionOptionResponseDto> questionOptionResponseDtoList = questionOptionList
                     .stream()

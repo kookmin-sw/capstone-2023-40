@@ -63,14 +63,12 @@ public class AnsweredQuestionService {
 
     @Transactional(readOnly = true)
     public List<Long[]> getSingleChoiceResult(Long questionBankId) {
-        return answeredQuestionRepository.countSingleChoiceByQuestionBankId(questionBankId)
-            .orElseThrow(() -> new NotFoundExceptionMapper(ErrorMessage.QUESTION_OPTION_NOT_FOUND));
+        return answeredQuestionRepository.countSingleChoiceByQuestionBankId(questionBankId);
     }
 
     @Transactional(readOnly = true)
     public List<Long[]> getMultipleChoiceResult(Long questionBankId) {
-        return answeredQuestionRepository.countMultipleChoiceByQuestionBankId(questionBankId)
-            .orElseThrow(() -> new NotFoundExceptionMapper(ErrorMessage.QUESTION_OPTION_NOT_FOUND));
+        return answeredQuestionRepository.countMultipleChoiceByQuestionBankId(questionBankId);
     }
 
     @Transactional
