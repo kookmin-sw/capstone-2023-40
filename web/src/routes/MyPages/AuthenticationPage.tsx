@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 
 import { Icons } from '../../assets/svg/index';
+import { getKakaoUserData } from '../../components/authlist/kakaoAuth';
 import Header from '../../components/Header';
 import { useTheme } from '../../hooks/useTheme';
 import { RootState } from '../../reducers';
@@ -93,6 +94,7 @@ export default function AuthenticationPage() {
   const [connectService, setConnectService] = useState(false);
   const surveyAuthState = useSelector((state: RootState) => state.surveyAuth);
   const dispatch = useDispatch();
+  const username = useSelector((state: RootState) => state.userInformation.name);
   const completeAuthState = surveyAuthState.checkCompleteAuth;
   const checkAuthServiceTitle = surveyAuthState.checkAuthService;
   const urlParams = new URLSearchParams(window.location.search);
@@ -101,7 +103,8 @@ export default function AuthenticationPage() {
   // 인가 코드가 오면 인증 상태 변경.
   useEffect(() => {
     if (authCode !== null) {
-      dispatch(setCompleteAuth(true));
+      getKakaoUserData(authCode, username, dispatch);
+      // dispatch(setCompleteAuth(true));
     }
   }, [authCode]);
 
