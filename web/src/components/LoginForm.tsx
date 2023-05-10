@@ -6,7 +6,7 @@ import styled, { DefaultTheme } from 'styled-components';
 
 import axios from '../api/axios';
 import { requests } from '../api/request';
-import { setLoggedIn } from '../reducers/header';
+import { setLoggedIn } from '../types/header';
 import { UserResponse } from '../types/response/User';
 import { setUserInformation } from '../utils/UserUtils';
 import { isEmptyString } from '../utils/validate';

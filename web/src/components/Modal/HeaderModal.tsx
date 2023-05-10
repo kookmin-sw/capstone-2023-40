@@ -6,7 +6,7 @@ import styled, { DefaultTheme } from 'styled-components';
 
 import { useOnClickOutside } from '../../hooks/useOnClickOutside';
 import { RootState } from '../../reducers';
-import { setLoggedIn, setSubPageOpen } from '../../reducers/header';
+import { setLoggedIn, setSubPageOpen } from '../../types/header';
 import { clearUserInformation } from '../../utils/UserUtils';
 
 const SubPageContainer = styled.div`
