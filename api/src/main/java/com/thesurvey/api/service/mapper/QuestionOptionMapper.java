@@ -3,6 +3,7 @@ package com.thesurvey.api.service.mapper;
 import com.thesurvey.api.domain.QuestionBank;
 import com.thesurvey.api.domain.QuestionOption;
 import com.thesurvey.api.dto.request.question.QuestionOptionRequestDto;
+import com.thesurvey.api.dto.response.question.QuestionOptionAnswerDto;
 import com.thesurvey.api.dto.response.question.QuestionOptionResponseDto;
 import com.thesurvey.api.util.StringUtil;
 
@@ -25,6 +26,15 @@ public class QuestionOptionMapper {
             .questionOptionId(questionOption.getQuestionOptionId())
             .option(questionOption.getOption())
             .description(questionOption.getDescription())
+            .build();
+    }
+
+    public QuestionOptionAnswerDto toQuestionOptionAnswerDto(Long questionOptionId, String option
+        , Long totalResponseCount) {
+        return QuestionOptionAnswerDto.builder()
+            .questionOptionId(questionOptionId)
+            .option(option)
+            .totalResponseCount(totalResponseCount)
             .build();
     }
 }
