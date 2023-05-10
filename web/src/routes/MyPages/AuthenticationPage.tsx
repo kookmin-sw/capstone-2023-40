@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 
 import { Icons } from '../../assets/svg/index';
+import authServiceWithKakao from '../../components/authlist/kakaoAuth';
 import Header from '../../components/Header';
 import { useTheme } from '../../hooks/useTheme';
 import { RootState } from '../../reducers';
@@ -16,6 +16,7 @@ import {
   setAuthDriver,
   setAuthIdentity,
   setAuthWebMail,
+  setCompleteAuth,
 } from '../../types/surveyAuth';
 
 const rotate = keyframes`
@@ -97,16 +98,46 @@ const Button = styled.button`
 export default function AuthenticationPage() {
   const [theme, toggleTheme] = useTheme();
   const navigate = useNavigate();
-  const [completeAuth, setCompleteAuth] = useState<boolean>(false);
+  const [connectService, setConnectService] = useState(false);
   const surveyAuthState = useSelector((state: RootState) => state.surveyAuth);
-  const location = useLocation();
   const dispatch = useDispatch();
-  const state = { ...location.state };
+  const completeAuthState = surveyAuthState.checkCompleteAuth;
+  const checkAuthServiceTitle = surveyAuthState.checkAuthService;
+  const urlParams = new URLSearchParams(window.location.search);
+  const authCode = urlParams.get('code');
 
-  const handleSummit = () => {};
+  // 인가 코드가 오면 인증 상태 변경.
+  useEffect(() => {
+    if (authCode !== null) {
+      dispatch(setCompleteAuth(true));
+    }
+  }, [authCode]);
 
-  const handleClick = (title: string) => {
-    switch (title) {
+  // FIXME: 다른 사용자 인증 과정 추가 구현하기.
+  const AuthConnect = () => {
+    switch (checkAuthServiceTitle) {
+      case '카카오':
+        setConnectService(true);
+        authServiceWithKakao();
+        break;
+      case '네이버':
+        break;
+      case '구글':
+        break;
+      case '신분증':
+        break;
+      case '운전면허':
+        break;
+      case '웹메일':
+        break;
+      default:
+        break;
+    }
+  };
+
+  // FIXME: 인가코드를 받으면 인증완료를 할 수 있도록 변경해야 함.
+  const AuthComplete = () => {
+    switch (checkAuthServiceTitle) {
       case '카카오':
         dispatch(setAuthKakao(!surveyAuthState.kakao));
         break;
@@ -128,17 +159,18 @@ export default function AuthenticationPage() {
       default:
         break;
     }
+    dispatch(setCompleteAuth(false));
     navigate('../mypage/auth-list');
   };
 
-  if (completeAuth) {
+  if (completeAuthState) {
     return (
       <Container theme={theme}>
         <Header theme={theme} toggleTheme={toggleTheme} />
         <AuthenticationContainer theme={theme}>
           <Form>
-            <TextType theme={theme}>{state.title} 인증이 완료되었습니다!</TextType>
-            <Button theme={theme} onClick={() => handleClick(state.title)}>
+            <TextType theme={theme}>인증이 완료되었습니다!</TextType>
+            <Button theme={theme} onClick={AuthComplete}>
               돌아가기
             </Button>
           </Form>
@@ -146,7 +178,6 @@ export default function AuthenticationPage() {
       </Container>
     );
   }
-
   return (
     <Container theme={theme}>
       <Header theme={theme} toggleTheme={toggleTheme} />
@@ -155,7 +186,14 @@ export default function AuthenticationPage() {
           <LoadingImage>
             <circle cx="50" cy="50" r="50" />
           </LoadingImage>
-          <TextType theme={theme}>{state.title}에서 인증을 완료해주세요.</TextType>
+          <TextType theme={theme}>
+            {!connectService ? `${checkAuthServiceTitle}에서 인증을 완료해주세요.` : `인증 진행중 입니다.`}
+          </TextType>
+          {!connectService && (
+            <Button theme={theme} onClick={AuthConnect}>
+              인증하기
+            </Button>
+          )}
         </Form>
       </AuthenticationContainer>
     </Container>
