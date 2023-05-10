@@ -5,19 +5,11 @@ import { useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 
 import { Icons } from '../../assets/svg/index';
-import authServiceWithKakao from '../../components/authlist/kakaoAuth';
 import Header from '../../components/Header';
 import { useTheme } from '../../hooks/useTheme';
 import { RootState } from '../../reducers';
-import {
-  setAuthKakao,
-  setAuthGoogle,
-  setAuthNaver,
-  setAuthDriver,
-  setAuthIdentity,
-  setAuthWebMail,
-  setCompleteAuth,
-} from '../../types/surveyAuth';
+import { setCompleteAuth } from '../../types/surveyAuth';
+import { AuthConnect, AuthComplete } from '../../utils/authService';
 
 const rotate = keyframes`
   0% {
@@ -113,56 +105,6 @@ export default function AuthenticationPage() {
     }
   }, [authCode]);
 
-  // FIXME: 다른 사용자 인증 과정 추가 구현하기.
-  const AuthConnect = () => {
-    switch (checkAuthServiceTitle) {
-      case '카카오':
-        setConnectService(true);
-        authServiceWithKakao();
-        break;
-      case '네이버':
-        break;
-      case '구글':
-        break;
-      case '신분증':
-        break;
-      case '운전면허':
-        break;
-      case '웹메일':
-        break;
-      default:
-        break;
-    }
-  };
-
-  // FIXME: 인가코드를 받으면 인증완료를 할 수 있도록 변경해야 함.
-  const AuthComplete = () => {
-    switch (checkAuthServiceTitle) {
-      case '카카오':
-        dispatch(setAuthKakao(!surveyAuthState.kakao));
-        break;
-      case '네이버':
-        dispatch(setAuthNaver(!surveyAuthState.naver));
-        break;
-      case '구글':
-        dispatch(setAuthGoogle(!surveyAuthState.google));
-        break;
-      case '신분증':
-        dispatch(setAuthIdentity(!surveyAuthState.identityCard));
-        break;
-      case '운전면허':
-        dispatch(setAuthDriver(!surveyAuthState.driverLicense));
-        break;
-      case '웹메일':
-        dispatch(setAuthWebMail(!surveyAuthState.webmail));
-        break;
-      default:
-        break;
-    }
-    dispatch(setCompleteAuth(false));
-    navigate('../mypage/auth-list');
-  };
-
   if (completeAuthState) {
     return (
       <Container theme={theme}>
@@ -170,7 +112,10 @@ export default function AuthenticationPage() {
         <AuthenticationContainer theme={theme}>
           <Form>
             <TextType theme={theme}>인증이 완료되었습니다!</TextType>
-            <Button theme={theme} onClick={AuthComplete}>
+            <Button
+              theme={theme}
+              onClick={() => AuthComplete(checkAuthServiceTitle, surveyAuthState, dispatch, navigate)}
+            >
               돌아가기
             </Button>
           </Form>
@@ -190,7 +135,7 @@ export default function AuthenticationPage() {
             {!connectService ? `${checkAuthServiceTitle}에서 인증을 완료해주세요.` : `인증 진행중 입니다.`}
           </TextType>
           {!connectService && (
-            <Button theme={theme} onClick={AuthConnect}>
+            <Button theme={theme} onClick={() => AuthConnect(checkAuthServiceTitle, setConnectService)}>
               인증하기
             </Button>
           )}
