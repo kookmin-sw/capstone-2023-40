@@ -303,7 +303,7 @@ public class SurveyService {
      * @param questionType the type of question for which to retrieve answer data,
      * either {@code QuestionType.SHORT_ANSWER} or {@code QuestionType.LONG_ANSWER}
      * @param answeredQuestionList a list of {@code AnsweredQuestion}
-     * @return List<String>
+     * @return {@code List<String>}
      */
     private List<String> getShortLongAnswerList(QuestionType questionType,
         List<AnsweredQuestion> answeredQuestionList) {
