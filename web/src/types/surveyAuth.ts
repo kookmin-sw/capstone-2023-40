@@ -10,6 +10,7 @@ export type SurveyAuthState = {
   driverLicense: boolean;
   webmail: boolean;
   checkCompleteAuth: boolean;
+  checkSuccessAuth: boolean;
   checkAuthService: string;
 };
 
@@ -45,6 +46,11 @@ export const setAuthWebMail = (payload: boolean) => ({
 
 export const setCompleteAuth = (payload: boolean) => ({
   type: 'COMPLETE_AUTH',
+  payload: payload,
+});
+
+export const setSuccessAuth = (payload: boolean) => ({
+  type: 'SUCCESS_AUTH',
   payload: payload,
 });
 

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 
-import { setCompleteAuth } from '../../types/surveyAuth';
+import { setCompleteAuth, setSuccessAuth } from '../../types/surveyAuth';
 
 export const KAKAO_REST_API_KEY = '076bd4745b2957a7567361ad04b58a57';
 export const KAKAO_REDIRECT_URI = 'http://localhost:3000/mypage/authentication';
@@ -25,10 +25,14 @@ export const getKakaoProfile = async (kakaoToken: any, username: string, dispatc
       },
     });
     const name = kakaoUser.data.properties.nickname;
+    console.log('theSurvey username : ', username);
+    console.log('kakaoUser name : ', name);
+
     if (name === username) {
-      console.log('이름이 똑같아요!', name);
-      dispatch(setCompleteAuth(true));
+      console.log('사용자가 같습니다!');
+      dispatch(setSuccessAuth(true));
     }
+    dispatch(setCompleteAuth(true));
   } catch (error) {
     console.log(error);
   }
