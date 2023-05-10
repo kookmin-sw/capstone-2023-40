@@ -1,3 +1,7 @@
+/**
+ * @VariableList : kakao, naver, google, identityCard, webmail
+ * @CheckList : checkCompleteAuth(인증완료가 되었는지 확인, boolean), checkAuthService(어떤 인증서버스 사용중인지 확인, string);
+ */
 export type SurveyAuthState = {
   kakao: boolean;
   naver: boolean;
@@ -5,6 +9,8 @@ export type SurveyAuthState = {
   identityCard: boolean;
   driverLicense: boolean;
   webmail: boolean;
+  checkCompleteAuth: boolean;
+  checkAuthService: string;
 };
 
 export const setAuthKakao = (payload: boolean) => ({
@@ -37,10 +43,22 @@ export const setAuthWebMail = (payload: boolean) => ({
   payload: payload,
 });
 
+export const setCompleteAuth = (payload: boolean) => ({
+  type: 'COMPLETE_AUTH',
+  payload: payload,
+});
+
+export const setAuthService = (payload: string) => ({
+  type: 'SET_AUTH_SERVICE',
+  payload: payload,
+});
+
 export type SurveyAuthAction =
   | ReturnType<typeof setAuthKakao>
   | ReturnType<typeof setAuthGoogle>
   | ReturnType<typeof setAuthNaver>
   | ReturnType<typeof setAuthIdentity>
   | ReturnType<typeof setAuthDriver>
-  | ReturnType<typeof setAuthWebMail>;
+  | ReturnType<typeof setAuthWebMail>
+  | ReturnType<typeof setCompleteAuth>
+  | ReturnType<typeof setAuthService>;
