@@ -1,7 +1,5 @@
 package com.thesurvey.api.service;
 
-import com.thesurvey.api.domain.EnumTypeEntity.QuestionType;
-
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -10,6 +8,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import com.thesurvey.api.domain.AnsweredQuestion;
+import com.thesurvey.api.domain.EnumTypeEntity.QuestionType;
 import com.thesurvey.api.domain.QuestionBank;
 import com.thesurvey.api.domain.Survey;
 import com.thesurvey.api.domain.User;
@@ -27,6 +26,8 @@ import com.thesurvey.api.exception.mapper.BadRequestExceptionMapper;
 import com.thesurvey.api.exception.mapper.ForbiddenRequestExceptionMapper;
 import com.thesurvey.api.exception.mapper.NotFoundExceptionMapper;
 import com.thesurvey.api.repository.SurveyRepository;
+import com.thesurvey.api.service.mapper.QuestionBankMapper;
+import com.thesurvey.api.service.mapper.QuestionOptionMapper;
 import com.thesurvey.api.service.mapper.SurveyMapper;
 import com.thesurvey.api.util.StringUtil;
 import com.thesurvey.api.util.UserUtil;
@@ -52,28 +53,37 @@ public class SurveyService {
 
     private final AnsweredQuestionService answeredQuestionService;
 
+    private final QuestionOptionMapper questionOptionMapper;
+
+    private final QuestionBankMapper questionBankMapper;
+
     public SurveyService(SurveyRepository surveyRepository, SurveyMapper surveyMapper,
         QuestionService questionService,
         QuestionOptionService questionOptionService, ParticipationService participationService,
-        AnsweredQuestionService answeredQuestionService) {
+        AnsweredQuestionService answeredQuestionService, QuestionOptionMapper questionOptionMapper, QuestionBankMapper questionBankMapper) {
         this.surveyRepository = surveyRepository;
         this.surveyMapper = surveyMapper;
         this.questionService = questionService;
         this.questionOptionService = questionOptionService;
         this.participationService = participationService;
         this.answeredQuestionService = answeredQuestionService;
+        this.questionOptionMapper = questionOptionMapper;
+        this.questionBankMapper = questionBankMapper;
     }
 
     @Transactional(readOnly = true)
     public SurveyListPageDto getAllSurvey(int page) {
+        // page starts from 1
         if (page < 1) {
             throw new BadRequestExceptionMapper(ErrorMessage.INVALID_REQUEST);
         }
+
         Page<Survey> surveyPage = surveyRepository.findAllInDescendingOrder(
             PageRequest.of(page - 1, 8));
         if (surveyPage.getTotalPages() < page) {
             throw new NotFoundExceptionMapper(ErrorMessage.PAGE_NOT_FOUND);
         }
+
         List<SurveyPageDto> surveyPageDtoList = surveyPage.getContent().stream()
             .map(surveyMapper::toSurveyPageDto).collect(Collectors.toList());
         return surveyMapper.toSurveyListPageDto(surveyPageDtoList, surveyPage);
@@ -81,8 +91,7 @@ public class SurveyService {
 
     @Transactional(readOnly = true)
     public SurveyResponseDto getSurveyBySurveyIdWithRelatedQuestion(UUID surveyId) {
-        Survey survey = surveyRepository.findBySurveyId(surveyId)
-            .orElseThrow(() -> new NotFoundExceptionMapper(ErrorMessage.SURVEY_NOT_FOUND));
+        Survey survey = getSurveyFromSurveyId(surveyId);
         return surveyMapper.toSurveyResponseDto(survey, survey.getAuthorId());
     }
 
@@ -93,17 +102,16 @@ public class SurveyService {
     }
 
     /**
-     * Returns a {@link UserSurveyResultDto} that represents the answers to the survey.
+     * Returns survey results and the answers created by the user.
      *
      * @param authentication authentication of the requesting user
      * @param surveyId the ID of survey to get result
-     * @return UserSurveyResultDto
+     * @return {@link UserSurveyResultDto}
      */
     @Transactional(readOnly = true)
     public UserSurveyResultDto getUserCreatedSurveyResult(Authentication authentication,
         UUID surveyId) {
-        Survey survey = surveyRepository.findBySurveyId(surveyId)
-            .orElseThrow(() -> new NotFoundExceptionMapper(ErrorMessage.SURVEY_NOT_FOUND));
+        Survey survey = getSurveyFromSurveyId(surveyId);
 
         // validate survey author from current user
         validateSurveyAuthor(UserUtil.getUserIdFromAuthentication(authentication),
@@ -114,10 +122,8 @@ public class SurveyService {
             throw new BadRequestExceptionMapper(ErrorMessage.SURVEY_NOT_STARTED);
         }
 
-        // fetch all QuestionBanks by "surveyId"
         List<QuestionBank> questionBanks = questionService.getAllQuestionBankBySurveyId(surveyId);
 
-        // fetch all QuestionBankAnswerDtos by "questionbanks"
         List<QuestionBankAnswerDto> questionBankAnswerDtoList = getQuestionBankAnswerDtoList(questionBanks);
 
         return surveyMapper.toUserSurveyResultDto(survey, questionBankAnswerDtoList);
@@ -138,8 +144,8 @@ public class SurveyService {
         }
 
         User user = UserUtil.getUserFromAuthentication(authentication);
-        Survey survey = surveyRepository.save(
-            surveyMapper.toSurvey(surveyRequestDto, user.getUserId()));
+        Survey survey = surveyRepository.save(surveyMapper.toSurvey(surveyRequestDto,
+            user.getUserId()));
         questionService.createQuestion(surveyRequestDto, survey);
         participationService.createParticipation(user, surveyRequestDto.getCertificationTypes(),
             survey);
@@ -149,8 +155,7 @@ public class SurveyService {
     @Transactional
     public void deleteSurvey(Authentication authentication, UUID surveyId) {
         Long userId = UserUtil.getUserIdFromAuthentication(authentication);
-        Survey survey = surveyRepository.findBySurveyId(surveyId).orElseThrow(
-            () -> new NotFoundExceptionMapper(ErrorMessage.SURVEY_NOT_FOUND));
+        Survey survey = getSurveyFromSurveyId(surveyId);
 
         // validate survey author from current user
         validateSurveyAuthor(userId, survey.getAuthorId());
@@ -171,8 +176,7 @@ public class SurveyService {
     public SurveyResponseDto updateSurvey(Authentication authentication,
         SurveyUpdateRequestDto surveyUpdateRequestDto) {
         Long userId = UserUtil.getUserIdFromAuthentication(authentication);
-        Survey survey = surveyRepository.findBySurveyId(surveyUpdateRequestDto.getSurveyId())
-            .orElseThrow(() -> new NotFoundExceptionMapper(ErrorMessage.SURVEY_NOT_FOUND));
+        Survey survey = getSurveyFromSurveyId(surveyUpdateRequestDto.getSurveyId());
 
         // validate survey author from current user
         validateSurveyAuthor(userId, survey.getAuthorId());
@@ -228,64 +232,34 @@ public class SurveyService {
         }
     }
 
-    /**
-     * Returns a list of {@link QuestionBankAnswerDto} based on the provided list of {@link QuestionBank}.
-     * For each QuestionBank, this method fetches the question number and answered questions, and then builds a
-     * {@link QuestionBankAnswerDto}.
-     *
-     * @param questionBankList a list of QuestionBanks fetched by {@code surveyId}
-     * @return List<QuestionBankAnswerDto>
-     */
-    private List<QuestionBankAnswerDto> getQuestionBankAnswerDtoList(List<QuestionBank> questionBankList) {
+    private Survey getSurveyFromSurveyId(UUID surveyId) {
+        return surveyRepository.findBySurveyId(surveyId)
+            .orElseThrow(() -> new NotFoundExceptionMapper(ErrorMessage.SURVEY_NOT_FOUND));
+    }
 
-        /*
-         * In this loop, fetch the QuestionNo and AnsweredQuestion
-         * for each QuestionBank.
-         * then build a QuestionBankAnswerDto and add to 'questionBankAnswerDtoList'.
-         */
+    private List<QuestionBankAnswerDto> getQuestionBankAnswerDtoList(List<QuestionBank> questionBankList) {
         List<QuestionBankAnswerDto> questionBankAnswerDtoList = new ArrayList<>();
         for (QuestionBank questionBank : questionBankList) {
-
-            // get QuestionNo by "questionBankId"
+            QuestionType questionType = questionBank.getQuestionType();
+            Long questionBankId = questionBank.getQuestionBankId();
             Integer questionNo = questionService.getQuestionNoByQuestionBankId(
                 questionBank.getQuestionBankId());
-
-            // fetch all AnsweredQuestions by "questionBankId"
             List<AnsweredQuestion> answeredQuestionList = answeredQuestionService.getAnswerQuestionByQuestionBankId(
                 questionBank.getQuestionBankId());
-
-            // get current QuestionBank's QuestionType
-            QuestionType questionType = questionBank.getQuestionType();
 
             List<QuestionOptionAnswerDto> questionOptionAnswerDtoList = new ArrayList<>();
             List<String> shortLongAnswerList = new ArrayList<>();
 
-            // In case it's choice answer
-            if (questionType == QuestionType.SINGLE_CHOICE
-                || questionType == QuestionType.MULTIPLE_CHOICES) {
-                questionOptionAnswerDtoList = getQuestionOptionAnswerDtoList(
-                    questionBank.getQuestionBankId(), questionBank.getQuestionType());
-            }
-            // In case it's short or long answer
-            else if (questionType == QuestionType.SHORT_ANSWER
-                || questionType == QuestionType.LONG_ANSWER) {
-                shortLongAnswerList =
-                    getShortLongAnswerList(questionBank.getQuestionType(), answeredQuestionList);
+            if (questionType == QuestionType.SINGLE_CHOICE || questionType == QuestionType.MULTIPLE_CHOICES) {
+                questionOptionAnswerDtoList = getQuestionOptionAnswerDtoList(questionBankId,
+                    questionType);
+            } else if (questionType == QuestionType.SHORT_ANSWER || questionType == QuestionType.LONG_ANSWER) {
+                shortLongAnswerList = getShortLongAnswerList(questionType, answeredQuestionList);
             }
 
-            questionBankAnswerDtoList.add(
-                // build QuestionBankAnswerDto
-                QuestionBankAnswerDto.builder()
-                    .questionBankId(questionBank.getQuestionBankId())
-                    .questionTitle(questionBank.getTitle())
-                    .questionDescription(questionBank.getDescription())
-                    .questionType(questionBank.getQuestionType())
-                    .questionNo(questionNo)
-                    .textAnswers(shortLongAnswerList)
-                    .optionAnswers(questionOptionAnswerDtoList)
-                    .build()
-            );
-        } // end loop
+            questionBankAnswerDtoList.add(questionBankMapper.toQuestionBankAnswerDto(questionBank,
+                questionNo, shortLongAnswerList, questionOptionAnswerDtoList));
+        }
 
         return questionBankAnswerDtoList;
     }
@@ -297,15 +271,10 @@ public class SurveyService {
      * @param questionBankId the ID of the question bank for which to retrieve answer data
      * @param questionType  the type of question for which to retrieve answer data,
      * either {@code QuestionType.SINGLE_CHOICE} or {@code QuestionType.MULTIPLE_CHOICES}
-     * @return List<QuestionOptionAnswerDto>
+     * @return {@code List<QuestionOptionAnswerDto>}
      */
     private List<QuestionOptionAnswerDto> getQuestionOptionAnswerDtoList(Long questionBankId,
         QuestionType questionType) {
-
-        /*
-         * "List<Long[]> answeredChoiceList" is a list containing arrays of
-         * [questionOptionId, totalResponseCount].
-         */
         List<Long[]> answeredChoiceList = new ArrayList<>();
         if (questionType == QuestionType.SINGLE_CHOICE) {
             answeredChoiceList = answeredQuestionService.getSingleChoiceResult(
@@ -315,21 +284,15 @@ public class SurveyService {
                 questionBankId);
         }
 
-        List<QuestionOptionAnswerDto> questionOptionAnswerDtoList = new ArrayList<>();
-        for (Long[] answeredChoiceResult : answeredChoiceList) {
-            Long questionOptionId = answeredChoiceResult[0];
-            Long totalResponseCount = answeredChoiceResult[1];
-            questionOptionAnswerDtoList.add(
-                // build QuestionOptionAnswerDto
-                QuestionOptionAnswerDto.builder()
-                    .questionOptionId(questionOptionId)
-                    .option(questionOptionService.getOptionByQuestionOptionId(questionOptionId))
-                    .totalResponseCount(totalResponseCount)
-                    .build()
-            );
-        }
+        return answeredChoiceList.stream()
+            .map(answeredChoiceResult -> {
+                Long questionOptionId = answeredChoiceResult[0];
+                Long totalResponseCount = answeredChoiceResult[1];
+                String option = questionOptionService.getOptionByQuestionOptionId(questionOptionId);
+                return questionOptionMapper.toQuestionOptionAnswerDto(questionOptionId, option, totalResponseCount);
+            })
+            .collect(Collectors.toList());
 
-        return questionOptionAnswerDtoList;
     }
 
     /**
@@ -347,16 +310,24 @@ public class SurveyService {
 
         List<String> shortLongAnswerList = new ArrayList<>();
         if (questionType == QuestionType.SHORT_ANSWER) {
-            shortLongAnswerList = answeredQuestionList.stream()
-                .map(AnsweredQuestion::getShortAnswer)
-                .collect(Collectors.toList());
+            shortLongAnswerList = getShortAnswerList(answeredQuestionList);
         } else if (questionType == QuestionType.LONG_ANSWER) {
-            shortLongAnswerList = answeredQuestionList.stream()
-                .map(AnsweredQuestion::getLongAnswer)
-                .collect(Collectors.toList());
+            shortLongAnswerList = getLongAnswerList(answeredQuestionList);
         }
 
         return shortLongAnswerList;
+    }
+
+    private List<String> getShortAnswerList(List<AnsweredQuestion> answeredQuestionList) {
+        return answeredQuestionList.stream()
+            .map(AnsweredQuestion::getShortAnswer)
+            .collect(Collectors.toList());
+    }
+
+    private List<String> getLongAnswerList(List<AnsweredQuestion> answeredQuestionList) {
+        return answeredQuestionList.stream()
+            .map(AnsweredQuestion::getLongAnswer)
+            .collect(Collectors.toList());
     }
 
 }
