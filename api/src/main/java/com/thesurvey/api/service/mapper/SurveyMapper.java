@@ -10,6 +10,8 @@ import com.thesurvey.api.dto.response.survey.SurveyPageDto;
 import com.thesurvey.api.dto.response.survey.SurveyResponseDto;
 import com.thesurvey.api.dto.request.survey.SurveyRequestDto;
 import com.thesurvey.api.dto.response.user.UserSurveyResultDto;
+import com.thesurvey.api.exception.ErrorMessage;
+import com.thesurvey.api.exception.mapper.NotFoundExceptionMapper;
 import com.thesurvey.api.repository.SurveyRepository;
 import com.thesurvey.api.service.QuestionService;
 import com.thesurvey.api.service.converter.CertificationTypeConverter;
@@ -34,21 +36,6 @@ public class SurveyMapper {
         this.certificationTypeConverter = certificationTypeConverter;
     }
 
-    public SurveyResponseDto toSurveyResponseDto(Survey survey) {
-        return SurveyResponseDto.builder()
-            .surveyId(survey.getSurveyId())
-            .authorId(survey.getAuthorId())
-            .title(survey.getTitle())
-            .description(survey.getDescription())
-            .startedDate(survey.getStartedDate())
-            .endedDate(survey.getEndedDate())
-            .createdDate(survey.getCreatedDate())
-            .modifiedDate(survey.getModifiedDate())
-            .certificationTypes(certificationTypeConverter.toCertificationTypeList(
-                surveyRepository.findCertificationTypeBySurveyId(survey.getSurveyId())))
-            .build();
-    }
-
     public SurveyResponseDto toSurveyResponseDto(Survey survey, Long authorId) {
         List<QuestionBankResponseDto> questionBankResponseDtoList = questionService.getQuestionBankInfoDtoListBySurveyId(
             survey.getSurveyId());
@@ -63,7 +50,8 @@ public class SurveyMapper {
             .createdDate(survey.getCreatedDate())
             .modifiedDate(survey.getModifiedDate())
             .certificationTypes(certificationTypeConverter.toCertificationTypeList(
-                surveyRepository.findCertificationTypeBySurveyId(survey.getSurveyId())))
+                surveyRepository.findCertificationTypeBySurveyId(survey.getSurveyId())
+                    .orElseThrow(() -> new NotFoundExceptionMapper(ErrorMessage.CERTIFICATION_NOT_FOUND))))
             .questions(questionBankResponseDtoList)
             .build();
     }
@@ -81,7 +69,7 @@ public class SurveyMapper {
 
     public SurveyPageDto toSurveyPageDto(Survey survey) {
         List<Integer> certificationTypes = surveyRepository.findCertificationTypeBySurveyId(
-            survey.getSurveyId());
+            survey.getSurveyId()).orElseThrow(() -> new NotFoundExceptionMapper(ErrorMessage.CERTIFICATION_NOT_FOUND));
         return SurveyPageDto.builder()
             .surveyId(survey.getSurveyId())
             .authorId(survey.getAuthorId())

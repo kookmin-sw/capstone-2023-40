@@ -58,7 +58,8 @@ public class AnsweredQuestionService {
 
     @Transactional
     public List<AnsweredQuestion> getAnswerQuestionByQuestionBankId(Long questionBankId) {
-        return answeredQuestionRepository.findAllByQuestionBankId(questionBankId);
+        return answeredQuestionRepository.findAllByQuestionBankId(questionBankId)
+            .orElseThrow(() -> new NotFoundExceptionMapper(ErrorMessage.ANSWERED_QUESTION_NOT_FOUND));
     }
 
     @Transactional(readOnly = true)
@@ -110,7 +111,7 @@ public class AnsweredQuestionService {
 
             // check if the question is included in the survey.
             if (questionRepository.notExistsBySurveyIdAndQuestionBankId(survey.getSurveyId(),
-                questionBank.getQuestionBankId())) {
+                questionBank.getQuestionBankId())){
                 throw new BadRequestExceptionMapper(ErrorMessage.NOT_SURVEY_QUESTION);
             }
 
@@ -138,7 +139,7 @@ public class AnsweredQuestionService {
     @Transactional
     public void deleteAnswer(UUID surveyId) {
         List<AnsweredQuestion> answeredQuestionList = answeredQuestionRepository.findAllBySurveyId(
-            surveyId);
+            surveyId).orElseThrow(() -> new NotFoundExceptionMapper(ErrorMessage.ANSWERED_QUESTION_NOT_FOUND));
         answeredQuestionRepository.deleteAll(answeredQuestionList);
     }
 

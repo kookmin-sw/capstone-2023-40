@@ -3,6 +3,7 @@ package com.thesurvey.api.service;
 import com.thesurvey.api.exception.mapper.NotFoundExceptionMapper;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -50,12 +51,17 @@ public class QuestionService {
 
     @Transactional(readOnly = true)
     public List<QuestionBank> getAllQuestionBankBySurveyId(UUID surveyId) {
-        return questionBankRepository.findAllBySurveyId(surveyId);
+        return questionBankRepository.findAllBySurveyId(surveyId).orElseThrow(
+            () -> new NotFoundExceptionMapper(ErrorMessage.QUESTION_NOT_FOUND)
+        );
     }
 
     @Transactional(readOnly = true)
     public List<QuestionBankResponseDto> getQuestionBankInfoDtoListBySurveyId(UUID surveyId) {
-        return questionBankRepository.findAllBySurveyId(surveyId)
+        List<QuestionBank> questionBankList = questionBankRepository.findAllBySurveyId(surveyId).orElseThrow(
+            () -> new NotFoundExceptionMapper(ErrorMessage.QUESTION_NOT_FOUND)
+        );
+        return questionBankList
             .stream()
             .map(questionBankMapper::toQuestionBankResponseDto)
             .collect(Collectors.toList());
@@ -125,8 +131,9 @@ public class QuestionService {
 
     @Transactional
     public void deleteQuestion(UUID surveyId) {
-        List<Question> questionList = questionRepository.findAllBySurveyId(surveyId);
-        questionRepository.deleteAll(questionList);
+        Optional<List<Question>> questionList = questionRepository.findAllBySurveyId(surveyId);
+        questionRepository.deleteAll(questionList.orElseThrow(
+            () -> new NotFoundExceptionMapper(ErrorMessage.QUESTION_NOT_FOUND)));
     }
 
 }

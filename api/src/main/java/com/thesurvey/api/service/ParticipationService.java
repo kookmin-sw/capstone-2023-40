@@ -7,6 +7,8 @@ import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
 import com.thesurvey.api.domain.Participation;
 import com.thesurvey.api.domain.Survey;
 import com.thesurvey.api.domain.User;
+import com.thesurvey.api.exception.ErrorMessage;
+import com.thesurvey.api.exception.mapper.NotFoundExceptionMapper;
 import com.thesurvey.api.repository.ParticipationRepository;
 import com.thesurvey.api.service.mapper.ParticipationMapper;
 
@@ -37,7 +39,8 @@ public class ParticipationService {
 
     @Transactional
     public void deleteParticipation(UUID surveyId) {
-        List<Participation> participationList = participationRepository.findAllBySurveyId(surveyId);
+        List<Participation> participationList = participationRepository.findAllBySurveyId(surveyId)
+            .orElseThrow(() -> new NotFoundExceptionMapper(ErrorMessage.PARTICIPATION_NOT_FOUND));
         participationRepository.deleteAll(participationList);
     }
 }

@@ -89,7 +89,8 @@ public class SurveyService {
     @Transactional(readOnly = true)
     public List<UserSurveyTitleDto> getUserCreatedSurveys(Authentication authentication) {
         return surveyRepository.findUserCreatedSurveysByAuthorID(
-            UserUtil.getUserIdFromAuthentication(authentication));
+                UserUtil.getUserIdFromAuthentication(authentication))
+            .orElseThrow(() -> new NotFoundExceptionMapper(ErrorMessage.USER_CREATED_SURVEY_NOT_FOUND));
     }
 
     /**

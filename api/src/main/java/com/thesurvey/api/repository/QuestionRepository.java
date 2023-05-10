@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 public interface QuestionRepository extends JpaRepository<Question, QuestionId> {
 
     @Query("SELECT q FROM Question q WHERE q.survey.surveyId = :surveyId ORDER BY q.questionNo ASC")
-    List<Question> findAllBySurveyId(UUID surveyId);
+    Optional<List<Question>> findAllBySurveyId(UUID surveyId);
 
     @Query("SELECT q.questionNo FROM Question q WHERE q.questionBank.questionBankId = :questionBankId")
     Optional<Integer> findQuestionNoByQuestionBankId(Long questionBankId);
