@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import authServiceWithKakao from '../components/authlist/kakaoAuth';
+import { KAKAO_AUTH_URL } from '../components/authlist/kakaoAuth';
 import {
   setAuthKakao,
   setAuthGoogle,
@@ -18,7 +18,7 @@ export const AuthConnect = (checkAuthServiceTitle: string, setConnectService: an
   switch (checkAuthServiceTitle) {
     case '카카오':
       setConnectService(true);
-      authServiceWithKakao();
+      window.location.href = KAKAO_AUTH_URL;
       break;
     case '네이버':
       break;
