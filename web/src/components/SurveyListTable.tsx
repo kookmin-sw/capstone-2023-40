@@ -6,7 +6,7 @@ import styled, { DefaultTheme } from 'styled-components';
 import { SurveyAbstractResponse } from '../types/response/Survey';
 import { dateFormatUpToMinute } from '../utils/dateFormat';
 import RectangleButton from './Button/RectangleButton';
-import CertificationList from './CertificationList';
+import CertificationIconList from './CertificationIconList';
 
 const ListTable = styled.table`
   display: flex;
@@ -56,11 +56,6 @@ const Title = styled(Item)`
   &:hover {
     background-color: ${(props) => props.theme.colors.btnhover};
   }
-`;
-
-const AuthList = styled(Item)`
-  min-width: 100px;
-  width: 20vw;
 `;
 
 const EndDate = styled(Item)`
@@ -165,13 +160,9 @@ export default function SurveyListTable({
             <Title role="button" onClick={() => handleButtonClick(index)} theme={theme}>
               {survey.title}
             </Title>
-            <AuthList theme={theme}>
-              {survey.certificationTypes.length === 0
-                ? CertificationList({ iconOption: true })
-                : survey.certificationTypes.map((label: number) =>
-                    CertificationList({ label: label, iconOption: true })
-                  )}
-            </AuthList>
+            <Item>
+              <CertificationIconList certificationList={survey.certificationTypes} theme={theme} />
+            </Item>
             <EndDate theme={theme}>{dateFormatUpToMinute(`${survey.endedDate}`)}</EndDate>
           </ListRow>
         ))}
