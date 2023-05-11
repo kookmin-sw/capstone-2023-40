@@ -76,27 +76,17 @@ export default function SurveyCreateForm({ theme }: SurveyFormProps) {
     }
   }, [recentCreate]);
 
-  const turnOnAlertNotification = (domIndex: number) => {
-    questionRefs.current[domIndex].style.borderLeft = '15px solid #FF5733';
-  };
-
-  const turnOffAlertNotification = (domIndex: number) => {
-    questionRefs.current[domIndex].style.borderLeft = `15px solid ${theme.colors.primary}`;
-  };
-
-  const setAlertNotification = (errorIndex: number) => {
+  const setAlertNotificationStyle = (errorIndex: number) => {
     surveyData.questions.forEach((question: QuestionCreateRequest) => {
-      if (question.questionNo - 1 === errorIndex) {
-        turnOnAlertNotification(question.questionNo - 1);
-      } else {
-        turnOffAlertNotification(question.questionNo - 1);
-      }
+      const questionNumber = question.questionNo - 1;
+      const borderStyle = questionNumber === errorIndex ? '15px solid #FF5733' : `15px solid ${theme.colors.primary}`;
+      questionRefs.current[questionNumber].style.borderLeft = borderStyle;
     });
   };
 
   const validation = () => {
     const checkResult: InputCheckResult = validateSurveyData(surveyData);
-    setAlertNotification(checkResult.index);
+    setAlertNotificationStyle(checkResult.index);
 
     switch (checkResult.message) {
       case ValidationErrorMessage.NO_QUESTION:
@@ -167,11 +157,7 @@ export default function SurveyCreateForm({ theme }: SurveyFormProps) {
       description: 'NULL',
     };
 
-    if (newOptions) {
-      newOptions = [...newOptions, newOption];
-    } else {
-      newOptions = [newOption];
-    }
+    newOptions = newOptions ? [...newOptions, newOption] : [newOption];
 
     const newQuestions = [...surveyData.questions];
     newQuestions[questionId] = { ...newQuestions[questionId], questionOptions: newOptions };
@@ -191,14 +177,10 @@ export default function SurveyCreateForm({ theme }: SurveyFormProps) {
 
   const editRequiredCertificationList = (value: number, isChecked: boolean) => {
     if (typeof surveyData.certificationTypes !== 'undefined') {
-      if (isChecked) {
-        setSurveyData({ ...surveyData, certificationTypes: [...surveyData.certificationTypes, value] });
-      } else {
-        setSurveyData({
-          ...surveyData,
-          certificationTypes: surveyData.certificationTypes.filter((item) => item !== value),
-        });
-      }
+      const newCertificationTypes = isChecked
+        ? [...surveyData.certificationTypes, value]
+        : surveyData.certificationTypes.filter((item) => item !== value);
+      setSurveyData({ ...surveyData, certificationTypes: newCertificationTypes });
     }
   };
 
