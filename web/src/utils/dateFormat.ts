@@ -1,17 +1,17 @@
 /**
- * Replace T and remove milliseconds
+ * Replace T from Date format(yyyy-mm-ddThh:MM:ss)
  *
- * @param {string} date yyyy-mm-ddThh:MM:ss.zzzZ
- * @returns {string} yyyy-mm-dd hh:MM:ss
+ * @param {string} date yyyy-mm-ddThh:MM:ss
+ * @returns {string} yyyy-mm-dd hh:MM
  */
 export const dateFormatUpToSecond = (date: string): string => {
   return date.replace('T', ' ').substring(0, 19);
 };
 
 /**
- * Replace T and remove seconds and milliseconds
+ * Replace T and remove seconds from Date format(yyyy-mm-ddThh:MM:ss)
  *
- * @param {string} date yyyy-mm-ddThh:MM:ss.zzzZ
+ * @param {string} date yyyy-mm-ddThh:MM:ss
  * @returns {string} yyyy-mm-dd hh:MM
  */
 export const dateFormatUpToMinute = (date: string): string => {
@@ -19,9 +19,9 @@ export const dateFormatUpToMinute = (date: string): string => {
 };
 
 /**
- * Replace T and remove hour, minute, seconds and milliseconds
+ * Replace T and remove hour, minute and seconds from Date format(yyyy-mm-ddThh:MM:ss)
  *
- * @param {string} date yyyy-mm-ddThh:MM:ss.zzzZ
+ * @param {string} date yyyy-mm-ddThh:MM:ss
  * @returns {string} yyyy-mm-dd
  */
 export const dateFormatUpToDate = (date: string): string => {
@@ -29,9 +29,9 @@ export const dateFormatUpToDate = (date: string): string => {
 };
 
 /**
- * Return date difference between date1 and date2
+ * Return how many days are left before the dDate from now
  *
- * @param {string | Date} dDate yyyy-mm-ddThh:MM:ss.zzzZ
+ * @param {string | Date} dDate yyyy-mm-ddThh:MM:ss
  * @returns {number} difference date
  */
 export const getDDay = (dDate: string | Date): number => {
