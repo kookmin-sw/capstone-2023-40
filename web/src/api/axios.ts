@@ -5,10 +5,8 @@ const instance: AxiosInstance = axios.create({
   baseURL: 'http://localhost:8080/v1',
   // baseURL: 'https://api.thesurvey.kr/v1',
   // timeout: 15000,
+  withCredentials: true,
 });
-
-// Activate cookie for maintain session
-instance.defaults.withCredentials = true;
 
 // 요청 인터셉터 추가하기
 instance.interceptors.request.use(
