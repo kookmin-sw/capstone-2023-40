@@ -8,7 +8,7 @@ import { SurveyAbstractResponse } from '../../types/response/Survey';
 import { dateFormatUpToMinute, getDDay } from '../../utils/dateFormat';
 import { DeleteImage } from '../Button/ImageButtons';
 import RectangleButton from '../Button/RectangleButton';
-import CertificationList from '../CertificationList';
+import CertificationIconList from '../CertificationIconList';
 
 const Container = styled.div`
   width: 100vw;
@@ -159,11 +159,7 @@ export default function SurveyPreviewModal({ surveyItem, setPreviewModalOpen, th
           <Description theme={theme}>{surveyItem.description}</Description>
           <Subtitle theme={theme}>필수인증 목록</Subtitle>
           <CertificationContainer>
-            {surveyItem.certificationTypes.length === 0
-              ? CertificationList({ iconOption: true })
-              : surveyItem.certificationTypes.map((index: number) =>
-                  CertificationList({ label: index, iconOption: true })
-                )}
+            <CertificationIconList certificationList={surveyItem.certificationTypes} theme={theme} />
           </CertificationContainer>
         </BodyContainer>
         <ButtonContainer>
