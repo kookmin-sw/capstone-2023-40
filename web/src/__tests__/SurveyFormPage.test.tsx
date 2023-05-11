@@ -162,7 +162,7 @@ describe('[SurveyFormPage Test]', () => {
 
     // 2) change question type
     const questionSelector = await screen.findByTestId('selector');
-    fireEvent.change(questionSelector, { target: { value: QuestionType.MULTIPLE_CHOICE } });
+    fireEvent.change(questionSelector, { target: { value: QuestionType.MULTIPLE_CHOICES } });
 
     // 3) check label of question
     const label = await screen.findByText('문항을 추가해 주세요');
@@ -178,7 +178,7 @@ describe('[SurveyFormPage Test]', () => {
 
     // 2) change question type
     const questionSelector = await screen.findByTestId('selector');
-    fireEvent.change(questionSelector, { target: { value: QuestionType.MULTIPLE_CHOICE } });
+    fireEvent.change(questionSelector, { target: { value: QuestionType.MULTIPLE_CHOICES } });
 
     // 3) add 5 options
     const addOptionButton = screen.getByText('문항 추가하기');
@@ -202,7 +202,7 @@ describe('[SurveyFormPage Test]', () => {
 
     // 2) change question type
     const questionSelector = await screen.findByTestId('selector');
-    fireEvent.change(questionSelector, { target: { value: QuestionType.MULTIPLE_CHOICE } });
+    fireEvent.change(questionSelector, { target: { value: QuestionType.MULTIPLE_CHOICES } });
 
     // 3) add 5 options
     const addOptionButton = screen.getByText('문항 추가하기');
@@ -407,7 +407,7 @@ describe('[SurveyFormPage Test]', () => {
 
     // 3) change question type
     const questionSelector = await screen.findByTestId('selector');
-    fireEvent.change(questionSelector, { target: { value: QuestionType.MULTIPLE_CHOICE } });
+    fireEvent.change(questionSelector, { target: { value: QuestionType.MULTIPLE_CHOICES } });
 
     // 4) check modal is open
     fireEvent.click(submitButton);
@@ -432,7 +432,7 @@ describe('[SurveyFormPage Test]', () => {
 
     // 3) change question type
     const questionSelector = await screen.findByTestId('selector');
-    fireEvent.change(questionSelector, { target: { value: QuestionType.MULTIPLE_CHOICE } });
+    fireEvent.change(questionSelector, { target: { value: QuestionType.MULTIPLE_CHOICES } });
 
     // 4) add option
     const addOptionButton = screen.getByText('문항 추가하기');
