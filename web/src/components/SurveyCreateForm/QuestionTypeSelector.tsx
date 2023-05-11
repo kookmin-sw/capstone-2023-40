@@ -43,7 +43,7 @@ export default function QuestionTypeSelector({ selected, questionId, handleChang
       <Option theme={theme} value={QuestionType.SINGLE_CHOICE}>
         단일선택
       </Option>
-      <Option theme={theme} value={QuestionType.MULTIPLE_CHOICE}>
+      <Option theme={theme} value={QuestionType.MULTIPLE_CHOICES}>
         다중선택
       </Option>
     </Selector>
