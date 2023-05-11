@@ -17,5 +17,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByName(String name);
 
     @Query("SELECT u FROM User u JOIN fetch u.answeredQuestions a")
-    Optional<List<User>> findAllByAnsweredQuestion();
+    List<User> findAllByAnsweredQuestion();
 }

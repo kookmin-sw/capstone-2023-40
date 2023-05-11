@@ -4,8 +4,8 @@ import com.thesurvey.api.domain.User;
 import com.thesurvey.api.dto.request.user.UserLoginRequestDto;
 import com.thesurvey.api.dto.request.user.UserRegisterRequestDto;
 import com.thesurvey.api.dto.response.user.UserResponseDto;
-import com.thesurvey.api.exception.mapper.BadRequestExceptionMapper;
 import com.thesurvey.api.exception.ErrorMessage;
+import com.thesurvey.api.exception.mapper.BadRequestExceptionMapper;
 import com.thesurvey.api.exception.mapper.UnauthorizedRequestExceptionMapper;
 import com.thesurvey.api.repository.UserRepository;
 import com.thesurvey.api.service.mapper.UserMapper;
@@ -44,14 +44,11 @@ public class AuthenticationService {
         throws AuthenticationException {
         UserDetails userDetails = userDetailsService.loadUserByUsername(authentication.getName());
 
-        if (passwordEncoder().matches(authentication.getCredentials().toString(),
-            userDetails.getPassword())) {
-            return new UsernamePasswordAuthenticationToken(userDetails.getUsername(),
-                userDetails.getPassword(),
-                userDetails.getAuthorities());
-        } else {
-            throw new BadRequestExceptionMapper(ErrorMessage.INVALID_CREDENTIALS);
-        }
+        checkPassword(authentication.getCredentials().toString(), userDetails.getPassword());
+
+        return new UsernamePasswordAuthenticationToken(userDetails.getUsername(),
+            userDetails.getPassword(),
+            userDetails.getAuthorities());
     }
 
     @Transactional
@@ -76,5 +73,11 @@ public class AuthenticationService {
 
     private PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    private void checkPassword(CharSequence rawPassword, String encodedPassword) {
+        if (!passwordEncoder().matches(rawPassword, encodedPassword)) {
+            throw new BadRequestExceptionMapper(ErrorMessage.INVALID_CREDENTIALS);
+        }
     }
 }

@@ -20,5 +20,5 @@ public interface QuestionOptionRepository extends JpaRepository<QuestionOption, 
         Long questionBankId);
 
     @Query("SELECT qo FROM QuestionOption qo WHERE qo.questionBank.questionBankId = :questionBankId")
-    Optional<List<QuestionOption>> findAllByQuestionBankId(Long questionBankId);
+    List<QuestionOption> findAllByQuestionBankId(Long questionBankId);
 }

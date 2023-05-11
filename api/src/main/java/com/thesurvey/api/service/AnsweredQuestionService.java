@@ -12,8 +12,8 @@ import com.thesurvey.api.domain.Survey;
 import com.thesurvey.api.domain.User;
 import com.thesurvey.api.dto.request.answeredQuestion.AnsweredQuestionDto;
 import com.thesurvey.api.dto.request.answeredQuestion.AnsweredQuestionRequestDto;
-import com.thesurvey.api.exception.mapper.BadRequestExceptionMapper;
 import com.thesurvey.api.exception.ErrorMessage;
+import com.thesurvey.api.exception.mapper.BadRequestExceptionMapper;
 import com.thesurvey.api.exception.mapper.ForbiddenRequestExceptionMapper;
 import com.thesurvey.api.exception.mapper.NotFoundExceptionMapper;
 import com.thesurvey.api.repository.AnsweredQuestionRepository;
@@ -63,14 +63,12 @@ public class AnsweredQuestionService {
 
     @Transactional(readOnly = true)
     public List<Long[]> getSingleChoiceResult(Long questionBankId) {
-        return answeredQuestionRepository.countSingleChoiceByQuestionBankId(questionBankId)
-            .orElseThrow(() -> new NotFoundExceptionMapper(ErrorMessage.QUESTION_OPTION_NOT_FOUND));
+        return answeredQuestionRepository.countSingleChoiceByQuestionBankId(questionBankId);
     }
 
     @Transactional(readOnly = true)
     public List<Long[]> getMultipleChoiceResult(Long questionBankId) {
-        return answeredQuestionRepository.countMultipleChoiceByQuestionBankId(questionBankId)
-            .orElseThrow(() -> new NotFoundExceptionMapper(ErrorMessage.QUESTION_OPTION_NOT_FOUND));
+        return answeredQuestionRepository.countMultipleChoiceByQuestionBankId(questionBankId);
     }
 
     @Transactional
@@ -86,20 +84,7 @@ public class AnsweredQuestionService {
             throw new ForbiddenRequestExceptionMapper(ErrorMessage.ANSWER_ALREADY_SUBMITTED);
         }
 
-        // validate if the survey creator is attempting to respond to their own survey
-        if (user.getUserId().equals(survey.getAuthorId())) {
-            throw new ForbiddenRequestExceptionMapper(ErrorMessage.CREATOR_CANNOT_ANSWER);
-        }
-
-        // validate if the survey has not yet started
-        if (LocalDateTime.now(ZoneId.of("Asia/Seoul")).isBefore(survey.getStartedDate())) {
-            throw new ForbiddenRequestExceptionMapper(ErrorMessage.SURVEY_NOT_STARTED);
-        }
-
-        // validate if the survey has already ended
-        if (LocalDateTime.now(ZoneId.of("Asia/Seoul")).isAfter(survey.getEndedDate())) {
-            throw new ForbiddenRequestExceptionMapper(ErrorMessage.SURVEY_ALREADY_ENDED);
-        }
+        validateCreateAnswerRequest(user, survey);
 
         for (AnsweredQuestionDto answeredQuestionDto : answeredQuestionRequestDto.getAnswers()) {
             validateEmptyAnswer(answeredQuestionDto);
@@ -142,7 +127,30 @@ public class AnsweredQuestionService {
         answeredQuestionRepository.deleteAll(answeredQuestionList);
     }
 
-    public void validateEmptyAnswer(AnsweredQuestionDto answeredQuestionDto) {
+    private void validateCreateAnswerRequest(User user, Survey survey) {
+        // validate if a user has already responded to the survey
+        if (answeredQuestionRepository.existsByUserIdAndSurveyId(user.getUserId(),
+            survey.getSurveyId())) {
+            throw new ForbiddenRequestExceptionMapper(ErrorMessage.ANSWER_ALREADY_SUBMITTED);
+        }
+
+        // validate if the survey creator is attempting to respond to their own survey
+        if (user.getUserId().equals(survey.getAuthorId())) {
+            throw new ForbiddenRequestExceptionMapper(ErrorMessage.CREATOR_CANNOT_ANSWER);
+        }
+
+        // validate if the survey has not yet started
+        if (LocalDateTime.now(ZoneId.of("Asia/Seoul")).isBefore(survey.getStartedDate())) {
+            throw new ForbiddenRequestExceptionMapper(ErrorMessage.SURVEY_NOT_STARTED);
+        }
+
+        // validate if the survey has already ended
+        if (LocalDateTime.now(ZoneId.of("Asia/Seoul")).isAfter(survey.getEndedDate())) {
+            throw new ForbiddenRequestExceptionMapper(ErrorMessage.SURVEY_ALREADY_ENDED);
+        }
+    }
+
+    private void validateEmptyAnswer(AnsweredQuestionDto answeredQuestionDto) {
         if (answeredQuestionDto.getLongAnswer() == null
             && answeredQuestionDto.getShortAnswer() == null
             && answeredQuestionDto.getSingleChoice() == null
