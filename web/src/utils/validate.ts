@@ -164,7 +164,7 @@ export const validateSurveyData = (surveyData: SurveyCreateRequest): InputCheckR
 
     if (
       questions[i].questionType === QuestionType.SINGLE_CHOICE ||
-      questions[i].questionType === QuestionType.MULTIPLE_CHOICE
+      questions[i].questionType === QuestionType.MULTIPLE_CHOICES
     ) {
       const options = questions[i].questionOptions;
 
