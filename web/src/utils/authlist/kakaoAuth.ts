@@ -35,6 +35,8 @@ export const getKakaoProfile = async (kakaoToken: any, username: string, dispatc
     if (name === username) {
       console.log('사용자가 같습니다!');
       dispatch(setSuccessAuth(true));
+    } else {
+      console.log('사용자가 다릅니다!');
     }
     dispatch(setCompleteAuth(true));
   } catch (error) {
