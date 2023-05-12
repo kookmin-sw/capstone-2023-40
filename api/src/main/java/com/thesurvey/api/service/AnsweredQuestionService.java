@@ -2,11 +2,13 @@ package com.thesurvey.api.service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 import com.thesurvey.api.domain.AnsweredQuestion;
+import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
 import com.thesurvey.api.domain.QuestionBank;
 import com.thesurvey.api.domain.Survey;
 import com.thesurvey.api.domain.User;
@@ -16,10 +18,13 @@ import com.thesurvey.api.exception.ErrorMessage;
 import com.thesurvey.api.exception.mapper.BadRequestExceptionMapper;
 import com.thesurvey.api.exception.mapper.ForbiddenRequestExceptionMapper;
 import com.thesurvey.api.exception.mapper.NotFoundExceptionMapper;
+import com.thesurvey.api.exception.mapper.UnauthorizedRequestExceptionMapper;
 import com.thesurvey.api.repository.AnsweredQuestionRepository;
 import com.thesurvey.api.repository.QuestionBankRepository;
 import com.thesurvey.api.repository.QuestionRepository;
 import com.thesurvey.api.repository.SurveyRepository;
+import com.thesurvey.api.repository.UserCertificationRepository;
+import com.thesurvey.api.service.converter.CertificationTypeConverter;
 import com.thesurvey.api.service.mapper.AnsweredQuestionMapper;
 import com.thesurvey.api.util.UserUtil;
 
@@ -42,18 +47,24 @@ public class AnsweredQuestionService {
 
     private final ParticipationService participationService;
 
+    private final UserCertificationRepository userCertificationRepository;
+
+    private final CertificationTypeConverter certificationTypeConverter;
+
     public AnsweredQuestionService(SurveyRepository surveyRepository,
         AnsweredQuestionRepository answeredQuestionRepository,
         QuestionBankRepository questionBankRepository,
         AnsweredQuestionMapper answeredQuestionMapper,
         QuestionRepository questionRepository,
-        ParticipationService participationService) {
+        ParticipationService participationService, UserCertificationRepository userCertificationRepository, CertificationTypeConverter certificationTypeConverter) {
         this.surveyRepository = surveyRepository;
         this.answeredQuestionRepository = answeredQuestionRepository;
         this.questionBankRepository = questionBankRepository;
         this.answeredQuestionMapper = answeredQuestionMapper;
         this.questionRepository = questionRepository;
         this.participationService = participationService;
+        this.userCertificationRepository = userCertificationRepository;
+        this.certificationTypeConverter = certificationTypeConverter;
     }
 
     @Transactional
@@ -83,7 +94,9 @@ public class AnsweredQuestionService {
             answeredQuestionRequestDto.getSurveyId())) {
             throw new ForbiddenRequestExceptionMapper(ErrorMessage.ANSWER_ALREADY_SUBMITTED);
         }
-
+        List<Integer> surveyCertificationList = surveyRepository.findCertificationTypeBySurveyIdAndAuthorId(
+            survey.getSurveyId(), survey.getAuthorId());
+        validateUserCompletedCertification(surveyCertificationList, user.getUserId());
         validateCreateAnswerRequest(user, survey);
 
         for (AnsweredQuestionDto answeredQuestionDto : answeredQuestionRequestDto.getAnswers()) {
@@ -115,8 +128,10 @@ public class AnsweredQuestionService {
 
                 answeredQuestionRepository.saveAll(answeredQuestionList);
             }
-            participationService.createParticipation(user,
-                answeredQuestionRequestDto.getCertificationTypes(), survey);
+
+            List<CertificationType> certificationTypeList =
+                getCertificationTypeList(surveyCertificationList);
+            participationService.createParticipation(user, certificationTypeList, survey);
         }
     }
 
@@ -161,4 +176,22 @@ public class AnsweredQuestionService {
         }
     }
 
+    // validate if the user has completed the necessary certifications for the survey
+    private void validateUserCompletedCertification(List<Integer> surveyCertificationList, Long userId) {
+        if (surveyCertificationList.contains(CertificationType.NONE.getCertificationTypeId())) {
+            return;
+        }
+        List<Integer> userCertificationList = userCertificationRepository.findUserCertificationTypeByUserId(
+            userId);
+        if (!new HashSet<>(userCertificationList).containsAll(surveyCertificationList)) {
+            throw new UnauthorizedRequestExceptionMapper(ErrorMessage.CERTIFICATION_NOT_COMPLETED);
+        }
+    }
+
+    private List<CertificationType> getCertificationTypeList(List<Integer> surveyCertificationList) {
+        if (surveyCertificationList.contains(CertificationType.NONE.getCertificationTypeId())) {
+            return List.of(CertificationType.NONE);
+        }
+        return certificationTypeConverter.toCertificationTypeList(surveyCertificationList);
+    }
 }
