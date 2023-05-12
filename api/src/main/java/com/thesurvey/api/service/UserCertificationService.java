@@ -65,8 +65,7 @@ public class UserCertificationService {
         }
 
         if (userCertificationUpdateRequestDto.getIsIdentityCardCertificated()) {
-            saveUserCertification(user, CertificationType.IDENTITY_CARD,
-                userCertificationList);
+            saveUserCertification(user, CertificationType.IDENTITY_CARD, userCertificationList);
         }
 
         return userCertificationMapper.toUserCertificationListDto(user.getUserId());
