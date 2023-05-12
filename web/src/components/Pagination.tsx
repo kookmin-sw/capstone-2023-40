@@ -4,7 +4,7 @@ import styled, { DefaultTheme } from 'styled-components';
 
 import { NumberUtils } from '../utils/NumberUtils';
 
-const PaginationContainer = styled.nav`
+const Container = styled.nav`
   text-align: center;
 `;
 
@@ -75,7 +75,7 @@ export default function Pagination({ currentPage, numOfTotalPage, numOfPageToSho
   };
 
   return (
-    <PaginationContainer>
+    <Container>
       <ButtonList>
         <ArrowButton theme={theme} onClick={() => leftButtonClicked()}>
           &lt;
@@ -97,6 +97,6 @@ export default function Pagination({ currentPage, numOfTotalPage, numOfPageToSho
           &gt;
         </ArrowButton>
       </ButtonList>
-    </PaginationContainer>
+    </Container>
   );
 }

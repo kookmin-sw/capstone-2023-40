@@ -4,7 +4,7 @@ export interface QuestionOptionCreateRequest {
 }
 
 export interface QuestionOptionUpdateRequest {
-  optionId: string;
+  optionId: number;
   option: string;
   description: string;
 }

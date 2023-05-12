@@ -186,13 +186,13 @@ const LoginInformation = styled.div`
   }
 `;
 
-const UpdateInformationButton = styled.div`
+const CustomButton = styled.div`
   margin: 1vw;
   display: flex;
   padding: 1vh;
   font-size: 1.7vh;
   font-weight: 700;
-  color: white;
+  color: ${(props) => props.theme.colors.default};
   background-color: ${(props) => props.theme.colors.primary};
   border: none;
   border-radius: ${(props) => props.theme.borderRadius};
@@ -266,11 +266,18 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
             <CheckBox id="checkbox" type="checkbox" theme={theme} onClick={handleClick} />
             <CheckBoxLabel htmlFor="checkbox" theme={theme} />
           </CheckBoxWrapper>
-          {currentLocation === '/mypage' ? (
-            <UpdateInformationButton theme={theme} onClick={updateUserInformation}>
+
+          {currentLocation === '/mypage' || currentLocation === '/mypage/' ? (
+            <CustomButton theme={theme} onClick={() => navigate('../mypage')}>
               개인정보 저장하기
-            </UpdateInformationButton>
+            </CustomButton>
           ) : undefined}
+          {currentLocation === '/survey' || currentLocation === '/survey/' ? (
+            <CustomButton theme={theme} onClick={() => navigate('/survey/form')}>
+              설문 만들기
+            </CustomButton>
+          ) : undefined}
+
           {isLoggedIn ? (
             <UserImage onClick={() => dispatch(setSubPageOpen(!isSubPageOpen))} />
           ) : (

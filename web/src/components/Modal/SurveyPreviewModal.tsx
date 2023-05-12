@@ -1,12 +1,14 @@
-import React, { useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
 
 import { useOnClickOutside } from '../../hooks/useOnClickOutside';
-import { RectanglePrimaryButton } from '../Button/Buttons';
+import { SurveyAbstractResponse } from '../../types/response/Survey';
+import { dateFormatUpToMinute, getDDay } from '../../utils/dateFormat';
 import { DeleteImage } from '../Button/ImageButtons';
-import CertificationList from '../CertificationList';
+import RectangleButton from '../Button/RectangleButton';
+import CertificationIconList from '../CertificationIconList';
 
 const Container = styled.div`
   width: 100vw;
@@ -117,34 +119,21 @@ const Description = styled.span`
   padding: 1.2vh 1.5vw 1.2vh 1.5vw;
 `;
 
-const SubmitButton = styled(RectanglePrimaryButton)`
-  width: 30vw;
-  margin-top: 10px;
-`;
-
-interface SurveyItem {
-  survey_id: string;
-  author: number;
-  title: string;
-  description: string;
-  created_date: string;
-  ended_date: string;
-  required_authentications: Array<string>;
-}
-
 interface ModalProps {
-  surveyItem: SurveyItem;
-  setEnterModalOpen: (arg: boolean) => void;
+  surveyItem: SurveyAbstractResponse;
+  setPreviewModalOpen: (arg: boolean) => void;
   theme: DefaultTheme;
 }
 
-export default function SurveyPreviewModal({ surveyItem, setEnterModalOpen, theme }: ModalProps) {
+export default function SurveyPreviewModal({ surveyItem, setPreviewModalOpen, theme }: ModalProps) {
+  const remainDate = useMemo(() => getDDay(surveyItem.endedDate), [surveyItem.endedDate]);
   const navigate = useNavigate();
   const modalRef = useRef<HTMLDivElement>(null);
+
   useOnClickOutside({
     ref: modalRef,
     handler: () => {
-      setEnterModalOpen(false);
+      setPreviewModalOpen(false);
     },
   });
 
@@ -155,30 +144,33 @@ export default function SurveyPreviewModal({ surveyItem, setEnterModalOpen, them
           <DeleteImage
             data-testid="closeModal"
             name="closeModal"
-            onClick={() => setEnterModalOpen(false)}
+            onClick={() => setPreviewModalOpen(false)}
             theme={theme}
           />
         </EndButtonContainer>
         <TitleContainer theme={theme}>
           <Title theme={theme}>{surveyItem.title}</Title>
-          <EndDate theme={theme}>~ {surveyItem.ended_date.substring(0, 10)}</EndDate>
+          <EndDate theme={theme}>
+            ~ {dateFormatUpToMinute(`${surveyItem.endedDate}`)} (D-{remainDate})
+          </EndDate>
         </TitleContainer>
         <BodyContainer theme={theme}>
           <Subtitle theme={theme}>설문조사 상세내용</Subtitle>
           <Description theme={theme}>{surveyItem.description}</Description>
           <Subtitle theme={theme}>필수인증 목록</Subtitle>
           <CertificationContainer>
-            {surveyItem.required_authentications.length === 0
-              ? CertificationList({ label: '', iconOption: true })
-              : surveyItem.required_authentications.map((label) =>
-                  CertificationList({ label: label, iconOption: true })
-                )}
+            <CertificationIconList certificationList={surveyItem.certificationTypes} theme={theme} />
           </CertificationContainer>
         </BodyContainer>
         <ButtonContainer>
-          <SubmitButton type="submit" onClick={() => navigate(`/survey/${surveyItem.survey_id}`)} theme={theme}>
-            설문 조사 시작하기
-          </SubmitButton>
+          <RectangleButton
+            backgroundColor={theme.colors.primary}
+            hoverColor={theme.colors.prhover}
+            text="설문 조사 시작하기"
+            theme={theme}
+            handleClick={() => navigate(`/survey/${surveyItem.surveyId}`)}
+            width="30vw"
+          />
         </ButtonContainer>
       </ModalContainer>
     </Container>
