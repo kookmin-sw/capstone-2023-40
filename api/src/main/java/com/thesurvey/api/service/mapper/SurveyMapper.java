@@ -1,5 +1,6 @@
 package com.thesurvey.api.service.mapper;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -97,6 +98,11 @@ public class SurveyMapper {
     }
 
     private List<CertificationType> getConvertedCertificationTypes(UUID surveyId) {
+        List<Integer> certificationTypes =
+            surveyRepository.findCertificationTypeBySurveyId(surveyId);
+        if (certificationTypes.contains(CertificationType.NONE.getCertificationTypeId())) {
+            return new ArrayList<>();
+        }
         return certificationTypeConverter.toCertificationTypeList(
             surveyRepository.findCertificationTypeBySurveyId(surveyId));
     }
