@@ -8,6 +8,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import com.thesurvey.api.domain.AnsweredQuestion;
+import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
 import com.thesurvey.api.domain.EnumTypeEntity.QuestionType;
 import com.thesurvey.api.domain.QuestionBank;
 import com.thesurvey.api.domain.Survey;
@@ -143,12 +144,15 @@ public class SurveyService {
             throw new BadRequestExceptionMapper(ErrorMessage.STARTEDDATE_ISAFTER_ENDEDDATE);
         }
 
+        List<CertificationType> certificationTypes =
+            surveyRequestDto.getCertificationTypes().isEmpty()
+                ? List.of(CertificationType.NONE) : surveyRequestDto.getCertificationTypes();
+
         User user = UserUtil.getUserFromAuthentication(authentication);
         Survey survey = surveyRepository.save(surveyMapper.toSurvey(surveyRequestDto,
             user.getUserId()));
         questionService.createQuestion(surveyRequestDto, survey);
-        participationService.createParticipation(user, surveyRequestDto.getCertificationTypes(),
-            survey);
+        participationService.createParticipation(user, certificationTypes, survey);
         return surveyMapper.toSurveyResponseDto(survey, user.getUserId());
     }
 
