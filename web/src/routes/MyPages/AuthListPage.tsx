@@ -155,7 +155,6 @@ export default function AuthListPage() {
   const surveyAuthState = useSelector((state: RootState) => state.surveyAuth);
   const dispatch = useDispatch();
 
-  // FIXME: To API data
   const surveyAuthList = [
     {
       number: 1,

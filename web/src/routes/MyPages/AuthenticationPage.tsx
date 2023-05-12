@@ -9,7 +9,6 @@ import { getKakaoUserData } from '../../components/authlist/kakaoAuth';
 import Header from '../../components/Header';
 import { useTheme } from '../../hooks/useTheme';
 import { RootState } from '../../reducers';
-import { setCompleteAuth } from '../../types/surveyAuth';
 import { AuthConnect, AuthComplete } from '../../utils/authService';
 
 const rotate = keyframes`
@@ -103,11 +102,12 @@ export default function AuthenticationPage() {
   // 인가 코드가 오면 인증 상태 변경.
   useEffect(() => {
     if (authCode !== null) {
+      // FIXME: 추가 인증방식을 도입할때 리팩토링 할 것.
       getKakaoUserData(authCode, username, dispatch);
-      // dispatch(setCompleteAuth(true));
     }
   }, [authCode]);
 
+  // 인증 완료 상태(completeAuthState)일 때, 인증 성공여부(checkSuccessAuth) 판별.
   if (completeAuthState) {
     return (
       <Container theme={theme}>
@@ -115,7 +115,7 @@ export default function AuthenticationPage() {
         <AuthenticationContainer theme={theme}>
           <Form>
             <TextType theme={theme}>
-              {!surveyAuthState.checkSuccessAuth ? `사용자 인증에 실패했습니다.` : `인증이 완료되었습니다!`}!
+              {!surveyAuthState.checkSuccessAuth ? `사용자 인증에 실패했습니다` : `인증이 완료되었습니다!`}!
             </TextType>
             <Button
               theme={theme}
