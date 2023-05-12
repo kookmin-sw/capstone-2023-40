@@ -1,6 +1,8 @@
 /**
  * @VariableList : kakao, naver, google, identityCard, webmail
- * @CheckList : checkCompleteAuth(인증완료가 되었는지 확인, boolean), checkAuthService(어떤 인증서버스 사용중인지 확인, string);
+ * @CheckList : checkCompleteAuth(인증과정이 완료 되었는지 확인, boolean)
+ * @CheckList : checkSuccessAuth(인증과정이 끝난 상태에서 사용자 인증에 성공했는지 확인, boolean)
+ * @CheckList : checkAuthService(어떤 인증서버스 사용중인지 확인, string)
  */
 export type SurveyAuthState = {
   kakao: boolean;
@@ -9,6 +11,7 @@ export type SurveyAuthState = {
   identityCard: boolean;
   driverLicense: boolean;
   webmail: boolean;
+
   checkCompleteAuth: boolean;
   checkSuccessAuth: boolean;
   checkAuthService: string;
