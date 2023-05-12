@@ -2,16 +2,16 @@ import { BaseTime } from './BaseTime';
 import { QuestionOptionResponse } from './QuestionOption';
 
 export interface QuestionBankResponse extends BaseTime {
-  questionBankId: string;
+  questionBankId: number;
   title: string;
   description: string;
   questionType: QuestionType;
-  questionOptions: Array<QuestionOptionResponse>;
+  questionOptions: Array<QuestionOptionResponse> | null;
 }
 
 enum QuestionType {
   SINGLE_CHOICE,
-  MULTIPLE_CHOICE,
+  MULTIPLE_CHOICES,
   SHORT_ANSWER,
   LONG_ANSWER,
 }

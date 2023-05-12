@@ -3,7 +3,7 @@ import React from 'react';
 import styled, { DefaultTheme } from 'styled-components';
 
 import { Icons } from '../../assets/svg';
-import { RectangleButton } from '../Button/Buttons';
+import RectangleButton from '../Button/RectangleButton';
 
 const Container = styled.div`
   width: 100vw;
@@ -73,10 +73,6 @@ const WarnIcon = styled(Icons.WARN)`
   margin: 1em;
 `;
 
-const Button = styled(RectangleButton)`
-  padding: 1em;
-`;
-
 export type LogLevel = 'ERROR' | 'WARN' | 'INFO';
 
 interface AlertModalProps {
@@ -112,9 +108,14 @@ export default function AlertModal({ theme, title, level, text, buttonText, onCl
         <BodyContainer>
           {/* FIXME: To verification shortcut list */}
           <TextContainer theme={theme}>{text}</TextContainer>
-          <Button theme={theme} onClick={onClose}>
-            {buttonText}
-          </Button>
+          <RectangleButton
+            backgroundColor={theme.colors.button}
+            hoverColor={theme.colors.btnhover}
+            text={buttonText}
+            theme={theme}
+            handleClick={onClose}
+            width="100%"
+          />
         </BodyContainer>
       </Modal>
     </Container>
