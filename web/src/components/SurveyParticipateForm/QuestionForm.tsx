@@ -44,7 +44,7 @@ const Description = styled(TextLabel)`
 interface QuestionFormProps {
   question: QuestionBankResponse;
   index: number;
-  userAnswers: AnsweredQuestion[];
+  userAnswers: Array<AnsweredQuestion>;
   setUserAnswers: (arg: AnsweredQuestion[]) => void;
   theme: DefaultTheme;
 }
@@ -81,7 +81,16 @@ export default function QuestionForm({ question, index, userAnswers, setUserAnsw
 
   const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement> | React.ChangeEvent<HTMLInputElement>) => {
     const newUserAnswers = [...userAnswers];
-    switch (question.questionType) {
+    let tmpQuestionType: number | string;
+    if (typeof question.questionType === 'undefined') {
+      tmpQuestionType = -1;
+    } else if (typeof question.questionType === 'string') {
+      tmpQuestionType = QuestionType[question.questionType];
+    } else {
+      tmpQuestionType = question.questionType;
+    }
+
+    switch (tmpQuestionType) {
       case QuestionType.SINGLE_CHOICE:
         newUserAnswers[index] = { questionBankId: question.questionBankId, singleChoice: Number(event.target.value) };
         break;

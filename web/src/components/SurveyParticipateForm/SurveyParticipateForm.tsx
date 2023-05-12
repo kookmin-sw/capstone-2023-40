@@ -63,7 +63,7 @@ export default function SurveyParticipateForm({ surveyData, theme }: SurveyParti
   const questionRefs = useRef<HTMLDivElement[]>([]);
   const [endedDate, setEndedDate] = useState<string>('');
   const [resultModalOpen, setResultModalOpen] = useState<boolean>(false);
-  const [userAnswers, setUserAnswers] = useState<AnsweredQuestion[]>([]);
+  const [userAnswers, setUserAnswers] = useState<Array<AnsweredQuestion>>([]);
 
   const remainDate = useMemo(() => getDDay(endedDate), [endedDate]);
 
