@@ -54,11 +54,17 @@ export const getKakaoUserData = async (authCode: string, username: string, dispa
   params.append('client_id', KAKAO_REST_API_KEY);
   params.append('redirect_uri', KAKAO_REDIRECT_URI);
   params.append('code', authCode);
+  console.log(params.toString());
 
-  const response = await axios.post('https://kauth.kakao.com/oauth/token', params.toString(), {
-    headers: {
-      'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-    },
-  });
-  getKakaoProfile(response.data.access_token, username, dispatch);
+  await axios
+    .post('https://kauth.kakao.com/oauth/token', params.toString(), {
+      headers: {
+        'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+      },
+    })
+    .then((res) => {
+      if (res.status === 200) {
+        getKakaoProfile(res.data.access_token, username, dispatch);
+      }
+    });
 };

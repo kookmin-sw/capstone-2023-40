@@ -2,6 +2,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import { KAKAO_AUTH_URL } from '../components/authlist/kakaoAuth';
+import { NAVER_AUTH_URL } from '../components/authlist/naverAuth';
 import {
   setAuthKakao,
   setAuthGoogle,
@@ -15,13 +16,15 @@ import {
 } from '../types/surveyAuth';
 
 // FIXME: 다른 사용자 인증 과정 추가 구현하기.
-export const AuthConnect = (checkAuthServiceTitle: string, setConnectService: any) => {
+export const authConnect = (checkAuthServiceTitle: string, setConnectService: any) => {
+  setConnectService(true);
   switch (checkAuthServiceTitle) {
     case '카카오':
-      setConnectService(true);
       window.location.href = KAKAO_AUTH_URL;
       break;
     case '네이버':
+      console.log('네이버 로그인');
+      window.location.href = NAVER_AUTH_URL;
       break;
     case '구글':
       break;
@@ -37,13 +40,13 @@ export const AuthConnect = (checkAuthServiceTitle: string, setConnectService: an
 };
 
 // 사용자 정보 조회가 일치하면 인증성공(완료) => 인증여부 변경.
-export const AuthComplete = (
+export const authComplete = (
   checkAuthServiceTitle: string,
   surveyAuthState: any,
   dispatch = useDispatch(),
   navigate = useNavigate()
 ) => {
-  if (surveyAuthState.setSuccessAuth) {
+  if (surveyAuthState.checkSuccessAuth) {
     switch (checkAuthServiceTitle) {
       case '카카오':
         dispatch(setAuthKakao(!surveyAuthState.kakao));
