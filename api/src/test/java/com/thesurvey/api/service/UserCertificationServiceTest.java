@@ -51,7 +51,7 @@ public class UserCertificationServiceTest {
         LocalDateTime expirationDate = LocalDateTime.now(ZoneId.of("Asia/Seoul")).minusYears(2);
         UserCertification testUserCertification = UserCertification.builder()
             .user(savedUser)
-            .certificationDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")).minusYears(3))
+            .certificationDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")).minusYears(4))
             .expirationDate(expirationDate)
             .certificationType(CertificationType.KAKAO)
             .build();
