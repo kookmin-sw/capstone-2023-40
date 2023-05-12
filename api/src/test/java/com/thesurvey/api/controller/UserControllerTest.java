@@ -129,12 +129,12 @@ public class UserControllerTest extends BaseControllerTest {
 
         // then
         JSONObject content = new JSONObject(result.getResponse().getContentAsString());
-        assertThat(content.isNull("kakaoCertificationInfo")).isFalse();
-        assertThat(content.isNull("naverCertificationInfo")).isFalse();
+        assertThat(content.isNull("kakaoCertificationInfo")).isFalse(); // completed certification
+        assertThat(content.isNull("naverCertificationInfo")).isFalse(); // completed certification
         assertThat(content.isNull("googleCertificationInfo")).isTrue();
-        assertThat(content.isNull("webMailCertificationInfo")).isFalse();
+        assertThat(content.isNull("webMailCertificationInfo")).isFalse(); // completed certification
         assertThat(content.isNull("driverLicenseCertificationInfo")).isTrue();
-        assertThat(content.isNull("identityCardCertificationInfo")).isFalse();
+        assertThat(content.isNull("identityCardCertificationInfo")).isFalse(); // completed certification
     }
 
     @Test
