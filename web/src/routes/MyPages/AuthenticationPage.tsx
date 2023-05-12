@@ -9,7 +9,7 @@ import { getKakaoUserData } from '../../components/authlist/kakaoAuth';
 import Header from '../../components/Header';
 import { useTheme } from '../../hooks/useTheme';
 import { RootState } from '../../reducers';
-import { AuthConnect, AuthComplete } from '../../utils/authService';
+import { authConnect, authComplete } from '../../utils/authService';
 
 const rotate = keyframes`
   0% {
@@ -119,7 +119,7 @@ export default function AuthenticationPage() {
             </TextType>
             <Button
               theme={theme}
-              onClick={() => AuthComplete(checkAuthServiceTitle, surveyAuthState, dispatch, navigate)}
+              onClick={() => authComplete(checkAuthServiceTitle, surveyAuthState, dispatch, navigate)}
             >
               돌아가기
             </Button>
@@ -140,7 +140,7 @@ export default function AuthenticationPage() {
             {!connectService ? `${checkAuthServiceTitle}에서 인증을 완료해주세요.` : `인증 진행중 입니다.`}
           </TextType>
           {!connectService && (
-            <Button theme={theme} onClick={() => AuthConnect(checkAuthServiceTitle, setConnectService)}>
+            <Button theme={theme} onClick={() => authConnect(checkAuthServiceTitle, setConnectService)}>
               인증하기
             </Button>
           )}
