@@ -15,22 +15,26 @@ public class EnumTypeEntity {
      * {@link CertificationType} represents various types of certifications
      * that can be used for user certification.
      * The available certification types are
-     * KAKAO, NAVER, GOOGLE, WEBMAIL, DRIVER_LICENSE, IDENTITY_CARD.
+     * NONE, KAKAO, NAVER, GOOGLE, WEBMAIL, DRIVER_LICENSE, IDENTITY_CARD.
+     * The NONE type is used as the certificationType when creating a survey
+     * that do not require user certification.
      * {@code certificationTypeId} is the ID value that is saved in the database.
      */
     public enum CertificationType {
 
-        KAKAO(0),
+        NONE(0),
 
-        NAVER(1),
+        KAKAO(1),
 
-        GOOGLE(2),
+        NAVER(2),
 
-        WEBMAIL(3),
+        GOOGLE(3),
 
-        DRIVER_LICENSE(4),
+        WEBMAIL(4),
 
-        IDENTITY_CARD(5);
+        DRIVER_LICENSE(5),
+
+        IDENTITY_CARD(6);
 
         @Getter
         private final int certificationTypeId;

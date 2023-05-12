@@ -21,7 +21,7 @@ public class ParticipationId implements Serializable {
     /*
      * the value of id is set to the index of EnumTypeEntity.CertificationType.
      * the value of id : CertificationType
-     * 0: KAKAO, 1: NAVER, 2: GOOGLE, 3: WEBMAIL, 4: DRIVER_LICENSE, 5: IDENTITY_CARD
+     * 0: NONE, 1: KAKAO, 2: NAVER, 3: GOOGLE, 4: WEBMAIL, 5: DRIVER_LICENSE, 6: IDENTITY_CARD
      */
     @Column(name = "certification_type")
     private CertificationType certificationType;
