@@ -232,12 +232,12 @@ export default function SurveyCreateForm({ theme }: SurveyFormProps) {
 
   // Add and delete question and option
   const handleClickButton = (name: string, questionId?: number, optionId?: number) => {
-    if (typeof questionId !== 'undefined') {
-      if (name === 'addQuestion') addQuestionUnderId(questionId);
-      else if (name === 'deleteQuestion') deleteQuestionAtId(questionId);
-      else if (name === 'addOption') addOptionAtBottom(questionId);
-      else if (typeof optionId !== 'undefined') deleteOptionAtId(questionId, optionId);
-    }
+    if (typeof questionId === 'undefined') return;
+
+    if (name === 'addQuestion') addQuestionUnderId(questionId);
+    else if (name === 'deleteQuestion') deleteQuestionAtId(questionId);
+    else if (name === 'addOption') addOptionAtBottom(questionId);
+    else if (typeof optionId !== 'undefined') deleteOptionAtId(questionId, optionId);
   };
 
   return (
@@ -272,6 +272,7 @@ export default function SurveyCreateForm({ theme }: SurveyFormProps) {
           />
         </ItemContainer>
       ))}
+
       <ButtonContainer>
         <RectangleButton
           backgroundColor={theme.colors.primary}
