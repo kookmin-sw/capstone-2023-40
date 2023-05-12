@@ -8,6 +8,7 @@ import com.thesurvey.api.dto.request.answeredQuestion.AnsweredQuestionRequestDto
 import com.thesurvey.api.dto.request.question.QuestionOptionRequestDto;
 import com.thesurvey.api.dto.request.question.QuestionRequestDto;
 import com.thesurvey.api.dto.request.survey.SurveyRequestDto;
+import com.thesurvey.api.dto.request.user.UserCertificationUpdateRequestDto;
 import com.thesurvey.api.dto.request.user.UserLoginRequestDto;
 import com.thesurvey.api.dto.request.user.UserRegisterRequestDto;
 import com.thesurvey.api.dto.request.user.UserUpdateRequestDto;
@@ -88,6 +89,52 @@ public class UserControllerTest extends BaseControllerTest {
             new UsernamePasswordAuthenticationToken(userLoginRequestDto.getEmail(),
                 userLoginRequestDto.getPassword())
         );
+    }
+
+    @Test
+    void testGetUserCertifications() throws Exception {
+        MvcResult result = mockMvc.perform(get("/users/profile/auth-list")
+                .with(authentication(authentication)))
+            .andExpect(status().isOk())
+            .andReturn();
+        JSONObject content = new JSONObject(result.getResponse().getContentAsString());
+
+        assertThat(content.isNull("kakaoCertificationInfo")).isTrue();
+        assertThat(content.isNull("naverCertificationInfo")).isTrue();
+        assertThat(content.isNull("googleCertificationInfo")).isTrue();
+        assertThat(content.isNull("webMailCertificationInfo")).isTrue();
+        assertThat(content.isNull("driverLicenseCertificationInfo")).isTrue();
+        assertThat(content.isNull("identityCardCertificationInfo")).isTrue();
+    }
+
+    @Test
+    void testUpdateUserCertifications() throws Exception {
+        // given
+        UserCertificationUpdateRequestDto userCertificationUpdateRequestDto = UserCertificationUpdateRequestDto.builder()
+            .isKakaoCertificated(true)
+            .isNaverCertificated(true)
+            .isGoogleCertificated(false)
+            .isWebMailCertificated(true)
+            .isDriverLicenseCertificated(false)
+            .isIdentityCardCertificated(true)
+            .build();
+
+        // when
+        MvcResult result = mockMvc.perform(patch("/users/profile/authentications")
+                .with(authentication(authentication))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(userCertificationUpdateRequestDto)))
+            .andExpect(status().isOk())
+            .andReturn();
+
+        // then
+        JSONObject content = new JSONObject(result.getResponse().getContentAsString());
+        assertThat(content.isNull("kakaoCertificationInfo")).isFalse();
+        assertThat(content.isNull("naverCertificationInfo")).isFalse();
+        assertThat(content.isNull("googleCertificationInfo")).isTrue();
+        assertThat(content.isNull("webMailCertificationInfo")).isFalse();
+        assertThat(content.isNull("driverLicenseCertificationInfo")).isTrue();
+        assertThat(content.isNull("identityCardCertificationInfo")).isFalse();
     }
 
     @Test
@@ -188,7 +235,6 @@ public class UserControllerTest extends BaseControllerTest {
 
         AnsweredQuestionRequestDto answeredQuestionRequestDto = AnsweredQuestionRequestDto.builder()
             .surveyId(UUID.fromString(createdSurveyContent.get("surveyId").toString()))
-            .certificationTypes(List.of(CertificationType.GOOGLE))
             .answers(List.of(answeredQuestionDto))
             .build();
 
@@ -196,6 +242,22 @@ public class UserControllerTest extends BaseControllerTest {
             new UsernamePasswordAuthenticationToken(submitAnswerUserLoginRequestDto.getEmail(),
                 submitAnswerUserLoginRequestDto.getPassword())
         );
+
+        UserCertificationUpdateRequestDto userCertificationUpdateRequestDto = UserCertificationUpdateRequestDto.builder()
+            .isKakaoCertificated(true)
+            .isNaverCertificated(true)
+            .isGoogleCertificated(true)
+            .isWebMailCertificated(true)
+            .isDriverLicenseCertificated(false)
+            .isIdentityCardCertificated(true)
+            .build();
+
+        mockMvc.perform(patch("/users/profile/authentications")
+                .with(authentication(submitUserAuthentication))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(userCertificationUpdateRequestDto)))
+            .andExpect(status().isOk());
+
         mockMvc.perform(post("/surveys/submit")
                 .with(authentication(submitUserAuthentication))
                 .contentType(MediaType.APPLICATION_JSON)

@@ -1,5 +1,7 @@
 package com.thesurvey.api.controller;
 
+import com.thesurvey.api.dto.request.user.UserCertificationUpdateRequestDto;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -246,9 +248,23 @@ public class SurveyControllerTest extends BaseControllerTest {
             .build();
         AnsweredQuestionRequestDto answeredQuestionRequestDto = AnsweredQuestionRequestDto.builder()
             .surveyId(UUID.fromString(mockSurvey.get("surveyId").toString()))
-            .certificationTypes(List.of(CertificationType.GOOGLE))
             .answers(List.of(answeredQuestionDto))
             .build();
+
+        UserCertificationUpdateRequestDto userCertificationUpdateRequestDto = UserCertificationUpdateRequestDto.builder()
+            .isKakaoCertificated(true)
+            .isNaverCertificated(true)
+            .isGoogleCertificated(true)
+            .isWebMailCertificated(true)
+            .isDriverLicenseCertificated(true)
+            .isIdentityCardCertificated(true)
+            .build();
+
+        mockMvc.perform(patch("/users/profile/authentications")
+                .with(authentication(authentication))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(userCertificationUpdateRequestDto)))
+            .andExpect(status().isOk());
 
         // when
         mockMvc.perform(post("/surveys/submit")
