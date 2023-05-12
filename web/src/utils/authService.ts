@@ -1,8 +1,6 @@
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import { KAKAO_AUTH_URL } from '../components/authlist/kakaoAuth';
-import { NAVER_AUTH_URL } from '../components/authlist/naverAuth';
 import {
   setAuthKakao,
   setAuthGoogle,
@@ -14,6 +12,8 @@ import {
   setAuthService,
   setSuccessAuth,
 } from '../types/surveyAuth';
+import { KAKAO_AUTH_URL } from './authlist/kakaoAuth';
+import { NAVER_AUTH_URL } from './authlist/naverAuth';
 
 // FIXME: 다른 사용자 인증 과정 추가 구현하기.
 export const authConnect = (checkAuthServiceTitle: string, setConnectService: any) => {

@@ -5,10 +5,10 @@ import { useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 
 import { Icons } from '../../assets/svg/index';
-import { getKakaoUserData } from '../../components/authlist/kakaoAuth';
 import Header from '../../components/Header';
 import { useTheme } from '../../hooks/useTheme';
 import { RootState } from '../../reducers';
+import { getKakaoUserData } from '../../utils/authlist/kakaoAuth';
 import { authConnect, authComplete } from '../../utils/authService';
 
 const rotate = keyframes`
