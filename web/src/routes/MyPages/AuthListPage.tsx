@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -8,7 +8,7 @@ import { Icons } from '../../assets/svg/index';
 import Header from '../../components/Header';
 import { useTheme } from '../../hooks/useTheme';
 import { RootState } from '../../reducers';
-import { SurveyAuthState } from '../../types/surveyAuth';
+import { setAuthService } from '../../types/surveyAuth';
 
 const KakaoImage = styled(Icons.KAKAO).attrs({
   width: 30,
@@ -149,21 +149,12 @@ const TextType = styled.span`
   text-overflow: ellipsis;
 `;
 
-const initialState: SurveyAuthState = {
-  kakao: false,
-  naver: false,
-  google: false,
-  identityCard: false,
-  driverLicense: false,
-  webmail: false,
-};
-
-export default function MyPage() {
+export default function AuthListPage() {
   const [theme, toggleTheme] = useTheme();
   const navigate = useNavigate();
   const surveyAuthState = useSelector((state: RootState) => state.surveyAuth);
+  const dispatch = useDispatch();
 
-  // FIXME: To API data
   const surveyAuthList = [
     {
       number: 1,
@@ -204,7 +195,9 @@ export default function MyPage() {
     },
   ];
 
+  // 인증서비스 확인 및 변경
   const handleClick = (title: string) => {
+    dispatch(setAuthService(title));
     navigate('../mypage/authentication', { state: { title } });
   };
 

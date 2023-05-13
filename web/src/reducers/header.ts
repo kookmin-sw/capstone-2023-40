@@ -1,31 +1,13 @@
-const SET_LOGGED_IN = 'SET_LOGGED_IN' as const;
-const SETSUBPAGE = 'SETSUBPAGE' as const;
+import { HeaderState, HeaderAction } from '../types/header';
 
-export const setLoggedIn = (payload: boolean) => ({
-  type: SET_LOGGED_IN,
-  payload: !payload,
-});
-
-export const setSubPageOpen = (payload: boolean) => ({
-  type: SETSUBPAGE,
-  payload: !payload,
-});
-
-export type HeaderAction = ReturnType<typeof setLoggedIn> | ReturnType<typeof setSubPageOpen>;
-
-export const initialAction: HeaderAction = {
-  type: 'SETSUBPAGE',
-  payload: false,
-};
-
-export interface HeaderState {
-  isLoggedIn: boolean;
-  isSubPageOpen: boolean;
-}
-
-export const initialState: HeaderState = {
+const initialState: HeaderState = {
   isLoggedIn: false,
   isSubPageOpen: false,
+};
+
+const initialAction: HeaderAction = {
+  type: 'SETSUBPAGE',
+  payload: false,
 };
 
 /**

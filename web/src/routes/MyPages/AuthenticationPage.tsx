@@ -1,22 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 
 import { Icons } from '../../assets/svg/index';
 import Header from '../../components/Header';
 import { useTheme } from '../../hooks/useTheme';
 import { RootState } from '../../reducers';
-import {
-  setAuthKakao,
-  setAuthGoogle,
-  setAuthNaver,
-  setAuthDriver,
-  setAuthIdentity,
-  setAuthWebMail,
-} from '../../types/surveyAuth';
+import { getKakaoUserData } from '../../utils/authlist/kakaoAuth';
+import { authConnect, authComplete } from '../../utils/authService';
 
 const rotate = keyframes`
   0% {
@@ -97,48 +90,37 @@ const Button = styled.button`
 export default function AuthenticationPage() {
   const [theme, toggleTheme] = useTheme();
   const navigate = useNavigate();
-  const [completeAuth, setCompleteAuth] = useState<boolean>(false);
+  const [connectService, setConnectService] = useState(false);
   const surveyAuthState = useSelector((state: RootState) => state.surveyAuth);
-  const location = useLocation();
   const dispatch = useDispatch();
-  const state = { ...location.state };
+  const username = useSelector((state: RootState) => state.userInformation.name);
+  const completeAuthState = surveyAuthState.checkCompleteAuth;
+  const checkAuthServiceTitle = surveyAuthState.checkAuthService;
+  const urlParams = new URLSearchParams(window.location.search);
+  const authCode = urlParams.get('code');
 
-  const handleSummit = () => {};
-
-  const handleClick = (title: string) => {
-    switch (title) {
-      case '카카오':
-        dispatch(setAuthKakao(!surveyAuthState.kakao));
-        break;
-      case '네이버':
-        dispatch(setAuthNaver(!surveyAuthState.naver));
-        break;
-      case '구글':
-        dispatch(setAuthGoogle(!surveyAuthState.google));
-        break;
-      case '신분증':
-        dispatch(setAuthIdentity(!surveyAuthState.identityCard));
-        break;
-      case '운전면허':
-        dispatch(setAuthDriver(!surveyAuthState.driverLicense));
-        break;
-      case '웹메일':
-        dispatch(setAuthWebMail(!surveyAuthState.webmail));
-        break;
-      default:
-        break;
+  // 인가 코드가 오면 인증 상태 변경.
+  useEffect(() => {
+    if (authCode !== null) {
+      // FIXME: 추가 인증방식을 도입할때 리팩토링 할 것.
+      getKakaoUserData(authCode, username, dispatch);
     }
-    navigate('../mypage/auth-list');
-  };
+  }, [authCode]);
 
-  if (completeAuth) {
+  // 인증 완료 상태(completeAuthState)일 때, 인증 성공여부(checkSuccessAuth) 판별.
+  if (completeAuthState) {
     return (
       <Container theme={theme}>
         <Header theme={theme} toggleTheme={toggleTheme} />
         <AuthenticationContainer theme={theme}>
           <Form>
-            <TextType theme={theme}>{state.title} 인증이 완료되었습니다!</TextType>
-            <Button theme={theme} onClick={() => handleClick(state.title)}>
+            <TextType theme={theme}>
+              {!surveyAuthState.checkSuccessAuth ? `사용자 인증에 실패했습니다` : `인증이 완료되었습니다!`}!
+            </TextType>
+            <Button
+              theme={theme}
+              onClick={() => authComplete(checkAuthServiceTitle, surveyAuthState, dispatch, navigate)}
+            >
               돌아가기
             </Button>
           </Form>
@@ -146,7 +128,6 @@ export default function AuthenticationPage() {
       </Container>
     );
   }
-
   return (
     <Container theme={theme}>
       <Header theme={theme} toggleTheme={toggleTheme} />
@@ -155,7 +136,14 @@ export default function AuthenticationPage() {
           <LoadingImage>
             <circle cx="50" cy="50" r="50" />
           </LoadingImage>
-          <TextType theme={theme}>{state.title}에서 인증을 완료해주세요.</TextType>
+          <TextType theme={theme}>
+            {!connectService ? `${checkAuthServiceTitle}에서 인증을 완료해주세요.` : `인증 진행중 입니다.`}
+          </TextType>
+          {!connectService && (
+            <Button theme={theme} onClick={() => authConnect(checkAuthServiceTitle, setConnectService)}>
+              인증하기
+            </Button>
+          )}
         </Form>
       </AuthenticationContainer>
     </Container>
