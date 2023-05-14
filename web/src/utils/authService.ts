@@ -92,13 +92,14 @@ export const authComplete = async (
     naverState,
     googleState,
     webmailState,
-    identityCardState,
     driverLicenseState,
+    identityCardState,
   };
+  console.log(updateAuthListBody);
   const res = await axios.patch<UserAuthListUpdateRequest>(requests.updateUserAuthList, updateAuthListBody);
+  console.log(res.data);
   if (res.status === 200) {
     console.log('getUserData Success!');
-    console.log(res.data);
   } else if (res.status === 401) {
     console.log('failed to get userdata');
   }
