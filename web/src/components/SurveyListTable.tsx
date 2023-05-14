@@ -109,6 +109,7 @@ const Label = styled.label`
 
 interface SurveyListTableProps {
   surveys: SurveyAbstractResponse[];
+  errorResponse: string;
   setSelectedSurveyIndex: (arg: number) => void;
   setPreviewModalOpen: (arg: boolean) => void;
   theme: DefaultTheme;
@@ -116,6 +117,7 @@ interface SurveyListTableProps {
 
 export default function SurveyListTable({
   surveys,
+  errorResponse,
   setSelectedSurveyIndex,
   setPreviewModalOpen,
   theme,
@@ -127,7 +129,7 @@ export default function SurveyListTable({
     setPreviewModalOpen(true);
   };
 
-  if (surveys.length === 0) {
+  if (errorResponse === '존재하지 않는 페이지입니다.') {
     return (
       <Notification theme={theme}>
         <Label theme={theme}>😥 참여가능한 설문이 없습니다...</Label>
