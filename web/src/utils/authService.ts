@@ -80,8 +80,21 @@ export const authComplete = async (
   dispatch(setAuthService(''));
   navigate('../mypage/auth-list');
 
-  console.log(surveyAuthState);
-  const updateAuthListBody = { surveyAuthState };
+  const kakaoState = surveyAuthState.kakao;
+  const naverState = surveyAuthState.naver;
+  const googleState = surveyAuthState.google;
+  const webmailState = surveyAuthState.webmail;
+  const identityCardState = surveyAuthState.identityCard;
+  const driverLicenseState = surveyAuthState.driverLicense;
+
+  const updateAuthListBody = {
+    kakaoState,
+    naverState,
+    googleState,
+    webmailState,
+    identityCardState,
+    driverLicenseState,
+  };
   const res = await axios.patch<UserAuthListUpdateRequest>(requests.updateUserAuthList, updateAuthListBody);
   if (res.status === 200) {
     console.log('getUserData Success!');
