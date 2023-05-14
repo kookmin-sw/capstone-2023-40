@@ -1,49 +1,34 @@
 package com.thesurvey.api.controller;
 
-import com.thesurvey.api.dto.request.user.UserCertificationUpdateRequestDto;
-
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.UUID;
-
 import com.thesurvey.api.domain.AnsweredQuestion;
-import com.thesurvey.api.dto.request.answeredQuestion.AnsweredQuestionDto;
-import com.thesurvey.api.dto.request.answeredQuestion.AnsweredQuestionRequestDto;
-import com.thesurvey.api.service.AnsweredQuestionService;
 import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
 import com.thesurvey.api.domain.EnumTypeEntity.QuestionType;
+import com.thesurvey.api.dto.request.answeredQuestion.AnsweredQuestionDto;
+import com.thesurvey.api.dto.request.answeredQuestion.AnsweredQuestionRequestDto;
 import com.thesurvey.api.dto.request.question.QuestionBankUpdateRequestDto;
 import com.thesurvey.api.dto.request.question.QuestionOptionRequestDto;
 import com.thesurvey.api.dto.request.question.QuestionOptionUpdateRequestDto;
 import com.thesurvey.api.dto.request.question.QuestionRequestDto;
 import com.thesurvey.api.dto.request.survey.SurveyRequestDto;
 import com.thesurvey.api.dto.request.survey.SurveyUpdateRequestDto;
+import com.thesurvey.api.dto.request.user.UserCertificationUpdateRequestDto;
 import com.thesurvey.api.dto.request.user.UserLoginRequestDto;
 import com.thesurvey.api.dto.request.user.UserRegisterRequestDto;
-import com.thesurvey.api.repository.ParticipationRepository;
-import com.thesurvey.api.repository.QuestionBankRepository;
-import com.thesurvey.api.repository.QuestionOptionRepository;
-import com.thesurvey.api.repository.QuestionRepository;
-import com.thesurvey.api.repository.SurveyRepository;
-import com.thesurvey.api.repository.UserRepository;
+import com.thesurvey.api.repository.*;
+import com.thesurvey.api.service.AnsweredQuestionService;
 import com.thesurvey.api.service.AuthenticationService;
 import com.thesurvey.api.service.SurveyService;
 import com.thesurvey.api.service.mapper.QuestionBankMapper;
 import com.thesurvey.api.service.mapper.QuestionMapper;
 import com.thesurvey.api.service.mapper.SurveyMapper;
 import com.thesurvey.api.util.UserUtil;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -56,12 +41,15 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.UUID;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -261,7 +249,7 @@ public class SurveyControllerTest extends BaseControllerTest {
             .isIdentityCardCertificated(true)
             .build();
 
-        mockMvc.perform(patch("/users/profile/authentications")
+        mockMvc.perform(patch("/users/profile/certifications")
                 .with(authentication(authentication))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(userCertificationUpdateRequestDto)))
