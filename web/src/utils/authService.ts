@@ -1,6 +1,9 @@
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
+import axios from '../api/axios';
+import { requests } from '../api/request';
+import { UserAuthListUpdateRequest } from '../types/request';
 import {
   setAuthKakao,
   setAuthGoogle,
@@ -40,7 +43,7 @@ export const authConnect = (checkAuthServiceTitle: string, setConnectService: an
 };
 
 // 사용자 정보 조회가 일치하면 인증성공(완료) => 인증여부 변경.
-export const authComplete = (
+export const authComplete = async (
   checkAuthServiceTitle: string,
   surveyAuthState: any,
   dispatch = useDispatch(),
@@ -76,4 +79,14 @@ export const authComplete = (
   dispatch(setSuccessAuth(false));
   dispatch(setAuthService(''));
   navigate('../mypage/auth-list');
+
+  console.log(surveyAuthState);
+  const updateAuthListBody = { surveyAuthState };
+  const res = await axios.patch<UserAuthListUpdateRequest>(requests.updateUserAuthList, updateAuthListBody);
+  if (res.status === 200) {
+    console.log('getUserData Success!');
+    console.log(res.data);
+  } else if (res.status === 401) {
+    console.log('failed to get userdata');
+  }
 };
