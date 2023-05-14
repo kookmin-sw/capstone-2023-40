@@ -4,11 +4,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
+import axios from '../../api/axios';
+import { requests } from '../../api/request';
 import { Icons } from '../../assets/svg/index';
 import Header from '../../components/Header';
 import { AlertModal } from '../../components/Modal';
 import { useTheme } from '../../hooks/useTheme';
 import { RootState } from '../../reducers';
+import { UserResponse } from '../../types/response/User';
 import { validatePassword, validatePhoneNumber } from '../../utils/validate';
 
 const PencilImage = styled(Icons.PENCIL).attrs({
@@ -207,10 +210,6 @@ export default function MyPage() {
     }
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-  };
-
   const closeAlertModal = () => {
     setShowAlertModal(false);
   };
@@ -271,7 +270,7 @@ export default function MyPage() {
     <Container theme={theme}>
       <Header theme={theme} toggleTheme={toggleTheme} />
       <MypageContainer theme={theme}>
-        <Form onSubmit={handleSubmit}>
+        <Form>
           <MyPageTitle theme={theme}>마이페이지</MyPageTitle>
           {showAlertModal && (
             <AlertModal

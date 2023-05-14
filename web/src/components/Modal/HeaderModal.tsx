@@ -4,9 +4,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
 
+import axios from '../../api/axios';
+import { requests } from '../../api/request';
 import { useOnClickOutside } from '../../hooks/useOnClickOutside';
 import { RootState } from '../../reducers';
 import { setLoggedIn, setSubPageOpen } from '../../types/header';
+import { UserResponse } from '../../types/response/User';
 import { clearUserInformation } from '../../utils/UserUtils';
 
 const SubPageContainer = styled.div`
@@ -62,9 +65,17 @@ export default function Header({ theme }: HeaderProps) {
     navigate('../../../');
   };
 
-  const navigateMypage = () => {
+  const navigateMypage = async () => {
     navigate('../../../mypage');
     dispatch(setSubPageOpen(!isSubPageOpen));
+
+    const res = await axios.get<UserResponse>(requests.getUserProfile);
+    if (res.status === 200) {
+      console.log('getUserData Success!');
+      console.log(res.data);
+    } else if (res.status === 401) {
+      console.log('failed to get userdata');
+    }
   };
 
   const subPageRef = useRef<HTMLDivElement>(null);

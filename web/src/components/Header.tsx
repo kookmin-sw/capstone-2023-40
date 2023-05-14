@@ -228,6 +228,7 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
 
   // FIXME: Update user information value [ password, phoneNumber, address, profileImage ]
   const updateUserInformation = async () => {
+    console.log(1);
     const profileUpdateBody = { password, phoneNumber, address, profileImage };
     const res = await axios.patch<UserUpdateRequest>(requests.updateUserProfile, profileUpdateBody);
     if (res.status === 200) {
@@ -268,7 +269,7 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
           </CheckBoxWrapper>
 
           {currentLocation === '/mypage' || currentLocation === '/mypage/' ? (
-            <CustomButton theme={theme} onClick={() => navigate('../mypage')}>
+            <CustomButton theme={theme} onClick={updateUserInformation}>
               개인정보 저장하기
             </CustomButton>
           ) : undefined}
