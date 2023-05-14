@@ -19,6 +19,8 @@ const Container = styled.div`
   background-color: ${(props) => props.theme.colors.container};
 `;
 
+const ListContainer = styled.div``;
+
 export default function SurveyListPage() {
   const [theme, toggleTheme] = useTheme();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -28,6 +30,7 @@ export default function SurveyListPage() {
   const [totalPages, setTotalPages] = useState<number>(0);
   const [previewModalOpen, setPreviewModalOpen] = useState<boolean>(false);
   const [selectedSurveyIndex, setSelectedSurveyIndex] = useState<number>(0);
+  const [errorResponse, setErrorResponse] = useState<string>('');
 
   const fetchSurveyList = async (abortSignal: AbortSignal): Promise<void> => {
     setIsLoading(true);
@@ -41,7 +44,10 @@ export default function SurveyListPage() {
       setTotalPages(request.data.totalPages);
       setIsLoading(false);
     } catch (error) {
-      const { name } = error as unknown as AxiosError;
+      const { name, response } = error as unknown as AxiosError;
+
+      setErrorResponse((response?.data as string) || '');
+
       if (name !== 'CanceledError') {
         setSurveys([]);
         setIsLoading(false);
@@ -64,24 +70,24 @@ export default function SurveyListPage() {
       <Header theme={theme} toggleTheme={toggleTheme} />
 
       {isLoading ? (
-        <SurveyListSkeleton numOfSurveyRow={10} theme={theme} />
+        <SurveyListSkeleton numOfSurveyRow={8} theme={theme} />
       ) : (
-        <SurveyListTable
-          theme={theme}
-          surveys={surveys}
-          setSelectedSurveyIndex={setSelectedSurveyIndex}
-          setPreviewModalOpen={setPreviewModalOpen}
-        />
-      )}
-
-      {!isLoading && surveys.length !== 0 && (
-        <Pagination
-          currentPage={page}
-          numOfTotalPage={totalPages}
-          numOfPageToShow={5}
-          setPage={setPage}
-          theme={theme}
-        />
+        <ListContainer>
+          <SurveyListTable
+            theme={theme}
+            surveys={surveys}
+            setSelectedSurveyIndex={setSelectedSurveyIndex}
+            setPreviewModalOpen={setPreviewModalOpen}
+            errorResponse={errorResponse}
+          />
+          <Pagination
+            currentPage={page}
+            numOfTotalPage={totalPages}
+            numOfPageToShow={5}
+            setPage={setPage}
+            theme={theme}
+          />
+        </ListContainer>
       )}
 
       {previewModalOpen && (
