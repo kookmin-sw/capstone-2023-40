@@ -11,7 +11,7 @@ import Header from '../../components/Header';
 import { AlertModal } from '../../components/Modal';
 import { useTheme } from '../../hooks/useTheme';
 import { RootState } from '../../reducers';
-import { UserResponse } from '../../types/response/User';
+import { UserAuthListResponse, UserResponse } from '../../types/response/User';
 import { validatePassword, validatePhoneNumber } from '../../utils/validate';
 
 const PencilImage = styled(Icons.PENCIL).attrs({
@@ -210,6 +210,18 @@ export default function MyPage() {
     }
   };
 
+  const navigateAuthList = async () => {
+    navigate('../mypage/auth-list');
+
+    const res = await axios.get<UserAuthListResponse>(requests.getUserAuthList);
+    if (res.status === 200) {
+      console.log('getUserData Success!');
+      console.log(res.data);
+    } else if (res.status === 401) {
+      console.log('failed to get userdata');
+    }
+  };
+
   const closeAlertModal = () => {
     setShowAlertModal(false);
   };
@@ -310,7 +322,7 @@ export default function MyPage() {
           ))}
           <ContainerBox style={{ marginTop: '10vh' }}>
             <ReplacePagetext theme={theme}>인증정보 목록</ReplacePagetext>
-            <ArrowImage theme={theme} onClick={() => navigate('../mypage/auth-list')} />
+            <ArrowImage theme={theme} onClick={navigateAuthList} />
           </ContainerBox>
 
           <ContainerBox style={{ marginTop: '20px' }}>
