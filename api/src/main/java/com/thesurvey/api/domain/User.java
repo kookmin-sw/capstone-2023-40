@@ -63,6 +63,13 @@ public class User extends BaseTimeEntity implements UserDetails {
         cascade = CascadeType.ALL,
         orphanRemoval = true
     )
+    private List<UserCertification> userCertifications;
+
+    @OneToMany(
+        mappedBy = "user",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+    )
     private List<PointHistory> pointHistories;
 
     /**
@@ -106,11 +113,13 @@ public class User extends BaseTimeEntity implements UserDetails {
 
     @Builder
     public User(List<Participation> participations, List<AnsweredQuestion> answeredQuestions,
-        List<PointHistory> pointHistories, String email, String name, String password,
+        List<UserCertification> userCertification,
+        List<PointHistory>pointHistories, String email, String name, String password,
         String phoneNumber, String address, String profileImage) {
         this.participations = participations;
         this.answeredQuestions = answeredQuestions;
         this.pointHistories = pointHistories;
+        this.userCertifications = userCertification;
         this.email = email;
         this.name = name;
         this.password = password;

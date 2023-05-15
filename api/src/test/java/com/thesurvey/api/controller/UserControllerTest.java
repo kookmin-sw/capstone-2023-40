@@ -8,6 +8,7 @@ import com.thesurvey.api.dto.request.answeredQuestion.AnsweredQuestionRequestDto
 import com.thesurvey.api.dto.request.question.QuestionOptionRequestDto;
 import com.thesurvey.api.dto.request.question.QuestionRequestDto;
 import com.thesurvey.api.dto.request.survey.SurveyRequestDto;
+import com.thesurvey.api.dto.request.user.UserCertificationUpdateRequestDto;
 import com.thesurvey.api.dto.request.user.UserLoginRequestDto;
 import com.thesurvey.api.dto.request.user.UserRegisterRequestDto;
 import com.thesurvey.api.dto.request.user.UserUpdateRequestDto;
@@ -15,12 +16,6 @@ import com.thesurvey.api.repository.UserRepository;
 import com.thesurvey.api.service.AuthenticationService;
 import com.thesurvey.api.service.UserService;
 import com.thesurvey.api.util.UserUtil;
-
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.List;
-import java.util.UUID;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeAll;
@@ -28,7 +23,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -39,12 +33,14 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.List;
+import java.util.UUID;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -88,6 +84,52 @@ public class UserControllerTest extends BaseControllerTest {
             new UsernamePasswordAuthenticationToken(userLoginRequestDto.getEmail(),
                 userLoginRequestDto.getPassword())
         );
+    }
+
+    @Test
+    void testGetUserCertifications() throws Exception {
+        MvcResult result = mockMvc.perform(get("/users/profile/certifications")
+                .with(authentication(authentication)))
+            .andExpect(status().isOk())
+            .andReturn();
+        JSONObject content = new JSONObject(result.getResponse().getContentAsString());
+
+        assertThat(content.isNull("kakaoCertificationInfo")).isTrue();
+        assertThat(content.isNull("naverCertificationInfo")).isTrue();
+        assertThat(content.isNull("googleCertificationInfo")).isTrue();
+        assertThat(content.isNull("webMailCertificationInfo")).isTrue();
+        assertThat(content.isNull("driverLicenseCertificationInfo")).isTrue();
+        assertThat(content.isNull("identityCardCertificationInfo")).isTrue();
+    }
+
+    @Test
+    void testUpdateUserCertifications() throws Exception {
+        // given
+        UserCertificationUpdateRequestDto userCertificationUpdateRequestDto = UserCertificationUpdateRequestDto.builder()
+            .isKakaoCertificated(true)
+            .isNaverCertificated(true)
+            .isGoogleCertificated(false)
+            .isWebMailCertificated(true)
+            .isDriverLicenseCertificated(false)
+            .isIdentityCardCertificated(true)
+            .build();
+
+        // when
+        MvcResult result = mockMvc.perform(patch("/users/profile/certifications")
+                .with(authentication(authentication))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(userCertificationUpdateRequestDto)))
+            .andExpect(status().isOk())
+            .andReturn();
+
+        // then
+        JSONObject content = new JSONObject(result.getResponse().getContentAsString());
+        assertThat(content.isNull("kakaoCertificationInfo")).isFalse(); // completed certification
+        assertThat(content.isNull("naverCertificationInfo")).isFalse(); // completed certification
+        assertThat(content.isNull("googleCertificationInfo")).isTrue();
+        assertThat(content.isNull("webMailCertificationInfo")).isFalse(); // completed certification
+        assertThat(content.isNull("driverLicenseCertificationInfo")).isTrue();
+        assertThat(content.isNull("identityCardCertificationInfo")).isFalse(); // completed certification
     }
 
     @Test
@@ -188,7 +230,6 @@ public class UserControllerTest extends BaseControllerTest {
 
         AnsweredQuestionRequestDto answeredQuestionRequestDto = AnsweredQuestionRequestDto.builder()
             .surveyId(UUID.fromString(createdSurveyContent.get("surveyId").toString()))
-            .certificationTypes(List.of(CertificationType.GOOGLE))
             .answers(List.of(answeredQuestionDto))
             .build();
 
@@ -196,6 +237,22 @@ public class UserControllerTest extends BaseControllerTest {
             new UsernamePasswordAuthenticationToken(submitAnswerUserLoginRequestDto.getEmail(),
                 submitAnswerUserLoginRequestDto.getPassword())
         );
+
+        UserCertificationUpdateRequestDto userCertificationUpdateRequestDto = UserCertificationUpdateRequestDto.builder()
+            .isKakaoCertificated(true)
+            .isNaverCertificated(true)
+            .isGoogleCertificated(true)
+            .isWebMailCertificated(true)
+            .isDriverLicenseCertificated(false)
+            .isIdentityCardCertificated(true)
+            .build();
+
+        mockMvc.perform(patch("/users/profile/certifications")
+                .with(authentication(submitUserAuthentication))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(userCertificationUpdateRequestDto)))
+            .andExpect(status().isOk());
+
         mockMvc.perform(post("/surveys/submit")
                 .with(authentication(submitUserAuthentication))
                 .contentType(MediaType.APPLICATION_JSON)
