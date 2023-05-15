@@ -20,12 +20,12 @@ public interface SurveyRepository extends JpaRepository<Survey, UUID> {
     @Query("SELECT s FROM Survey s ORDER BY s.createdDate DESC")
     Page<Survey> findAllInDescendingOrder(Pageable pageable);
 
-    @Query("SELECT p.certificationType FROM Participation p WHERE p.survey.surveyId = :survey_id")
-    List<Integer> findCertificationTypeBySurveyId(@Param("survey_id") UUID surveyId);
+    @Query("SELECT p.certificationType FROM Participation p WHERE p.survey.surveyId = :surveyId AND p.user.userId = :authorId")
+    List<Integer> findCertificationTypeBySurveyIdAndAuthorId(@Param("surveyId") UUID surveyId, @Param("authorId") Long authorId);
 
     Optional<Survey> findBySurveyId(UUID surveyId);
 
-    @Query("SELECT new com.thesurvey.api.dto.response.user.UserSurveyTitleDto(s.surveyId, s.title) FROM Survey s WHERE s.authorId = :author_id ORDER BY s.createdDate DESC")
-    List<UserSurveyTitleDto> findUserCreatedSurveysByAuthorID(@Param("author_id") Long authorId);
+    @Query("SELECT new com.thesurvey.api.dto.response.user.UserSurveyTitleDto(s.surveyId, s.title) FROM Survey s WHERE s.authorId = :authorId ORDER BY s.createdDate DESC")
+    List<UserSurveyTitleDto> findUserCreatedSurveysByAuthorID(@Param("authorId") Long authorId);
 
 }
