@@ -2,12 +2,12 @@ import React from 'react';
 
 import { QueryFunctionContext, useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import axios from '../../api/axios';
 import { requests } from '../../api/request';
-import RectangleButton from '../../components/Button/RectangleButton';
+import ErrorPage from '../../components/ErrorPage';
 import Header from '../../components/Header';
 import SurveyPageSkeleton from '../../components/Skeleton/SurveyPageSkeleton';
 import SurveyParticipateForm from '../../components/SurveyParticipateForm/SurveyParticipateForm';
@@ -20,26 +20,6 @@ const Container = styled.div`
   background-color: ${(props) => props.theme.colors.container};
 `;
 
-const Notification = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  margin-top: 35vh;
-  padding: 10px;
-`;
-
-const Label = styled.label`
-  font-size: 50px;
-  font-weight: 700;
-  color: ${(props) => props.theme.colors.default};
-  text-align: center;
-
-  @media screen and (max-width: 700px) {
-    font-size: 30px;
-  }
-`;
-
 const fetchSurveyData = async ({ queryKey }: QueryFunctionContext) => {
   const { data } = await axios.get<SurveyResponse>(requests.getSurvey + queryKey[1]);
 
@@ -50,7 +30,6 @@ const fetchSurveyData = async ({ queryKey }: QueryFunctionContext) => {
 export default function SurveyPage() {
   const { id } = useParams();
   const [theme, toggleTheme] = useTheme();
-  const navigate = useNavigate();
 
   // FIXME: cacheTime and staleTime is appropriate?
   const { data, isLoading, isError, error } = useQuery<SurveyResponse>(['survey', id], fetchSurveyData, {
@@ -65,21 +44,13 @@ export default function SurveyPage() {
     const { response } = error as AxiosError;
 
     return (
-      <Container theme={theme}>
-        <Header theme={theme} toggleTheme={toggleTheme} />
-        <Notification theme={theme}>
-          <Label theme={theme}>😥 잘못된 설문 입니다...</Label>
-          <br />
-          <RectangleButton
-            text="설문 리스트로 돌아가기"
-            width="250px"
-            backgroundColor={theme.colors.primary}
-            hoverColor={theme.colors.prhover}
-            handleClick={() => navigate('/survey')}
-            theme={theme}
-          />
-        </Notification>
-      </Container>
+      <ErrorPage
+        labelText="😥 잘못된 설문 입니다..."
+        buttonText="설문 리스트로 돌아가기"
+        navigateRoute="/survey"
+        theme={theme}
+        toggleTheme={toggleTheme}
+      />
     );
   }
 
