@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
-import { AxiosError, AxiosResponse } from 'axios';
+import { QueryFunctionContext, useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -18,35 +18,27 @@ const Container = styled.div`
   background-color: ${(props) => props.theme.colors.container};
 `;
 
+const fetchSurveyData = async ({ queryKey }: QueryFunctionContext) => {
+  const { data } = await axios.get<SurveyResponse>(requests.getSurvey + queryKey[1]);
+
+  return data;
+};
+
 // TODO: disable submit button after click
 export default function SurveyPage() {
   const { id } = useParams();
   const [theme, toggleTheme] = useTheme();
-  const [surveyData, setSurveyData] = useState<SurveyResponse>();
 
-  const fetchSurveyData = async () => {
-    try {
-      const request: AxiosResponse<SurveyResponse> = await axios.get<SurveyResponse>(requests.getSurvey + id);
-
-      setSurveyData(request.data);
-    } catch (error) {
-      const { name } = error as unknown as AxiosError;
-      // TODO: handle error while fetching data
-    }
-  };
-
-  useEffect(() => {
-    fetchSurveyData();
-  }, []);
+  // FIXME: cacheTime and staleTime is appropriate?
+  const { data, isLoading, isFetching } = useQuery<SurveyResponse>(['survey', id], fetchSurveyData, {
+    cacheTime: 3000,
+    staleTime: 60000,
+  });
 
   return (
     <Container theme={theme}>
       <Header theme={theme} toggleTheme={toggleTheme} />
-      {typeof surveyData === 'undefined' ? (
-        <SurveyPageSkeleton theme={theme} />
-      ) : (
-        <SurveyParticipateForm surveyData={surveyData} theme={theme} />
-      )}
+      {isLoading ? <SurveyPageSkeleton theme={theme} /> : <SurveyParticipateForm surveyData={data!} theme={theme} />}
     </Container>
   );
 }
