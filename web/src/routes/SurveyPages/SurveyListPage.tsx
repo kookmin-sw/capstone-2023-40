@@ -40,7 +40,7 @@ export default function SurveyListPage() {
     // TODO: 에러 종류에 따라서 다른 알림 표시
     const { response } = error as AxiosError;
 
-    if (response!.data === '존재하지 않는 페이지입니다.') {
+    if (response?.data === '존재하지 않는 페이지입니다.') {
       return (
         <ErrorPage
           labelText="😥 참여가능한 설문이 없습니다..."
