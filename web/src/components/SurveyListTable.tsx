@@ -1,11 +1,9 @@
 import React from 'react';
 
-import { useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
 
 import { SurveyAbstractResponse } from '../types/response/Survey';
 import { dateFormatUpToMinute } from '../utils/dateFormat';
-import RectangleButton from './Button/RectangleButton';
 import CertificationIconList from './CertificationIconList';
 
 const ListTable = styled.table`
@@ -87,29 +85,8 @@ const HeadEndDate = styled(HeadItem)`
   }
 `;
 
-const Notification = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  margin-top: 35vh;
-  padding: 10px;
-`;
-
-const Label = styled.label`
-  font-size: 50px;
-  font-weight: 700;
-  color: ${(props) => props.theme.colors.default};
-  text-align: center;
-
-  @media screen and (max-width: 700px) {
-    font-size: 30px;
-  }
-`;
-
 interface SurveyListTableProps {
   surveys: SurveyAbstractResponse[];
-  errorResponse: string;
   setSelectedSurveyIndex: (arg: number) => void;
   setPreviewModalOpen: (arg: boolean) => void;
   theme: DefaultTheme;
@@ -117,34 +94,14 @@ interface SurveyListTableProps {
 
 export default function SurveyListTable({
   surveys,
-  errorResponse,
   setSelectedSurveyIndex,
   setPreviewModalOpen,
   theme,
 }: SurveyListTableProps) {
-  const navigate = useNavigate();
-
   const handleButtonClick = (index: number) => {
     setSelectedSurveyIndex(index);
     setPreviewModalOpen(true);
   };
-
-  if (errorResponse === '존재하지 않는 페이지입니다.') {
-    return (
-      <Notification theme={theme}>
-        <Label theme={theme}>😥 참여가능한 설문이 없습니다...</Label>
-        <br />
-        <RectangleButton
-          text="설문 만들러 가기"
-          width="250px"
-          backgroundColor={theme.colors.primary}
-          hoverColor={theme.colors.prhover}
-          handleClick={() => navigate('/survey/form')}
-          theme={theme}
-        />
-      </Notification>
-    );
-  }
 
   return (
     <ListTable theme={theme}>
