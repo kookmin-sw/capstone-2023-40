@@ -1,12 +1,11 @@
 import React from 'react';
 
-import { QueryFunctionContext, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import axios from '../../api/axios';
-import { requests } from '../../api/request';
+import { fetchSurveyData } from '../../api/fetchFunctions';
 import ErrorPage from '../../components/ErrorPage';
 import Header from '../../components/Header';
 import SurveyPageSkeleton from '../../components/Skeleton/SurveyPageSkeleton';
@@ -19,12 +18,6 @@ const Container = styled.div`
   height: 100vh;
   background-color: ${(props) => props.theme.colors.container};
 `;
-
-const fetchSurveyData = async ({ queryKey }: QueryFunctionContext) => {
-  const { data } = await axios.get<SurveyResponse>(requests.getSurvey + queryKey[1]);
-
-  return data;
-};
 
 // TODO: disable submit button after click
 export default function SurveyPage() {

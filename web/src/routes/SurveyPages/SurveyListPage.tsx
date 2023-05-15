@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 
-import { QueryFunctionContext, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import styled from 'styled-components';
 
-import axios from '../../api/axios';
-import { requests } from '../../api/request';
+import { fetchSurveyList } from '../../api/fetchFunctions';
 import ErrorPage from '../../components/ErrorPage';
 import Header from '../../components/Header';
 import { SurveyPreviewModal } from '../../components/Modal';
@@ -22,12 +21,6 @@ const Container = styled.div`
 `;
 
 const ListContainer = styled.div``;
-
-const fetchSurveyList = async ({ queryKey }: QueryFunctionContext) => {
-  const { data } = await axios.get<SurveyPageResponse>(`${requests.getSurveyPage}${queryKey[1]}`);
-
-  return data;
-};
 
 export default function SurveyListPage() {
   const [theme, toggleTheme] = useTheme();
