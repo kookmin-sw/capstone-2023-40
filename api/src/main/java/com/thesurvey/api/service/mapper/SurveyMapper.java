@@ -37,20 +37,6 @@ public class SurveyMapper {
         this.certificationTypeConverter = certificationTypeConverter;
     }
 
-    public SurveyResponseDto toSurveyResponseDto(Survey survey) {
-        return SurveyResponseDto.builder()
-            .surveyId(survey.getSurveyId())
-            .authorId(survey.getAuthorId())
-            .title(survey.getTitle())
-            .description(survey.getDescription())
-            .startedDate(survey.getStartedDate())
-            .endedDate(survey.getEndedDate())
-            .createdDate(survey.getCreatedDate())
-            .modifiedDate(survey.getModifiedDate())
-            .certificationTypes(getConvertedCertificationTypes(survey.getSurveyId()))
-            .build();
-    }
-
     public SurveyResponseDto toSurveyResponseDto(Survey survey, Long authorId) {
         List<QuestionBankResponseDto> questionBankResponseDtoList = questionService.getQuestionBankInfoDtoListBySurveyId(
             survey.getSurveyId());
@@ -64,7 +50,7 @@ public class SurveyMapper {
             .endedDate(survey.getEndedDate())
             .createdDate(survey.getCreatedDate())
             .modifiedDate(survey.getModifiedDate())
-            .certificationTypes(getConvertedCertificationTypes(survey.getSurveyId()))
+            .certificationTypes(getConvertedCertificationTypes(survey.getSurveyId(), survey.getAuthorId()))
             .questions(questionBankResponseDtoList)
             .build();
     }
@@ -87,8 +73,9 @@ public class SurveyMapper {
             .title(survey.getTitle())
             .description(survey.getDescription())
             .startedDate(survey.getStartedDate())
+            .createdDate(survey.getCreatedDate())
             .endedDate(survey.getEndedDate())
-            .certificationTypes(getConvertedCertificationTypes(survey.getSurveyId()))
+            .certificationTypes(getConvertedCertificationTypes(survey.getSurveyId(), survey.getAuthorId()))
             .modifiedDate(survey.getModifiedDate())
             .build();
     }
@@ -111,14 +98,14 @@ public class SurveyMapper {
             .build();
     }
 
-    private List<CertificationType> getConvertedCertificationTypes(UUID surveyId) {
+    private List<CertificationType> getConvertedCertificationTypes(UUID surveyId, Long authorId) {
         List<Integer> certificationTypes =
-            surveyRepository.findCertificationTypeBySurveyId(surveyId);
+            surveyRepository.findCertificationTypeBySurveyIdAndAuthorId(surveyId, authorId);
         if (certificationTypes.contains(CertificationType.NONE.getCertificationTypeId())) {
             return new ArrayList<>();
         }
         return certificationTypeConverter.toCertificationTypeList(
-            surveyRepository.findCertificationTypeBySurveyId(surveyId));
+            certificationTypes);
     }
 
 }
