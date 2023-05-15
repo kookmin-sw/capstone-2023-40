@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import 'pace-js/themes/red/pace-theme-minimal.css';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
@@ -11,11 +13,15 @@ import { store, persistor } from './reducers/store';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
+const queryClient = new QueryClient();
 root.render(
   <BrowserRouter>
     <Provider store={store}>
       <PersistGate persistor={persistor}>
-        <App />
+        <QueryClientProvider client={queryClient}>
+          <App />
+          <ReactQueryDevtools />
+        </QueryClientProvider>
       </PersistGate>
     </Provider>
   </BrowserRouter>
