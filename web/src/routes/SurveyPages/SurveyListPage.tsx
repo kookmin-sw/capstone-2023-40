@@ -2,12 +2,11 @@ import React, { useState } from 'react';
 
 import { QueryFunctionContext, useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import axios from '../../api/axios';
 import { requests } from '../../api/request';
-import RectangleButton from '../../components/Button/RectangleButton';
+import ErrorPage from '../../components/ErrorPage';
 import Header from '../../components/Header';
 import { SurveyPreviewModal } from '../../components/Modal';
 import Pagination from '../../components/Pagination';
@@ -24,26 +23,6 @@ const Container = styled.div`
 
 const ListContainer = styled.div``;
 
-const Notification = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  margin-top: 35vh;
-  padding: 10px;
-`;
-
-const Label = styled.label`
-  font-size: 50px;
-  font-weight: 700;
-  color: ${(props) => props.theme.colors.default};
-  text-align: center;
-
-  @media screen and (max-width: 700px) {
-    font-size: 30px;
-  }
-`;
-
 const fetchSurveyList = async ({ queryKey }: QueryFunctionContext) => {
   const { data } = await axios.get<SurveyPageResponse>(`${requests.getSurveyPage}${queryKey[1]}`);
 
@@ -51,7 +30,6 @@ const fetchSurveyList = async ({ queryKey }: QueryFunctionContext) => {
 };
 
 export default function SurveyListPage() {
-  const navigate = useNavigate();
   const [theme, toggleTheme] = useTheme();
   const [page, setPage] = useState<number>(1);
   const [previewModalOpen, setPreviewModalOpen] = useState<boolean>(false);
@@ -71,39 +49,23 @@ export default function SurveyListPage() {
 
     if (response!.data === '존재하지 않는 페이지입니다.') {
       return (
-        <Container theme={theme}>
-          <Header theme={theme} toggleTheme={toggleTheme} />
-          <Notification theme={theme}>
-            <Label theme={theme}>😥 참여가능한 설문이 없습니다...</Label>
-            <br />
-            <RectangleButton
-              text="설문 만들러 가기"
-              width="250px"
-              backgroundColor={theme.colors.primary}
-              hoverColor={theme.colors.prhover}
-              handleClick={() => navigate('/survey/form')}
-              theme={theme}
-            />
-          </Notification>
-        </Container>
+        <ErrorPage
+          labelText="😥 참여가능한 설문이 없습니다..."
+          buttonText="설문 만들러 가기"
+          navigateRoute="/survey/form"
+          theme={theme}
+          toggleTheme={toggleTheme}
+        />
       );
     }
     return (
-      <Container theme={theme}>
-        <Header theme={theme} toggleTheme={toggleTheme} />
-        <Notification theme={theme}>
-          <Label theme={theme}>😥 로그인이 만료 되었습니다...</Label>
-          <br />
-          <RectangleButton
-            text="로그인 하러 가기"
-            width="250px"
-            backgroundColor={theme.colors.primary}
-            hoverColor={theme.colors.prhover}
-            handleClick={() => navigate('/login')}
-            theme={theme}
-          />
-        </Notification>
-      </Container>
+      <ErrorPage
+        labelText="😥 로그인이 만료 되었습니다..."
+        buttonText="로그인 하러 가기"
+        navigateRoute="/login"
+        theme={theme}
+        toggleTheme={toggleTheme}
+      />
     );
   }
 
