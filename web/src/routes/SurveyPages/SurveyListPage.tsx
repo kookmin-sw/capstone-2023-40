@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
-import { AxiosError, AxiosResponse } from 'axios';
+import { useQuery } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import styled from 'styled-components';
 
-import axios from '../../api/axios';
-import { requests } from '../../api/request';
+import { fetchSurveyList } from '../../api/fetchFunctions';
+import ErrorPage from '../../components/ErrorPage';
 import Header from '../../components/Header';
 import { SurveyPreviewModal } from '../../components/Modal';
 import Pagination from '../../components/Pagination';
 import SurveyListSkeleton from '../../components/Skeleton/SurveyListSkeleton';
 import SurveyListTable from '../../components/SurveyListTable';
 import { useTheme } from '../../hooks/useTheme';
-import { SurveyAbstractResponse, SurveyPageResponse } from '../../types/response/Survey';
+import { SurveyPageResponse } from '../../types/response/Survey';
 
 const Container = styled.div`
   width: 100vw;
@@ -19,77 +20,79 @@ const Container = styled.div`
   background-color: ${(props) => props.theme.colors.container};
 `;
 
+const ListContainer = styled.div``;
+
 export default function SurveyListPage() {
   const [theme, toggleTheme] = useTheme();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [abortController, setAbortController] = useState<AbortController>(new AbortController());
-  const [surveys, setSurveys] = useState<SurveyAbstractResponse[]>([]);
   const [page, setPage] = useState<number>(1);
-  const [totalPages, setTotalPages] = useState<number>(0);
   const [previewModalOpen, setPreviewModalOpen] = useState<boolean>(false);
   const [selectedSurveyIndex, setSelectedSurveyIndex] = useState<number>(0);
 
-  const fetchSurveyList = async (abortSignal: AbortSignal): Promise<void> => {
-    setIsLoading(true);
-    try {
-      const request: AxiosResponse<SurveyPageResponse> = await axios.get<SurveyPageResponse>(
-        `${requests.getSurveyPage}${page}`,
-        { signal: abortSignal }
-      );
+  const { data, isLoading, isError, error } = useQuery<SurveyPageResponse>(['surveyPage', page], fetchSurveyList, {
+    cacheTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: 20 * 1000, // 20 seconds
+    retry: 1,
+    refetchOnWindowFocus: false,
+  });
 
-      setSurveys(request.data.surveys);
-      setTotalPages(request.data.totalPages);
-      setIsLoading(false);
-    } catch (error) {
-      const { name } = error as unknown as AxiosError;
-      if (name !== 'CanceledError') {
-        setSurveys([]);
-        setIsLoading(false);
-      }
-    }
-  };
+  if (isError) {
+    // TODO: 에러 종류에 따라서 다른 알림 표시
+    // TODO: 에러 처리 로직 분리
+    const { response } = error as AxiosError;
 
-  useEffect(() => {
-    if (isLoading) {
-      abortController.abort();
+    let labelText = '';
+    let buttonText = '';
+    let navigateRoute = '';
+
+    if (response?.data === '존재하지 않는 페이지입니다.') {
+      labelText = '😥 참여가능한 설문이 없습니다...';
+      buttonText = '설문 만들러 가기';
+      navigateRoute = '/survey/form';
+    } else {
+      labelText = '😥 로그인이 만료 되었습니다...';
+      buttonText = '로그인 하러 가기';
+      navigateRoute = '/login';
     }
-    const controller = new AbortController();
-    const { signal } = controller;
-    setAbortController(controller);
-    fetchSurveyList(signal);
-  }, [page]);
+
+    return (
+      <ErrorPage
+        labelText={labelText}
+        buttonText={buttonText}
+        navigateRoute={navigateRoute}
+        theme={theme}
+        toggleTheme={toggleTheme}
+      />
+    );
+  }
 
   return (
     <Container theme={theme}>
       <Header theme={theme} toggleTheme={toggleTheme} />
-
       {isLoading ? (
-        <SurveyListSkeleton numOfSurveyRow={10} theme={theme} />
+        <SurveyListSkeleton numOfSurveyRow={8} theme={theme} />
       ) : (
-        <SurveyListTable
-          theme={theme}
-          surveys={surveys}
-          setSelectedSurveyIndex={setSelectedSurveyIndex}
-          setPreviewModalOpen={setPreviewModalOpen}
-        />
-      )}
-
-      {!isLoading && surveys.length !== 0 && (
-        <Pagination
-          currentPage={page}
-          numOfTotalPage={totalPages}
-          numOfPageToShow={5}
-          setPage={setPage}
-          theme={theme}
-        />
-      )}
-
-      {previewModalOpen && (
-        <SurveyPreviewModal
-          surveyItem={surveys[selectedSurveyIndex]}
-          setPreviewModalOpen={setPreviewModalOpen}
-          theme={theme}
-        />
+        <ListContainer>
+          <SurveyListTable
+            theme={theme}
+            surveys={data.surveys}
+            setSelectedSurveyIndex={setSelectedSurveyIndex}
+            setPreviewModalOpen={setPreviewModalOpen}
+          />
+          {previewModalOpen && (
+            <SurveyPreviewModal
+              surveyItem={data.surveys[selectedSurveyIndex]}
+              setPreviewModalOpen={setPreviewModalOpen}
+              theme={theme}
+            />
+          )}
+          <Pagination
+            currentPage={page}
+            numOfTotalPage={data.totalPages}
+            numOfPageToShow={5}
+            setPage={setPage}
+            theme={theme}
+          />
+        </ListContainer>
       )}
     </Container>
   );

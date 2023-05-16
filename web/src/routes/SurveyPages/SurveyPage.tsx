@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
-import { AxiosError, AxiosResponse } from 'axios';
+import { useQuery } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import axios from '../../api/axios';
-import { requests } from '../../api/request';
+import { fetchSurveyData } from '../../api/fetchFunctions';
+import ErrorPage from '../../components/ErrorPage';
 import Header from '../../components/Header';
 import SurveyPageSkeleton from '../../components/Skeleton/SurveyPageSkeleton';
 import SurveyParticipateForm from '../../components/SurveyParticipateForm/SurveyParticipateForm';
@@ -22,31 +23,42 @@ const Container = styled.div`
 export default function SurveyPage() {
   const { id } = useParams();
   const [theme, toggleTheme] = useTheme();
-  const [surveyData, setSurveyData] = useState<SurveyResponse>();
 
-  const fetchSurveyData = async () => {
-    try {
-      const request: AxiosResponse<SurveyResponse> = await axios.get<SurveyResponse>(requests.getSurvey + id);
+  const { data, isLoading, isError, error } = useQuery<SurveyResponse>(['survey', id], fetchSurveyData, {
+    cacheTime: 15 * 60 * 1000, // 15 minutes
+    staleTime: 10 * 60 * 1000, // 10 minutes
+    retry: 1,
+    refetchOnWindowFocus: false,
+  });
 
-      setSurveyData(request.data);
-    } catch (error) {
-      const { name } = error as unknown as AxiosError;
-      // TODO: handle error while fetching data
-    }
-  };
+  if (isError) {
+    // TODO: 에러 종류에 따라서 다른 알림 표시
+    // TODO: 에러 처리 로직 분리
+    const { response } = error as AxiosError;
 
-  useEffect(() => {
-    fetchSurveyData();
-  }, []);
+    let labelText = '';
+    let buttonText = '';
+    let navigateRoute = '';
+
+    labelText = '😥 잘못된 설문 입니다...';
+    buttonText = '설문 리스트로 돌아가기';
+    navigateRoute = '/survey';
+
+    return (
+      <ErrorPage
+        labelText={labelText}
+        buttonText={buttonText}
+        navigateRoute={navigateRoute}
+        theme={theme}
+        toggleTheme={toggleTheme}
+      />
+    );
+  }
 
   return (
     <Container theme={theme}>
       <Header theme={theme} toggleTheme={toggleTheme} />
-      {typeof surveyData === 'undefined' ? (
-        <SurveyPageSkeleton theme={theme} />
-      ) : (
-        <SurveyParticipateForm surveyData={surveyData} theme={theme} />
-      )}
+      {isLoading ? <SurveyPageSkeleton theme={theme} /> : <SurveyParticipateForm surveyData={data} theme={theme} />}
     </Container>
   );
 }
