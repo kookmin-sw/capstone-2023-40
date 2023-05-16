@@ -28,7 +28,6 @@ export default function SurveyListPage() {
   const [previewModalOpen, setPreviewModalOpen] = useState<boolean>(false);
   const [selectedSurveyIndex, setSelectedSurveyIndex] = useState<number>(0);
 
-  // FIXME: cacheTime and staleTime is appropriate?
   const { data, isLoading, isError, error } = useQuery<SurveyPageResponse>(['surveyPage', page], fetchSurveyList, {
     cacheTime: 5 * 60 * 1000, // 5 minutes
     staleTime: 20 * 1000, // 20 seconds
