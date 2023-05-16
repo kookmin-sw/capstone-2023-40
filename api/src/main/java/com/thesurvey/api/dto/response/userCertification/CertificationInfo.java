@@ -18,6 +18,6 @@ public class CertificationInfo<CertificationType> {
     private Boolean isCertificated;
 
     @Schema(example = "2023-04-22T00:00:00", description = "인증 만료 날짜입니다.")
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime expirationDate;
 }
