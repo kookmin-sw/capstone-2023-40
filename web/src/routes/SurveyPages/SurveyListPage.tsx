@@ -38,24 +38,28 @@ export default function SurveyListPage() {
 
   if (isError) {
     // TODO: 에러 종류에 따라서 다른 알림 표시
+    // TODO: 에러 처리 로직 분리
     const { response } = error as AxiosError;
 
+    let labelText = '';
+    let buttonText = '';
+    let navigateRoute = '';
+
     if (response?.data === '존재하지 않는 페이지입니다.') {
-      return (
-        <ErrorPage
-          labelText="😥 참여가능한 설문이 없습니다..."
-          buttonText="설문 만들러 가기"
-          navigateRoute="/survey/form"
-          theme={theme}
-          toggleTheme={toggleTheme}
-        />
-      );
+      labelText = '😥 참여가능한 설문이 없습니다...';
+      buttonText = '설문 만들러 가기';
+      navigateRoute = '/survey/form';
+    } else {
+      labelText = '😥 로그인이 만료 되었습니다...';
+      buttonText = '로그인 하러 가기';
+      navigateRoute = '/login';
     }
+
     return (
       <ErrorPage
-        labelText="😥 로그인이 만료 되었습니다..."
-        buttonText="로그인 하러 가기"
-        navigateRoute="/login"
+        labelText={labelText}
+        buttonText={buttonText}
+        navigateRoute={navigateRoute}
         theme={theme}
         toggleTheme={toggleTheme}
       />

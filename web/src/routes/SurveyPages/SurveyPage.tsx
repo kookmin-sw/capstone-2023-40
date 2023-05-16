@@ -34,13 +34,22 @@ export default function SurveyPage() {
 
   if (isError) {
     // TODO: 에러 종류에 따라서 다른 알림 표시
+    // TODO: 에러 처리 로직 분리
     const { response } = error as AxiosError;
+
+    let labelText = '';
+    let buttonText = '';
+    let navigateRoute = '';
+
+    labelText = '😥 잘못된 설문 입니다...';
+    buttonText = '설문 리스트로 돌아가기';
+    navigateRoute = '/survey';
 
     return (
       <ErrorPage
-        labelText="😥 잘못된 설문 입니다..."
-        buttonText="설문 리스트로 돌아가기"
-        navigateRoute="/survey"
+        labelText={labelText}
+        buttonText={buttonText}
+        navigateRoute={navigateRoute}
         theme={theme}
         toggleTheme={toggleTheme}
       />
