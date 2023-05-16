@@ -81,7 +81,7 @@ public class SurveyService {
 
         Page<Survey> surveyPage = surveyRepository.findAllInDescendingOrder(
             PageRequest.of(page - 1, 8));
-        if (surveyPage.getTotalPages() < page) {
+        if (surveyPage.getTotalElements() != 0 && surveyPage.getTotalPages() < page) {
             throw new NotFoundExceptionMapper(ErrorMessage.PAGE_NOT_FOUND);
         }
 
