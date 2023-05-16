@@ -24,7 +24,6 @@ export default function SurveyPage() {
   const { id } = useParams();
   const [theme, toggleTheme] = useTheme();
 
-  // FIXME: cacheTime and staleTime is appropriate?
   const { data, isLoading, isError, error } = useQuery<SurveyResponse>(['survey', id], fetchSurveyData, {
     cacheTime: 15 * 60 * 1000, // 15 minutes
     staleTime: 10 * 60 * 1000, // 10 minutes
