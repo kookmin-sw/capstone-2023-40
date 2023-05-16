@@ -26,8 +26,8 @@ export default function SurveyPage() {
 
   // FIXME: cacheTime and staleTime is appropriate?
   const { data, isLoading, isError, error } = useQuery<SurveyResponse>(['survey', id], fetchSurveyData, {
-    cacheTime: 3000,
-    staleTime: 60000,
+    cacheTime: 15 * 60 * 1000, // 15 minutes
+    staleTime: 10 * 60 * 1000, // 10 minutes
     retry: 1,
     refetchOnWindowFocus: false,
   });
