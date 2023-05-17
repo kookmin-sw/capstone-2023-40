@@ -123,6 +123,7 @@ export default function ConfirmModal({
           <TextContainer theme={theme}>{text}</TextContainer>
           <ButtonContainer>
             <RectangleButton
+              textColor={theme.colors.text}
               backgroundColor={theme.colors.button}
               hoverColor={theme.colors.btnhover}
               text="취소"
@@ -131,6 +132,7 @@ export default function ConfirmModal({
               width="15vw"
             />
             <RectangleButton
+              textColor="white"
               backgroundColor={theme.colors.primary}
               hoverColor={theme.colors.prhover}
               text="확인"

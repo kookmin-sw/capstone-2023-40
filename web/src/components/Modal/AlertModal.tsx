@@ -109,6 +109,7 @@ export default function AlertModal({ theme, title, level, text, buttonText, onCl
           {/* FIXME: To verification shortcut list */}
           <TextContainer theme={theme}>{text}</TextContainer>
           <RectangleButton
+            textColor={theme.colors.text}
             backgroundColor={theme.colors.button}
             hoverColor={theme.colors.btnhover}
             text={buttonText}

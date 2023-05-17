@@ -156,6 +156,7 @@ export default function SurveyParticipateForm({ surveyData, theme }: SurveyParti
 
         <ButtonContainer>
           <RectangleButton
+            textColor="white"
             backgroundColor={theme.colors.primary}
             hoverColor={theme.colors.prhover}
             text="제출하기"

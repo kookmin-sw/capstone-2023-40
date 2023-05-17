@@ -62,6 +62,7 @@ export default function SurveyPageResultModal({ theme }: ModalProps) {
       <ModalContainer theme={theme}>
         <Label theme={theme}>🥳</Label>
         <RectangleButton
+          textColor="white"
           backgroundColor={theme.colors.primary}
           hoverColor={theme.colors.prhover}
           text="완료하기"

@@ -164,6 +164,7 @@ export default function SurveyPreviewModal({ surveyItem, setPreviewModalOpen, th
         </BodyContainer>
         <ButtonContainer>
           <RectangleButton
+            textColor="white"
             backgroundColor={theme.colors.primary}
             hoverColor={theme.colors.prhover}
             text="설문 조사 시작하기"

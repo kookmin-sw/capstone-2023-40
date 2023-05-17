@@ -51,6 +51,7 @@ export default function ErrorPage({ labelText, buttonText, navigateRoute, theme,
         <br />
         <RectangleButton
           text={buttonText}
+          textColor="white"
           width="250px"
           backgroundColor={theme.colors.primary}
           hoverColor={theme.colors.prhover}

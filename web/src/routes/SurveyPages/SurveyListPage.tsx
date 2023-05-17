@@ -45,9 +45,9 @@ export default function SurveyListPage() {
     let navigateRoute = '';
 
     if (response?.data === '존재하지 않는 페이지입니다.') {
-      labelText = '😥 참여가능한 설문이 없습니다...';
-      buttonText = '설문 만들러 가기';
-      navigateRoute = '/survey/form';
+      labelText = '😥 찾는 페이지가 없습니다...';
+      buttonText = '홈화면으로 돌아가기';
+      navigateRoute = '/';
     } else {
       labelText = '😥 로그인이 만료 되었습니다...';
       buttonText = '로그인 하러 가기';
@@ -65,35 +65,52 @@ export default function SurveyListPage() {
     );
   }
 
+  if (isLoading) {
+    return (
+      <Container theme={theme}>
+        <Header theme={theme} toggleTheme={toggleTheme} />
+        <SurveyListSkeleton numOfSurveyRow={8} theme={theme} />
+      </Container>
+    );
+  }
+
+  if (data.surveys.length === 0) {
+    return (
+      <ErrorPage
+        labelText="😥 참여 가능한 설문이 없습니다..."
+        buttonText="설문 만들러 가기"
+        navigateRoute="/survey/form"
+        theme={theme}
+        toggleTheme={toggleTheme}
+      />
+    );
+  }
+
   return (
     <Container theme={theme}>
       <Header theme={theme} toggleTheme={toggleTheme} />
-      {isLoading ? (
-        <SurveyListSkeleton numOfSurveyRow={8} theme={theme} />
-      ) : (
-        <ListContainer>
-          <SurveyListTable
-            theme={theme}
-            surveys={data.surveys}
-            setSelectedSurveyIndex={setSelectedSurveyIndex}
+      <ListContainer>
+        <SurveyListTable
+          theme={theme}
+          surveys={data.surveys}
+          setSelectedSurveyIndex={setSelectedSurveyIndex}
+          setPreviewModalOpen={setPreviewModalOpen}
+        />
+        {previewModalOpen && (
+          <SurveyPreviewModal
+            surveyItem={data.surveys[selectedSurveyIndex]}
             setPreviewModalOpen={setPreviewModalOpen}
-          />
-          {previewModalOpen && (
-            <SurveyPreviewModal
-              surveyItem={data.surveys[selectedSurveyIndex]}
-              setPreviewModalOpen={setPreviewModalOpen}
-              theme={theme}
-            />
-          )}
-          <Pagination
-            currentPage={page}
-            numOfTotalPage={data.totalPages}
-            numOfPageToShow={5}
-            setPage={setPage}
             theme={theme}
           />
-        </ListContainer>
-      )}
+        )}
+        <Pagination
+          currentPage={page}
+          numOfTotalPage={data.totalPages}
+          numOfPageToShow={5}
+          setPage={setPage}
+          theme={theme}
+        />
+      </ListContainer>
     </Container>
   );
 }

@@ -3,6 +3,7 @@ import React from 'react';
 import styled, { DefaultTheme } from 'styled-components';
 
 const Button = styled.button<{
+  textColor: string;
   width: string;
   backgroundColor: string;
   backgroundHover: string;
@@ -15,7 +16,7 @@ const Button = styled.button<{
   font-weight: ${(props) => props.fontWeight};
   border: none;
   border-radius: ${(props) => props.theme.borderRadius};
-  color: ${(props) => props.theme.colors.default};
+  color: ${(props) => props.textColor};
   background-color: ${(props) => props.backgroundColor};
   transition: 200ms background ease;
   cursor: pointer;
@@ -27,6 +28,7 @@ const Button = styled.button<{
 
 interface RectangleButtonProps {
   text: string;
+  textColor: string;
   width: string;
   backgroundColor: string;
   hoverColor: string;
@@ -38,6 +40,7 @@ interface RectangleButtonProps {
 
 export default function RectangleButton({
   text,
+  textColor,
   width,
   backgroundColor,
   hoverColor,
@@ -49,6 +52,7 @@ export default function RectangleButton({
   return (
     <Button
       theme={theme}
+      textColor={textColor}
       width={width}
       backgroundColor={backgroundColor}
       backgroundHover={hoverColor}
