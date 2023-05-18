@@ -1,5 +1,10 @@
 package com.thesurvey.api.controller;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.List;
+import java.util.UUID;
+
 import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
 import com.thesurvey.api.domain.EnumTypeEntity.QuestionType;
 import com.thesurvey.api.domain.User;
@@ -8,6 +13,7 @@ import com.thesurvey.api.dto.request.answeredQuestion.AnsweredQuestionRequestDto
 import com.thesurvey.api.dto.request.question.QuestionOptionRequestDto;
 import com.thesurvey.api.dto.request.question.QuestionRequestDto;
 import com.thesurvey.api.dto.request.survey.SurveyRequestDto;
+import com.thesurvey.api.dto.request.user.UserCertificationUpdateRequestDto;
 import com.thesurvey.api.dto.request.user.UserLoginRequestDto;
 import com.thesurvey.api.dto.request.user.UserRegisterRequestDto;
 import com.thesurvey.api.dto.request.user.UserUpdateRequestDto;
@@ -15,11 +21,6 @@ import com.thesurvey.api.repository.UserRepository;
 import com.thesurvey.api.service.AuthenticationService;
 import com.thesurvey.api.service.UserService;
 import com.thesurvey.api.util.UserUtil;
-
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.List;
-import java.util.UUID;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeAll;
@@ -87,6 +88,44 @@ public class UserControllerTest extends BaseControllerTest {
             new UsernamePasswordAuthenticationToken(userLoginRequestDto.getEmail(),
                 userLoginRequestDto.getPassword())
         );
+    }
+
+    @Test
+    void testGetUserCertifications() throws Exception {
+        MvcResult result = mockMvc.perform(get("/users/profile/certifications")
+                .with(authentication(authentication)))
+            .andExpect(status().isOk())
+            .andReturn();
+        JSONObject content = new JSONObject(result.getResponse().getContentAsString());
+        JSONArray certificationInfoList = content.getJSONArray("certificationInfoList");
+        assertThat(certificationInfoList.length()).isEqualTo(0);
+
+    }
+
+    @Test
+    void testUpdateUserCertifications() throws Exception {
+        // given
+        UserCertificationUpdateRequestDto userCertificationUpdateRequestDto = UserCertificationUpdateRequestDto.builder()
+            .isKakaoCertificated(true)
+            .isNaverCertificated(true)
+            .isGoogleCertificated(false)
+            .isWebMailCertificated(true)
+            .isDriverLicenseCertificated(false)
+            .isIdentityCardCertificated(true)
+            .build();
+
+        // when
+        MvcResult result = mockMvc.perform(patch("/users/profile/certifications")
+                .with(authentication(authentication))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(userCertificationUpdateRequestDto)))
+            .andExpect(status().isOk())
+            .andReturn();
+
+        // then
+        JSONObject content = new JSONObject(result.getResponse().getContentAsString());
+        JSONArray certificationInfoList = content.getJSONArray("certificationInfoList");
+        assertThat(certificationInfoList.length()).isEqualTo(4);
     }
 
     @Test
@@ -187,7 +226,6 @@ public class UserControllerTest extends BaseControllerTest {
 
         AnsweredQuestionRequestDto answeredQuestionRequestDto = AnsweredQuestionRequestDto.builder()
             .surveyId(UUID.fromString(createdSurveyContent.get("surveyId").toString()))
-            .certificationTypes(List.of(CertificationType.GOOGLE))
             .answers(List.of(answeredQuestionDto))
             .build();
 
@@ -195,6 +233,22 @@ public class UserControllerTest extends BaseControllerTest {
             new UsernamePasswordAuthenticationToken(submitAnswerUserLoginRequestDto.getEmail(),
                 submitAnswerUserLoginRequestDto.getPassword())
         );
+
+        UserCertificationUpdateRequestDto userCertificationUpdateRequestDto = UserCertificationUpdateRequestDto.builder()
+            .isKakaoCertificated(true)
+            .isNaverCertificated(true)
+            .isGoogleCertificated(true)
+            .isWebMailCertificated(true)
+            .isDriverLicenseCertificated(false)
+            .isIdentityCardCertificated(true)
+            .build();
+
+        mockMvc.perform(patch("/users/profile/certifications")
+                .with(authentication(submitUserAuthentication))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(userCertificationUpdateRequestDto)))
+            .andExpect(status().isOk());
+
         mockMvc.perform(post("/surveys/submit")
                 .with(authentication(submitUserAuthentication))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -229,7 +283,7 @@ public class UserControllerTest extends BaseControllerTest {
         JSONArray optionAnswers = questionAnswer.getJSONArray("optionAnswers");
         JSONObject optionAnswer = optionAnswers.getJSONObject(0);
         assertThat(optionAnswer.get("option")).isEqualTo(questionOptionRequestDto.getOption());
-        assertThat(optionAnswer.get("responseNumber")).isEqualTo(1);
+        assertThat(optionAnswer.get("totalResponseCount")).isEqualTo(1);
     }
 
     @Test

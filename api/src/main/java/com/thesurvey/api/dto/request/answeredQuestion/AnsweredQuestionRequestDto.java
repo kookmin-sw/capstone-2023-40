@@ -24,7 +24,4 @@ public class AnsweredQuestionRequestDto {
     @Schema(example = "93c0a231-207e-4190-aee9-0a5f78cafc44", description = "수정하려는 설문조사의 아이디입니다.")
     private UUID surveyId;
 
-    @Schema(example = "[\"NAVER\", \"KAKAO\"]", description = "설문 참가자의 인증 유형을 지정합니다. 인증 유형은 다음의 값들이 올 수 있습니다: [\"NAVER\", \"KAKAO\", \"GOGLE\", \"WEBMAIL\", \"DRIVER_LICENSE\", \"MOBILE_PHONE\"]")
-    private List<@Valid CertificationType> certificationTypes;
-
 }

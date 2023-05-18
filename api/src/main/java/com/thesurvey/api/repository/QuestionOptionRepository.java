@@ -2,7 +2,9 @@ package com.thesurvey.api.repository;
 
 import java.util.List;
 import java.util.Optional;
+
 import com.thesurvey.api.domain.QuestionOption;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -18,5 +20,5 @@ public interface QuestionOptionRepository extends JpaRepository<QuestionOption, 
         Long questionBankId);
 
     @Query("SELECT qo FROM QuestionOption qo WHERE qo.questionBank.questionBankId = :questionBankId")
-    Optional<List<QuestionOption>> findAllByQuestionBankId(Long questionBankId);
+    List<QuestionOption> findAllByQuestionBankId(Long questionBankId);
 }

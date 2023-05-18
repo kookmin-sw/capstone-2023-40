@@ -20,18 +20,18 @@ public class CertificationTypeConverter {
         return certificationTypeList.stream()
             .map(type -> {
                 switch (type) {
-                    case 0:
-                        return CertificationType.KAKAO;
                     case 1:
-                        return CertificationType.NAVER;
+                        return CertificationType.KAKAO;
                     case 2:
-                        return CertificationType.GOOGLE;
+                        return CertificationType.NAVER;
                     case 3:
-                        return CertificationType.WEBMAIL;
+                        return CertificationType.GOOGLE;
                     case 4:
-                        return CertificationType.DRIVER_LICENSE;
+                        return CertificationType.WEBMAIL;
                     case 5:
-                        return CertificationType.MOBILE_PHONE;
+                        return CertificationType.DRIVER_LICENSE;
+                    case 6:
+                        return CertificationType.IDENTITY_CARD;
                     default:
                         return null;
                 }

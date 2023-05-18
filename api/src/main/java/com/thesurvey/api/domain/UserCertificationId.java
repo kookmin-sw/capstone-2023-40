@@ -1,22 +1,22 @@
 package com.thesurvey.api.domain;
 
+import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.UUID;
-
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-
-import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Embeddable
 @Getter
+@Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ParticipationId implements Serializable {
+public class UserCertificationId implements Serializable {
+
+    @Column(name = "user_id")
+    private Long userId;
 
     /*
      * the value of id is set to the index of EnumTypeEntity.CertificationType.
@@ -26,17 +26,10 @@ public class ParticipationId implements Serializable {
     @Column(name = "certification_type")
     private CertificationType certificationType;
 
-    @Column(name = "survey_id")
-    private UUID surveyId;
-
-    @Column(name = "user_id")
-    private Long userId;
-
     @Builder
-    public ParticipationId(CertificationType certificationType, UUID surveyId, Long userId) {
-        this.certificationType = certificationType;
-        this.surveyId = surveyId;
+    public UserCertificationId(Long userId, CertificationType certificationType) {
         this.userId = userId;
+        this.certificationType = certificationType;
     }
 
     @Override
@@ -47,12 +40,14 @@ public class ParticipationId implements Serializable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        ParticipationId that = (ParticipationId) o;
-        return Objects.equals(surveyId, that.surveyId) && Objects.equals(userId, that.userId);
+        UserCertificationId that = (UserCertificationId) o;
+        return Objects.equals(userId, that.userId) && Objects.equals(certificationType,
+            that.certificationType);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(surveyId, userId);
+        return Objects.hash(userId, certificationType);
     }
+
 }
