@@ -8,12 +8,19 @@ import com.thesurvey.api.dto.response.question.QuestionBankAnswerDto;
 import com.thesurvey.api.dto.response.question.QuestionBankResponseDto;
 import com.thesurvey.api.dto.response.question.QuestionOptionAnswerDto;
 import com.thesurvey.api.dto.response.question.QuestionOptionResponseDto;
+import com.thesurvey.api.exception.ErrorMessage;
+import com.thesurvey.api.exception.mapper.NotFoundExceptionMapper;
+import com.thesurvey.api.repository.QuestionRepository;
 import com.thesurvey.api.util.StringUtil;
 
 import org.springframework.stereotype.Component;
 
 @Component
 public class QuestionBankMapper {
+
+    private final QuestionRepository questionRepository;
+
+    public QuestionBankMapper(QuestionRepository questionRepository) {this.questionRepository = questionRepository;}
 
     public QuestionBank toQuestionBank(QuestionRequestDto questionRequestDto) {
         return QuestionBank.builder()
@@ -25,10 +32,14 @@ public class QuestionBankMapper {
 
     public QuestionBankResponseDto toQuestionBankResponseDto(QuestionBank questionBank,
         List<QuestionOptionResponseDto> questionOptionResponseDtoList) {
+        Boolean isRequired = questionRepository.findIsRequiredByQuestionBankId(
+                questionBank.getQuestionBankId()).orElseThrow(
+                    () -> new NotFoundExceptionMapper(ErrorMessage.QUESTION_NOT_FOUND));
         return QuestionBankResponseDto.builder()
             .questionBankId(questionBank.getQuestionBankId())
             .title(questionBank.getTitle())
             .description(questionBank.getDescription())
+            .isRequired(isRequired)
             .questionType(questionBank.getQuestionType())
             .questionOptions(questionOptionResponseDtoList)
             .createdDate(questionBank.getCreatedDate())

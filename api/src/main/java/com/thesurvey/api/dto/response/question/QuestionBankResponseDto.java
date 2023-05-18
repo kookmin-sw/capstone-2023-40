@@ -22,6 +22,9 @@ public class QuestionBankResponseDto {
     @Schema(example = "카카오톡 사용자여부 확인", description = "질문은행 아이디에 해당하는 질문 내용입니다.")
     private String description;
 
+    @Schema(example = "true", description = "필수 응답 질문인지 여부입니다.")
+    private Boolean isRequired;
+
     @Schema(example = "SINGLE_CHOICE", description = "질문은행 아이디에 해당하는 질문 유형입니다.")
     private QuestionType questionType;
 
