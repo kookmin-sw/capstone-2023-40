@@ -203,14 +203,14 @@ export default function SurveyCreateForm({ theme }: SurveyFormProps) {
     }
   };
 
-  // Update questionList[questionId] title | description
+  // Update questions[questionId] title | description
   const handleChangeQuestion = (event: React.ChangeEvent<HTMLInputElement>, questionId: number) => {
     const { name, value } = event.target;
     surveyData.questions[questionId] = { ...surveyData.questions[questionId], [name]: value };
     setSurveyData({ ...surveyData });
   };
 
-  // Update questionList[questionId] type
+  // Update questions[questionId] type
   const handleChangeQuestionType = (event: React.ChangeEvent<HTMLSelectElement>, questionId: number) => {
     const { name, value } = event.target;
     surveyData.questions[questionId] = {
@@ -221,7 +221,7 @@ export default function SurveyCreateForm({ theme }: SurveyFormProps) {
     setSurveyData({ ...surveyData });
   };
 
-  // Update questionList[questionId][optionId] option
+  // Update questions[questionId][optionId] option
   const handleChangeOption = (event: React.ChangeEvent<HTMLInputElement>, questionId: number, optionId: number) => {
     const { name, value } = event.target;
     const newOptions = surveyData.questions[questionId].questionOptions;
@@ -241,6 +241,16 @@ export default function SurveyCreateForm({ theme }: SurveyFormProps) {
     else if (name === 'deleteQuestion') deleteQuestionAtId(questionId);
     else if (name === 'addOption') addOptionAtBottom(questionId);
     else if (typeof optionId !== 'undefined') deleteOptionAtId(questionId, optionId);
+  };
+
+  // Update questions[questionId] isRequired
+  const handleToggleSwitch = (event: React.ChangeEvent<HTMLInputElement>, questionId: number) => {
+    const { checked } = event.target;
+    surveyData.questions[questionId] = {
+      ...surveyData.questions[questionId],
+      isRequired: checked,
+    };
+    setSurveyData({ ...surveyData });
   };
 
   return (
@@ -271,6 +281,7 @@ export default function SurveyCreateForm({ theme }: SurveyFormProps) {
             handleChangeQuestionType={handleChangeQuestionType}
             handleClickButton={handleClickButton}
             handleChangeOption={handleChangeOption}
+            handleToggleSwitch={handleToggleSwitch}
             theme={theme}
           />
         </ItemContainer>
