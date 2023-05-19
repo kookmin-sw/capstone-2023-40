@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
 import { fetchSurveyList } from '../../api/fetchFunctions';
@@ -12,6 +13,7 @@ import Pagination from '../../components/Pagination';
 import SurveyListSkeleton from '../../components/Skeleton/SurveyListSkeleton';
 import SurveyListTable from '../../components/SurveyListTable';
 import { useTheme } from '../../hooks/useTheme';
+import { setLoggedIn } from '../../types/header';
 import { SurveyPageResponse } from '../../types/response/Survey';
 import { responseErrorHandle } from '../../utils/responseErrorHandle';
 
@@ -28,6 +30,10 @@ export default function SurveyListPage() {
   const [page, setPage] = useState<number>(1);
   const [previewModalOpen, setPreviewModalOpen] = useState<boolean>(false);
   const [selectedSurveyIndex, setSelectedSurveyIndex] = useState<number>(0);
+  const dispatch = useDispatch();
+  const [errorLabel, setErrorLabel] = useState<string>('');
+  const [errorButtonText, setErrorButtonText] = useState<string>('');
+  const [errorNavigate, setErrorNavigate] = useState<string>('');
 
   const { data, isLoading, isError, error } = useQuery<SurveyPageResponse>(['surveyPage', page], fetchSurveyList, {
     cacheTime: 5 * 60 * 1000, // 5 minutes
@@ -36,14 +42,22 @@ export default function SurveyListPage() {
     refetchOnWindowFocus: false,
   });
 
-  if (isError) {
-    const errorMessages: string[] = responseErrorHandle(error as AxiosError);
+  useEffect(() => {
+    if (isError) {
+      const errorMessages: string[] = responseErrorHandle(error as AxiosError);
 
+      setErrorLabel(`😥 ${errorMessages[0]}..`);
+      setErrorButtonText(errorMessages[1]);
+      setErrorNavigate(errorMessages[2]);
+    }
+  }, [isError]);
+
+  if (isError) {
     return (
       <ErrorPage
-        labelText={`😥 ${errorMessages[0]}..`}
-        buttonText={errorMessages[1]}
-        navigateRoute={errorMessages[2]}
+        labelText={errorLabel}
+        buttonText={errorButtonText}
+        navigateRoute={errorNavigate}
         theme={theme}
         toggleTheme={toggleTheme}
       />
