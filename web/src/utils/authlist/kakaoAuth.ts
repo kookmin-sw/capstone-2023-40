@@ -15,6 +15,18 @@ export const KAKAO_REST_API_KEY = '076bd4745b2957a7567361ad04b58a57';
 export const KAKAO_REDIRECT_URI = 'http://localhost:3000/mypage/authentication';
 export const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_REST_API_KEY}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code`;
 
+// 다른 로그인 환경에 영향을 끼치는 것을 방지하기 위한 kakao token값 초기화
+export const unlinkKakao = async (kakaoToken: any) => {
+  const res = await axios({
+    method: 'POST',
+    url: `https://kapi.kakao.com/v1/user/unlink`,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: `Bearer ${kakaoToken}`,
+    },
+  });
+};
+
 /**
  * 카카오 사용자 정보 조회를 위한 Function
  * @param kakaoToken : 카카오에서 받은 인자코드를 사용하여 받은 token값
@@ -33,11 +45,12 @@ export const getKakaoProfile = async (kakaoToken: any, username: string, dispatc
     console.log('kakaoUser name : ', name);
 
     if (name === username) {
-      console.log('사용자가 같습니다!');
+      console.log('카카오 인증 완료!');
       dispatch(setSuccessAuth(true));
     } else {
       console.log('사용자가 다릅니다!');
     }
+    unlinkKakao(kakaoToken);
     dispatch(setCompleteAuth(true));
   } catch (error) {
     console.log(error);

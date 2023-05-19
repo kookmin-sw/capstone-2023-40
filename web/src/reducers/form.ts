@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { RegisterFormState, RegisterFormAction } from '../types/registerForm';
 
 export const formReducer = (state: RegisterFormState, action: RegisterFormAction): RegisterFormState => {

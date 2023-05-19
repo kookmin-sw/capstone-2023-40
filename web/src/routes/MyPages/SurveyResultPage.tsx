@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Icons } from '../../assets/svg/index';
 import Header from '../../components/Header';
 import { useTheme } from '../../hooks/useTheme';
+import { updateUserInformation } from '../../utils/UserUtils';
 
 const TwoArrow = styled(Icons.TWOARROW).attrs({
   width: 24,
@@ -116,11 +118,12 @@ const FontText = styled.span`
   text-overflow: ellipsis;
 `;
 
-export default function MyPage() {
+export default function SurveyResultPage() {
   const [theme, toggleTheme] = useTheme();
   const [resultClickFirst, setResultClickFirst] = useState<boolean>(false);
   const [resultClickSecond, setResultClickSecond] = useState<boolean>(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -145,7 +148,7 @@ export default function MyPage() {
       <SurveyResultContainer theme={theme}>
         <Form onSubmit={handleSubmit}>
           <SurVeyResultPageTitle style={{ marginBottom: '5vh' }} theme={theme}>
-            <MypageText theme={theme} onClick={() => navigate('../mypage')}>
+            <MypageText theme={theme} onClick={() => updateUserInformation(dispatch, navigate)}>
               마이페이지
             </MypageText>
             <SurveyResultText theme={theme}> &gt; 설문 결과 조회</SurveyResultText>

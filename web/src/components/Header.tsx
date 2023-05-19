@@ -268,7 +268,7 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
           </CheckBoxWrapper>
 
           {currentLocation === '/mypage' || currentLocation === '/mypage/' ? (
-            <CustomButton theme={theme} onClick={() => navigate('../mypage')}>
+            <CustomButton theme={theme} onClick={updateUserInformation}>
               개인정보 저장하기
             </CustomButton>
           ) : undefined}

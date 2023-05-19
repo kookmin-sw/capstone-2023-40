@@ -97,7 +97,7 @@ interface LoginFormProps {
 export default function LoginForm({ theme }: LoginFormProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isAlertModal, setIsAlertModal] = useState<boolean>(false);
+  const [showAlertModal, setShowAlertModal] = useState<boolean>(false);
   const [alertTitle, setAlertTitle] = useState('');
   const [alertText, setAlertText] = useState('');
   const dispatch = useDispatch();
@@ -107,7 +107,7 @@ export default function LoginForm({ theme }: LoginFormProps) {
     if (isEmptyString(email) || isEmptyString(password)) {
       setAlertTitle('로그인 오류');
       setAlertText('아이디 또는 비밀번호를 확인해주세요.');
-      setIsAlertModal(true);
+      setShowAlertModal(true);
       return false;
     }
     return true;
@@ -120,16 +120,26 @@ export default function LoginForm({ theme }: LoginFormProps) {
     }
 
     const loginRequestBody = { email, password };
-    const res = await axios.post<UserResponse>(requests.login, loginRequestBody);
-    if (res.status === 200) {
-      setUserInformation(res.data, password, dispatch);
-      dispatch(setLoggedIn(true));
-      navigate('../../');
-    }
+    axios
+      .post<UserResponse>(requests.login, loginRequestBody)
+      .then((res) => {
+        if (res.status === 200) {
+          setUserInformation(res.data, password, dispatch);
+          dispatch(setLoggedIn(true));
+          navigate('../../');
+        }
+      })
+      .catch((error) => {
+        if (error.request.status === 404) {
+          setAlertTitle('로그인 오류');
+          setAlertText('아이디 또는 비밀번호를 확인해주세요.');
+          setShowAlertModal(true);
+        }
+      });
   };
 
   const closeAlertModal = () => {
-    setIsAlertModal(false);
+    setShowAlertModal(false);
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -161,7 +171,7 @@ export default function LoginForm({ theme }: LoginFormProps) {
         <Button onClick={() => handleLogin()} theme={theme}>
           로그인
         </Button>
-        {isAlertModal && (
+        {showAlertModal && (
           <AlertModal
             theme={theme}
             title={alertTitle}

@@ -47,6 +47,20 @@ export const requests = {
    */
   updateUserProfile: '/users/profile',
   /**
+   * Get Profile information of user certification list
+   *
+   * @method `GET`
+   * @endpoint `/users/profile/certifications`
+   */
+  getUserAuthList: '/users/profile/certifications',
+  /**
+   * Update profile information of user certification list
+   *
+   * @method `PATCH`
+   * @endpoint `/users/profile/certifications`
+   */
+  updateUserAuthList: '/users/profile/certifications',
+  /**
    * Delete currently signed in user. This requires user
    * to be signed in.
    *
