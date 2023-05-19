@@ -21,11 +21,9 @@ import { NAVER_AUTH_URL, getNaverUserData } from './authlist/naverAuth';
 // 인증여부 초기화 - authlist api connect
 export const initializeAuthList = (resData: any, dispatch = useDispatch()) => {
   if (resData.certificationInfolist !== null) {
-    for (let i = 0; i < resData.certificationInfoList.length; i += 1) {
-      const certicication = resData.certificationInfoList[i];
-      const name = certicication.certificationName;
-      const checkCertificated = certicication.isCertificated;
-      console.log('인증명 : ', name, '인증여부 : ', checkCertificated);
+    resData.certificationInfoList.forEach((certification: any) => {
+      const name = certification.certificationName;
+      const checkCertificated = certification.isCertificated;
       if (checkCertificated === true) {
         switch (name) {
           case 'KAKAO':
@@ -50,7 +48,7 @@ export const initializeAuthList = (resData: any, dispatch = useDispatch()) => {
             break;
         }
       }
-    }
+    });
   }
 };
 
