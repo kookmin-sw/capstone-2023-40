@@ -192,7 +192,7 @@ const CustomButton = styled.div`
   padding: 1vh;
   font-size: 1.7vh;
   font-weight: 700;
-  color: ${(props) => props.theme.colors.default};
+  color: white;
   background-color: ${(props) => props.theme.colors.primary};
   border: none;
   border-radius: ${(props) => props.theme.borderRadius};
@@ -268,7 +268,7 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
           </CheckBoxWrapper>
 
           {currentLocation === '/mypage' || currentLocation === '/mypage/' ? (
-            <CustomButton theme={theme} onClick={() => navigate('../mypage')}>
+            <CustomButton theme={theme} onClick={updateUserInformation}>
               개인정보 저장하기
             </CustomButton>
           ) : undefined}

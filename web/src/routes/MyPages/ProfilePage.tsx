@@ -146,7 +146,7 @@ const formatPhoneNumber = (value: string): string => {
   return phoneNumber;
 };
 
-export default function MyPage() {
+export default function ProfilePage() {
   const [theme, toggleTheme] = useTheme();
   const navigate = useNavigate();
   const [updatePasswordDisabled, setUpdatePasswordDisabled] = useState(false);

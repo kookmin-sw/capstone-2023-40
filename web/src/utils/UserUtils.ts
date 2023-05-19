@@ -1,5 +1,9 @@
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router';
 
+import axios from '../api/axios';
+import { requests } from '../api/request';
+import { UserResponse } from '../types/response/User';
 import {
   setAuthDriver,
   setAuthGoogle,
@@ -25,13 +29,24 @@ import {
  * @param dispatch : Function for updating information on react-redux
  */
 export const setUserInformation = (userdata: any, password: string, dispatch = useDispatch()) => {
-  dispatch(setUserPoint('0'));
+  dispatch(setUserPoint(userdata.point === undefined ? '0' : userdata.point));
   dispatch(setUserEmail(userdata.email));
-  dispatch(setUserPassword(password));
+  if (password !== 'passwordUndefined') {
+    dispatch(setUserPassword(password));
+  }
   dispatch(setUserName(userdata.name));
   dispatch(setPhoneNumber(userdata.phoneNumber));
   dispatch(setUserAddress(userdata.address === null ? '주소를 입력해주세요' : userdata.address));
   dispatch(setUserProfileImage('https://images2.alphacoders.com/130/1306410.png'));
+};
+
+// 마이페이지 이동시 사용자 정보 조회 및 업데이트.
+export const updateUserInformation = async (dispatch = useDispatch(), navigate = useNavigate()) => {
+  const res = await axios.get<UserResponse>(requests.getUserProfile);
+  if (res.status === 200) {
+    setUserInformation(res.data, 'passwordUndefined', dispatch);
+    navigate('../../mypage');
+  }
 };
 
 // if we logout in this service, initialize userData in local.

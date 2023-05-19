@@ -9,6 +9,7 @@ import Header from '../../components/Header';
 import { useTheme } from '../../hooks/useTheme';
 import { RootState } from '../../reducers';
 import { setAuthService } from '../../types/surveyAuth';
+import { updateUserInformation } from '../../utils/UserUtils';
 
 const KakaoImage = styled(Icons.KAKAO).attrs({
   width: 30,
@@ -205,20 +206,19 @@ export default function AuthListPage() {
     event.preventDefault();
   };
 
-  // FIXME: 인증과정 구현 후에 인증완료 버튼을 disabled 하기.
   return (
     <Container theme={theme}>
       <Header theme={theme} toggleTheme={toggleTheme} />
       <AuthListContainer theme={theme}>
         <Form onSubmit={handleSubmit}>
           <AuthListTitle theme={theme}>
-            <MypageText theme={theme} onClick={() => navigate('../mypage')}>
+            <MypageText theme={theme} onClick={() => updateUserInformation(dispatch, navigate)}>
               마이페이지
             </MypageText>
             <AuthInformationText theme={theme}> &gt; 인증정보 목록</AuthInformationText>
           </AuthListTitle>
           {surveyAuthList.map(({ number, image, title, checkAuth }) => (
-            <ContainerBox key={number} theme={theme} onClick={() => handleClick(title)}>
+            <ContainerBox key={number} theme={theme} onClick={() => handleClick(title)} disabled={checkAuth}>
               {image}
               <TextType
                 theme={theme}

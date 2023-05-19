@@ -8,8 +8,7 @@ import { Icons } from '../../assets/svg/index';
 import Header from '../../components/Header';
 import { useTheme } from '../../hooks/useTheme';
 import { RootState } from '../../reducers';
-import { getKakaoUserData } from '../../utils/authlist/kakaoAuth';
-import { authConnect, authComplete } from '../../utils/authService';
+import { authConnect, authComplete, getApiUserInformation } from '../../utils/authService';
 
 const rotate = keyframes`
   0% {
@@ -99,11 +98,11 @@ export default function AuthenticationPage() {
   const urlParams = new URLSearchParams(window.location.search);
   const authCode = urlParams.get('code');
 
-  // 인가 코드가 오면 인증 상태 변경.
+  // 인가 코드가 오면 해당 인증사이트에서 가져온 사용자 개인정보 조회.
   useEffect(() => {
     if (authCode !== null) {
       // FIXME: 추가 인증방식을 도입할때 리팩토링 할 것.
-      getKakaoUserData(authCode, username, dispatch);
+      getApiUserInformation(checkAuthServiceTitle, authCode, username, dispatch);
     }
   }, [authCode]);
 
@@ -140,7 +139,7 @@ export default function AuthenticationPage() {
             {!connectService ? `${checkAuthServiceTitle}에서 인증을 완료해주세요.` : `인증 진행중 입니다.`}
           </TextType>
           {!connectService && (
-            <Button theme={theme} onClick={() => authConnect(checkAuthServiceTitle, setConnectService)}>
+            <Button theme={theme} onClick={() => authConnect(checkAuthServiceTitle, setConnectService, dispatch)}>
               인증하기
             </Button>
           )}

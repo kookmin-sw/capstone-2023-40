@@ -4,9 +4,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
 
+import axios from '../../api/axios';
+import { requests } from '../../api/request';
 import { useOnClickOutside } from '../../hooks/useOnClickOutside';
 import { RootState } from '../../reducers';
 import { setLoggedIn, setSubPageOpen } from '../../types/header';
+import { UserAuthListResponse } from '../../types/response/User';
+import { initializeAuthList } from '../../utils/authService';
 import { clearUserInformation } from '../../utils/UserUtils';
 
 const SubPageContainer = styled.div`
@@ -62,9 +66,20 @@ export default function Header({ theme }: HeaderProps) {
     navigate('../../../');
   };
 
-  const navigateMypage = () => {
-    navigate('../../../mypage');
+  const navigateMypage = async () => {
     dispatch(setSubPageOpen(!isSubPageOpen));
+    axios
+      .get<UserAuthListResponse>(requests.getUserAuthList)
+      .then((getAuthListResponse) => {
+        if (getAuthListResponse.status === 200) {
+          console.log('getUserData Success!');
+          initializeAuthList(getAuthListResponse.data, dispatch);
+          navigate('../../../mypage');
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const subPageRef = useRef<HTMLDivElement>(null);
