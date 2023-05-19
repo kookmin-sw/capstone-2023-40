@@ -25,4 +25,7 @@ public interface QuestionRepository extends JpaRepository<Question, QuestionId> 
 
     @Query("SELECT q FROM Question q WHERE q.questionBank.questionBankId = :questionBankId")
     Optional<Question> findByQuestionBankId(Long questionBankId);
+
+    @Query("SELECT q.isRequired FROM Question q WHERE q.questionBank.questionBankId = :questionBankId")
+    Optional<Boolean> findIsRequiredByQuestionBankId(Long questionBankId);
 }
