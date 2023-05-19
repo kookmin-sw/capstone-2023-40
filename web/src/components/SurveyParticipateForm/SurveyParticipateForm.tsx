@@ -103,7 +103,7 @@ export default function SurveyParticipateForm({ surveyData, theme }: SurveyParti
     if (typeof surveyData !== 'undefined') {
       for (let i = 0; i < surveyData.questions.length; i += 1) {
         // TODO: response validation will be needed
-        if (typeof userAnswers[i] === 'undefined') {
+        if (typeof userAnswers[i] === 'undefined' && surveyData.questions[i].isRequired) {
           turnOnUserAttention(i);
           answersVerification = false;
           break;

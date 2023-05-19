@@ -14,6 +14,12 @@ const HeadContainer = styled.div`
   justify-content: space-between;
 `;
 
+const DescriptionContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
 const BodyContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -36,9 +42,19 @@ const Title = styled(TextLabel)`
 `;
 
 const Description = styled(TextLabel)`
+  width: 70%;
   font-size: 15px;
   margin-bottom: 23px;
   background-color: ${(props) => props.theme.colors.inputBackground};
+`;
+
+const RequiredOption = styled(TextLabel)`
+  width: 20%;
+  font-size: 15px;
+  margin-bottom: 23px;
+  background-color: ${(props) => props.theme.colors.inputBackground};
+  display: flex;
+  justify-content: center;
 `;
 
 interface QuestionFormProps {
@@ -113,7 +129,10 @@ export default function QuestionForm({ question, index, userAnswers, setUserAnsw
         <Title theme={theme}>
           {index + 1}.&nbsp;&nbsp;{question.title}
         </Title>
-        <Description theme={theme}>{question.description}</Description>
+        <DescriptionContainer>
+          <Description theme={theme}>{question.description}</Description>
+          <RequiredOption>{question.isRequired ? '필수 응답 질문' : '선택 응답 질문'}</RequiredOption>
+        </DescriptionContainer>
       </HeadContainer>
 
       <BodyContainer>
