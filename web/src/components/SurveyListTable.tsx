@@ -3,7 +3,7 @@ import React from 'react';
 import styled, { DefaultTheme } from 'styled-components';
 
 import { SurveyAbstractResponse } from '../types/response/Survey';
-import { dateFormatUpToMinute } from '../utils/dateFormat';
+import { dateFormatUpToDate } from '../utils/dateFormat';
 import CertificationIconList from './CertificationIconList';
 
 const ListTable = styled.table`
@@ -122,7 +122,7 @@ export default function SurveyListTable({
             <Item>
               <CertificationIconList certificationList={survey.certificationTypes} theme={theme} />
             </Item>
-            <EndDate theme={theme}>{dateFormatUpToMinute(`${survey.endedDate}`)}</EndDate>
+            <EndDate theme={theme}>{dateFormatUpToDate(`${survey.endedDate}`)}</EndDate>
           </ListRow>
         ))}
       </ListBody>
