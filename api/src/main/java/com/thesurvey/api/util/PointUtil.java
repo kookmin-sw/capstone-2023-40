@@ -80,6 +80,10 @@ public class PointUtil {
         }
     }
 
+    /**
+     * {@code maxRewardPoints} is the amount of points a user get when they answer all the
+     * questions in the survey.
+     */
     public int getSurveyMaxRewardPoints(UUID surveyId) {
         List<QuestionBank> questionBankList = questionBankRepository.findAllBySurveyId(surveyId);
         int maxRewardPoints = questionBankList.stream()
