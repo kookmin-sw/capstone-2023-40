@@ -26,7 +26,9 @@ public enum ErrorMessage {
     NOT_SURVEY_QUESTION("해당 설문조사의 질문이 아닙니다."),
     INVALID_REQUEST("유효하지 않은 요청입니다"),
     PAGE_NOT_FOUND("존재하지 않는 페이지입니다."),
-    CERTIFICATION_NOT_COMPLETED("설문조사에 필요한 인증을 하지 않았습니다.");
+    CERTIFICATION_NOT_COMPLETED("설문조사에 필요한 인증을 하지 않았습니다."),
+    SURVEY_CREATE_POINT_NOT_ENOUGH("설문조사 생성에 필요한 포인트가 부족합니다."),
+    INVALID_QUESTION_TYPE("유효하지 않은 질문 유형 입니다.");
 
     private final String message;
 

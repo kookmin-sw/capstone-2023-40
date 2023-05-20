@@ -30,6 +30,7 @@ import com.thesurvey.api.repository.SurveyRepository;
 import com.thesurvey.api.service.mapper.QuestionBankMapper;
 import com.thesurvey.api.service.mapper.QuestionOptionMapper;
 import com.thesurvey.api.service.mapper.SurveyMapper;
+import com.thesurvey.api.util.PointUtil;
 import com.thesurvey.api.util.StringUtil;
 import com.thesurvey.api.util.UserUtil;
 
@@ -58,10 +59,14 @@ public class SurveyService {
 
     private final QuestionBankMapper questionBankMapper;
 
+    private final PointHistoryService pointHistoryService;
+
+    private final PointUtil pointUtil;
+
     public SurveyService(SurveyRepository surveyRepository, SurveyMapper surveyMapper,
         QuestionService questionService,
         QuestionOptionService questionOptionService, ParticipationService participationService,
-        AnsweredQuestionService answeredQuestionService, QuestionOptionMapper questionOptionMapper, QuestionBankMapper questionBankMapper) {
+        AnsweredQuestionService answeredQuestionService, QuestionOptionMapper questionOptionMapper, QuestionBankMapper questionBankMapper, PointHistoryService pointHistoryService, PointUtil pointUtil) {
         this.surveyRepository = surveyRepository;
         this.surveyMapper = surveyMapper;
         this.questionService = questionService;
@@ -70,6 +75,8 @@ public class SurveyService {
         this.answeredQuestionService = answeredQuestionService;
         this.questionOptionMapper = questionOptionMapper;
         this.questionBankMapper = questionBankMapper;
+        this.pointHistoryService = pointHistoryService;
+        this.pointUtil = pointUtil;
     }
 
     @Transactional(readOnly = true)
@@ -133,6 +140,7 @@ public class SurveyService {
     @Transactional
     public SurveyResponseDto createSurvey(Authentication authentication,
         SurveyRequestDto surveyRequestDto) {
+
         // `startedDate` is only allowed to be within 5 seconds from now or later.
         if (surveyRequestDto.getStartedDate()
             .isBefore(LocalDateTime.now(ZoneId.of("Asia/Seoul")).minusSeconds(5))) {
@@ -143,26 +151,31 @@ public class SurveyService {
         if (surveyRequestDto.getStartedDate().isAfter(surveyRequestDto.getEndedDate())) {
             throw new BadRequestExceptionMapper(ErrorMessage.STARTEDDATE_ISAFTER_ENDEDDATE);
         }
+        User user = UserUtil.getUserFromAuthentication(authentication);
 
         List<CertificationType> certificationTypes =
             surveyRequestDto.getCertificationTypes().isEmpty()
                 ? List.of(CertificationType.NONE) : surveyRequestDto.getCertificationTypes();
 
-        User user = UserUtil.getUserFromAuthentication(authentication);
         Survey survey = surveyRepository.save(surveyMapper.toSurvey(surveyRequestDto,
             user.getUserId()));
-        questionService.createQuestion(surveyRequestDto, survey);
+        questionService.createQuestion(surveyRequestDto.getQuestions(), survey);
+
+        int surveyCreatePoints = pointUtil.calculateSurveyCreatePoints(survey.getSurveyId());
+        pointUtil.validateUserPoint(surveyCreatePoints, user.getUserId());
+
         participationService.createParticipation(user, certificationTypes, survey);
+        pointHistoryService.savePointHistory(user, -surveyCreatePoints);
         return surveyMapper.toSurveyResponseDto(survey, user.getUserId());
     }
 
     @Transactional
     public void deleteSurvey(Authentication authentication, UUID surveyId) {
-        Long userId = UserUtil.getUserIdFromAuthentication(authentication);
+        User user = UserUtil.getUserFromAuthentication(authentication);
         Survey survey = getSurveyFromSurveyId(surveyId);
 
         // validate survey author from current user
-        validateSurveyAuthor(userId, survey.getAuthorId());
+        validateSurveyAuthor(user.getUserId(), survey.getAuthorId());
 
         // validate for attempts to delete a started survey.
         if (survey.getStartedDate().isBefore(LocalDateTime.now(ZoneId.of("Asia/Seoul")))
@@ -174,6 +187,9 @@ public class SurveyService {
         surveyRepository.delete(survey);
         participationService.deleteParticipation(surveyId);
         questionService.deleteQuestion(surveyId);
+
+        int surveyCreatePoints = pointUtil.calculateSurveyCreatePoints(survey.getSurveyId());
+        pointHistoryService.savePointHistory(user, surveyCreatePoints);
     }
 
     @Transactional
@@ -200,7 +216,6 @@ public class SurveyService {
         }
 
         questionService.updateQuestion(survey.getSurveyId(), surveyUpdateRequestDto.getQuestions());
-        surveyRepository.save(survey);
         return surveyMapper.toSurveyResponseDto(survey, userId);
     }
 
