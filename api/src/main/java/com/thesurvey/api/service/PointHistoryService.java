@@ -17,13 +17,13 @@ public class PointHistoryService {
 
     public PointHistoryService(PointHistoryRepository pointHistoryRepository) {this.pointHistoryRepository = pointHistoryRepository;}
 
-    public void savePointHistory(User user, int saveUserPoint) {
+    public void savePointHistory(User user, int operandPoint) {
         int userTotalPoint = getUserTotalPoint(user.getUserId());
         pointHistoryRepository.save(
             PointHistory.builder()
                 .user(user)
                 .transactionDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")))
-                .point(userTotalPoint + saveUserPoint)
+                .point(userTotalPoint + operandPoint)
                 .build()
         );
     }
