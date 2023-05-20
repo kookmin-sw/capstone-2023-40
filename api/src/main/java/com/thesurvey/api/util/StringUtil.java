@@ -15,4 +15,15 @@ public class StringUtil {
         }
         return null;
     }
+
+    public static String trimShortLongAnswer(String value, boolean isRequired) {
+        if (value != null) {
+            if (value.isBlank() && isRequired) {
+                throw new BadRequestExceptionMapper(ErrorMessage.NO_ONLY_WHITESPACE);
+            } else {
+                return value.trim();
+            }
+        }
+        return null;
+    }
 }
