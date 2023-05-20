@@ -3,22 +3,24 @@ import { AxiosError } from 'axios';
 export const responseErrorHandle = (error: AxiosError): string[] => {
   const { response } = error as AxiosError;
 
-  let labelText = '';
+  let labelText = `${response?.data}`;
   let buttonText = '';
   let navigateRoute = '';
 
   switch (response?.status) {
     case 400:
-      labelText = `${response?.data}`;
-      buttonText = '확인';
       break;
     case 401:
-      labelText = '로그인이 만료 되었습니다.';
-      buttonText = '로그인 하러 가기';
-      navigateRoute = '/login';
+      if (labelText === '설문조사에 필요한 인증을 하지 않았습니다.') {
+        buttonText = '인증 하러 가기';
+        navigateRoute = '/mypage/auth-list';
+      } else {
+        labelText = '로그인이 만료 되었습니다.';
+        buttonText = '로그인 하러 가기';
+        navigateRoute = '/login';
+      }
       break;
     case 403:
-      labelText = `${response?.data}`;
       buttonText = '설문 리스트로 돌아가기';
       navigateRoute = '/survey';
       break;
@@ -27,7 +29,6 @@ export const responseErrorHandle = (error: AxiosError): string[] => {
       navigateRoute = '/';
       break;
     default:
-      labelText = `${response?.data}`;
       buttonText = '홈화면으로 돌아가기';
       navigateRoute = '/';
       break;
