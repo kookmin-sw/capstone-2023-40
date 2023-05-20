@@ -221,6 +221,8 @@ public class UserControllerTest extends BaseControllerTest {
         JSONObject questionOption = questionOptions.getJSONObject(0);
         AnsweredQuestionDto answeredQuestionDto = AnsweredQuestionDto.builder()
             .questionBankId(questionBank.getLong("questionBankId"))
+            .questionType(QuestionType.SINGLE_CHOICE)
+            .isRequired(true)
             .singleChoice(questionOption.getLong("questionOptionId"))
             .build();
 
@@ -253,7 +255,7 @@ public class UserControllerTest extends BaseControllerTest {
                 .with(authentication(submitUserAuthentication))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(answeredQuestionRequestDto)))
-            .andExpect(status().isNoContent());
+            .andExpect(status().isOk());
 
         mockMvc.perform(get("/auth/logout"))
             .andExpect(status().isOk());

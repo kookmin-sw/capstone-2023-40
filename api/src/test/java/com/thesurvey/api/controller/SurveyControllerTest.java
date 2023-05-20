@@ -1,7 +1,14 @@
 package com.thesurvey.api.controller;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.UUID;
+
 import com.thesurvey.api.domain.AnsweredQuestion;
 import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
+import com.thesurvey.api.domain.EnumTypeEntity.PointTransactionType;
 import com.thesurvey.api.domain.EnumTypeEntity.QuestionType;
 import com.thesurvey.api.dto.request.answeredQuestion.AnsweredQuestionDto;
 import com.thesurvey.api.dto.request.answeredQuestion.AnsweredQuestionRequestDto;
@@ -14,7 +21,12 @@ import com.thesurvey.api.dto.request.survey.SurveyUpdateRequestDto;
 import com.thesurvey.api.dto.request.user.UserCertificationUpdateRequestDto;
 import com.thesurvey.api.dto.request.user.UserLoginRequestDto;
 import com.thesurvey.api.dto.request.user.UserRegisterRequestDto;
-import com.thesurvey.api.repository.*;
+import com.thesurvey.api.repository.ParticipationRepository;
+import com.thesurvey.api.repository.QuestionBankRepository;
+import com.thesurvey.api.repository.QuestionOptionRepository;
+import com.thesurvey.api.repository.QuestionRepository;
+import com.thesurvey.api.repository.SurveyRepository;
+import com.thesurvey.api.repository.UserRepository;
 import com.thesurvey.api.service.AnsweredQuestionService;
 import com.thesurvey.api.service.AuthenticationService;
 import com.thesurvey.api.service.SurveyService;
@@ -29,6 +41,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -41,15 +54,12 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.UUID;
-
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -186,6 +196,7 @@ public class SurveyControllerTest extends BaseControllerTest {
         assertThat(LocalDateTime.parse(content.getString("startedDate"))).isBefore(
             LocalDateTime.parse(content.getString("endedDate")));
         assertThat(content.getJSONArray("questions")).isNotNull();
+        assertThat(content.get("rewardPoints")).isEqualTo(1);
     }
 
     @Test
@@ -234,7 +245,10 @@ public class SurveyControllerTest extends BaseControllerTest {
         AnsweredQuestionDto answeredQuestionDto = AnsweredQuestionDto.builder()
             .questionBankId(questionBank.getLong("questionBankId"))
             .singleChoice(questionOption.getLong("questionOptionId"))
+            .isRequired(true)
+            .questionType(QuestionType.SINGLE_CHOICE)
             .build();
+
         AnsweredQuestionRequestDto answeredQuestionRequestDto = AnsweredQuestionRequestDto.builder()
             .surveyId(UUID.fromString(mockSurvey.get("surveyId").toString()))
             .answers(List.of(answeredQuestionDto))
@@ -256,15 +270,18 @@ public class SurveyControllerTest extends BaseControllerTest {
             .andExpect(status().isOk());
 
         // when
-        mockMvc.perform(post("/surveys/submit")
+        MvcResult submitResult = mockMvc.perform(post("/surveys/submit")
                 .with(authentication(authentication))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(answeredQuestionRequestDto)))
-            .andExpect(status().isNoContent());
+            .andExpect(status().isOk())
+            .andReturn();
 
         // then
         List<AnsweredQuestion> resultAnsweredQuestion = answeredQuestionService.getAnswerQuestionByQuestionBankId(
             questionBank.getLong("questionBankId"));
+        JSONObject rewardPoints = new JSONObject(submitResult.getResponse().getContentAsString());
+        assertThat(rewardPoints.get("rewardPoints")).isEqualTo(PointTransactionType.SINGLE_CHOICE_REWARD.getTransactionPoint());
         assertThat(resultAnsweredQuestion.size()).isEqualTo(1);
         assertThat(resultAnsweredQuestion.get(0).getSingleChoice()).isEqualTo(questionOption.getLong("questionOptionId"));
     }

@@ -25,7 +25,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.test.context.support.WithMockUser;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -69,7 +68,6 @@ public class PointHistoryServiceTest {
     }
 
     @Test
-    @WithMockUser
     void testValidateUserPoint() {
         List<QuestionRequestDto> testQuestionList = new ArrayList<>();
         // To increase the required points for creating a survey, 100 survey questions are generated
