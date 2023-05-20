@@ -30,10 +30,11 @@ export interface SurveyPageResponse extends BaseTime {
 }
 
 enum CertificationType {
+  NONE,
   KAKAO,
   NAVER,
   GOOGLE,
   WEBMAIL,
   DRIVER_LICENSE,
-  MOBILE_PHONE,
+  IDENTITY_CARD,
 }
