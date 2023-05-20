@@ -16,6 +16,7 @@ import com.thesurvey.api.dto.response.user.UserSurveyResultDto;
 import com.thesurvey.api.repository.SurveyRepository;
 import com.thesurvey.api.service.QuestionService;
 import com.thesurvey.api.service.converter.CertificationTypeConverter;
+import com.thesurvey.api.util.PointUtil;
 import com.thesurvey.api.util.StringUtil;
 
 import org.springframework.data.domain.Page;
@@ -30,17 +31,21 @@ public class SurveyMapper {
 
     private final CertificationTypeConverter certificationTypeConverter;
 
+    private final PointUtil pointUtil;
+
+
     public SurveyMapper(SurveyRepository surveyRepository, QuestionService questionService,
-        CertificationTypeConverter certificationTypeConverter) {
+        CertificationTypeConverter certificationTypeConverter, PointUtil pointUtil) {
         this.surveyRepository = surveyRepository;
         this.questionService = questionService;
         this.certificationTypeConverter = certificationTypeConverter;
+        this.pointUtil = pointUtil;
     }
 
     public SurveyResponseDto toSurveyResponseDto(Survey survey, Long authorId) {
+        int maxRewardPoints = pointUtil.getSurveyMaxRewardPoints(survey.getSurveyId());
         List<QuestionBankResponseDto> questionBankResponseDtoList = questionService.getQuestionBankInfoDtoListBySurveyId(
             survey.getSurveyId());
-
         return SurveyResponseDto.builder()
             .surveyId(survey.getSurveyId())
             .authorId(authorId)
@@ -52,6 +57,7 @@ public class SurveyMapper {
             .modifiedDate(survey.getModifiedDate())
             .certificationTypes(getConvertedCertificationTypes(survey.getSurveyId(), survey.getAuthorId()))
             .questions(questionBankResponseDtoList)
+            .rewardPoints(maxRewardPoints)
             .build();
     }
 
@@ -67,6 +73,7 @@ public class SurveyMapper {
     }
 
     public SurveyPageDto toSurveyPageDto(Survey survey) {
+        int maxRewardPoints = pointUtil.getSurveyMaxRewardPoints(survey.getSurveyId());
         return SurveyPageDto.builder()
             .surveyId(survey.getSurveyId())
             .authorId(survey.getAuthorId())
@@ -77,6 +84,7 @@ public class SurveyMapper {
             .endedDate(survey.getEndedDate())
             .certificationTypes(getConvertedCertificationTypes(survey.getSurveyId(), survey.getAuthorId()))
             .modifiedDate(survey.getModifiedDate())
+            .rewardPoints(maxRewardPoints)
             .build();
     }
 

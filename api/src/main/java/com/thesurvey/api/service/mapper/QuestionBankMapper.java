@@ -32,9 +32,7 @@ public class QuestionBankMapper {
 
     public QuestionBankResponseDto toQuestionBankResponseDto(QuestionBank questionBank,
         List<QuestionOptionResponseDto> questionOptionResponseDtoList) {
-        Boolean isRequired = questionRepository.findIsRequiredByQuestionBankId(
-                questionBank.getQuestionBankId()).orElseThrow(
-                    () -> new NotFoundExceptionMapper(ErrorMessage.QUESTION_NOT_FOUND));
+        Boolean isRequired = getIsRequiredByQuestionBankId(questionBank.getQuestionBankId());
         return QuestionBankResponseDto.builder()
             .questionBankId(questionBank.getQuestionBankId())
             .title(questionBank.getTitle())
@@ -60,4 +58,10 @@ public class QuestionBankMapper {
             .optionAnswers(questionOptionAnswerDtoList)
             .build();
     }
+
+    private Boolean getIsRequiredByQuestionBankId(Long questionBankId) {
+        return questionRepository.findIsRequiredByQuestionBankId(questionBankId)
+            .orElseThrow(() -> new NotFoundExceptionMapper(ErrorMessage.QUESTION_NOT_FOUND));
+    }
+
 }
