@@ -42,6 +42,6 @@ public class UserResponseDto {
     private LocalDateTime modifiedDate;
 
     @Schema(example = "4", description = "사용자가 보유한 포인트입니다.")
-    private Integer userPoint;
+    private Integer userPoints;
 
 }
