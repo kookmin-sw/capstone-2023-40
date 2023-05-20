@@ -301,7 +301,7 @@ describe('[SurveyFormPage Test]', () => {
 
     // 2) check modal is open
     fireEvent.click(submitButton);
-    const wrongDateModal = await screen.findByText('설문조사 시작일을 확인해 주세요');
+    const wrongDateModal = await screen.findByText('설문조사 시작일은 현재시간 이후여야 합니다');
     expect(wrongDateModal).toBeInTheDocument();
   });
 

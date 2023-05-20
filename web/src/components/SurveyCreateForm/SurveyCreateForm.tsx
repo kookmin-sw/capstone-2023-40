@@ -103,7 +103,7 @@ export default function SurveyCreateForm({ theme }: SurveyFormProps) {
         break;
       case ValidationErrorMessage.EARLY_START:
         scrollToTop();
-        setWarnText('설문조사 시작일은 현재시간 이후여야 합니다.');
+        setWarnText('설문조사 시작일은 현재시간 이후여야 합니다');
         setAlertModalOpen(true);
         break;
       case ValidationErrorMessage.EARLY_END:
