@@ -10,7 +10,7 @@ import DarkModeIcon from '../assets/darkmode.webp';
 import LightModeIcon from '../assets/lightmode.webp';
 import { Icons } from '../assets/svg';
 import { RootState } from '../reducers/index';
-import { setSubPageOpen } from '../types/header';
+import { setLoggedIn, setSubPageOpen } from '../types/header';
 import { UserUpdateRequest } from '../types/request';
 import { UserResponse } from '../types/response/User';
 import HeaderModal from './Modal/HeaderModal';
@@ -154,14 +154,14 @@ const NavigatorContainer = styled.ul`
   flex: 1;
 `;
 
-const Navigator = styled.li<{ currentLocation: string }>`
+const Navigator = styled.li`
   font-size: calc(1.5vh + 0.5vmin);
   font-weight: 600;
-  cursor: ${(props) => (props.currentLocation === '/' ? 'pointer' : 'hand')};
+  cursor: pointer;
   padding: 1vw;
 
   &:hover {
-    opacity: ${(props) => (props.currentLocation === '/' ? 0.5 : 1)};
+    opacity: 0.5;
     transition: all 0.15s ease-in-out;
   }
 `;
@@ -233,7 +233,8 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
     if (res.status === 200) {
       console.log('update Success!');
     } else if (res.status === 401) {
-      console.log('failed to user Authentication');
+      dispatch(setLoggedIn(false));
+      navigate('../');
     }
   };
 
@@ -246,18 +247,8 @@ export default function Header({ theme, toggleTheme }: HeaderProps) {
         <FaviconContainer onClick={() => navigate('/')} title="logo" />
       </LogoWrapper>
       <NavigatorContainer theme={theme}>
-        <Navigator
-          currentLocation={currentLocation}
-          onClick={currentLocation === '/' ? () => navigate('/survey') : undefined}
-        >
-          설문
-        </Navigator>
-        <Navigator
-          currentLocation={currentLocation}
-          onClick={currentLocation === '/' ? () => navigate('/report') : undefined}
-        >
-          리포트
-        </Navigator>
+        <Navigator onClick={() => navigate('../survey')}>설문</Navigator>
+        <Navigator onClick={() => navigate('../report')}>리포트</Navigator>
       </NavigatorContainer>
 
       <ButtonContainer>
