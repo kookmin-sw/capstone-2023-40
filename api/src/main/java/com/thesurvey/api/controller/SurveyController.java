@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import com.thesurvey.api.dto.request.answeredQuestion.AnsweredQuestionRequestDto;
 import com.thesurvey.api.dto.request.survey.SurveyRequestDto;
 import com.thesurvey.api.dto.request.survey.SurveyUpdateRequestDto;
+import com.thesurvey.api.dto.response.answeredQuestion.AnsweredQuestionRewardPointDto;
 import com.thesurvey.api.dto.response.survey.SurveyListPageDto;
 import com.thesurvey.api.dto.response.survey.SurveyResponseDto;
 import com.thesurvey.api.service.AnsweredQuestionService;
@@ -126,18 +127,19 @@ public class SurveyController {
 
     @Operation(summary = "설문조사 응답 제출", description = "설문조사 응답을 제출합니다.")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "204", description = "요청 성공"),
+        @ApiResponse(responseCode = "200", description = "요청 성공"),
         @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @Content(schema = @Schema(hidden = true))),
         @ApiResponse(responseCode = "401", description = "사용자 인증 실패", content = @Content(schema = @Schema(hidden = true))),
         @ApiResponse(responseCode = "403", description = "접근 권한 없음", content = @Content(schema = @Schema(hidden = true))),
         @ApiResponse(responseCode = "404", description = "요청한 리소스 찾을 수 없음", content = @Content(schema = @Schema(hidden = true)))
     })
     @PostMapping("/submit")
-    public ResponseEntity<Void> submitSurvey(
+    public ResponseEntity<AnsweredQuestionRewardPointDto> submitSurvey(
         @Parameter(hidden = true) Authentication authentication,
         @Valid @RequestBody AnsweredQuestionRequestDto answeredQuestionRequestDto) {
-        answeredQuestionService.createAnswer(authentication, answeredQuestionRequestDto);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        AnsweredQuestionRewardPointDto rewardPointDto =
+            answeredQuestionService.createAnswer(authentication, answeredQuestionRequestDto);
+        return ResponseEntity.ok(rewardPointDto);
     }
 
 }
