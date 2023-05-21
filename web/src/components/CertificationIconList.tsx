@@ -8,6 +8,7 @@ import Certification from './Certification';
 const Container = styled.div<{ width: string; minWidth: string }>`
   min-width: ${(props) => props.minWidth};
   width: ${(props) => props.width};
+  overflow: scroll;
 `;
 
 interface CertificationIconListProps {

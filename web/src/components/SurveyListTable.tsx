@@ -122,7 +122,7 @@ export default function SurveyListTable({
             </Title>
             <Item theme={theme}>
               <CertificationIconList
-                width="30vw"
+                width="20vw"
                 minWidth="100px"
                 certificationList={survey.certificationTypes}
                 theme={theme}
