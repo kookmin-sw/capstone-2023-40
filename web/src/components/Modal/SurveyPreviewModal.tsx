@@ -159,7 +159,12 @@ export default function SurveyPreviewModal({ surveyItem, setPreviewModalOpen, th
           <Description theme={theme}>{surveyItem.description}</Description>
           <Subtitle theme={theme}>필수인증 목록</Subtitle>
           <CertificationContainer>
-            <CertificationIconList certificationList={surveyItem.certificationTypes} theme={theme} />
+            <CertificationIconList
+              width="100%"
+              minWidth="100px"
+              certificationList={surveyItem.certificationTypes}
+              theme={theme}
+            />
           </CertificationContainer>
         </BodyContainer>
         <ButtonContainer>

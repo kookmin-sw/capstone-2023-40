@@ -121,7 +121,12 @@ export default function SurveyListTable({
               {survey.title}
             </Title>
             <Item theme={theme}>
-              <CertificationIconList certificationList={survey.certificationTypes} theme={theme} />
+              <CertificationIconList
+                width="30vw"
+                minWidth="100px"
+                certificationList={survey.certificationTypes}
+                theme={theme}
+              />
             </Item>
             <EndDate theme={theme}>{dateFormatUpToDate(`${survey.endedDate}`)}</EndDate>
           </ListRow>
