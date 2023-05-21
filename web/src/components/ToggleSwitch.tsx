@@ -10,31 +10,31 @@ const Container = styled.div`
 `;
 
 const Toggle = styled.input<{
-  leftText: string;
-  rightText: string;
-  leftTextColor: string;
-  rightTextColor: string;
-  leftBackgroundColor: string;
-  rightBackgroundColor: string;
+  onText: string;
+  offText: string;
+  onTextColor: string;
+  offTextColor: string;
+  onBackgroundColor: string;
+  offBackgroundColor: string;
   toggleColor: string;
 }>`
   all: unset;
   z-index: 1;
   width: 5rem;
   height: 2rem;
-  background: ${(props) => props.leftBackgroundColor};
+  background: ${(props) => props.offBackgroundColor};
   border-radius: 2em;
 
   ::before {
     position: absolute;
-    content: '${(props) => props.leftText}';
+    content: '${(props) => props.offText}';
     padding-left: 1em;
     width: 3.5rem;
     height: 2rem;
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    color: ${(props) => props.leftTextColor};
+    color: ${(props) => props.offTextColor};
     font-weight: 900;
     font-size: 0.813rem;
     transition: all 0.2s ease-in-out;
@@ -53,16 +53,16 @@ const Toggle = styled.input<{
     transition: all 0.2s ease-in-out;
   }
   &:checked {
-    background: ${(props) => props.rightBackgroundColor};
+    background: ${(props) => props.onBackgroundColor};
     transition: all 0.2s ease-in-out;
 
     ::before {
       position: absolute;
       padding-right: 1em;
-      content: '${(props) => props.rightText}';
+      content: '${(props) => props.onText}';
       align-items: center;
       justify-content: flex-end;
-      color: ${(props) => props.rightTextColor};
+      color: ${(props) => props.onTextColor};
     }
 
     ::after {
@@ -81,24 +81,24 @@ const Toggle = styled.input<{
 `;
 
 interface ToggleSwitchProps {
-  leftText: string;
-  rightText: string;
-  leftTextColor: string;
-  rightTextColor: string;
-  leftBackgroundColor: string;
-  rightBackgroundColor: string;
+  onText: string;
+  offText: string;
+  onTextColor: string;
+  offTextColor: string;
+  onBackgroundColor: string;
+  offBackgroundColor: string;
   toggleColor: string;
   isChecked: boolean;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export default function ToggleSwitch({
-  leftText,
-  rightText,
-  leftTextColor,
-  rightTextColor,
-  leftBackgroundColor,
-  rightBackgroundColor,
+  onText,
+  offText,
+  onTextColor,
+  offTextColor,
+  onBackgroundColor,
+  offBackgroundColor,
   toggleColor,
   isChecked,
   onChange,
@@ -106,12 +106,12 @@ export default function ToggleSwitch({
   return (
     <Container>
       <Toggle
-        leftText={leftText}
-        rightText={rightText}
-        leftTextColor={leftTextColor}
-        rightTextColor={rightTextColor}
-        leftBackgroundColor={leftBackgroundColor}
-        rightBackgroundColor={rightBackgroundColor}
+        onText={onText}
+        offText={offText}
+        onTextColor={onTextColor}
+        offTextColor={offTextColor}
+        onBackgroundColor={onBackgroundColor}
+        offBackgroundColor={offBackgroundColor}
         toggleColor={toggleColor}
         onChange={(event) => onChange(event)}
         type="checkbox"
