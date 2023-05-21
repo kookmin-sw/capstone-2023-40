@@ -73,6 +73,7 @@ export default function SurveyParticipateForm({ surveyData, theme }: SurveyParti
   const [alertModalOpen, setAlertModalOpen] = useState<boolean>(false);
   const [warnText, setWarnText] = useState<string>('');
   const [userAnswers, setUserAnswers] = useState<Array<AnsweredQuestion>>([]);
+  const [earnedPoint, setEarnedPoint] = useState<number>(0);
 
   const remainDate = useMemo(() => getDDay(endedDate), [endedDate]);
 
@@ -85,7 +86,8 @@ export default function SurveyParticipateForm({ surveyData, theme }: SurveyParti
     axios
       .post(requests.submitSurvey, surveySubmitData)
       .then((response) => {
-        // TODO: 획득 포인트 표시
+        // TODO: 서버로 부터 받은 획득 포인트 표시
+        setEarnedPoint(100);
         setResultModalOpen(true);
       })
       .catch((error) => {
@@ -176,7 +178,7 @@ export default function SurveyParticipateForm({ surveyData, theme }: SurveyParti
           />
         </ButtonContainer>
       </BodyContainer>
-      {resultModalOpen && <SurveyPageResultModal theme={theme} />}
+      {resultModalOpen && <SurveyPageResultModal point={earnedPoint} theme={theme} />}
       {alertModalOpen && (
         <AlertModal
           theme={theme}

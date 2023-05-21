@@ -42,11 +42,12 @@ const Label = styled.label`
 `;
 
 interface ModalProps {
+  point: number;
   theme: DefaultTheme;
 }
 
 // TODO: show point earned instead of emoji
-export default function SurveyPageResultModal({ theme }: ModalProps) {
+export default function SurveyPageResultModal({ point, theme }: ModalProps) {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -61,6 +62,7 @@ export default function SurveyPageResultModal({ theme }: ModalProps) {
     <Container theme={theme}>
       <ModalContainer theme={theme}>
         <Label theme={theme}>🥳</Label>
+        <Label theme={theme}>{point}</Label>
         <RectangleButton
           textColor="white"
           backgroundColor={theme.colors.primary}

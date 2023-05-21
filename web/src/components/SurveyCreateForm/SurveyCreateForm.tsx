@@ -59,12 +59,14 @@ export default function SurveyCreateForm({ theme }: SurveyFormProps) {
     certificationTypes: [],
     questions: [],
   });
+  const [usedPoint, setUsedPoint] = useState<number>(0);
 
   const handleSubmit = () => {
     axios
       .post(requests.createSurvey, surveyData)
       .then((response) => {
-        // TODO: 사용한 포인트 표시
+        // TODO: 서버로 부터 받은 사용한 포인트 표시
+        setUsedPoint(-100);
         setConfirmModalOpen(false);
         setResultModalOpen(true);
       })
@@ -301,7 +303,7 @@ export default function SurveyCreateForm({ theme }: SurveyFormProps) {
         />
       </ButtonContainer>
 
-      {resultModalOpen && <SurveyPageResultModal theme={theme} />}
+      {resultModalOpen && <SurveyPageResultModal point={usedPoint} theme={theme} />}
 
       {alertModalOpen && (
         <AlertModal
