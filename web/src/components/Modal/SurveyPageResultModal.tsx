@@ -28,6 +28,11 @@ const ModalContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  @media screen and (max-width: 700px) {
+    width: 50%;
+    height: 30%;
+  }
 `;
 
 const Label = styled.label`
@@ -37,7 +42,7 @@ const Label = styled.label`
   text-align: center;
 
   @media screen and (max-width: 700px) {
-    font-size: 30px;
+    font-size: 40px;
   }
 `;
 
@@ -49,7 +54,7 @@ const Point = styled.label<{ textColor: string }>`
   text-align: center;
 
   @media screen and (max-width: 700px) {
-    font-size: 30px;
+    font-size: 40px;
   }
 `;
 
@@ -84,7 +89,7 @@ export default function SurveyPageResultModal({ point, theme }: ModalProps) {
           text="완료하기"
           theme={theme}
           handleClick={() => navigate('/survey')}
-          width="15vw"
+          width="80%"
         />
       </ModalContainer>
     </Container>
