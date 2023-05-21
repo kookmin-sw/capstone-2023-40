@@ -68,11 +68,6 @@ export const validatePhoneNumber = (phoneNumber: string): boolean => {
 export const validateStartDate = (startDate: Date, currentDate: Date): boolean => {
   const dateDiff = startDate.getTime() - currentDate.getTime();
 
-  if (Math.abs(dateDiff) < 60000) {
-    if (startDate.getMinutes() >= currentDate.getMinutes()) return true;
-    return false;
-  }
-
   if (dateDiff < 0) return false;
 
   return true;

@@ -3,12 +3,13 @@ import { QuestionCreateRequest } from './Question';
 import { QuestionBankUpdateRequest } from './QuestionBank';
 
 export enum CertificationType {
+  NONE,
   KAKAO,
   NAVER,
   GOOGLE,
   WEBMAIL,
   DRIVER_LICENSE,
-  MOBILE_PHONE,
+  IDENTITY_CARD,
 }
 
 export interface SurveyCreateRequest {

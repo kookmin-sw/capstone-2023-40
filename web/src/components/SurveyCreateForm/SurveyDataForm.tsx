@@ -157,7 +157,7 @@ export default function SurveyDataForm({
           <CertificationIconList certificationList={surveyData.certificationTypes || []} theme={theme} />
         </SelectedCertificationsContainer>
         <List>
-          {NumberUtils.range(0, 6).map((index: number) => {
+          {NumberUtils.range(1, 7).map((index: number) => {
             return (
               <ListItem key={index}>
                 <CertificationLabel htmlFor={`certification${index}`} theme={theme}>

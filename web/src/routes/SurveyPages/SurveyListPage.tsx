@@ -13,6 +13,7 @@ import SurveyListSkeleton from '../../components/Skeleton/SurveyListSkeleton';
 import SurveyListTable from '../../components/SurveyListTable';
 import { useTheme } from '../../hooks/useTheme';
 import { SurveyPageResponse } from '../../types/response/Survey';
+import { responseErrorHandle } from '../../utils/responseErrorHandle';
 
 const Container = styled.div`
   width: 100vw;
@@ -36,29 +37,13 @@ export default function SurveyListPage() {
   });
 
   if (isError) {
-    // TODO: 에러 종류에 따라서 다른 알림 표시
-    // TODO: 에러 처리 로직 분리
-    const { response } = error as AxiosError;
-
-    let labelText = '';
-    let buttonText = '';
-    let navigateRoute = '';
-
-    if (response?.data === '존재하지 않는 페이지입니다.') {
-      labelText = '😥 찾는 페이지가 없습니다...';
-      buttonText = '홈화면으로 돌아가기';
-      navigateRoute = '/';
-    } else {
-      labelText = '😥 로그인이 만료 되었습니다...';
-      buttonText = '로그인 하러 가기';
-      navigateRoute = '/login';
-    }
+    const errorMessages: string[] = responseErrorHandle(error as AxiosError);
 
     return (
       <ErrorPage
-        labelText={labelText}
-        buttonText={buttonText}
-        navigateRoute={navigateRoute}
+        labelText={`😥 ${errorMessages[0]}..`}
+        buttonText={errorMessages[1]}
+        navigateRoute={errorMessages[2]}
         theme={theme}
         toggleTheme={toggleTheme}
       />

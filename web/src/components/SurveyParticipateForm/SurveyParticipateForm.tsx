@@ -8,9 +8,10 @@ import { AnsweredQuestion, SurveySubmitRequest } from '../../types/request';
 import { QuestionBankResponse } from '../../types/response/QuestionBank';
 import { SurveyResponse } from '../../types/response/Survey';
 import { dateFormatUpToDate, getDDay } from '../../utils/dateFormat';
+import { responseErrorHandle } from '../../utils/responseErrorHandle';
 import { scrollToRef } from '../../utils/scroll';
 import RectangleButton from '../Button/RectangleButton';
-import { SurveyPageResultModal } from '../Modal';
+import { AlertModal, SurveyPageResultModal } from '../Modal';
 import QuestionForm from './QuestionForm';
 
 const Container = styled.div``;
@@ -63,6 +64,8 @@ export default function SurveyParticipateForm({ surveyData, theme }: SurveyParti
   const questionRefs = useRef<HTMLDivElement[]>([]);
   const [endedDate, setEndedDate] = useState<string>('');
   const [resultModalOpen, setResultModalOpen] = useState<boolean>(false);
+  const [alertModalOpen, setAlertModalOpen] = useState<boolean>(false);
+  const [warnText, setWarnText] = useState<string>('');
   const [userAnswers, setUserAnswers] = useState<Array<AnsweredQuestion>>([]);
 
   const remainDate = useMemo(() => getDDay(endedDate), [endedDate]);
@@ -75,14 +78,15 @@ export default function SurveyParticipateForm({ surveyData, theme }: SurveyParti
     };
     axios
       .post(requests.submitSurvey, surveySubmitData)
-      .then(function (response) {
-        console.log(response);
+      .then((response) => {
+        // TODO: 획득 포인트 표시
+        setResultModalOpen(true);
       })
-      .catch(function (error) {
-        console.log(error);
+      .catch((error) => {
+        const errorMessages: string[] = responseErrorHandle(error);
+        setWarnText(errorMessages[0]);
+        setAlertModalOpen(true);
       });
-
-    setResultModalOpen(true);
   };
 
   const turnOnUserAttention = (domIndex: number) => {
@@ -167,6 +171,16 @@ export default function SurveyParticipateForm({ surveyData, theme }: SurveyParti
         </ButtonContainer>
       </BodyContainer>
       {resultModalOpen && <SurveyPageResultModal theme={theme} />}
+      {alertModalOpen && (
+        <AlertModal
+          theme={theme}
+          title="경고"
+          level="WARN"
+          text={warnText}
+          buttonText="확인"
+          onClose={() => setAlertModalOpen(false)}
+        />
+      )}
     </Container>
   );
 }

@@ -1,12 +1,10 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 
 const instance: AxiosInstance = axios.create({
-  // baseURL: 'https://capstone-mock-api.fly.dev',
-  // baseURL: 'http://localhost:8080/v1',
-
   // FIXME: 원활한 thesurvey.kr 사용을 위한 Base url 변경,
   // FIXME: 구현 및 테스트시 BaseUrl을 변경하여 사용할 것.
   baseURL: 'https://api.thesurvey.kr/v1',
+  // baseURL: 'http://localhost:8080/v1',
   // timeout: 15000,
   withCredentials: true,
 });

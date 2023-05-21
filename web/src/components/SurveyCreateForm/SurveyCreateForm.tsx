@@ -8,6 +8,7 @@ import { QuestionCreateRequest, QuestionType } from '../../types/request/Questio
 import { QuestionOptionCreateRequest } from '../../types/request/QuestionOption';
 import { SurveyCreateRequest } from '../../types/request/Survey';
 import { ValidationErrorMessage, InputCheckResult } from '../../types/userInputCheck';
+import { responseErrorHandle } from '../../utils/responseErrorHandle';
 import { scrollToRef, scrollToTop } from '../../utils/scroll';
 import { validateSurveyData } from '../../utils/validate';
 import RectangleButton from '../Button/RectangleButton';
@@ -60,14 +61,16 @@ export default function SurveyCreateForm({ theme }: SurveyFormProps) {
   const handleSubmit = () => {
     axios
       .post(requests.createSurvey, surveyData)
-      .then(function (response) {
-        console.log(response);
+      .then((response) => {
+        // TODO: 사용한 포인트 표시
+        setConfirmModalOpen(false);
+        setResultModalOpen(true);
       })
-      .catch(function (error) {
-        console.log(error);
+      .catch((error) => {
+        const errorMessages: string[] = responseErrorHandle(error);
+        setWarnText(errorMessages[0]);
+        setAlertModalOpen(true);
       });
-    setConfirmModalOpen(false);
-    setResultModalOpen(true);
   };
 
   useEffect(() => {
@@ -100,7 +103,7 @@ export default function SurveyCreateForm({ theme }: SurveyFormProps) {
         break;
       case ValidationErrorMessage.EARLY_START:
         scrollToTop();
-        setWarnText('설문조사 시작일을 확인해 주세요');
+        setWarnText('설문조사 시작일은 현재시간 이후여야 합니다');
         setAlertModalOpen(true);
         break;
       case ValidationErrorMessage.EARLY_END:

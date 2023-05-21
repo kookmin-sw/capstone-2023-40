@@ -12,6 +12,7 @@ import SurveyPageSkeleton from '../../components/Skeleton/SurveyPageSkeleton';
 import SurveyParticipateForm from '../../components/SurveyParticipateForm/SurveyParticipateForm';
 import { useTheme } from '../../hooks/useTheme';
 import { SurveyResponse } from '../../types/response/Survey';
+import { responseErrorHandle } from '../../utils/responseErrorHandle';
 
 const Container = styled.div`
   width: 100vw;
@@ -32,23 +33,13 @@ export default function SurveyPage() {
   });
 
   if (isError) {
-    // TODO: 에러 종류에 따라서 다른 알림 표시
-    // TODO: 에러 처리 로직 분리
-    const { response } = error as AxiosError;
-
-    let labelText = '';
-    let buttonText = '';
-    let navigateRoute = '';
-
-    labelText = '😥 잘못된 설문 입니다...';
-    buttonText = '설문 리스트로 돌아가기';
-    navigateRoute = '/survey';
+    const errorMessages: string[] = responseErrorHandle(error as AxiosError);
 
     return (
       <ErrorPage
-        labelText={labelText}
-        buttonText={buttonText}
-        navigateRoute={navigateRoute}
+        labelText={`😥 ${errorMessages[0]}..`}
+        buttonText={errorMessages[1]}
+        navigateRoute={errorMessages[2]}
         theme={theme}
         toggleTheme={toggleTheme}
       />
