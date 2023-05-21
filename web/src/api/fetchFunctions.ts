@@ -1,6 +1,6 @@
 import { QueryFunctionContext } from '@tanstack/react-query';
 
-import { SurveyPageResponse, SurveyResponse } from '../types/response/Survey';
+import { SurveyPageResponse, SurveyResponse, SurveyResultListResponse } from '../types/response/Survey';
 import axios from './axios';
 import { requests } from './request';
 
@@ -24,6 +24,17 @@ export const fetchSurveyList = async ({ queryKey }: QueryFunctionContext): Promi
  */
 export const fetchSurveyData = async ({ queryKey }: QueryFunctionContext): Promise<SurveyResponse> => {
   const { data } = await axios.get<SurveyResponse>(requests.getSurvey + queryKey[1]);
+
+  return data;
+};
+
+/**
+ * Get survey result list page with axios instance
+ *
+ * @returns {Promise<SurveyResultListResponse>}
+ */
+export const fetchSurveyResultList = async (): Promise<SurveyResultListResponse> => {
+  const { data } = await axios.get<SurveyResultListResponse>(`${requests.getSurveyResultList}`);
 
   return data;
 };

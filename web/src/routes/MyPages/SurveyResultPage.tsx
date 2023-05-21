@@ -1,12 +1,20 @@
 import React, { useState } from 'react';
 
+import { useQuery } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
+import axios from '../../api/axios';
+import { fetchSurveyResultList } from '../../api/fetchFunctions';
+import { requests } from '../../api/request';
 import { Icons } from '../../assets/svg/index';
+import ErrorPage from '../../components/ErrorPage';
 import Header from '../../components/Header';
+import SurveyListSkeleton from '../../components/Skeleton/SurveyListSkeleton';
 import { useTheme } from '../../hooks/useTheme';
+import { SurveyResultListResponse } from '../../types/response/Survey';
 import { updateUserInformation } from '../../utils/UserUtils';
 
 const TwoArrow = styled(Icons.TWOARROW).attrs({
@@ -122,6 +130,7 @@ export default function SurveyResultPage() {
   const [theme, toggleTheme] = useTheme();
   const [resultClickFirst, setResultClickFirst] = useState<boolean>(false);
   const [resultClickSecond, setResultClickSecond] = useState<boolean>(false);
+  const [surveyTitle, setSurveyTitle] = useState<SurveyResultListResponse[]>();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -137,10 +146,68 @@ export default function SurveyResultPage() {
     }
   };
 
+  const { data, isLoading, isError, error } = useQuery<SurveyResultListResponse>([], fetchSurveyResultList, {
+    cacheTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: 20 * 1000, // 20 seconds
+    retry: 1,
+    refetchOnWindowFocus: false,
+  });
+
   const resultList = [
     { id: 1, title: 'test1', resultClick: resultClickFirst },
     { id: 2, title: 'test2', resultClick: resultClickSecond },
   ];
+
+  if (isError) {
+    // TODO: 에러 종류에 따라서 다른 알림 표시
+    // TODO: 에러 처리 로직 분리
+    const { response } = error as AxiosError;
+
+    let labelText = '';
+    let buttonText = '';
+    let navigateRoute = '';
+
+    if (response?.data === '존재하지 않는 페이지입니다.') {
+      labelText = '😥 찾는 페이지가 없습니다...';
+      buttonText = '홈화면으로 돌아가기';
+      navigateRoute = '/';
+    } else {
+      labelText = '😥 로그인이 만료 되었습니다...';
+      buttonText = '로그인 하러 가기';
+      navigateRoute = '/login';
+    }
+
+    return (
+      <ErrorPage
+        labelText={labelText}
+        buttonText={buttonText}
+        navigateRoute={navigateRoute}
+        theme={theme}
+        toggleTheme={toggleTheme}
+      />
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <Container theme={theme}>
+        <Header theme={theme} toggleTheme={toggleTheme} />
+        <SurveyListSkeleton numOfSurveyRow={8} theme={theme} />
+      </Container>
+    );
+  }
+
+  if (data === null) {
+    return (
+      <ErrorPage
+        labelText="😥 참여 가능한 설문이 없습니다..."
+        buttonText="설문 만들러 가기"
+        navigateRoute="/survey/form"
+        theme={theme}
+        toggleTheme={toggleTheme}
+      />
+    );
+  }
 
   return (
     <Container theme={theme}>
