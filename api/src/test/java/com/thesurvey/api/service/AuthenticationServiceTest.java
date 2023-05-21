@@ -36,8 +36,8 @@ public class AuthenticationServiceTest {
     void testRegisterService() {
         // given
         UserRegisterRequestDto userRegisterRequestDto = UserRegisterRequestDto.builder()
-            .name("test")
-            .email("test@gmail.com")
+            .name("authTest")
+            .email("authTest@gmail.com")
             .password("Password40@")
             .phoneNumber("01012345678")
             .build();
@@ -63,14 +63,14 @@ public class AuthenticationServiceTest {
     void testLoginService() {
         // given
         UserRegisterRequestDto userRegisterRequestDto = UserRegisterRequestDto.builder()
-            .name("test")
-            .email("test@gmail.com")
+            .name("loginTest")
+            .email("loginTest@gmail.com")
             .password("Password40@")
             .phoneNumber("01012345678")
             .build();
 
         UserLoginRequestDto userLoginRequestDto = UserLoginRequestDto.builder()
-            .email("test@gmail.com")
+            .email("loginTest@gmail.com")
             .password("Password40@")
             .build();
 

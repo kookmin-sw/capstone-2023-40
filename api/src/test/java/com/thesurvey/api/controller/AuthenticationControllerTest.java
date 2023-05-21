@@ -68,7 +68,7 @@ public class AuthenticationControllerTest extends BaseControllerTest {
         assertThat(content.get("name")).isEqualTo(userRegisterRequestDto.getName());
         assertThat(content.get("role")).isEqualTo(String.valueOf(Role.USER));
         assertThat(content.get("email")).isEqualTo(userRegisterRequestDto.getEmail());
-        assertThat(content.get("userPoints")).isEqualTo(PointHistory.USER_INITIAL_POINT);
+        assertThat(content.get("point")).isEqualTo(PointHistory.USER_INITIAL_POINT);
     }
 
     @Test
