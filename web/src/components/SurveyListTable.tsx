@@ -50,6 +50,7 @@ const Title = styled(Item)`
   min-width: 15vh;
   flex: 1;
   cursor: pointer;
+  transition: 200ms background ease;
 
   &:hover {
     background-color: ${(props) => props.theme.colors.btnhover};
@@ -119,7 +120,7 @@ export default function SurveyListTable({
             <Title role="button" onClick={() => handleButtonClick(index)} theme={theme}>
               {survey.title}
             </Title>
-            <Item>
+            <Item theme={theme}>
               <CertificationIconList certificationList={survey.certificationTypes} theme={theme} />
             </Item>
             <EndDate theme={theme}>{dateFormatUpToDate(`${survey.endedDate}`)}</EndDate>
