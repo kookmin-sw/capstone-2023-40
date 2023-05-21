@@ -6,12 +6,19 @@ import { setLoggedIn, HeaderAction } from '../types/header';
 export const responseErrorHandle = (error: AxiosError, dispatch: Dispatch<HeaderAction>): string[] => {
   const { response } = error as AxiosError;
 
-  let labelText = `${response?.data}`;
+  let labelText = typeof response?.data === 'string' ? response.data : '';
   let buttonText = '';
   let navigateRoute = '';
 
   switch (response?.status) {
     case 400:
+      if (labelText !== '') {
+        buttonText = '확인';
+      } else {
+        labelText = '잘못된 요청입니다.';
+        buttonText = '홈화면으로 돌아가기';
+        navigateRoute = '/';
+      }
       break;
     case 401:
       if (labelText === '설문조사에 필요한 인증을 하지 않았습니다.') {
@@ -33,6 +40,7 @@ export const responseErrorHandle = (error: AxiosError, dispatch: Dispatch<Header
       navigateRoute = '/';
       break;
     default:
+      labelText = `${response?.status} 에러.`;
       buttonText = '홈화면으로 돌아가기';
       navigateRoute = '/';
       break;
