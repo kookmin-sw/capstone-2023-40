@@ -16,7 +16,7 @@ public enum ErrorMessage {
     QUESTION_NOT_FOUND("존재하지 않는 설문조사 또는 질문입니다."),
     SURVEY_ALREADY_STARTED("이미 시작된 설문조사입니다."),
     ANSWER_ALREADY_SUBMITTED("이미 완료한 설문조사 입니다."),
-    NO_ANSWER_TO_QUESTION("질문에 응답을 하지 않았습니다."),
+    NOT_ANSWER_TO_REQUIRED_QUESTION("필수 질문에 응답을 하지 않았습니다."),
     STARTEDDATE_ISAFTER_ENDEDDATE("설문조사 시작 시간이 종료 시간보다 앞설 수 없습니다."),
     SURVEY_ALREADY_ENDED("이미 종료된 설문조사 입니다."),
     SURVEY_NOT_STARTED("아직 시작하지 않은 설문조사 입니다."),
@@ -28,7 +28,8 @@ public enum ErrorMessage {
     PAGE_NOT_FOUND("존재하지 않는 페이지입니다."),
     CERTIFICATION_NOT_COMPLETED("설문조사에 필요한 인증을 하지 않았습니다."),
     SURVEY_CREATE_POINT_NOT_ENOUGH("설문조사 생성에 필요한 포인트가 부족합니다."),
-    INVALID_QUESTION_TYPE("유효하지 않은 질문 유형 입니다.");
+    INVALID_QUESTION_TYPE("유효하지 않은 질문 유형 입니다."),
+    ANSWER_AT_LEAST_ONE_QUESTION("적어도 하나 이상의 질문에 답변을 해야합니다.");
 
     private final String message;
 

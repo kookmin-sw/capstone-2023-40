@@ -109,9 +109,13 @@ public class AnsweredQuestionService {
         validateCreateAnswerRequest(user, survey);
 
         int rewardPoints = 0;
+        boolean isAnswered = false;
         for (AnsweredQuestionDto answeredQuestionDto : answeredQuestionRequestDto.getAnswers()) {
             if (answeredQuestionDto.getIsRequired() && validateEmptyAnswer(answeredQuestionDto)) {
-                throw new BadRequestExceptionMapper(ErrorMessage.NO_ANSWER_TO_QUESTION);
+                throw new BadRequestExceptionMapper(ErrorMessage.NOT_ANSWER_TO_REQUIRED_QUESTION);
+            }
+            if (!isAnswered && !validateEmptyAnswer(answeredQuestionDto)) {
+                isAnswered = true;
             }
 
             QuestionBank questionBank = questionBankRepository.findByQuestionBankId(
@@ -143,6 +147,10 @@ public class AnsweredQuestionService {
             rewardPoints += getQuestionBankRewardPoints(answeredQuestionDto);
 
         }
+        if (!isAnswered) {
+            throw new BadRequestExceptionMapper(ErrorMessage.ANSWER_AT_LEAST_ONE_QUESTION);
+        }
+
         List<CertificationType> certificationTypeList =
             getCertificationTypeList(surveyCertificationList);
         participationService.createParticipation(user, certificationTypeList, survey);
@@ -212,14 +220,10 @@ public class AnsweredQuestionService {
     }
 
     private int getQuestionBankRewardPoints(AnsweredQuestionDto answeredQuestionDto) {
-        int rewardPoints = 0;
-        if (answeredQuestionDto.getIsRequired()) {
-            rewardPoints = pointUtil.calculateSurveyMaxRewardPoints(answeredQuestionDto.getQuestionType());
+        if (!validateEmptyAnswer(answeredQuestionDto)) {
+            return pointUtil.calculateSurveyMaxRewardPoints(answeredQuestionDto.getQuestionType());
         }
-        else if (!validateEmptyAnswer(answeredQuestionDto)) {
-            rewardPoints = pointUtil.calculateSurveyMaxRewardPoints(answeredQuestionDto.getQuestionType());
-        }
-        return rewardPoints;
+        return 0;
     }
 
 }
