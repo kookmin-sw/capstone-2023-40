@@ -73,15 +73,14 @@ describe('[LoginPage Test]', () => {
     const email = () => container.querySelector('input[name="email"]') as HTMLInputElement;
     const password = () => container.querySelector('input[name="password"]') as HTMLInputElement;
     const isEmpty = !email().value || !password().value;
+
     fireEvent.change(password(), { target: { value: 'Test1234' } });
     fireEvent.change(email(), { target: { value: '' } });
     fireEvent.blur(email());
-
     const loginButton = await waitFor(() => screen.getByRole('button', { name: '로그인' }));
     await act(async () => {
       fireEvent.click(loginButton);
     });
-
     if (isEmpty) {
       const error = await screen.getByText('로그인 오류');
       expect(error).toBeInTheDocument();
@@ -164,14 +163,14 @@ describe('[LoginPage Test]', () => {
     );
     const email = () => container.querySelector('input[name="email"]') as HTMLInputElement;
     const password = () => container.querySelector('input[name="password"]') as HTMLInputElement;
-    fireEvent.change(email(), { target: { value: 'user@test.com' } });
-    fireEvent.change(password(), { target: { value: 'test1234!' } });
+    fireEvent.change(email(), { target: { value: 'userTest1234@gmail.com ' } });
+    fireEvent.change(password(), { target: { value: 'Test1234!' } });
 
     const navigateToRegisterButton = await waitFor(() => screen.getByRole('button', { name: '로그인' }));
     await act(async () => {
       fireEvent.click(navigateToRegisterButton);
     });
 
-    expect(screen.getByText('바로 설문하기')).toHaveTextContent('바로 설문하기');
+    expect(screen.getByText('회원가입')).toHaveTextContent('회원가입');
   });
 });
