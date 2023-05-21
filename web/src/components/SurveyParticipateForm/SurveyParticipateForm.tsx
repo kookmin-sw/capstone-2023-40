@@ -27,6 +27,10 @@ const QuestionContainer = styled.div`
 `;
 
 const HeadContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
   padding: 6vh 8vw 0vh 8vw;
   background-color: ${(props) => props.theme.colors.container};
 `;

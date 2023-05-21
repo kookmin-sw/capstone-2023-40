@@ -24,6 +24,7 @@ const GuideLabel = styled.label`
   margin-right: 10px;
   font-weight: 900;
   color: ${(props) => props.theme.colors.default};
+
   @media screen and (max-width: 650px) {
     margin-left: 2px;
     margin-right: 2px;
