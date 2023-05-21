@@ -20,8 +20,8 @@ const Container = styled.div`
 `;
 
 const ModalContainer = styled.div`
-  width: 30vw;
-  height: 30vh;
+  width: 40%;
+  height: 40%;
   border-radius: ${(props) => props.theme.borderRadius};
   background-color: ${(props) => props.theme.colors.container};
   display: flex;
@@ -31,9 +31,21 @@ const ModalContainer = styled.div`
 `;
 
 const Label = styled.label`
-  font-size: 80px;
+  font-size: 50px;
   font-weight: 700;
   color: ${(props) => props.theme.colors.default};
+  text-align: center;
+
+  @media screen and (max-width: 700px) {
+    font-size: 30px;
+  }
+`;
+
+const Point = styled.label<{ textColor: string }>`
+  font-size: 70px;
+  font-weight: 700;
+  color: ${(props) => props.textColor};
+  margin-bottom: 15px;
   text-align: center;
 
   @media screen and (max-width: 700px) {
@@ -62,7 +74,9 @@ export default function SurveyPageResultModal({ point, theme }: ModalProps) {
     <Container theme={theme}>
       <ModalContainer theme={theme}>
         <Label theme={theme}>🥳</Label>
-        <Label theme={theme}>{point}</Label>
+        <Point textColor={point >= 0 ? '#ADFF2F' : '#FF4500'} theme={theme}>
+          {point > 0 ? `+${point}pt` : `${point}pt`}
+        </Point>
         <RectangleButton
           textColor="white"
           backgroundColor={theme.colors.primary}

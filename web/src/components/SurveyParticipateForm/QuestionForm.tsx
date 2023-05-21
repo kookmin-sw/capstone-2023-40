@@ -138,7 +138,7 @@ export default function QuestionForm({ question, index, userAnswers, setUserAnsw
           {index + 1}.&nbsp;&nbsp;{question.title}
         </Title>
         <DescriptionContainer>
-          <RequiredOption isRequired={question.isRequired}>
+          <RequiredOption isRequired={question.isRequired} theme={theme}>
             {question.isRequired ? '필수 응답 질문' : '선택 응답 질문'}
           </RequiredOption>
           <Description theme={theme}>{question.description}</Description>
