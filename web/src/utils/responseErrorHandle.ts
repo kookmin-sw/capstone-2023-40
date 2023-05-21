@@ -1,6 +1,9 @@
 import { AxiosError } from 'axios';
+import { Dispatch } from 'redux';
 
-export const responseErrorHandle = (error: AxiosError): string[] => {
+import { setLoggedIn, HeaderAction } from '../types/header';
+
+export const responseErrorHandle = (error: AxiosError, dispatch: Dispatch<HeaderAction>): string[] => {
   const { response } = error as AxiosError;
 
   let labelText = `${response?.data}`;
@@ -15,6 +18,7 @@ export const responseErrorHandle = (error: AxiosError): string[] => {
         buttonText = '인증 하러 가기';
         navigateRoute = '/mypage/auth-list';
       } else {
+        dispatch(setLoggedIn(false));
         labelText = '로그인이 만료 되었습니다.';
         buttonText = '로그인 하러 가기';
         navigateRoute = '/login';

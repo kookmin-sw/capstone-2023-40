@@ -13,7 +13,6 @@ import Pagination from '../../components/Pagination';
 import SurveyListSkeleton from '../../components/Skeleton/SurveyListSkeleton';
 import SurveyListTable from '../../components/SurveyListTable';
 import { useTheme } from '../../hooks/useTheme';
-import { setLoggedIn } from '../../types/header';
 import { SurveyPageResponse } from '../../types/response/Survey';
 import { responseErrorHandle } from '../../utils/responseErrorHandle';
 
@@ -26,11 +25,11 @@ const Container = styled.div`
 const ListContainer = styled.div``;
 
 export default function SurveyListPage() {
+  const dispatch = useDispatch();
   const [theme, toggleTheme] = useTheme();
   const [page, setPage] = useState<number>(1);
   const [previewModalOpen, setPreviewModalOpen] = useState<boolean>(false);
   const [selectedSurveyIndex, setSelectedSurveyIndex] = useState<number>(0);
-  const dispatch = useDispatch();
   const [errorLabel, setErrorLabel] = useState<string>('');
   const [errorButtonText, setErrorButtonText] = useState<string>('');
   const [errorNavigate, setErrorNavigate] = useState<string>('');
@@ -44,7 +43,7 @@ export default function SurveyListPage() {
 
   useEffect(() => {
     if (isError) {
-      const errorMessages: string[] = responseErrorHandle(error as AxiosError);
+      const errorMessages: string[] = responseErrorHandle(error as AxiosError, dispatch);
 
       setErrorLabel(`😥 ${errorMessages[0]}..`);
       setErrorButtonText(errorMessages[1]);

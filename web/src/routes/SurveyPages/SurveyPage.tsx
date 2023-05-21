@@ -2,6 +2,7 @@ import React from 'react';
 
 import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
+import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -24,6 +25,7 @@ const Container = styled.div`
 export default function SurveyPage() {
   const { id } = useParams();
   const [theme, toggleTheme] = useTheme();
+  const dispatch = useDispatch();
 
   const { data, isLoading, isError, error } = useQuery<SurveyResponse>(['survey', id], fetchSurveyData, {
     cacheTime: 15 * 60 * 1000, // 15 minutes
@@ -33,7 +35,7 @@ export default function SurveyPage() {
   });
 
   if (isError) {
-    const errorMessages: string[] = responseErrorHandle(error as AxiosError);
+    const errorMessages: string[] = responseErrorHandle(error as AxiosError, dispatch);
 
     return (
       <ErrorPage
