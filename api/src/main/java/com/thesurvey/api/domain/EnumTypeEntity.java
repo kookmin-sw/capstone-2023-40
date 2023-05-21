@@ -44,6 +44,28 @@ public class EnumTypeEntity {
         }
     }
 
+    public enum PointTransactionType {
+
+        SINGLE_CHOICE_REWARD(1),
+        SINGLE_CHOICE_CONSUME(2),
+
+        MULTIPLE_CHOICES_REWARD(2),
+        MULTIPLE_CHOICES_CONSUME(4),
+
+        SHORT_ANSWER_REWARD(2),
+        SHORT_ANSWER_CONSUME(4),
+
+        LONG_ANSWER_REWARD(3),
+        LONG_ANSWER_CONSUME(6);
+
+        @Getter
+        private final int transactionPoint;
+
+        PointTransactionType(int transactionPoint) {
+            this.transactionPoint = transactionPoint;
+        }
+    }
+
     public enum Role {
         USER,
         ADMIN

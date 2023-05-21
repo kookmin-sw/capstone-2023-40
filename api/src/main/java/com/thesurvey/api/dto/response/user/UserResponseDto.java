@@ -41,4 +41,7 @@ public class UserResponseDto {
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime modifiedDate;
 
+    @Schema(example = "4", description = "사용자가 보유한 포인트입니다.")
+    private Integer point;
+
 }

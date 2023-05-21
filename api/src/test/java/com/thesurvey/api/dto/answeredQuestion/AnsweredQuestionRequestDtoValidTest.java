@@ -9,6 +9,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 
 import com.thesurvey.api.controller.SurveyController;
+import com.thesurvey.api.domain.EnumTypeEntity.QuestionType;
 import com.thesurvey.api.dto.request.answeredQuestion.AnsweredQuestionDto;
 import com.thesurvey.api.dto.request.answeredQuestion.AnsweredQuestionRequestDto;
 import org.junit.jupiter.api.Test;
@@ -31,8 +32,10 @@ public class AnsweredQuestionRequestDtoValidTest {
     public void testCorrectInput() {
         // given
         AnsweredQuestionDto answeredQuestionDto = AnsweredQuestionDto.builder()
-            .shortAnswer("This tis test short answer.")
-            .longAnswer("This is test long answer")
+            .questionBankId(1L)
+            .questionType(QuestionType.SHORT_ANSWER)
+            .isRequired(true)
+            .shortAnswer("This is test short answer.")
             .build();
 
         List<AnsweredQuestionDto> answers = Arrays.asList(answeredQuestionDto);

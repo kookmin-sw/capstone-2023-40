@@ -1,13 +1,12 @@
 package com.thesurvey.api.dto.response.survey;
 
-import com.thesurvey.api.dto.response.question.QuestionBankResponseDto;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
+import com.thesurvey.api.dto.response.question.QuestionBankResponseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
@@ -48,5 +47,8 @@ public class SurveyResponseDto {
 
     @Schema(example = "[\"NAVER\", \"KAKAO\"]", description = "생성된 설문조사의 필수인증 목록입니다.")
     private List<CertificationType> certificationTypes;
+
+    @Schema(example = "1", description = "설문조사 완료시 획득할 수 있는 포인트입니다.")
+    private Integer rewardPoints;
 
 }

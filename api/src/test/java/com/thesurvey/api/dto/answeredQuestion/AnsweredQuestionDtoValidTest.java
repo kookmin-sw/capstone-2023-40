@@ -6,6 +6,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 
 import com.thesurvey.api.controller.SurveyController;
+import com.thesurvey.api.domain.EnumTypeEntity.QuestionType;
 import com.thesurvey.api.dto.request.answeredQuestion.AnsweredQuestionDto;
 import org.junit.jupiter.api.Test;
 
@@ -27,8 +28,10 @@ public class AnsweredQuestionDtoValidTest {
     public void testCorrectInput() {
         // given
         AnsweredQuestionDto answeredQuestionDto = AnsweredQuestionDto.builder()
+            .questionBankId(1L)
+            .questionType(QuestionType.SHORT_ANSWER)
+            .isRequired(true)
             .shortAnswer("This is test short answer.")
-            .longAnswer("This is test long answer")
             .build();
 
         // when
@@ -50,6 +53,9 @@ public class AnsweredQuestionDtoValidTest {
         String maxLengthString = maxLengthStringBuilder.toString();
 
         AnsweredQuestionDto answeredQuestionDto = AnsweredQuestionDto.builder()
+            .questionBankId(1L)
+            .isRequired(true)
+            .questionType(QuestionType.SHORT_ANSWER)
             .shortAnswer(maxLengthString) // violated by @Size
             .longAnswer(maxLengthString) // violated by @Size
             .build();

@@ -45,5 +45,7 @@ public class SurveyPageDto {
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime modifiedDate;
 
+    @Schema(example = "1", description = "설문조사 완료시 획득할 수 있는 포인트입니다.")
+    private Integer rewardPoints;
 
 }

@@ -10,7 +10,6 @@ import com.thesurvey.api.domain.QuestionOption;
 import com.thesurvey.api.domain.Survey;
 import com.thesurvey.api.dto.request.question.QuestionBankUpdateRequestDto;
 import com.thesurvey.api.dto.request.question.QuestionRequestDto;
-import com.thesurvey.api.dto.request.survey.SurveyRequestDto;
 import com.thesurvey.api.dto.response.question.QuestionBankResponseDto;
 import com.thesurvey.api.dto.response.question.QuestionOptionResponseDto;
 import com.thesurvey.api.exception.ErrorMessage;
@@ -89,8 +88,8 @@ public class QuestionService {
     }
 
     @Transactional
-    public void createQuestion(SurveyRequestDto surveyRequestDto, Survey survey) {
-        for (QuestionRequestDto questionRequestDto : surveyRequestDto.getQuestions()) {
+    public void createQuestion(List<QuestionRequestDto> questionRequestDtoList, Survey survey) {
+        for (QuestionRequestDto questionRequestDto : questionRequestDtoList) {
             QuestionBank questionBank = questionBankRepository.save(
                 questionBankMapper.toQuestionBank(questionRequestDto));
 

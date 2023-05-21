@@ -20,8 +20,10 @@ public class AnsweredQuestionMapper {
             .survey(survey)
             .questionBank(questionBank)
             .singleChoice(answeredQuestionRequestDto.getSingleChoice())
-            .shortAnswer(StringUtil.trim(answeredQuestionRequestDto.getShortAnswer()))
-            .longAnswer(StringUtil.trim(answeredQuestionRequestDto.getLongAnswer()))
+            .shortAnswer(StringUtil.trimShortLongAnswer(answeredQuestionRequestDto.getShortAnswer(),
+                answeredQuestionRequestDto.getIsRequired()))
+            .longAnswer(StringUtil.trimShortLongAnswer(answeredQuestionRequestDto.getLongAnswer(),
+                answeredQuestionRequestDto.getIsRequired()))
             .build();
     }
 

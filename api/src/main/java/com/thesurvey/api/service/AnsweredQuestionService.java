@@ -14,6 +14,7 @@ import com.thesurvey.api.domain.Survey;
 import com.thesurvey.api.domain.User;
 import com.thesurvey.api.dto.request.answeredQuestion.AnsweredQuestionDto;
 import com.thesurvey.api.dto.request.answeredQuestion.AnsweredQuestionRequestDto;
+import com.thesurvey.api.dto.response.answeredQuestion.AnsweredQuestionRewardPointDto;
 import com.thesurvey.api.exception.ErrorMessage;
 import com.thesurvey.api.exception.mapper.BadRequestExceptionMapper;
 import com.thesurvey.api.exception.mapper.ForbiddenRequestExceptionMapper;
@@ -26,6 +27,8 @@ import com.thesurvey.api.repository.SurveyRepository;
 import com.thesurvey.api.repository.UserCertificationRepository;
 import com.thesurvey.api.service.converter.CertificationTypeConverter;
 import com.thesurvey.api.service.mapper.AnsweredQuestionMapper;
+import com.thesurvey.api.util.PointUtil;
+import com.thesurvey.api.util.StringUtil;
 import com.thesurvey.api.util.UserUtil;
 
 import org.springframework.security.core.Authentication;
@@ -51,12 +54,16 @@ public class AnsweredQuestionService {
 
     private final CertificationTypeConverter certificationTypeConverter;
 
+    private final PointHistoryService pointHistoryService;
+
+    private final PointUtil pointUtil;
+
     public AnsweredQuestionService(SurveyRepository surveyRepository,
         AnsweredQuestionRepository answeredQuestionRepository,
         QuestionBankRepository questionBankRepository,
         AnsweredQuestionMapper answeredQuestionMapper,
         QuestionRepository questionRepository,
-        ParticipationService participationService, UserCertificationRepository userCertificationRepository, CertificationTypeConverter certificationTypeConverter) {
+        ParticipationService participationService, UserCertificationRepository userCertificationRepository, CertificationTypeConverter certificationTypeConverter, PointHistoryService pointHistoryService, PointUtil pointUtil) {
         this.surveyRepository = surveyRepository;
         this.answeredQuestionRepository = answeredQuestionRepository;
         this.questionBankRepository = questionBankRepository;
@@ -65,6 +72,8 @@ public class AnsweredQuestionService {
         this.participationService = participationService;
         this.userCertificationRepository = userCertificationRepository;
         this.certificationTypeConverter = certificationTypeConverter;
+        this.pointHistoryService = pointHistoryService;
+        this.pointUtil = pointUtil;
     }
 
     @Transactional
@@ -83,7 +92,7 @@ public class AnsweredQuestionService {
     }
 
     @Transactional
-    public void createAnswer(Authentication authentication,
+    public AnsweredQuestionRewardPointDto createAnswer(Authentication authentication,
         AnsweredQuestionRequestDto answeredQuestionRequestDto) {
         User user = UserUtil.getUserFromAuthentication(authentication);
         Survey survey = surveyRepository.findBySurveyId(answeredQuestionRequestDto.getSurveyId())
@@ -99,8 +108,15 @@ public class AnsweredQuestionService {
         validateUserCompletedCertification(surveyCertificationList, user.getUserId());
         validateCreateAnswerRequest(user, survey);
 
+        int rewardPoints = 0;
+        boolean isAnswered = false;
         for (AnsweredQuestionDto answeredQuestionDto : answeredQuestionRequestDto.getAnswers()) {
-            validateEmptyAnswer(answeredQuestionDto);
+            if (answeredQuestionDto.getIsRequired() && validateEmptyAnswer(answeredQuestionDto)) {
+                throw new BadRequestExceptionMapper(ErrorMessage.NOT_ANSWER_TO_REQUIRED_QUESTION);
+            }
+            if (!isAnswered && !validateEmptyAnswer(answeredQuestionDto)) {
+                isAnswered = true;
+            }
 
             QuestionBank questionBank = questionBankRepository.findByQuestionBankId(
                 answeredQuestionDto.getQuestionBankId()).orElseThrow(
@@ -128,11 +144,19 @@ public class AnsweredQuestionService {
 
                 answeredQuestionRepository.saveAll(answeredQuestionList);
             }
+            rewardPoints += getQuestionBankRewardPoints(answeredQuestionDto);
 
-            List<CertificationType> certificationTypeList =
-                getCertificationTypeList(surveyCertificationList);
-            participationService.createParticipation(user, certificationTypeList, survey);
         }
+        if (!isAnswered) {
+            throw new BadRequestExceptionMapper(ErrorMessage.ANSWER_AT_LEAST_ONE_QUESTION);
+        }
+
+        List<CertificationType> certificationTypeList =
+            getCertificationTypeList(surveyCertificationList);
+        participationService.createParticipation(user, certificationTypeList, survey);
+        pointHistoryService.savePointHistory(user, rewardPoints);
+
+        return AnsweredQuestionRewardPointDto.builder().rewardPoints(rewardPoints).build();
     }
 
     @Transactional
@@ -165,15 +189,15 @@ public class AnsweredQuestionService {
         }
     }
 
-    private void validateEmptyAnswer(AnsweredQuestionDto answeredQuestionDto) {
-        if (answeredQuestionDto.getLongAnswer() == null
-            && answeredQuestionDto.getShortAnswer() == null
+    private boolean validateEmptyAnswer(AnsweredQuestionDto answeredQuestionDto) {
+        return (answeredQuestionDto.getLongAnswer() == null
+            || StringUtil.trimShortLongAnswer(answeredQuestionDto.getLongAnswer(),
+            answeredQuestionDto.getIsRequired()).isEmpty())
+            && (answeredQuestionDto.getShortAnswer() == null
+            || StringUtil.trimShortLongAnswer(answeredQuestionDto.getShortAnswer(),
+            answeredQuestionDto.getIsRequired()).isEmpty())
             && answeredQuestionDto.getSingleChoice() == null
-            && (answeredQuestionDto.getMultipleChoices() == null
-            || answeredQuestionDto.getMultipleChoices().isEmpty())
-        ) {
-            throw new BadRequestExceptionMapper(ErrorMessage.NO_ANSWER_TO_QUESTION);
-        }
+            && (answeredQuestionDto.getMultipleChoices() == null || answeredQuestionDto.getMultipleChoices().isEmpty());
     }
 
     // validate if the user has completed the necessary certifications for the survey
@@ -194,4 +218,12 @@ public class AnsweredQuestionService {
         }
         return certificationTypeConverter.toCertificationTypeList(surveyCertificationList);
     }
+
+    private int getQuestionBankRewardPoints(AnsweredQuestionDto answeredQuestionDto) {
+        if (!validateEmptyAnswer(answeredQuestionDto)) {
+            return pointUtil.calculateSurveyMaxRewardPoints(answeredQuestionDto.getQuestionType());
+        }
+        return 0;
+    }
+
 }

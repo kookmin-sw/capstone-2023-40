@@ -4,6 +4,7 @@ package com.thesurvey.api.controller;
 import java.util.UUID;
 
 import com.thesurvey.api.domain.EnumTypeEntity.Role;
+import com.thesurvey.api.domain.PointHistory;
 import com.thesurvey.api.dto.request.user.UserLoginRequestDto;
 import com.thesurvey.api.dto.request.user.UserRegisterRequestDto;
 import com.thesurvey.api.repository.UserRepository;
@@ -67,6 +68,7 @@ public class AuthenticationControllerTest extends BaseControllerTest {
         assertThat(content.get("name")).isEqualTo(userRegisterRequestDto.getName());
         assertThat(content.get("role")).isEqualTo(String.valueOf(Role.USER));
         assertThat(content.get("email")).isEqualTo(userRegisterRequestDto.getEmail());
+        assertThat(content.get("point")).isEqualTo(PointHistory.USER_INITIAL_POINT);
     }
 
     @Test
