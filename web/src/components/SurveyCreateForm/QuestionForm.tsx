@@ -47,6 +47,7 @@ const TextInput = styled.input.attrs({ type: 'text', maxLength: 100 })`
 `;
 
 const QuestionTitleInput = styled(TextInput).attrs({ type: 'text' })`
+  width: 70%;
   font-size: 18px;
   margin-top: 7px;
 `;
@@ -59,7 +60,7 @@ const QuestionDescriptionInput = styled(TextInput).attrs({ type: 'text' })`
 
 const AnswerLabel = styled.label`
   display: inline-block;
-  width: 30vw;
+  width: 30%;
   padding: 1.2vh 1.5vw 1.2vh 1.5vw;
   font-size: 15px;
   color: ${(props) => props.theme.colors.text};
@@ -68,6 +69,10 @@ const AnswerLabel = styled.label`
   text-decoration-color: currentColor;
   border: ${(props) => props.theme.border};
   border-radius: ${(props) => props.theme.borderRadius};
+
+  @media screen and (max-width: 650px) {
+    width: 65%;
+  }
 `;
 
 const AddOptionButton = styled.button`

@@ -297,7 +297,7 @@ export default function SurveyCreateForm({ theme }: SurveyFormProps) {
           text="제출하기"
           theme={theme}
           handleClick={validation}
-          width="15vw"
+          width="30%"
         />
       </ButtonContainer>
 
