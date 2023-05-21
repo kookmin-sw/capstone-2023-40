@@ -41,7 +41,7 @@ public class UserMapper {
             .profileImage(user.getProfileImage())
             .createdDate(user.getCreatedDate())
             .modifiedDate(user.getModifiedDate())
-            .userPoints(pointHistoryService.getUserTotalPoint(user.getUserId()))
+            .point(pointHistoryService.getUserTotalPoint(user.getUserId()))
             .build();
     }
 
