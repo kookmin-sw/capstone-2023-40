@@ -13,6 +13,7 @@ import { Icons } from '../../assets/svg/index';
 import ErrorPage from '../../components/ErrorPage';
 import Header from '../../components/Header';
 import LoadingForm from '../../components/LoadingForm';
+import SurveyResultBox from '../../components/SurveyResultBox';
 import { useTheme } from '../../hooks/useTheme';
 import { SurveyResultList, SurveyResultListResponse, SurveyResultResponse } from '../../types/response/Survey';
 import { updateUserInformation } from '../../utils/UserUtils';
@@ -63,6 +64,7 @@ const SurveyResultContainer = styled.div`
 const ListBox = styled.div`
   z-index: 1;
   display: flex;
+  width: 100%;
   flex-direction: row;
   align-items: center;
   border: ${(props) => props.theme.borderResultList};
@@ -74,13 +76,15 @@ const ListBox = styled.div`
 
 const ResultBox = styled.div`
   height: 40vh;
-  width: 100%;
+  width: 91%;
+  max-width: 91%;
   align-items: center;
   box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.4);
   pointer-events: none;
   margin-top: 1.5vh;
   transition: opacity 0.4s ease-in-out;
   position: absolute;
+  padding: 4vw;
   top: 100%;
   border: ${(props) => props.theme.borderResultList};
   border-radius: ${(props) => props.theme.borderRadius};
@@ -138,16 +142,16 @@ export default function SurveyResultPage() {
   };
 
   const handleClick = async (item: any) => {
+    setIsSurveyResultClicked((state) => ({
+      ...state,
+      [item.authorId]: !state[item.authorId],
+    }));
     axios
       .get<SurveyResultResponse>(`${requests.getSurveyResultData}${item.surveyId}`)
       .then((res) => {
         if (res.status === 200) {
           console.log(res.data);
           setSurveyResult(res.data);
-          setIsSurveyResultClicked((state) => ({
-            ...state,
-            [item.authorId]: !state[item.authorId],
-          }));
         }
       })
       .catch((error) => {
@@ -165,6 +169,7 @@ export default function SurveyResultPage() {
       refetchOnWindowFocus: false,
     }
   );
+
   const resultList = [
     { surveyId: 'test1', authorId: 1, title: 'test1' },
     { surveyId: 'test2', authorId: 2, title: 'test2' },
@@ -175,17 +180,17 @@ export default function SurveyResultPage() {
     return <LoadingForm />;
   }
 
-  if (isError || data === undefined) {
-    return (
-      <ErrorPage
-        labelText="😥 생성하신 설문이 없습니다..."
-        buttonText="설문 만들러 가기"
-        navigateRoute="/survey/form"
-        theme={theme}
-        toggleTheme={toggleTheme}
-      />
-    );
-  }
+  // if (isError || data === undefined) {
+  //   return (
+  //     <ErrorPage
+  //       labelText="😥 생성하신 설문이 없습니다..."
+  //       buttonText="설문 만들러 가기"
+  //       navigateRoute="/survey/form"
+  //       theme={theme}
+  //       toggleTheme={toggleTheme}
+  //     />
+  //   );
+  // }
 
   return (
     <Container theme={theme}>
@@ -198,7 +203,7 @@ export default function SurveyResultPage() {
             </MypageText>
             <SurveyResultText theme={theme}> &gt; 설문 결과 조회</SurveyResultText>
           </SurVeyResultPageTitle>
-          {data?.surveys.map((item) => (
+          {resultList.map((item) => (
             <ListBoxContainer key={item.surveyId} theme={theme}>
               <ListBox theme={theme} onClick={() => handleClick(item)}>
                 <FontText theme={theme}>{item.title}</FontText>
@@ -210,11 +215,12 @@ export default function SurveyResultPage() {
               <ResultBox
                 theme={theme}
                 style={{
+                  width: ListBox.width,
                   opacity: isSurveyResultClicked[item.authorId] ? 1 : 0,
                   zIndex: isSurveyResultClicked[item.authorId] ? 1 : -1,
                 }}
               >
-                <ChartImage />
+                <SurveyResultBox theme={theme} />
                 <FontText theme={theme}>{surveyResult?.toString()}</FontText>
               </ResultBox>
             </ListBoxContainer>
