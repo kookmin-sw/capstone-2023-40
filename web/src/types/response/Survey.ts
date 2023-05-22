@@ -31,7 +31,12 @@ export interface SurveyPageResponse extends BaseTime {
 }
 
 export interface SurveyResultListResponse {
+  surveys: SurveyResultList[];
+}
+
+export interface SurveyResultList {
   surveyId: string;
+  authorId: number;
   title: string;
 }
 

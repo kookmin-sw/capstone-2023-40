@@ -13,6 +13,7 @@ import {
   setAuthWebMail,
 } from '../types/surveyAuth';
 import {
+  setUserId,
   setUserEmail,
   setUserPassword,
   setUserName,
@@ -29,6 +30,7 @@ import {
  * @param dispatch : Function for updating information on react-redux
  */
 export const setUserInformation = (userdata: any, password: string, dispatch = useDispatch()) => {
+  dispatch(setUserId(userdata.authorId));
   dispatch(setUserPoint(userdata.point === undefined ? '0' : userdata.point));
   dispatch(setUserEmail(userdata.email));
   if (password !== 'passwordUndefined') {
@@ -52,6 +54,7 @@ export const updateUserInformation = async (dispatch = useDispatch(), navigate =
 // if we logout in this service, initialize userData in local.
 export const clearUserInformation = (dispatch = useDispatch()) => {
   // initialize user information.
+  dispatch(setUserId(0));
   dispatch(setUserEmail(''));
   dispatch(setUserPassword(''));
   dispatch(setUserName(''));
