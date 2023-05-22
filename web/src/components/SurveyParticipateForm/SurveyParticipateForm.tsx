@@ -177,7 +177,7 @@ export default function SurveyParticipateForm({ surveyData, theme }: SurveyParti
             theme={theme}
             handleClick={handleSubmitButtonClick}
             width="20vw"
-            disabled={confirmModalOpen}
+            disabled={confirmModalOpen || resultModalOpen}
           />
         </ButtonContainer>
       </BodyContainer>

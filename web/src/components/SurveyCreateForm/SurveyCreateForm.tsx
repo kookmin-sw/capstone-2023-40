@@ -312,7 +312,7 @@ export default function SurveyCreateForm({ theme }: SurveyFormProps) {
           theme={theme}
           handleClick={validation}
           width="30%"
-          disabled={numOfContext >= 1000 || confirmModalOpen}
+          disabled={numOfContext >= 10 || confirmModalOpen || resultModalOpen}
         />
       </ButtonContainer>
 
