@@ -72,7 +72,11 @@ const FontText = styled.span`
   color: ${(props) => props.theme.colors.default};
 `;
 
-const Button = styled.button`
+interface ButtonProps {
+  type: 'button' | 'submit' | 'reset';
+}
+
+const Button = styled.button<ButtonProps>`
   margin-top: 1vh;
   border: none;
   padding: 2vh;
@@ -168,7 +172,7 @@ export default function LoginForm({ theme }: LoginFormProps) {
           theme={theme}
           placeholder="비밀번호를 입력하세요."
         />
-        <Button onClick={() => handleLogin()} theme={theme}>
+        <Button type="button" onClick={() => handleLogin()} theme={theme}>
           로그인
         </Button>
         {showAlertModal && (
@@ -186,7 +190,7 @@ export default function LoginForm({ theme }: LoginFormProps) {
           <FontText theme={theme}>or</FontText>
           <hr style={{ border: `${theme.colors.default}` }} />
         </FontText>
-        <Button onClick={() => navigate('/register')} theme={theme}>
+        <Button type="button" onClick={() => navigate('/register')} theme={theme}>
           회원가입
         </Button>
       </Form>
