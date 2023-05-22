@@ -72,8 +72,9 @@ public class SurveyController {
     })
     @GetMapping("/{surveyId}")
     public ResponseEntity<SurveyResponseDto> getSurvey(
+        @Parameter(hidden = true) Authentication authentication,
         @Parameter(name = "UUID 형식의 surveyId", required = true) @PathVariable UUID surveyId) {
-        return ResponseEntity.ok(surveyService.getSurveyBySurveyIdWithRelatedQuestion(surveyId));
+        return ResponseEntity.ok(surveyService.getSurveyBySurveyIdWithRelatedQuestion(authentication, surveyId));
     }
 
     @Operation(summary = "설문조사 생성", description = "새로운 설문조사를 생성합니다.")
