@@ -8,7 +8,7 @@ import { useOnClickOutside } from '../../hooks/useOnClickOutside';
 import { RootState } from '../../reducers';
 import { CertificationType } from '../../types/request';
 import { SurveyAbstractResponse } from '../../types/response/Survey';
-import { dateFormatUpToMinute, getDDay } from '../../utils/dateFormat';
+import { dateFormatUpToMinute, getDDay, getTimeRemaining } from '../../utils/dateFormat';
 import { validateStartDate } from '../../utils/validate';
 import { DeleteImage } from '../Button/ImageButtons';
 import RectangleButton from '../Button/RectangleButton';
@@ -129,6 +129,7 @@ export default function SurveyPreviewModal({ surveyItem, setPreviewModalOpen, th
   const [isSurveyStart, setIsSurveyStart] = useState<boolean>(true);
   const [isAuthor, setIsAuthor] = useState<boolean>(false);
   const userState = useSelector((state: RootState) => state.userInformation);
+  const [buttonText, setButtonText] = useState('설문 조사 참여하기');
 
   useOnClickOutside({
     ref: modalRef,
@@ -137,6 +138,25 @@ export default function SurveyPreviewModal({ surveyItem, setPreviewModalOpen, th
     },
   });
 
+  const updateButtonText = () => {
+    if (isSurveyStart) {
+      setButtonText('설문 조사 참여하기');
+    } else {
+      const { days, hours, minutes, seconds } = getTimeRemaining(surveyItem.startedDate.toString());
+
+      if (days === 0 && hours === 0 && minutes === 0 && seconds === 0) {
+        setIsSurveyStart(true);
+        setButtonText('설문 조사 참여하기');
+      } else {
+        setButtonText(
+          `${days > 0 ? `${days}일 ` : ''}${hours > 0 ? `${hours}시 ` : ''}${minutes > 0 ? `${minutes}분 ` : ''}${
+            seconds > 0 ? `${seconds}초 ` : ''
+          }이후 참여가능`
+        );
+      }
+    }
+  };
+
   useEffect(() => {
     // Check survey is start
     if (validateStartDate(new Date(surveyItem.startedDate), date)) {
@@ -144,6 +164,21 @@ export default function SurveyPreviewModal({ surveyItem, setPreviewModalOpen, th
     }
     // TODO: 본인이 만든 설문이면 수정 페이지로 이동 시켜주기
   }, [surveyItem.surveyId]);
+
+  useEffect(() => {
+    let timer: number;
+    const update = () => {
+      updateButtonText();
+      if (!isSurveyStart) {
+        timer = window.setTimeout(update, 1000);
+      }
+    };
+    update();
+
+    return () => {
+      if (timer) window.clearTimeout(timer);
+    };
+  }, [surveyItem.startedDate, isSurveyStart]);
 
   return (
     <Container>
@@ -180,11 +215,7 @@ export default function SurveyPreviewModal({ surveyItem, setPreviewModalOpen, th
             textColor="white"
             backgroundColor={theme.colors.primary}
             hoverColor={theme.colors.prhover}
-            text={
-              isSurveyStart
-                ? '설문 조사 참여하기'
-                : `${dateFormatUpToMinute(String(surveyItem.startedDate))} 부터 참여가능`
-            }
+            text={buttonText}
             theme={theme}
             handleClick={() => navigate(`/survey/${surveyItem.surveyId}`)}
             width="50%"

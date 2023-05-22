@@ -22,10 +22,7 @@ const PencilImage = styled(Icons.PENCIL).attrs({
   margin-left: 1vh;
   border-radius: 14px;
   cursor: pointer;
-
-  &:hover {
-    background-color: ${(props) => props.theme.colors.inputBackground};
-  }
+  background-color: ${(props) => props.theme.colors.inputBackground};
 `;
 
 const ArrowImage = styled(Icons.ARROW).attrs({
@@ -78,7 +75,7 @@ const Input = styled.input`
   border-radius: 10px;
   font-size: 1.8vh;
   font-weight: 600;
-  color: ${(props) => props.theme.colors.default};
+  color: #4e536a;
   background-color: ${(props) => props.theme.colors.inputBackground};
   cursor: auto;
   text-overflow: ellipsis;
