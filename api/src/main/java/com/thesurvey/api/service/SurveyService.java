@@ -21,7 +21,7 @@ import com.thesurvey.api.dto.response.survey.SurveyListPageDto;
 import com.thesurvey.api.dto.response.survey.SurveyPageDto;
 import com.thesurvey.api.dto.response.survey.SurveyResponseDto;
 import com.thesurvey.api.dto.response.user.UserSurveyResultDto;
-import com.thesurvey.api.dto.response.user.UserSurveyTitleDto;
+import com.thesurvey.api.dto.response.user.UserSurveyTitleListDto;
 import com.thesurvey.api.exception.ErrorMessage;
 import com.thesurvey.api.exception.mapper.BadRequestExceptionMapper;
 import com.thesurvey.api.exception.mapper.ForbiddenRequestExceptionMapper;
@@ -114,9 +114,11 @@ public class SurveyService {
     }
 
     @Transactional(readOnly = true)
-    public List<UserSurveyTitleDto> getUserCreatedSurveys(Authentication authentication) {
-        return surveyRepository.findUserCreatedSurveysByAuthorID(
-            UserUtil.getUserIdFromAuthentication(authentication));
+    public UserSurveyTitleListDto getUserCreatedSurveys(Authentication authentication) {
+        return UserSurveyTitleListDto.builder()
+            .surveys(surveyRepository.findUserCreatedSurveysByAuthorID(
+                UserUtil.getUserIdFromAuthentication(authentication)))
+            .build();
     }
 
     /**
