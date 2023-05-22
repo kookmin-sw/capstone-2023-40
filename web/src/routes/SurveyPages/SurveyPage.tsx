@@ -18,7 +18,7 @@ import { responseErrorHandle } from '../../utils/responseErrorHandle';
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
-  background-color: ${(props) => props.theme.colors.container};
+  background-color: ${(props) => props.theme.colors.background};
 `;
 
 // TODO: disable submit button after click

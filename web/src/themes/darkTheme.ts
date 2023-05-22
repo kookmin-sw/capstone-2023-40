@@ -19,7 +19,7 @@ export const darkTheme: DefaultTheme = {
     header: '#202123',
     opposite: '#808080',
     background: '#808080',
-    inputBackground: '#f0f0f0',
+    inputBackground: '#2c2d2c',
     placeHolder: '#F4F7FA',
   },
 };
