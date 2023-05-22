@@ -98,8 +98,18 @@ public class SurveyService {
     }
 
     @Transactional(readOnly = true)
-    public SurveyResponseDto getSurveyBySurveyIdWithRelatedQuestion(UUID surveyId) {
+    public SurveyResponseDto getSurveyBySurveyIdWithRelatedQuestion(Authentication authentication
+        , UUID surveyId) {
         Survey survey = getSurveyFromSurveyId(surveyId);
+
+        List<Integer> surveyCertificationList =
+            surveyRepository.findCertificationTypeBySurveyIdAndAuthorId(surveyId, survey.getAuthorId());
+        Long userId = UserUtil.getUserIdFromAuthentication(authentication);
+        if(!survey.getAuthorId().equals(userId)){
+            answeredQuestionService.validateUserCompletedCertification(
+                surveyCertificationList, userId);
+        }
+
         return surveyMapper.toSurveyResponseDto(survey, survey.getAuthorId());
     }
 

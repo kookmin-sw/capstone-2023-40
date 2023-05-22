@@ -98,11 +98,6 @@ public class AnsweredQuestionService {
         Survey survey = surveyRepository.findBySurveyId(answeredQuestionRequestDto.getSurveyId())
             .orElseThrow(() -> new NotFoundExceptionMapper(ErrorMessage.SURVEY_NOT_FOUND));
 
-        // validate if a user has already responded to the survey
-        if (answeredQuestionRepository.existsByUserIdAndSurveyId(user.getUserId(),
-            answeredQuestionRequestDto.getSurveyId())) {
-            throw new ForbiddenRequestExceptionMapper(ErrorMessage.ANSWER_ALREADY_SUBMITTED);
-        }
         List<Integer> surveyCertificationList = surveyRepository.findCertificationTypeBySurveyIdAndAuthorId(
             survey.getSurveyId(), survey.getAuthorId());
         validateUserCompletedCertification(surveyCertificationList, user.getUserId());
@@ -201,7 +196,8 @@ public class AnsweredQuestionService {
     }
 
     // validate if the user has completed the necessary certifications for the survey
-    private void validateUserCompletedCertification(List<Integer> surveyCertificationList, Long userId) {
+    public void validateUserCompletedCertification(List<Integer> surveyCertificationList,
+        Long userId) {
         if (surveyCertificationList.contains(CertificationType.NONE.getCertificationTypeId())) {
             return;
         }
