@@ -13,15 +13,11 @@ const Container = styled.div`
 `;
 
 const LoadingBoxContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  margin-bottom: 1vh;
+  padding: 5vw;
+  min-width: 40vh;
+  height: 80vh;
+  flex-direction: column;
   background-color: ${(props) => props.theme.colors.container};
-  border: ${(props) => props.theme.borderResultList};
-  border-radius: ${(props) => props.theme.borderRadius};
-  background-color: ${(props) => props.theme.colors.opposite};
 `;
 
 const Form = styled.form`
@@ -32,13 +28,37 @@ const Form = styled.form`
   margin-top: 20vw;
 `;
 
+const LoadingPageTitle = styled.div`
+  flex-direction: row;
+  margin-bottom: 2vh;
+`;
+
+const MypageText = styled.span`
+  text-align: left;
+  font-size: calc(2vh + 2vmin);
+  font-weight: 900;
+  color: ${(props) => props.theme.colors.default};
+  cursor: pointer;
+`;
+
+const SurveyResultText = styled.span`
+  text-align: left;
+  font-size: calc(2vh + 2vmin);
+  font-weight: 900;
+  color: ${(props) => props.theme.colors.default};
+`;
+
 export default function LoadingForm() {
   const [theme, toggleTheme] = useTheme();
 
   return (
     <Container theme={theme}>
       <Header theme={theme} toggleTheme={toggleTheme} />
-      <LoadingBoxContainer>
+      <LoadingBoxContainer theme={theme}>
+        <LoadingPageTitle style={{ marginBottom: '5vh' }} theme={theme}>
+          <MypageText theme={theme}>마이페이지</MypageText>
+          <SurveyResultText theme={theme}> &gt; 설문 결과 조회</SurveyResultText>
+        </LoadingPageTitle>
         <Form>
           <LoadingImage>
             <circle cx="50" cy="50" r="50" />

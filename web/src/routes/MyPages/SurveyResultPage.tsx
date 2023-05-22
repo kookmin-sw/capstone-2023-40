@@ -14,7 +14,7 @@ import ErrorPage from '../../components/ErrorPage';
 import Header from '../../components/Header';
 import LoadingForm from '../../components/LoadingForm';
 import { useTheme } from '../../hooks/useTheme';
-import { SurveyResultList, SurveyResultListResponse } from '../../types/response/Survey';
+import { SurveyResultList, SurveyResultListResponse, SurveyResultResponse } from '../../types/response/Survey';
 import { updateUserInformation } from '../../utils/UserUtils';
 
 const TwoArrow = styled(Icons.TWOARROW).attrs({
@@ -128,7 +128,8 @@ const FontText = styled.span`
 
 export default function SurveyResultPage() {
   const [theme, toggleTheme] = useTheme();
-  const [isSurveyResultClicked, setIsSurveyResultClicked] = useState(false);
+  const [isSurveyResultClicked, setIsSurveyResultClicked] = useState([false]);
+  const [surveyResult, setSurveyResult] = useState<SurveyResultResponse>();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -136,36 +137,55 @@ export default function SurveyResultPage() {
     event.preventDefault();
   };
 
-  const handleClick = (surveyNumber: number) => {
-    setIsSurveyResultClicked(!isSurveyResultClicked);
+  const handleClick = async (item: any) => {
+    axios
+      .get<SurveyResultResponse>(`${requests.getSurveyResultData}${item.surveyId}`)
+      .then((res) => {
+        if (res.status === 200) {
+          console.log(res.data);
+          setSurveyResult(res.data);
+          setIsSurveyResultClicked((state) => ({
+            ...state,
+            [item.authorId]: !state[item.authorId],
+          }));
+        }
+      })
+      .catch((error) => {
+        console.log(error.requests.status);
+      });
   };
 
-  const { data, isLoading, isError, error } = useQuery<SurveyResultListResponse>([], fetchSurveyResultList, {
-    cacheTime: 5 * 60 * 1000, // 5 minutes
-    staleTime: 20 * 1000, // 20 seconds
-    retry: 1,
-    refetchOnWindowFocus: false,
-  });
+  const { data, isLoading, isError, error } = useQuery<SurveyResultListResponse>(
+    ['SurveyResultList'],
+    fetchSurveyResultList,
+    {
+      cacheTime: 5 * 60 * 1000, // 5 minutes
+      staleTime: 20 * 1000, // 20 seconds
+      retry: 1,
+      refetchOnWindowFocus: false,
+    }
+  );
   const resultList = [
     { surveyId: 'test1', authorId: 1, title: 'test1' },
     { surveyId: 'test2', authorId: 2, title: 'test2' },
+    { surveyId: 'test3', authorId: 3, title: 'test3' },
   ];
 
-  // if (isLoading) {
-  //   return <LoadingForm />;
-  // }
+  if (isLoading) {
+    return <LoadingForm />;
+  }
 
-  // if (isError) {
-  //   return (
-  //     <ErrorPage
-  //       labelText="😥 생성하신 설문이 없습니다..."
-  //       buttonText="설문 만들러 가기"
-  //       navigateRoute="/survey/form"
-  //       theme={theme}
-  //       toggleTheme={toggleTheme}
-  //     />
-  //   );
-  // }
+  if (isError || data === undefined) {
+    return (
+      <ErrorPage
+        labelText="😥 생성하신 설문이 없습니다..."
+        buttonText="설문 만들러 가기"
+        navigateRoute="/survey/form"
+        theme={theme}
+        toggleTheme={toggleTheme}
+      />
+    );
+  }
 
   return (
     <Container theme={theme}>
@@ -178,17 +198,25 @@ export default function SurveyResultPage() {
             </MypageText>
             <SurveyResultText theme={theme}> &gt; 설문 결과 조회</SurveyResultText>
           </SurVeyResultPageTitle>
-          {resultList.map((item) => (
+          {data?.surveys.map((item) => (
             <ListBoxContainer key={item.surveyId} theme={theme}>
-              <ListBox theme={theme} onClick={() => handleClick(item.authorId)}>
+              <ListBox theme={theme} onClick={() => handleClick(item)}>
                 <FontText theme={theme}>{item.title}</FontText>
-                <TwoArrow style={{ transform: isSurveyResultClicked ? 'rotate(90deg)' : 'rotate(0deg)' }} />
+                <TwoArrow
+                  style={{ transform: isSurveyResultClicked[item.authorId] ? 'rotate(90deg)' : 'rotate(0deg)' }}
+                />
               </ListBox>
-              {isSurveyResultClicked && (
-                <ResultBox theme={theme}>
-                  <ChartImage />
-                </ResultBox>
-              )}
+
+              <ResultBox
+                theme={theme}
+                style={{
+                  opacity: isSurveyResultClicked[item.authorId] ? 1 : 0,
+                  zIndex: isSurveyResultClicked[item.authorId] ? 1 : -1,
+                }}
+              >
+                <ChartImage />
+                <FontText theme={theme}>{surveyResult?.toString()}</FontText>
+              </ResultBox>
             </ListBoxContainer>
           ))}
         </SurveyForm>

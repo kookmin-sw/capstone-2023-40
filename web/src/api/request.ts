@@ -73,7 +73,7 @@ export const requests = {
    * @method `GET'
    * @endpoint `/users/surveys/{surveyId}`
    */
-  getSurveyResultData: '/users/surveys',
+  getSurveyResultData: '/users/surveys/',
   /**
    * Delete currently signed in user. This requires user
    * to be signed in.
