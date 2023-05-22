@@ -160,8 +160,9 @@ public class UserControllerTest extends BaseControllerTest {
                 .with(authentication(authentication)))
             .andExpect(status().isOk())
             .andReturn();
-        JSONArray content = new JSONArray(result.getResponse().getContentAsString());
-        JSONObject userCreatedSurvey = content.getJSONObject(0);
+        JSONObject content = new JSONObject(result.getResponse().getContentAsString());
+        JSONArray userCreatedSurveyList = content.getJSONArray("surveys");
+        JSONObject userCreatedSurvey = userCreatedSurveyList.getJSONObject(0);
 
         // then
         assertThat(content.length()).isEqualTo(1);
