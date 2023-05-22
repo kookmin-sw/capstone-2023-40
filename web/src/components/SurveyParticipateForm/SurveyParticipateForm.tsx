@@ -13,7 +13,7 @@ import { removeEmptyAnswer } from '../../utils/removeEmptyAnswer';
 import { responseErrorHandle } from '../../utils/responseErrorHandle';
 import { scrollToRef } from '../../utils/scroll';
 import RectangleButton from '../Button/RectangleButton';
-import { AlertModal, SurveyPageResultModal } from '../Modal';
+import { AlertModal, ConfirmModal, SurveyPageResultModal } from '../Modal';
 import QuestionForm from './QuestionForm';
 
 const Container = styled.div``;
@@ -72,6 +72,7 @@ export default function SurveyParticipateForm({ surveyData, theme }: SurveyParti
   const [endedDate, setEndedDate] = useState<string>('');
   const [resultModalOpen, setResultModalOpen] = useState<boolean>(false);
   const [alertModalOpen, setAlertModalOpen] = useState<boolean>(false);
+  const [confirmModalOpen, setConfirmModalOpen] = useState<boolean>(false);
   const [warnText, setWarnText] = useState<string>('');
   const [userAnswers, setUserAnswers] = useState<Array<AnsweredQuestion>>([]);
   const [earnedPoint, setEarnedPoint] = useState<number>(0);
@@ -88,11 +89,13 @@ export default function SurveyParticipateForm({ surveyData, theme }: SurveyParti
       .then((response) => {
         setEarnedPoint(response.data.rewardPoints);
         setResultModalOpen(true);
+        setConfirmModalOpen(false);
       })
       .catch((error) => {
         const errorMessages: string[] = responseErrorHandle(error, dispatch);
         setWarnText(errorMessages[0]);
         setAlertModalOpen(true);
+        setConfirmModalOpen(false);
       });
   };
 
@@ -126,7 +129,7 @@ export default function SurveyParticipateForm({ surveyData, theme }: SurveyParti
     const answersVerificationResult = checkAnswers();
 
     if (answersVerificationResult) {
-      postSurveyAnswers();
+      setConfirmModalOpen(true);
     }
   };
 
@@ -174,10 +177,13 @@ export default function SurveyParticipateForm({ surveyData, theme }: SurveyParti
             theme={theme}
             handleClick={handleSubmitButtonClick}
             width="20vw"
+            disabled={resultModalOpen}
           />
         </ButtonContainer>
       </BodyContainer>
+
       {resultModalOpen && <SurveyPageResultModal point={earnedPoint} theme={theme} />}
+
       {alertModalOpen && (
         <AlertModal
           theme={theme}
@@ -186,6 +192,16 @@ export default function SurveyParticipateForm({ surveyData, theme }: SurveyParti
           text={warnText}
           buttonText="확인"
           onClose={() => setAlertModalOpen(false)}
+        />
+      )}
+      {confirmModalOpen && (
+        <ConfirmModal
+          theme={theme}
+          title="확인"
+          level="INFO"
+          text="제출하시겠습니까?"
+          handleCancelClick={() => setConfirmModalOpen(false)}
+          handleConfirmClick={() => postSurveyAnswers()}
         />
       )}
     </Container>
