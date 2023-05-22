@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
@@ -6,6 +6,7 @@ import styled, { DefaultTheme } from 'styled-components';
 import { useOnClickOutside } from '../../hooks/useOnClickOutside';
 import { SurveyAbstractResponse } from '../../types/response/Survey';
 import { dateFormatUpToMinute, getDDay } from '../../utils/dateFormat';
+import { validateStartDate } from '../../utils/validate';
 import { DeleteImage } from '../Button/ImageButtons';
 import RectangleButton from '../Button/RectangleButton';
 import CertificationIconList from '../CertificationIconList';
@@ -121,6 +122,7 @@ export default function SurveyPreviewModal({ surveyItem, setPreviewModalOpen, th
   const remainDate = useMemo(() => getDDay(surveyItem.endedDate), [surveyItem.endedDate]);
   const navigate = useNavigate();
   const modalRef = useRef<HTMLDivElement>(null);
+  const [disableButton, setDisableButton] = useState<boolean>(false);
 
   useOnClickOutside({
     ref: modalRef,
@@ -128,6 +130,12 @@ export default function SurveyPreviewModal({ surveyItem, setPreviewModalOpen, th
       setPreviewModalOpen(false);
     },
   });
+
+  useEffect(() => {
+    if (validateStartDate(new Date(surveyItem.startedDate), new Date())) {
+      setDisableButton(true);
+    }
+  }, [surveyItem.startedDate]);
 
   return (
     <Container>
@@ -164,10 +172,11 @@ export default function SurveyPreviewModal({ surveyItem, setPreviewModalOpen, th
             textColor="white"
             backgroundColor={theme.colors.primary}
             hoverColor={theme.colors.prhover}
-            text="설문 조사 시작하기"
+            text={disableButton ? `${dateFormatUpToMinute(String(surveyItem.startedDate))} 시작` : '설문 조사 시작하기'}
             theme={theme}
             handleClick={() => navigate(`/survey/${surveyItem.surveyId}`)}
             width="50%"
+            disabled={disableButton}
           />
         </ButtonContainer>
       </ModalContainer>
