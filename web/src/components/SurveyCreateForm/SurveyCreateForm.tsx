@@ -85,7 +85,7 @@ export default function SurveyCreateForm({ theme }: SurveyFormProps) {
   }, [recentCreate]);
 
   useEffect(() => {
-    if (numOfContext >= 1000) {
+    if (numOfContext > 1000) {
       setWarnText(`질문 수와 옵션 수의 합이 1000개 이하여야 합니다. 현재 ${numOfContext}개`);
       setAlertModalOpen(true);
     }
@@ -312,7 +312,7 @@ export default function SurveyCreateForm({ theme }: SurveyFormProps) {
           theme={theme}
           handleClick={validation}
           width="30%"
-          disabled={numOfContext >= 10 || confirmModalOpen || resultModalOpen}
+          disabled={numOfContext > 1000 || confirmModalOpen || resultModalOpen}
         />
       </ButtonContainer>
 
