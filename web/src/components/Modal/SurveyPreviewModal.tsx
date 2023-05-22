@@ -1,11 +1,15 @@
-import React, { useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
 
 import { useOnClickOutside } from '../../hooks/useOnClickOutside';
+import { RootState } from '../../reducers';
+import { CertificationType } from '../../types/request';
 import { SurveyAbstractResponse } from '../../types/response/Survey';
 import { dateFormatUpToMinute, getDDay } from '../../utils/dateFormat';
+import { validateStartDate } from '../../utils/validate';
 import { DeleteImage } from '../Button/ImageButtons';
 import RectangleButton from '../Button/RectangleButton';
 import CertificationIconList from '../CertificationIconList';
@@ -118,9 +122,13 @@ interface ModalProps {
 }
 
 export default function SurveyPreviewModal({ surveyItem, setPreviewModalOpen, theme }: ModalProps) {
+  const date = new Date();
   const remainDate = useMemo(() => getDDay(surveyItem.endedDate), [surveyItem.endedDate]);
   const navigate = useNavigate();
   const modalRef = useRef<HTMLDivElement>(null);
+  const [isSurveyStart, setIsSurveyStart] = useState<boolean>(true);
+  const [isAuthor, setIsAuthor] = useState<boolean>(false);
+  const userState = useSelector((state: RootState) => state.userInformation);
 
   useOnClickOutside({
     ref: modalRef,
@@ -128,6 +136,14 @@ export default function SurveyPreviewModal({ surveyItem, setPreviewModalOpen, th
       setPreviewModalOpen(false);
     },
   });
+
+  useEffect(() => {
+    // Check survey is start
+    if (validateStartDate(new Date(surveyItem.startedDate), date)) {
+      setIsSurveyStart(false);
+    }
+    // TODO: 본인이 만든 설문이면 수정 페이지로 이동 시켜주기
+  }, [surveyItem.surveyId]);
 
   return (
     <Container>
@@ -164,10 +180,15 @@ export default function SurveyPreviewModal({ surveyItem, setPreviewModalOpen, th
             textColor="white"
             backgroundColor={theme.colors.primary}
             hoverColor={theme.colors.prhover}
-            text="설문 조사 시작하기"
+            text={
+              isSurveyStart
+                ? '설문 조사 참여하기'
+                : `${dateFormatUpToMinute(String(surveyItem.startedDate))} 부터 참여가능`
+            }
             theme={theme}
             handleClick={() => navigate(`/survey/${surveyItem.surveyId}`)}
             width="50%"
+            disabled={!isSurveyStart}
           />
         </ButtonContainer>
       </ModalContainer>

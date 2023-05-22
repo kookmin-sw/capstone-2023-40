@@ -11,7 +11,7 @@ import { RootState } from '../../reducers';
 import { setLoggedIn, setSubPageOpen } from '../../types/header';
 import { UserAuthListResponse } from '../../types/response/User';
 import { initializeAuthList } from '../../utils/authService';
-import { clearUserInformation } from '../../utils/UserUtils';
+import { clearUserInformation, updateUserInformation } from '../../utils/UserUtils';
 
 const SubPageContainer = styled.div`
   display: flex;
@@ -67,19 +67,8 @@ export default function Header({ theme }: HeaderProps) {
   };
 
   const navigateMypage = async () => {
+    updateUserInformation(dispatch, navigate);
     dispatch(setSubPageOpen(!isSubPageOpen));
-    axios
-      .get<UserAuthListResponse>(requests.getUserAuthList)
-      .then((getAuthListResponse) => {
-        if (getAuthListResponse.status === 200) {
-          console.log('getUserData Success!');
-          initializeAuthList(getAuthListResponse.data, dispatch);
-          navigate('../../../mypage');
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
   };
 
   const subPageRef = useRef<HTMLDivElement>(null);

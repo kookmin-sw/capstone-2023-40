@@ -60,6 +60,7 @@ export default function SurveyCreateForm({ theme }: SurveyFormProps) {
     questions: [],
   });
   const [usedPoint, setUsedPoint] = useState<number>(0);
+  const [numOfContext, setNumOfContext] = useState<number>(0);
 
   const handleSubmit = () => {
     axios
@@ -82,6 +83,13 @@ export default function SurveyCreateForm({ theme }: SurveyFormProps) {
       scrollToRef(questionRefs, recentCreate);
     }
   }, [recentCreate]);
+
+  useEffect(() => {
+    if (numOfContext > 1000) {
+      setWarnText(`질문 수와 옵션 수의 합이 1000개 이하여야 합니다. 현재 ${numOfContext}개`);
+      setAlertModalOpen(true);
+    }
+  }, [numOfContext]);
 
   const setAlertNotificationStyle = (errorIndex: number) => {
     surveyData.questions.forEach((question: QuestionCreateRequest) => {
@@ -145,6 +153,7 @@ export default function SurveyCreateForm({ theme }: SurveyFormProps) {
     newQuestions.splice(questionId + 1, 0, newQuestion);
     setSurveyData({ ...surveyData, questions: newQuestions });
     setRecentCreate(questionId + 1);
+    setNumOfContext(numOfContext + 1);
   };
 
   const deleteQuestionAtId = (questionId: number) => {
@@ -155,6 +164,7 @@ export default function SurveyCreateForm({ theme }: SurveyFormProps) {
     newQuestions.splice(questionId, 1);
     setSurveyData({ ...surveyData, questions: newQuestions });
     setRecentCreate(newQuestions.length === 0 ? undefined : newQuestions.length - 1);
+    setNumOfContext(numOfContext - 1);
   };
 
   const addOptionAtBottom = (questionId: number) => {
@@ -169,6 +179,7 @@ export default function SurveyCreateForm({ theme }: SurveyFormProps) {
     const newQuestions = [...surveyData.questions];
     newQuestions[questionId] = { ...newQuestions[questionId], questionOptions: newOptions };
     setSurveyData({ ...surveyData, questions: newQuestions });
+    setNumOfContext(numOfContext + 1);
   };
 
   const deleteOptionAtId = (questionId: number, optionId: number) => {
@@ -180,6 +191,7 @@ export default function SurveyCreateForm({ theme }: SurveyFormProps) {
     const newQuestions = [...surveyData.questions];
     newQuestions[questionId] = { ...newQuestions[questionId], questionOptions: newOptions };
     setSurveyData({ ...surveyData, questions: newQuestions });
+    setNumOfContext(numOfContext + 1);
   };
 
   const editRequiredCertificationList = (value: number, isChecked: boolean) => {
@@ -300,6 +312,7 @@ export default function SurveyCreateForm({ theme }: SurveyFormProps) {
           theme={theme}
           handleClick={validation}
           width="30%"
+          disabled={numOfContext > 1000 || confirmModalOpen || resultModalOpen}
         />
       </ButtonContainer>
 
