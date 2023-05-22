@@ -73,6 +73,14 @@ const CheckBox = styled.input`
   }
 `;
 
+const CheckBoxLabel = styled.label`
+  text-align: left;
+  font-size: 1.3vh;
+  font-weight: 600;
+  color: ${(props) => props.theme.colors.default};
+  margin-left: 0.5rem;
+`;
+
 const CompleteButton = styled.button`
   margin-top: 1vh;
   padding: 2vh;
@@ -412,7 +420,9 @@ export default function RegisterForm(props: RegisterFormProps) {
             name="agreeService"
             onChange={() => dispatch({ type: 'AGREE_SERVICE', payload: !state.isServiceAgreementChecked })}
           />
-          <FontText theme={props.theme}>[필수] 서비스 이용약관 </FontText>
+          <CheckBoxLabel htmlFor="agreeService" theme={props.theme}>
+            [필수] 서비스 이용약관
+          </CheckBoxLabel>
         </AgreementCheckBox>
         <AgreementCheckBox>
           <CheckBox
@@ -420,7 +430,9 @@ export default function RegisterForm(props: RegisterFormProps) {
             name="agreeInformation"
             onChange={() => dispatch({ type: 'AGREE_INFORMATION', payload: !state.isUserInfoConsentChecked })}
           />
-          <FontText theme={props.theme}>[필수] 개인정보 수집동의</FontText>
+          <CheckBoxLabel htmlFor="agreeInformation" theme={props.theme}>
+            [필수] 개인정보 수집동의
+          </CheckBoxLabel>
         </AgreementCheckBox>
         <FontText theme={props.theme}>※ 서비스 이용약관 및 개인정보 수집에 동의해주세요.</FontText>
         <CompleteButton

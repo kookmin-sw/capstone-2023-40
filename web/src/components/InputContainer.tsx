@@ -28,8 +28,8 @@ const Input = styled.input`
   margin-bottom: 10px;
   border: ${(props) => props.theme.border};
   border-radius: ${(props) => props.theme.borderRadius};
-  color: ${(props) => props.theme.colors.default};
-  background-color: ${(props) => props.theme.colors.container};
+  color: #4e536a;
+  background-color: ${(props) => props.theme.colors.inputBackground};
   font-size: 1.5vh;
   font-weight: 600;
   flex: 1;
@@ -49,7 +49,7 @@ const Input = styled.input`
 
 const Button = styled.button`
   border: none;
-  min-width: 100px;
+  min-width: fit-content;
   width: 10vw;
   height: 100%;
   padding: 1.3em;
@@ -71,8 +71,8 @@ const PrefixBox = styled.div`
   font-size: 1.5vh;
   font-weight: 700;
   margin-right: 1vh;
-  color: ${(props) => props.theme.colors.default};
-  background-color: ${(props) => props.theme.colors.container};
+  color: #4e536a;
+  background-color: ${(props) => props.theme.colors.inputBackground};
   border: ${(props) => props.theme.border};
   border-color: ${(props) => props.theme.borderRadius};
   border-radius: ${(props) => props.theme.borderRadius};
