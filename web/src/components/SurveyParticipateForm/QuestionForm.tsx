@@ -80,17 +80,25 @@ export default function QuestionForm({ question, index, userAnswers, setUserAnsw
     const newUserAnswers = [...userAnswers];
 
     if (typeof newUserAnswers[index] === 'undefined') {
-      newUserAnswers[index] = { questionBankId: question.questionBankId };
+      newUserAnswers[index] = {
+        questionBankId: question.questionBankId,
+        isRequired: question.isRequired,
+        questionType: question.questionType,
+      };
     }
 
     if (isChecked) {
       newUserAnswers[index] = {
         questionBankId: question.questionBankId,
+        isRequired: question.isRequired,
+        questionType: question.questionType,
         multipleChoices: [...(newUserAnswers[index].multipleChoices || []), value],
       };
     } else {
       newUserAnswers[index] = {
         questionBankId: question.questionBankId,
+        isRequired: question.isRequired,
+        questionType: question.questionType,
         multipleChoices: newUserAnswers[index].multipleChoices?.filter((item: number) => item !== value),
       };
     }
@@ -114,15 +122,35 @@ export default function QuestionForm({ question, index, userAnswers, setUserAnsw
       tmpQuestionType = question.questionType;
     }
 
+    newUserAnswers[index] = {
+      questionBankId: question.questionBankId,
+      isRequired: question.isRequired,
+      questionType: question.questionType,
+    };
     switch (tmpQuestionType) {
       case QuestionType.SINGLE_CHOICE:
-        newUserAnswers[index] = { questionBankId: question.questionBankId, singleChoice: Number(event.target.value) };
+        newUserAnswers[index] = {
+          questionBankId: question.questionBankId,
+          isRequired: question.isRequired,
+          questionType: question.questionType,
+          singleChoice: Number(event.target.value),
+        };
         break;
       case QuestionType.SHORT_ANSWER:
-        newUserAnswers[index] = { questionBankId: question.questionBankId, shortAnswer: event.target.value };
+        newUserAnswers[index] = {
+          questionBankId: question.questionBankId,
+          isRequired: question.isRequired,
+          questionType: question.questionType,
+          shortAnswer: event.target.value,
+        };
         break;
       case QuestionType.LONG_ANSWER:
-        newUserAnswers[index] = { questionBankId: question.questionBankId, longAnswer: event.target.value };
+        newUserAnswers[index] = {
+          questionBankId: question.questionBankId,
+          isRequired: question.isRequired,
+          questionType: question.questionType,
+          longAnswer: event.target.value,
+        };
         break;
       default:
         break;
