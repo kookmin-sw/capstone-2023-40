@@ -29,8 +29,8 @@ export default function CertificationIconList({
   return (
     <Container width={width} minWidth={minWidth} theme={theme}>
       {certificationList.length === 0
-        ? Certification({ iconOption: true })
-        : certificationList.map((label: number) => Certification({ label: label, iconOption: true }))}
+        ? Certification({ iconOption: true, theme })
+        : certificationList.map((label: number) => Certification({ label: label, iconOption: true, theme }))}
     </Container>
   );
 }

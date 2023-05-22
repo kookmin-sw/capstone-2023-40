@@ -7,6 +7,7 @@ export const darkTheme: DefaultTheme = {
   border: '3px solid #F4F7FA',
   borderResultList: '0px solid black',
   themeToggle: '2px solid #FFFFFF',
+  iconInvert: '100%',
 
   colors: {
     default: '#FFFFFF',

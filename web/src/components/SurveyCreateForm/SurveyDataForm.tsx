@@ -178,7 +178,7 @@ export default function SurveyDataForm({
                     onChange={(e) => handleChangeCheck(e, index)}
                     theme={theme}
                   />
-                  {Certification({ label: index, iconOption: false })}
+                  {Certification({ label: index, iconOption: false, theme })}
                 </CertificationLabel>
               </ListItem>
             );
@@ -208,7 +208,11 @@ export default function SurveyDataForm({
       </SurveyDateContainer>
 
       <ButtonContainer>
-        <PlusImage data-testid="addQuestion" onClick={() => handleClickButton('addQuestion', -1)} theme={theme} />
+        <PlusImage
+          data-testid="addQuestion"
+          onClick={() => handleClickButton('addQuestion', -1)}
+          invert={theme.iconInvert || '0%'}
+        />
       </ButtonContainer>
     </Container>
   );

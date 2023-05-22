@@ -83,7 +83,7 @@ export default function OptionList({
             <DeleteImage
               data-testid="deleteOption"
               onClick={() => handleClickButton('deleteOption', questionId, index)}
-              theme={theme}
+              invert={theme.iconInvert || '0%'}
             />
           </OptionContainer>
         ))}

@@ -5,7 +5,8 @@ import { Icons } from '../../assets/svg';
 export const TrashImage = styled(Icons.TRASH).attrs({
   width: 30,
   height: 30,
-})`
+})<{ invert: string }>`
+  filter: invert(${(props) => props.invert});
   display: flex;
   align-items: center;
   justify-content: center;
@@ -22,7 +23,8 @@ export const TrashImage = styled(Icons.TRASH).attrs({
 export const PlusImage = styled(Icons.PLUS).attrs({
   width: 30,
   height: 30,
-})`
+})<{ invert: string }>`
+  filter: invert(${(props) => props.invert});
   display: flex;
   align-items: center;
   justify-content: center;
@@ -39,7 +41,8 @@ export const PlusImage = styled(Icons.PLUS).attrs({
 export const DeleteImage = styled(Icons.DELETE).attrs({
   width: 30,
   height: 30,
-})`
+})<{ invert: string }>`
+  filter: invert(${(props) => props.invert});
   display: flex;
   align-items: center;
   justify-content: center;

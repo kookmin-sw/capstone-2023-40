@@ -9,6 +9,7 @@ declare module 'styled-components' {
     borderResultList?: string;
     borderRadius?: string | number;
     themeToggle?: string | number;
+    iconInvert?: string;
 
     colors: {
       default: string;

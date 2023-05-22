@@ -7,6 +7,7 @@ export const lightTheme: DefaultTheme = {
   border: '3px solid #F4F7FA',
   borderResultList: '0px solid black',
   themeToggle: '2px solid #F4F7FA',
+  iconInvert: '0%',
 
   colors: {
     default: '#000000',
