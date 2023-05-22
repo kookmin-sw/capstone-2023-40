@@ -12,7 +12,6 @@ import { Icons } from '../assets/svg';
 import { RootState } from '../reducers/index';
 import { setLoggedIn, setSubPageOpen } from '../types/header';
 import { UserUpdateRequest } from '../types/request';
-import { UserResponse } from '../types/response/User';
 import HeaderModal from './Modal/HeaderModal';
 
 const HeaderContainer = styled.header<{ isTransitionEnabled: boolean }>`

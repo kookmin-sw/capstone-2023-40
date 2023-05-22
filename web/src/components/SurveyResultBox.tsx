@@ -4,13 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
 
-import axios from '../api/axios';
-import { requests } from '../api/request';
-import { setLoggedIn } from '../types/header';
-import { UserResponse } from '../types/response/User';
-import { setUserInformation } from '../utils/UserUtils';
-import { isEmptyString } from '../utils/validate';
-import { AlertModal } from './Modal';
+import { ChartData } from '../types/response/Survey';
 
 const SurveyResultContainer = styled.div`
   width: 10vw;
@@ -41,26 +35,24 @@ const FontText = styled.span`
 
 interface SurveyResultProps {
   theme: DefaultTheme;
+  data: any;
 }
 
-export default function SurveyResultBox({ theme }: SurveyResultProps) {
+export default function SurveyResultBox({ theme, data }: SurveyResultProps) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [surveyTitle, setSurveyTitle] = useState('');
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
   };
+  console.log(data.results);
+  const updateSurveyResult = () => {};
 
   return (
     <SurveyResultContainer theme={theme}>
       <Form onSubmit={handleSubmit}>
-        <FontText theme={theme}>이메일</FontText>
-        <FontText theme={theme}>비밀번호</FontText>
-        <FontText theme={theme} style={{ display: 'flex', flexDirection: 'row' }}>
-          <hr style={{ border: `${theme.colors.default}` }} />
-          <FontText theme={theme}>or</FontText>
-          <hr style={{ border: `${theme.colors.default}` }} />
-        </FontText>
+        <FontText theme={theme}>{data}</FontText>
       </Form>
     </SurveyResultContainer>
   );

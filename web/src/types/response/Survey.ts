@@ -31,12 +31,7 @@ export interface SurveyPageResponse extends BaseTime {
 }
 
 export interface SurveyResultListResponse {
-  surveys: SurveyResultList[];
-}
-
-export interface SurveyResultList {
   surveyId: string;
-  authorId: number;
   title: string;
 }
 
@@ -44,6 +39,21 @@ export interface SurveyResultResponse {
   surveyId: string;
   surveyTitle: string;
   results: Array<AnsweredQuestionResult>;
+}
+
+export interface ChartData {
+  questionBankId: number;
+  questionTitle: string;
+  questionDescription: string;
+  questionNo: number;
+  textAnswers: Array<string>;
+  optionAnswers: OptionAnswer[];
+}
+
+export interface OptionAnswer {
+  questionOptionId: number;
+  option: string;
+  totalResponseCount: number;
 }
 
 enum CertificationType {

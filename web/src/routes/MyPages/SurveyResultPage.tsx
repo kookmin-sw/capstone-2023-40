@@ -15,7 +15,7 @@ import Header from '../../components/Header';
 import LoadingForm from '../../components/LoadingForm';
 import SurveyResultBox from '../../components/SurveyResultBox';
 import { useTheme } from '../../hooks/useTheme';
-import { SurveyResultList, SurveyResultListResponse, SurveyResultResponse } from '../../types/response/Survey';
+import { SurveyResultListResponse, SurveyResultResponse } from '../../types/response/Survey';
 import { updateUserInformation } from '../../utils/UserUtils';
 
 const TwoArrow = styled(Icons.TWOARROW).attrs({
@@ -78,6 +78,7 @@ const ResultBox = styled.div`
   height: 40vh;
   width: 91%;
   max-width: 91%;
+  flex-direction: row;
   align-items: center;
   box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.4);
   pointer-events: none;
@@ -141,10 +142,10 @@ export default function SurveyResultPage() {
     event.preventDefault();
   };
 
-  const handleClick = async (item: any) => {
+  const handleClick = async (item: any, index: number) => {
     setIsSurveyResultClicked((state) => ({
       ...state,
-      [item.authorId]: !state[item.authorId],
+      [index]: !state[index],
     }));
     axios
       .get<SurveyResultResponse>(`${requests.getSurveyResultData}${item.surveyId}`)
@@ -159,7 +160,7 @@ export default function SurveyResultPage() {
       });
   };
 
-  const { data, isLoading, isError, error } = useQuery<SurveyResultListResponse>(
+  const { data, isLoading, isError, error } = useQuery<SurveyResultListResponse[]>(
     ['SurveyResultList'],
     fetchSurveyResultList,
     {
@@ -170,27 +171,21 @@ export default function SurveyResultPage() {
     }
   );
 
-  const resultList = [
-    { surveyId: 'test1', authorId: 1, title: 'test1' },
-    { surveyId: 'test2', authorId: 2, title: 'test2' },
-    { surveyId: 'test3', authorId: 3, title: 'test3' },
-  ];
-
   if (isLoading) {
     return <LoadingForm />;
   }
 
-  // if (isError || data === undefined) {
-  //   return (
-  //     <ErrorPage
-  //       labelText="😥 생성하신 설문이 없습니다..."
-  //       buttonText="설문 만들러 가기"
-  //       navigateRoute="/survey/form"
-  //       theme={theme}
-  //       toggleTheme={toggleTheme}
-  //     />
-  //   );
-  // }
+  if (isError || data === undefined) {
+    return (
+      <ErrorPage
+        labelText="😥 생성하신 설문이 없습니다..."
+        buttonText="설문 만들러 가기"
+        navigateRoute="/survey/form"
+        theme={theme}
+        toggleTheme={toggleTheme}
+      />
+    );
+  }
 
   return (
     <Container theme={theme}>
@@ -203,25 +198,25 @@ export default function SurveyResultPage() {
             </MypageText>
             <SurveyResultText theme={theme}> &gt; 설문 결과 조회</SurveyResultText>
           </SurVeyResultPageTitle>
-          {resultList.map((item) => (
+          {data?.map((item, index) => (
             <ListBoxContainer key={item.surveyId} theme={theme}>
-              <ListBox theme={theme} onClick={() => handleClick(item)}>
+              <ListBox theme={theme} onClick={() => handleClick(item, index)}>
                 <FontText theme={theme}>{item.title}</FontText>
                 <TwoArrow
-                  style={{ transform: isSurveyResultClicked[item.authorId] ? 'rotate(90deg)' : 'rotate(0deg)' }}
+                  style={{
+                    transform: isSurveyResultClicked[index] ? 'rotate(90deg)' : 'rotate(0deg)',
+                  }}
                 />
               </ListBox>
 
               <ResultBox
                 theme={theme}
                 style={{
-                  width: ListBox.width,
-                  opacity: isSurveyResultClicked[item.authorId] ? 1 : 0,
-                  zIndex: isSurveyResultClicked[item.authorId] ? 1 : -1,
+                  opacity: isSurveyResultClicked[index] ? 1 : 0,
+                  zIndex: isSurveyResultClicked[index] ? 1 : -1,
                 }}
               >
-                <SurveyResultBox theme={theme} />
-                <FontText theme={theme}>{surveyResult?.toString()}</FontText>
+                <SurveyResultBox theme={theme} data={surveyResult} />
               </ResultBox>
             </ListBoxContainer>
           ))}

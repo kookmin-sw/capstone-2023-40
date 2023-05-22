@@ -33,8 +33,8 @@ export const fetchSurveyData = async ({ queryKey }: QueryFunctionContext): Promi
  *
  * @returns {Promise<SurveyResultListResponse>}
  */
-export const fetchSurveyResultList = async (): Promise<SurveyResultListResponse> => {
-  const res = await axios.get<SurveyResultListResponse>(`${requests.getSurveyResultList}`);
+export const fetchSurveyResultList = async (): Promise<SurveyResultListResponse[]> => {
+  const res = await axios.get<SurveyResultListResponse[]>(`${requests.getSurveyResultList}`);
 
   return res.data;
 };
