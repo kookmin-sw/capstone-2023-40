@@ -26,6 +26,7 @@ import com.thesurvey.api.exception.ErrorMessage;
 import com.thesurvey.api.exception.mapper.BadRequestExceptionMapper;
 import com.thesurvey.api.exception.mapper.ForbiddenRequestExceptionMapper;
 import com.thesurvey.api.exception.mapper.NotFoundExceptionMapper;
+import com.thesurvey.api.repository.AnsweredQuestionRepository;
 import com.thesurvey.api.repository.SurveyRepository;
 import com.thesurvey.api.service.mapper.QuestionBankMapper;
 import com.thesurvey.api.service.mapper.QuestionOptionMapper;
@@ -63,10 +64,12 @@ public class SurveyService {
 
     private final PointUtil pointUtil;
 
+    private final AnsweredQuestionRepository answeredQuestionRepository;
+
     public SurveyService(SurveyRepository surveyRepository, SurveyMapper surveyMapper,
         QuestionService questionService,
         QuestionOptionService questionOptionService, ParticipationService participationService,
-        AnsweredQuestionService answeredQuestionService, QuestionOptionMapper questionOptionMapper, QuestionBankMapper questionBankMapper, PointHistoryService pointHistoryService, PointUtil pointUtil) {
+        AnsweredQuestionService answeredQuestionService, QuestionOptionMapper questionOptionMapper, QuestionBankMapper questionBankMapper, PointHistoryService pointHistoryService, PointUtil pointUtil, AnsweredQuestionRepository answeredQuestionRepository) {
         this.surveyRepository = surveyRepository;
         this.surveyMapper = surveyMapper;
         this.questionService = questionService;
@@ -77,6 +80,7 @@ public class SurveyService {
         this.questionBankMapper = questionBankMapper;
         this.pointHistoryService = pointHistoryService;
         this.pointUtil = pointUtil;
+        this.answeredQuestionRepository = answeredQuestionRepository;
     }
 
     @Transactional(readOnly = true)
@@ -105,9 +109,15 @@ public class SurveyService {
         List<Integer> surveyCertificationList =
             surveyRepository.findCertificationTypeBySurveyIdAndAuthorId(surveyId, survey.getAuthorId());
         Long userId = UserUtil.getUserIdFromAuthentication(authentication);
+
+        // validate if the user has completed the necessary certifications for the survey
         if(!survey.getAuthorId().equals(userId)){
-            answeredQuestionService.validateUserCompletedCertification(
-                surveyCertificationList, userId);
+            answeredQuestionService.validateUserCompletedCertification(surveyCertificationList, userId);
+        }
+
+        // validate if a user has already responded to the survey
+        if (answeredQuestionRepository.existsByUserIdAndSurveyId(userId, survey.getSurveyId())) {
+            throw new ForbiddenRequestExceptionMapper(ErrorMessage.ANSWER_ALREADY_SUBMITTED);
         }
 
         return surveyMapper.toSurveyResponseDto(survey, survey.getAuthorId());
