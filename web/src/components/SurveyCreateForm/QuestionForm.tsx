@@ -167,15 +167,15 @@ export default function QuestionForm({
       <ButtonContainer>
         <ButtonWrapper flexJustify="flex-start">
           <ToggleSwitch
-            onText="필수"
-            offText="선택"
-            onTextColor="white"
-            offTextColor={theme.colors.text}
-            onBackgroundColor={theme.colors.primary}
-            offBackgroundColor={theme.colors.button}
+            switchOnText="필수"
+            switchOffText="선택"
+            switchOnTextColor="white"
+            switchOffTextColor={theme.colors.text}
+            switchOnBackgroundColor={theme.colors.primary}
+            switchOffBackgroundColor={theme.colors.button}
             toggleColor="white"
             isChecked={surveyData.questions[questionId].isRequired}
-            onChange={toggleOnChange}
+            handleChange={toggleOnChange}
           />
         </ButtonWrapper>
         <ButtonWrapper flexJustify="center">
