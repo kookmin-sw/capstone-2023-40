@@ -59,7 +59,7 @@ export const validatePhoneNumber = (phoneNumber: string): boolean => {
 };
 
 /**
- * Validate start date is same or later than current date by minutes
+ * Validate start date is same or later than current date
  *
  * @param {Date} startDate Start date
  * @param {Date} currentDate Current date
