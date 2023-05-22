@@ -12,6 +12,7 @@ import { dateFormatUpToDate, getDDay } from '../../utils/dateFormat';
 import { removeEmptyAnswer } from '../../utils/removeEmptyAnswer';
 import { responseErrorHandle } from '../../utils/responseErrorHandle';
 import { scrollToRef } from '../../utils/scroll';
+import { validateSurveyAnswer } from '../../utils/validate';
 import RectangleButton from '../Button/RectangleButton';
 import { AlertModal, ConfirmModal, SurveyPageResultModal } from '../Modal';
 import QuestionForm from './QuestionForm';
@@ -112,13 +113,12 @@ export default function SurveyParticipateForm({ surveyData, theme }: SurveyParti
     let answersVerification = true;
     if (typeof surveyData !== 'undefined') {
       for (let i = 0; i < surveyData.questions.length; i += 1) {
-        // TODO: response validation will be needed
-        if (typeof userAnswers[i] === 'undefined' && surveyData.questions[i].isRequired) {
+        if (validateSurveyAnswer(userAnswers[i], surveyData.questions[i])) {
+          turnOffUserAttention(i);
+        } else {
           turnOnUserAttention(i);
           answersVerification = false;
           break;
-        } else {
-          turnOffUserAttention(i);
         }
       }
     }
