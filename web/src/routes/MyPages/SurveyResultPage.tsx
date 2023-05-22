@@ -216,7 +216,7 @@ export default function SurveyResultPage() {
                   zIndex: isSurveyResultClicked[index] ? 1 : -1,
                 }}
               >
-                <SurveyResultBox theme={theme} data={surveyResult} />
+                <SurveyResultBox theme={theme} />
               </ResultBox>
             </ListBoxContainer>
           ))}

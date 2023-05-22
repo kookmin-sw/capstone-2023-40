@@ -35,10 +35,9 @@ const FontText = styled.span`
 
 interface SurveyResultProps {
   theme: DefaultTheme;
-  data: any;
 }
 
-export default function SurveyResultBox({ theme, data }: SurveyResultProps) {
+export default function SurveyResultBox({ theme }: SurveyResultProps) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [surveyTitle, setSurveyTitle] = useState('');
@@ -46,13 +45,14 @@ export default function SurveyResultBox({ theme, data }: SurveyResultProps) {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
   };
-  console.log(data.results);
-  const updateSurveyResult = () => {};
+  const updateSurveyResult = (data: any) => {
+    setSurveyTitle(data.results.toString());
+  };
 
   return (
     <SurveyResultContainer theme={theme}>
       <Form onSubmit={handleSubmit}>
-        <FontText theme={theme}>{data}</FontText>
+        <FontText theme={theme}>{surveyTitle}</FontText>
       </Form>
     </SurveyResultContainer>
   );
