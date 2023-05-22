@@ -34,5 +34,4 @@ export interface SurveyUpdateRequest {
 export interface SurveySubmitRequest {
   surveyId: string;
   answers: Array<AnsweredQuestion>;
-  certificationTypes: Array<CertificationType>;
 }
