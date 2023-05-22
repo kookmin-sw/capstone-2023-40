@@ -18,7 +18,7 @@ export const darkTheme: DefaultTheme = {
     btnhover: '#6C768C',
     header: '#202123',
     opposite: '#808080',
-    background: '#808080',
+    background: '#2c2d2c',
     inputBackground: '#2c2d2c',
     placeHolder: '#F4F7FA',
   },
