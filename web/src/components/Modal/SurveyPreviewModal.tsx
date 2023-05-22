@@ -119,6 +119,7 @@ interface ModalProps {
 }
 
 export default function SurveyPreviewModal({ surveyItem, setPreviewModalOpen, theme }: ModalProps) {
+  const date = new Date();
   const remainDate = useMemo(() => getDDay(surveyItem.endedDate), [surveyItem.endedDate]);
   const navigate = useNavigate();
   const modalRef = useRef<HTMLDivElement>(null);
@@ -132,7 +133,7 @@ export default function SurveyPreviewModal({ surveyItem, setPreviewModalOpen, th
   });
 
   useEffect(() => {
-    if (validateStartDate(new Date(surveyItem.startedDate), new Date())) {
+    if (validateStartDate(new Date(surveyItem.startedDate), date)) {
       setDisableButton(true);
     }
   }, [surveyItem.startedDate]);
@@ -172,7 +173,11 @@ export default function SurveyPreviewModal({ surveyItem, setPreviewModalOpen, th
             textColor="white"
             backgroundColor={theme.colors.primary}
             hoverColor={theme.colors.prhover}
-            text={disableButton ? `${dateFormatUpToMinute(String(surveyItem.startedDate))} 시작` : '설문 조사 시작하기'}
+            text={
+              disableButton
+                ? `${dateFormatUpToMinute(String(surveyItem.startedDate))} 부터 참여가능`
+                : '설문 조사 참여하기'
+            }
             theme={theme}
             handleClick={() => navigate(`/survey/${surveyItem.surveyId}`)}
             width="50%"
