@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
+import { useDispatch } from 'react-redux';
 import styled, { DefaultTheme } from 'styled-components';
 
 import axios from '../../api/axios';
@@ -8,6 +9,7 @@ import { AnsweredQuestion, SurveySubmitRequest } from '../../types/request';
 import { QuestionBankResponse } from '../../types/response/QuestionBank';
 import { SurveyResponse } from '../../types/response/Survey';
 import { dateFormatUpToDate, getDDay } from '../../utils/dateFormat';
+import { removeEmptyAnswer } from '../../utils/removeEmptyAnswer';
 import { responseErrorHandle } from '../../utils/responseErrorHandle';
 import { scrollToRef } from '../../utils/scroll';
 import RectangleButton from '../Button/RectangleButton';
@@ -26,6 +28,10 @@ const QuestionContainer = styled.div`
 `;
 
 const HeadContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
   padding: 6vh 8vw 0vh 8vw;
   background-color: ${(props) => props.theme.colors.container};
 `;
@@ -61,29 +67,30 @@ interface SurveyParticipateFormProps {
 }
 
 export default function SurveyParticipateForm({ surveyData, theme }: SurveyParticipateFormProps) {
+  const dispatch = useDispatch();
   const questionRefs = useRef<HTMLDivElement[]>([]);
   const [endedDate, setEndedDate] = useState<string>('');
   const [resultModalOpen, setResultModalOpen] = useState<boolean>(false);
   const [alertModalOpen, setAlertModalOpen] = useState<boolean>(false);
   const [warnText, setWarnText] = useState<string>('');
   const [userAnswers, setUserAnswers] = useState<Array<AnsweredQuestion>>([]);
+  const [earnedPoint, setEarnedPoint] = useState<number>(0);
 
   const remainDate = useMemo(() => getDDay(endedDate), [endedDate]);
 
   const postSurveyAnswers = async () => {
     const surveySubmitData: SurveySubmitRequest = {
       surveyId: surveyData.surveyId,
-      answers: userAnswers,
-      certificationTypes: surveyData.certificationTypes,
+      answers: removeEmptyAnswer(userAnswers),
     };
     axios
       .post(requests.submitSurvey, surveySubmitData)
       .then((response) => {
-        // TODO: 획득 포인트 표시
+        setEarnedPoint(response.data.rewardPoints);
         setResultModalOpen(true);
       })
       .catch((error) => {
-        const errorMessages: string[] = responseErrorHandle(error);
+        const errorMessages: string[] = responseErrorHandle(error, dispatch);
         setWarnText(errorMessages[0]);
         setAlertModalOpen(true);
       });
@@ -103,7 +110,7 @@ export default function SurveyParticipateForm({ surveyData, theme }: SurveyParti
     if (typeof surveyData !== 'undefined') {
       for (let i = 0; i < surveyData.questions.length; i += 1) {
         // TODO: response validation will be needed
-        if (typeof userAnswers[i] === 'undefined') {
+        if (typeof userAnswers[i] === 'undefined' && surveyData.questions[i].isRequired) {
           turnOnUserAttention(i);
           answersVerification = false;
           break;
@@ -170,7 +177,7 @@ export default function SurveyParticipateForm({ surveyData, theme }: SurveyParti
           />
         </ButtonContainer>
       </BodyContainer>
-      {resultModalOpen && <SurveyPageResultModal theme={theme} />}
+      {resultModalOpen && <SurveyPageResultModal point={earnedPoint} theme={theme} />}
       {alertModalOpen && (
         <AlertModal
           theme={theme}

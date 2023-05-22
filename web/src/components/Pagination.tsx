@@ -24,10 +24,9 @@ const Button = styled.li`
   height: 25px;
   padding: 2px 18px;
   margin: 5px;
-  transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1), opacity 15ms linear 30ms,
-    transform 270ms cubic-bezier(0, 0, 0.2, 1) 0ms;
   color: ${(props) => props.theme.colors.default};
   cursor: pointer;
+  transition: 200ms background ease;
 `;
 
 const PageButton = styled(Button)`

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
+import { useDispatch } from 'react-redux';
 import styled, { DefaultTheme } from 'styled-components';
 
 import axios from '../../api/axios';
@@ -42,6 +43,7 @@ interface SurveyFormProps {
 }
 
 export default function SurveyCreateForm({ theme }: SurveyFormProps) {
+  const dispatch = useDispatch();
   const questionRefs = useRef<HTMLDivElement[]>([]);
   const [recentCreate, setRecentCreate] = useState<number>();
   const [certificationIsChecked, setCertificationIsChecked] = useState<boolean>(false);
@@ -57,19 +59,21 @@ export default function SurveyCreateForm({ theme }: SurveyFormProps) {
     certificationTypes: [],
     questions: [],
   });
+  const [usedPoint, setUsedPoint] = useState<number>(0);
 
   const handleSubmit = () => {
     axios
       .post(requests.createSurvey, surveyData)
       .then((response) => {
-        // TODO: 사용한 포인트 표시
+        setUsedPoint(response.data.rewardPoints * -2);
         setConfirmModalOpen(false);
         setResultModalOpen(true);
       })
       .catch((error) => {
-        const errorMessages: string[] = responseErrorHandle(error);
+        const errorMessages: string[] = responseErrorHandle(error, dispatch);
         setWarnText(errorMessages[0]);
         setAlertModalOpen(true);
+        setConfirmModalOpen(false);
       });
   };
 
@@ -203,14 +207,14 @@ export default function SurveyCreateForm({ theme }: SurveyFormProps) {
     }
   };
 
-  // Update questionList[questionId] title | description
+  // Update questions[questionId] title | description
   const handleChangeQuestion = (event: React.ChangeEvent<HTMLInputElement>, questionId: number) => {
     const { name, value } = event.target;
     surveyData.questions[questionId] = { ...surveyData.questions[questionId], [name]: value };
     setSurveyData({ ...surveyData });
   };
 
-  // Update questionList[questionId] type
+  // Update questions[questionId] type
   const handleChangeQuestionType = (event: React.ChangeEvent<HTMLSelectElement>, questionId: number) => {
     const { name, value } = event.target;
     surveyData.questions[questionId] = {
@@ -221,7 +225,7 @@ export default function SurveyCreateForm({ theme }: SurveyFormProps) {
     setSurveyData({ ...surveyData });
   };
 
-  // Update questionList[questionId][optionId] option
+  // Update questions[questionId][optionId] option
   const handleChangeOption = (event: React.ChangeEvent<HTMLInputElement>, questionId: number, optionId: number) => {
     const { name, value } = event.target;
     const newOptions = surveyData.questions[questionId].questionOptions;
@@ -241,6 +245,16 @@ export default function SurveyCreateForm({ theme }: SurveyFormProps) {
     else if (name === 'deleteQuestion') deleteQuestionAtId(questionId);
     else if (name === 'addOption') addOptionAtBottom(questionId);
     else if (typeof optionId !== 'undefined') deleteOptionAtId(questionId, optionId);
+  };
+
+  // Update questions[questionId] isRequired
+  const handleToggleSwitch = (event: React.ChangeEvent<HTMLInputElement>, questionId: number) => {
+    const { checked } = event.target;
+    surveyData.questions[questionId] = {
+      ...surveyData.questions[questionId],
+      isRequired: checked,
+    };
+    setSurveyData({ ...surveyData });
   };
 
   return (
@@ -271,6 +285,7 @@ export default function SurveyCreateForm({ theme }: SurveyFormProps) {
             handleChangeQuestionType={handleChangeQuestionType}
             handleClickButton={handleClickButton}
             handleChangeOption={handleChangeOption}
+            handleToggleSwitch={handleToggleSwitch}
             theme={theme}
           />
         </ItemContainer>
@@ -284,11 +299,11 @@ export default function SurveyCreateForm({ theme }: SurveyFormProps) {
           text="제출하기"
           theme={theme}
           handleClick={validation}
-          width="15vw"
+          width="30%"
         />
       </ButtonContainer>
 
-      {resultModalOpen && <SurveyPageResultModal theme={theme} />}
+      {resultModalOpen && <SurveyPageResultModal point={usedPoint} theme={theme} />}
 
       {alertModalOpen && (
         <AlertModal

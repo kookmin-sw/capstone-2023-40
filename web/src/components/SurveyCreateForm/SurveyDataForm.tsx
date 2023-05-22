@@ -24,6 +24,11 @@ const GuideLabel = styled.label`
   margin-right: 10px;
   font-weight: 900;
   color: ${(props) => props.theme.colors.default};
+
+  @media screen and (max-width: 650px) {
+    margin-left: 2px;
+    margin-right: 2px;
+  }
 `;
 
 const TextInput = styled.input.attrs({ type: 'text', maxLength: 100 })`
@@ -60,17 +65,12 @@ const SelectedCertificationsContainer = styled.div`
   height: 50px;
 `;
 
-const SelectedCertification = styled.label`
-  margin: 5px;
-  border-radius: ${(props) => props.theme.borderRadius};
-  padding: 1.2vh 1.5vw 1.2vh 1.5vw;
-`;
-
 const SurveyDateContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
   align-items: baseline;
+  flex-wrap: wrap;
 `;
 
 const SurveyDateInput = styled.input.attrs({ type: 'datetime-local' })`
@@ -87,6 +87,7 @@ const List = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  flex-wrap: wrap;
   padding: 0px;
 `;
 
@@ -153,8 +154,13 @@ export default function SurveyDataForm({
 
       <SurveyCertificationsContainer theme={theme}>
         <SelectedCertificationsContainer theme={theme}>
-          <GuideLabel theme={theme}>필수 인증 목록 : </GuideLabel>
-          <CertificationIconList certificationList={surveyData.certificationTypes || []} theme={theme} />
+          <GuideLabel theme={theme}>필수 인증 : </GuideLabel>
+          <CertificationIconList
+            width="65%"
+            minWidth="100px"
+            certificationList={surveyData.certificationTypes || []}
+            theme={theme}
+          />
         </SelectedCertificationsContainer>
         <List>
           {NumberUtils.range(1, 7).map((index: number) => {

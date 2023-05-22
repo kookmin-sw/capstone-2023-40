@@ -47,6 +47,7 @@ const TitleContainer = styled.div`
   flex-direction: row;
   justify-content: flex-start;
   align-items: baseline;
+  flex-wrap: wrap;
 `;
 
 const BodyContainer = styled.div`
@@ -92,26 +93,17 @@ const Title = styled(Label)`
 const EndDate = styled(Label)`
   font-size: 17px;
   font-weight: 600;
-  margin-left: 15px;
+  margin-left: 5px;
   color: ${(props) => props.theme.colors.text};
-
-  @media screen and (max-width: 960px) {
-    display: none;
-  }
 `;
 
 const Subtitle = styled(Label)`
   font-size: 20px;
   font-weight: 600;
-  width: 30vw;
   padding: 1.2vh 1.5vw 1.2vh 1.5vw;
   text-decoration: underline;
   text-decoration-color: currentColor;
   text-underline-offset: 5px;
-
-  @media screen and (max-width: 960px) {
-    width: 35vw;
-  }
 `;
 
 const Description = styled.span`
@@ -159,7 +151,12 @@ export default function SurveyPreviewModal({ surveyItem, setPreviewModalOpen, th
           <Description theme={theme}>{surveyItem.description}</Description>
           <Subtitle theme={theme}>필수인증 목록</Subtitle>
           <CertificationContainer>
-            <CertificationIconList certificationList={surveyItem.certificationTypes} theme={theme} />
+            <CertificationIconList
+              width="100%"
+              minWidth="100px"
+              certificationList={surveyItem.certificationTypes}
+              theme={theme}
+            />
           </CertificationContainer>
         </BodyContainer>
         <ButtonContainer>
@@ -170,7 +167,7 @@ export default function SurveyPreviewModal({ surveyItem, setPreviewModalOpen, th
             text="설문 조사 시작하기"
             theme={theme}
             handleClick={() => navigate(`/survey/${surveyItem.surveyId}`)}
-            width="30vw"
+            width="50%"
           />
         </ButtonContainer>
       </ModalContainer>

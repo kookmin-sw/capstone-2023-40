@@ -5,6 +5,7 @@ export interface QuestionBankResponse extends BaseTime {
   questionBankId: number;
   title: string;
   description: string;
+  isRequired: boolean;
   questionType: QuestionType;
   questionOptions: Array<QuestionOptionResponse> | null;
 }

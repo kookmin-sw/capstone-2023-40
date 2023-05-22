@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
+import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -24,6 +25,10 @@ const Container = styled.div`
 export default function SurveyPage() {
   const { id } = useParams();
   const [theme, toggleTheme] = useTheme();
+  const [errorLabel, setErrorLabel] = useState<string>('');
+  const [errorButtonText, setErrorButtonText] = useState<string>('');
+  const [errorNavigate, setErrorNavigate] = useState<string>('');
+  const dispatch = useDispatch();
 
   const { data, isLoading, isError, error } = useQuery<SurveyResponse>(['survey', id], fetchSurveyData, {
     cacheTime: 15 * 60 * 1000, // 15 minutes
@@ -32,14 +37,22 @@ export default function SurveyPage() {
     refetchOnWindowFocus: false,
   });
 
-  if (isError) {
-    const errorMessages: string[] = responseErrorHandle(error as AxiosError);
+  useEffect(() => {
+    if (isError) {
+      const errorMessages: string[] = responseErrorHandle(error as AxiosError, dispatch);
 
+      setErrorLabel(`😥 ${errorMessages[0]}..`);
+      setErrorButtonText(errorMessages[1]);
+      setErrorNavigate(errorMessages[2]);
+    }
+  }, [isError]);
+
+  if (isError) {
     return (
       <ErrorPage
-        labelText={`😥 ${errorMessages[0]}..`}
-        buttonText={errorMessages[1]}
-        navigateRoute={errorMessages[2]}
+        labelText={errorLabel}
+        buttonText={errorButtonText}
+        navigateRoute={errorNavigate}
         theme={theme}
         toggleTheme={toggleTheme}
       />

@@ -3,7 +3,7 @@ import React from 'react';
 import styled, { DefaultTheme } from 'styled-components';
 
 import { SurveyAbstractResponse } from '../types/response/Survey';
-import { dateFormatUpToMinute } from '../utils/dateFormat';
+import { dateFormatUpToDate } from '../utils/dateFormat';
 import CertificationIconList from './CertificationIconList';
 
 const ListTable = styled.table`
@@ -50,6 +50,7 @@ const Title = styled(Item)`
   min-width: 15vh;
   flex: 1;
   cursor: pointer;
+  transition: 200ms background ease;
 
   &:hover {
     background-color: ${(props) => props.theme.colors.btnhover};
@@ -119,10 +120,15 @@ export default function SurveyListTable({
             <Title role="button" onClick={() => handleButtonClick(index)} theme={theme}>
               {survey.title}
             </Title>
-            <Item>
-              <CertificationIconList certificationList={survey.certificationTypes} theme={theme} />
+            <Item theme={theme}>
+              <CertificationIconList
+                width="20vw"
+                minWidth="100px"
+                certificationList={survey.certificationTypes}
+                theme={theme}
+              />
             </Item>
-            <EndDate theme={theme}>{dateFormatUpToMinute(`${survey.endedDate}`)}</EndDate>
+            <EndDate theme={theme}>{dateFormatUpToDate(`${survey.endedDate}`)}</EndDate>
           </ListRow>
         ))}
       </ListBody>

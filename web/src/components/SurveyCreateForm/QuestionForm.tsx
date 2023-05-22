@@ -5,6 +5,7 @@ import styled, { DefaultTheme } from 'styled-components';
 import { QuestionType } from '../../types/request/Question';
 import { SurveyCreateRequest } from '../../types/request/Survey';
 import { PlusImage, TrashImage } from '../Button/ImageButtons';
+import ToggleSwitch from '../ToggleSwitch';
 import OptionList from './OptionList';
 import QuestionTypeSelector from './QuestionTypeSelector';
 
@@ -17,6 +18,13 @@ const ButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  margin-top: 10px;
+`;
+
+const ButtonWrapper = styled.div<{ flexJustify: string }>`
+  width: 30%;
+  display: flex;
+  justify-content: ${(props) => props.flexJustify};
 `;
 
 const HeadContainer = styled.div`
@@ -39,6 +47,7 @@ const TextInput = styled.input.attrs({ type: 'text', maxLength: 100 })`
 `;
 
 const QuestionTitleInput = styled(TextInput).attrs({ type: 'text' })`
+  width: 70%;
   font-size: 18px;
   margin-top: 7px;
 `;
@@ -51,7 +60,7 @@ const QuestionDescriptionInput = styled(TextInput).attrs({ type: 'text' })`
 
 const AnswerLabel = styled.label`
   display: inline-block;
-  width: 30vw;
+  width: 30%;
   padding: 1.2vh 1.5vw 1.2vh 1.5vw;
   font-size: 15px;
   color: ${(props) => props.theme.colors.text};
@@ -60,6 +69,10 @@ const AnswerLabel = styled.label`
   text-decoration-color: currentColor;
   border: ${(props) => props.theme.border};
   border-radius: ${(props) => props.theme.borderRadius};
+
+  @media screen and (max-width: 650px) {
+    width: 65%;
+  }
 `;
 
 const AddOptionButton = styled.button`
@@ -78,13 +91,6 @@ const AddOptionButton = styled.button`
   }
 `;
 
-const EmptyObject = styled.button`
-  border: none;
-  background-color: transparent;
-  width: 35px;
-  height: 35px;
-`;
-
 interface SubjectiveAnswerFormProps {
   surveyData: SurveyCreateRequest;
   selected: number;
@@ -93,6 +99,7 @@ interface SubjectiveAnswerFormProps {
   handleChangeQuestionType: (event: React.ChangeEvent<HTMLSelectElement>, questionId: number) => void;
   handleClickButton: (name: string, questionId?: number, optionId?: number) => void;
   handleChangeOption: (event: React.ChangeEvent<HTMLInputElement>, questionId: number, optionId: number) => void;
+  handleToggleSwitch: (event: React.ChangeEvent<HTMLInputElement>, questionId: number) => void;
   theme: DefaultTheme;
 }
 
@@ -104,9 +111,13 @@ export default function QuestionForm({
   handleChangeQuestionType,
   handleClickButton,
   handleChangeOption,
+  handleToggleSwitch,
   theme,
 }: SubjectiveAnswerFormProps) {
   const answerLabel = selected === QuestionType.LONG_ANSWER ? '장문형 답변이 입력됩니다.' : '단답형 답변이 입력됩니다.';
+  const toggleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    handleToggleSwitch(event, questionId);
+  };
 
   return (
     <Container data-testid="question">
@@ -154,17 +165,33 @@ export default function QuestionForm({
       )}
 
       <ButtonContainer>
-        <EmptyObject />
-        <PlusImage
-          data-testid="addQuestion"
-          onClick={() => handleClickButton('addQuestion', questionId)}
-          theme={theme}
-        />
-        <TrashImage
-          data-testid="deleteQuestion"
-          onClick={() => handleClickButton('deleteQuestion', questionId)}
-          theme={theme}
-        />
+        <ButtonWrapper flexJustify="flex-start">
+          <ToggleSwitch
+            switchOnText="필수"
+            switchOffText="선택"
+            switchOnTextColor="white"
+            switchOffTextColor={theme.colors.text}
+            switchOnBackgroundColor={theme.colors.primary}
+            switchOffBackgroundColor={theme.colors.button}
+            toggleColor="white"
+            isChecked={surveyData.questions[questionId].isRequired}
+            handleChange={toggleOnChange}
+          />
+        </ButtonWrapper>
+        <ButtonWrapper flexJustify="center">
+          <PlusImage
+            data-testid="addQuestion"
+            onClick={() => handleClickButton('addQuestion', questionId)}
+            theme={theme}
+          />
+        </ButtonWrapper>
+        <ButtonWrapper flexJustify="flex-end">
+          <TrashImage
+            data-testid="deleteQuestion"
+            onClick={() => handleClickButton('deleteQuestion', questionId)}
+            theme={theme}
+          />
+        </ButtonWrapper>
       </ButtonContainer>
     </Container>
   );

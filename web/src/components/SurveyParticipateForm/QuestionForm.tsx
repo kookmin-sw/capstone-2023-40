@@ -14,6 +14,13 @@ const HeadContainer = styled.div`
   justify-content: space-between;
 `;
 
+const DescriptionContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap-reverse;
+`;
+
 const BodyContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -36,9 +43,26 @@ const Title = styled(TextLabel)`
 `;
 
 const Description = styled(TextLabel)`
+  width: 80%;
   font-size: 15px;
   margin-bottom: 23px;
   background-color: ${(props) => props.theme.colors.inputBackground};
+
+  @media screen and (max-width: 1050px) {
+    width: 100%;
+    margin-bottom: 0px;
+  }
+`;
+
+const RequiredOption = styled(TextLabel)<{ isRequired: boolean }>`
+  color: ${(props) => (props.isRequired ? props.theme.colors.primary : props.theme.colors.text)};
+  font-size: 15px;
+  margin-bottom: 23px;
+  background-color: ${(props) => props.theme.colors.inputBackground};
+
+  @media screen and (max-width: 1050px) {
+    width: 100%;
+  }
 `;
 
 interface QuestionFormProps {
@@ -56,17 +80,25 @@ export default function QuestionForm({ question, index, userAnswers, setUserAnsw
     const newUserAnswers = [...userAnswers];
 
     if (typeof newUserAnswers[index] === 'undefined') {
-      newUserAnswers[index] = { questionBankId: question.questionBankId };
+      newUserAnswers[index] = {
+        questionBankId: question.questionBankId,
+        isRequired: question.isRequired,
+        questionType: question.questionType,
+      };
     }
 
     if (isChecked) {
       newUserAnswers[index] = {
         questionBankId: question.questionBankId,
+        isRequired: question.isRequired,
+        questionType: question.questionType,
         multipleChoices: [...(newUserAnswers[index].multipleChoices || []), value],
       };
     } else {
       newUserAnswers[index] = {
         questionBankId: question.questionBankId,
+        isRequired: question.isRequired,
+        questionType: question.questionType,
         multipleChoices: newUserAnswers[index].multipleChoices?.filter((item: number) => item !== value),
       };
     }
@@ -92,13 +124,28 @@ export default function QuestionForm({ question, index, userAnswers, setUserAnsw
 
     switch (tmpQuestionType) {
       case QuestionType.SINGLE_CHOICE:
-        newUserAnswers[index] = { questionBankId: question.questionBankId, singleChoice: Number(event.target.value) };
+        newUserAnswers[index] = {
+          questionBankId: question.questionBankId,
+          isRequired: question.isRequired,
+          questionType: question.questionType,
+          singleChoice: Number(event.target.value),
+        };
         break;
       case QuestionType.SHORT_ANSWER:
-        newUserAnswers[index] = { questionBankId: question.questionBankId, shortAnswer: event.target.value };
+        newUserAnswers[index] = {
+          questionBankId: question.questionBankId,
+          isRequired: question.isRequired,
+          questionType: question.questionType,
+          shortAnswer: event.target.value,
+        };
         break;
       case QuestionType.LONG_ANSWER:
-        newUserAnswers[index] = { questionBankId: question.questionBankId, longAnswer: event.target.value };
+        newUserAnswers[index] = {
+          questionBankId: question.questionBankId,
+          isRequired: question.isRequired,
+          questionType: question.questionType,
+          longAnswer: event.target.value,
+        };
         break;
       default:
         break;
@@ -113,7 +160,12 @@ export default function QuestionForm({ question, index, userAnswers, setUserAnsw
         <Title theme={theme}>
           {index + 1}.&nbsp;&nbsp;{question.title}
         </Title>
-        <Description theme={theme}>{question.description}</Description>
+        <DescriptionContainer>
+          <RequiredOption isRequired={question.isRequired} theme={theme}>
+            {question.isRequired ? '필수 응답 질문' : '선택 응답 질문'}
+          </RequiredOption>
+          <Description theme={theme}>{question.description}</Description>
+        </DescriptionContainer>
       </HeadContainer>
 
       <BodyContainer>
