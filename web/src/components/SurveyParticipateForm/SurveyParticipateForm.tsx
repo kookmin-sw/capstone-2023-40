@@ -9,6 +9,7 @@ import { AnsweredQuestion, SurveySubmitRequest } from '../../types/request';
 import { QuestionBankResponse } from '../../types/response/QuestionBank';
 import { SurveyResponse } from '../../types/response/Survey';
 import { dateFormatUpToDate, getDDay } from '../../utils/dateFormat';
+import { removeEmptyAnswer } from '../../utils/removeEmptyAnswer';
 import { responseErrorHandle } from '../../utils/responseErrorHandle';
 import { scrollToRef } from '../../utils/scroll';
 import RectangleButton from '../Button/RectangleButton';
@@ -80,14 +81,12 @@ export default function SurveyParticipateForm({ surveyData, theme }: SurveyParti
   const postSurveyAnswers = async () => {
     const surveySubmitData: SurveySubmitRequest = {
       surveyId: surveyData.surveyId,
-      answers: userAnswers,
-      certificationTypes: surveyData.certificationTypes,
+      answers: removeEmptyAnswer(userAnswers),
     };
     axios
       .post(requests.submitSurvey, surveySubmitData)
       .then((response) => {
-        // TODO: 서버로 부터 받은 획득 포인트 표시
-        setEarnedPoint(100);
+        setEarnedPoint(response.data.rewardPoints);
         setResultModalOpen(true);
       })
       .catch((error) => {

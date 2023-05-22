@@ -65,8 +65,7 @@ export default function SurveyCreateForm({ theme }: SurveyFormProps) {
     axios
       .post(requests.createSurvey, surveyData)
       .then((response) => {
-        // TODO: 서버로 부터 받은 사용한 포인트 표시
-        setUsedPoint(-100);
+        setUsedPoint(response.data.rewardPoints * -2);
         setConfirmModalOpen(false);
         setResultModalOpen(true);
       })
@@ -74,6 +73,7 @@ export default function SurveyCreateForm({ theme }: SurveyFormProps) {
         const errorMessages: string[] = responseErrorHandle(error, dispatch);
         setWarnText(errorMessages[0]);
         setAlertModalOpen(true);
+        setConfirmModalOpen(false);
       });
   };
 

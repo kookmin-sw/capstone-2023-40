@@ -122,11 +122,6 @@ export default function QuestionForm({ question, index, userAnswers, setUserAnsw
       tmpQuestionType = question.questionType;
     }
 
-    newUserAnswers[index] = {
-      questionBankId: question.questionBankId,
-      isRequired: question.isRequired,
-      questionType: question.questionType,
-    };
     switch (tmpQuestionType) {
       case QuestionType.SINGLE_CHOICE:
         newUserAnswers[index] = {
