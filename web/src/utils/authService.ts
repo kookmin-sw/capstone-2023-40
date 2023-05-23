@@ -60,8 +60,9 @@ export const authConnect = (checkAuthServiceTitle: string, setConnectService: an
       window.location.href = KAKAO_AUTH_URL;
       break;
     case '네이버':
-      console.log('네이버 로그인');
-      window.location.href = NAVER_AUTH_URL;
+      // TODO: window.location.href = NAVER_AUTH_URL;
+      dispatch(setSuccessAuth(true));
+      dispatch(setCompleteAuth(true));
       break;
     case '구글':
       dispatch(setSuccessAuth(true));
