@@ -32,13 +32,6 @@ const TwoArrow = styled(Icons.TWOARROW).attrs({
   transition: transform 0.2s ease-in-out;
 `;
 
-const ChartImage = styled(Icons.CHART)`
-  margin-right: auto;
-  width: 100vw;
-  height: 100%;
-  border-radius: 20px;
-`;
-
 const Container = styled.div`
   width: 100vw;
   height: 100vh;

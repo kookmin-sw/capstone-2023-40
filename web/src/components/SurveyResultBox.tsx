@@ -4,7 +4,15 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
 
+import { Icons } from '../assets/svg/index';
 import { ChartData } from '../types/response/Survey';
+
+const ChartImage = styled(Icons.CHART)`
+  margin-right: auto;
+  width: 100vw;
+  height: 100%;
+  border-radius: 20px;
+`;
 
 const SurveyResultContainer = styled.div`
   width: 10vw;
@@ -52,7 +60,7 @@ export default function SurveyResultBox({ theme }: SurveyResultProps) {
   return (
     <SurveyResultContainer theme={theme}>
       <Form onSubmit={handleSubmit}>
-        <FontText theme={theme}>{surveyTitle}</FontText>
+        <ChartImage />
       </Form>
     </SurveyResultContainer>
   );
