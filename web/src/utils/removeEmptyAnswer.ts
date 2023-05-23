@@ -25,12 +25,12 @@ export const removeEmptyAnswer = (answers: Array<AnsweredQuestion>): Array<Answe
           // TODO: 단일 선택 체크 해제
           break;
         case QuestionType.LONG_ANSWER:
-          if (answers[i].longAnswer !== '') {
+          if (answers[i].longAnswer?.trim() !== '') {
             newAnswers.push(answers[i]);
           }
           break;
         case QuestionType.SHORT_ANSWER:
-          if (answers[i].shortAnswer !== '') {
+          if (answers[i].shortAnswer?.trim() !== '') {
             newAnswers.push(answers[i]);
           }
           break;
