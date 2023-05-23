@@ -5,12 +5,12 @@ export interface HeaderState {
 
 export const setLoggedIn = (payload: boolean) => ({
   type: 'SET_LOGGED_IN',
-  payload: !payload,
+  payload: payload,
 });
 
 export const setSubPageOpen = (payload: boolean) => ({
   type: 'SETSUBPAGE',
-  payload: !payload,
+  payload: payload,
 });
 
 export type HeaderAction = ReturnType<typeof setLoggedIn> | ReturnType<typeof setSubPageOpen>;

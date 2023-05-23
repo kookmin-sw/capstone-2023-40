@@ -1,3 +1,4 @@
+import { AnsweredQuestionResult } from './AnsweredQuestion';
 import { BaseTime } from './BaseTime';
 import { QuestionBankResponse } from './QuestionBank';
 
@@ -27,6 +28,32 @@ export interface SurveyPageResponse extends BaseTime {
   page: number;
   totalSurveys: number;
   totalPages: number;
+}
+
+export interface SurveyResultListResponse {
+  surveyId: string;
+  title: string;
+}
+
+export interface SurveyResultResponse {
+  surveyId: string;
+  surveyTitle: string;
+  results: Array<AnsweredQuestionResult>;
+}
+
+export interface ChartData {
+  questionBankId: number;
+  questionTitle: string;
+  questionDescription: string;
+  questionNo: number;
+  textAnswers: Array<string>;
+  optionAnswers: OptionAnswer[];
+}
+
+export interface OptionAnswer {
+  questionOptionId: number;
+  option: string;
+  totalResponseCount: number;
 }
 
 enum CertificationType {

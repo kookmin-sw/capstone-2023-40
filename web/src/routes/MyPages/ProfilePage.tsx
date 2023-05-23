@@ -4,11 +4,17 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
+import axios from '../../api/axios';
+import { requests } from '../../api/request';
 import { Icons } from '../../assets/svg/index';
 import Header from '../../components/Header';
 import { AlertModal } from '../../components/Modal';
 import { useTheme } from '../../hooks/useTheme';
 import { RootState } from '../../reducers';
+import { setLoggedIn, setSubPageOpen } from '../../types/header';
+import { SurveyResultListResponse } from '../../types/response/Survey';
+import { UserAuthListResponse } from '../../types/response/User';
+import { initializeAuthList } from '../../utils/authService';
 import { validatePassword, validatePhoneNumber } from '../../utils/validate';
 
 const PencilImage = styled(Icons.PENCIL).attrs({
@@ -153,6 +159,7 @@ export default function ProfilePage() {
   const [alertText, setAlertText] = useState('');
   const [showAlertModal, setShowAlertModal] = useState(false);
   const userState = useSelector((state: RootState) => state.userInformation);
+  const isSubPageOpen = useSelector((state: RootState) => state.header.isSubPageOpen);
   const dispatch = useDispatch();
 
   // Input Data list
@@ -202,6 +209,36 @@ export default function ProfilePage() {
     } else if (text === 'address') {
       setUpdateAddressDisabled(!updateAddressDisabled);
     }
+  };
+
+  const navigateAuthListPage = () => {
+    dispatch(setSubPageOpen(!isSubPageOpen));
+    axios
+      .get<UserAuthListResponse>(requests.getUserAuthList)
+      .then((getAuthListResponse) => {
+        if (getAuthListResponse.status === 200) {
+          console.log('get UserAuthList Success!');
+          initializeAuthList(getAuthListResponse.data, dispatch);
+          navigate('../mypage/auth-list');
+        }
+      })
+      .catch((error) => {
+        console.log(error.requests.status);
+      });
+  };
+
+  const navigateSurveyListPage = async () => {
+    axios
+      .get<SurveyResultListResponse>(requests.getSurveyResultList)
+      .then((res) => {
+        if (res.status === 200) {
+          console.log(res.data);
+          navigate('../mypage/survey-result/:id');
+        }
+      })
+      .catch((error) => {
+        console.log(error.requests.status);
+      });
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -308,12 +345,12 @@ export default function ProfilePage() {
           ))}
           <ContainerBox style={{ marginTop: '10vh' }}>
             <ReplacePagetext theme={theme}>인증정보 목록</ReplacePagetext>
-            <ArrowImage theme={theme} onClick={() => navigate('../mypage/auth-list')} />
+            <ArrowImage theme={theme} onClick={navigateAuthListPage} />
           </ContainerBox>
 
           <ContainerBox style={{ marginTop: '20px' }}>
             <ReplacePagetext theme={theme}>설문 결과 조회</ReplacePagetext>
-            <ArrowImage theme={theme} onClick={() => navigate('../mypage/survey-result/:id')} />
+            <ArrowImage theme={theme} onClick={navigateSurveyListPage} />
           </ContainerBox>
         </Form>
       </MypageContainer>

@@ -61,6 +61,20 @@ export const requests = {
    */
   updateUserAuthList: '/users/profile/certifications',
   /**
+   * Get Survey result List that user created
+   *
+   * @method `GET'
+   * @endpoint `/users/surveys`
+   */
+  getSurveyResultList: '/users/surveys',
+  /**
+   * Get Survey result data that user created
+   *
+   * @method `GET'
+   * @endpoint `/users/surveys/{surveyId}`
+   */
+  getSurveyResultData: '/users/surveys/',
+  /**
    * Delete currently signed in user. This requires user
    * to be signed in.
    *

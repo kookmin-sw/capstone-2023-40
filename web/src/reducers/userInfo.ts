@@ -1,6 +1,7 @@
 import { UserInformationState, UserInformationAction } from '../types/user';
 
 const initalState: UserInformationState = {
+  authorId: 0,
   point: '0',
   email: '',
   password: '',
@@ -27,20 +28,22 @@ export const userInformationReducer = (
   action: UserInformationAction = initialAction
 ): UserInformationState => {
   switch (action.type) {
+    case 'CHANGE_USERID':
+      return { ...state, authorId: Number(action.payload) };
     case 'CHANGE_POINT':
-      return { ...state, point: action.payload };
+      return { ...state, point: action.payload.toString() };
     case 'CHANGE_EMAIL':
-      return { ...state, email: action.payload };
+      return { ...state, email: action.payload.toString() };
     case 'CHANGE_PASSWORD':
-      return { ...state, password: action.payload };
+      return { ...state, password: action.payload.toString() };
     case 'CHANGE_NAME':
-      return { ...state, name: action.payload };
+      return { ...state, name: action.payload.toString() };
     case 'CHANGE_PHONE_NUMBER':
-      return { ...state, phoneNumber: action.payload };
+      return { ...state, phoneNumber: action.payload.toString() };
     case 'CHANGE_ADDRESS':
-      return { ...state, address: action.payload };
+      return { ...state, address: action.payload.toString() };
     case 'CHANGE_PROFILEIMAGE':
-      return { ...state, profileImage: action.payload };
+      return { ...state, profileImage: action.payload.toString() };
     default:
       return state;
   }

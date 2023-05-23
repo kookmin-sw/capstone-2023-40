@@ -1,3 +1,5 @@
+import { QuestionOptionresultResponse } from './QuestionOption';
+
 export interface AnsweredQuestionResponse {
   surveyId: string;
   surveyTitle: string;
@@ -12,4 +14,14 @@ export interface AnsweredQuestion {
   multipleChoices: Array<string>;
   shortAnswer: string;
   longAnswer: string;
+}
+
+export interface AnsweredQuestionResult {
+  answeredQuestionId: string;
+  questionTitle: string;
+  questionDescription: string;
+  questionType: string;
+  questionNo: number;
+  textAnswers: Array<string>;
+  optionAnswers: Array<QuestionOptionresultResponse>;
 }

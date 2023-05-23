@@ -1,7 +1,7 @@
 import { BaseTime } from './BaseTime';
 
 export interface UserResponse extends BaseTime {
-  userId: number;
+  authorId: number;
   email: string;
   name: string;
   phoneNumber: string;

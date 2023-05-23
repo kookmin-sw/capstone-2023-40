@@ -1,4 +1,5 @@
 export type UserInformationState = {
+  authorId: number;
   email: string;
   name: string;
   point: string;
@@ -7,6 +8,11 @@ export type UserInformationState = {
   address: string;
   profileImage: string;
 };
+
+export const setUserId = (payload: number) => ({
+  type: 'CHANGE_USERID',
+  payload: payload,
+});
 
 export const setUserPoint = (payload: string) => ({
   type: 'CHANGE_POINT',
@@ -44,6 +50,7 @@ export const setUserProfileImage = (payload: string) => ({
 });
 
 export type UserInformationAction =
+  | ReturnType<typeof setUserId>
   | ReturnType<typeof setUserPoint>
   | ReturnType<typeof setUserEmail>
   | ReturnType<typeof setUserPassword>

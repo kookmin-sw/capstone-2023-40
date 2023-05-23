@@ -28,7 +28,7 @@ const Container = styled.div`
   background-color: ${(props) => props.theme.colors.container};
 `;
 
-const LoadingImage = styled(Icons.LOADING).attrs({
+export const LoadingImage = styled(Icons.LOADING).attrs({
   width: 150,
   height: 150,
 })`
