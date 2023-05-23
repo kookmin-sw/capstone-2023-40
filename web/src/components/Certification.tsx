@@ -9,56 +9,56 @@ import { CertificationType } from '../types/request';
 const Kakao = styled(Icons.KAKAO).attrs({
   width: 27,
   height: 27,
-})<{ invert: string }>`
-  filter: invert(${(props) => props.invert});
+})`
+  filter: invert(${(props) => props.theme.iconInvert});
   margin-right: 5px;
 `;
 
 const Google = styled(Icons.GOOGLE).attrs({
   width: 27,
   height: 27,
-})<{ invert: string }>`
-  filter: invert(${(props) => props.invert});
+})`
+  filter: invert(${(props) => props.theme.iconInvert});
   margin-right: 5px;
 `;
 
 const Webmail = styled(Icons.WEBMAIL).attrs({
   width: 27,
   height: 27,
-})<{ invert: string }>`
-  filter: invert(${(props) => props.invert});
+})`
+  filter: invert(${(props) => props.theme.iconInvert});
   margin-right: 5px;
 `;
 
 const Naver = styled(Icons.NAVER).attrs({
   width: 27,
   height: 27,
-})<{ invert: string }>`
-  filter: invert(${(props) => props.invert});
+})`
+  filter: invert(${(props) => props.theme.iconInvert});
   margin-right: 5px;
 `;
 
 const IdentityCard = styled(Icons.ID).attrs({
   width: 27,
   height: 27,
-})<{ invert: string }>`
-  filter: invert(${(props) => props.invert});
+})`
+  filter: invert(${(props) => props.theme.iconInvert});
   margin-right: 5px;
 `;
 
 const DriverLicense = styled(Icons.DRIVER_LICENSE).attrs({
   width: 27,
   height: 27,
-})<{ invert: string }>`
-  filter: invert(${(props) => props.invert});
+})`
+  filter: invert(${(props) => props.theme.iconInvert});
   margin-right: 5px;
 `;
 
 const AuthNone = styled(Icons.FREE).attrs({
   width: 27,
   height: 27,
-})<{ invert: string }>`
-  filter: invert(${(props) => props.invert});
+})`
+  filter: invert(${(props) => props.theme.iconInvert});
   margin-right: 5px;
 `;
 
@@ -83,19 +83,19 @@ export default function Certification({ label, iconOption, theme }: Certificatio
   if (iconOption) {
     switch (tmpLabel) {
       case CertificationType.KAKAO:
-        return <Kakao invert={theme.iconInvert || '0%'} key={label} />;
+        return <Kakao theme={theme} key={label} />;
       case CertificationType.NAVER:
-        return <Naver invert={theme.iconInvert || '0%'} key={label} />;
+        return <Naver theme={theme} key={label} />;
       case CertificationType.GOOGLE:
-        return <Google invert={theme.iconInvert || '0%'} key={label} />;
+        return <Google theme={theme} key={label} />;
       case CertificationType.WEBMAIL:
-        return <Webmail invert={theme.iconInvert || '0%'} key={label} />;
+        return <Webmail theme={theme} key={label} />;
       case CertificationType.DRIVER_LICENSE:
-        return <DriverLicense invert={theme.iconInvert || '0%'} key={label} />;
+        return <DriverLicense theme={theme} key={label} />;
       case CertificationType.IDENTITY_CARD:
-        return <IdentityCard invert={theme.iconInvert || '0%'} key={label} />;
+        return <IdentityCard theme={theme} key={label} />;
       default:
-        return <AuthNone invert={theme.iconInvert || '0%'} key={label} />;
+        return <AuthNone theme={theme} key={label} />;
     }
   }
   switch (tmpLabel) {
