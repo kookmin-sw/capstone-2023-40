@@ -186,14 +186,14 @@ export default function QuestionForm({
           <PlusImage
             data-testid="addQuestion"
             onClick={() => handleClickButton('addQuestion', questionId)}
-            invert={theme.iconInvert || '0%'}
+            theme={theme}
           />
         </ButtonWrapper>
         <ButtonWrapper flexJustify="flex-end">
           <TrashImage
             data-testid="deleteQuestion"
             onClick={() => handleClickButton('deleteQuestion', questionId)}
-            invert={theme.iconInvert || '0%'}
+            theme={theme}
           />
         </ButtonWrapper>
       </ButtonContainer>

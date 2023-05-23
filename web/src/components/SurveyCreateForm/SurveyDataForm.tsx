@@ -114,6 +114,7 @@ const CheckBox = styled.input.attrs({ type: 'checkbox' })`
   border: ${(props) => props.theme.border};
   border-color: ${(props) => props.theme.colors.default};
   border-radius: 0.35rem;
+  cursor: pointer;
 
   &:checked {
     border-color: transparent;
@@ -208,11 +209,7 @@ export default function SurveyDataForm({
       </SurveyDateContainer>
 
       <ButtonContainer>
-        <PlusImage
-          data-testid="addQuestion"
-          onClick={() => handleClickButton('addQuestion', -1)}
-          invert={theme.iconInvert || '0%'}
-        />
+        <PlusImage data-testid="addQuestion" onClick={() => handleClickButton('addQuestion', -1)} theme={theme} />
       </ButtonContainer>
     </Container>
   );

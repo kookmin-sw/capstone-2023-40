@@ -188,7 +188,7 @@ export default function SurveyPreviewModal({ surveyItem, setPreviewModalOpen, th
             data-testid="closeModal"
             name="closeModal"
             onClick={() => setPreviewModalOpen(false)}
-            invert={theme.iconInvert || '0%'}
+            theme={theme}
           />
         </EndButtonContainer>
         <TitleContainer theme={theme}>
