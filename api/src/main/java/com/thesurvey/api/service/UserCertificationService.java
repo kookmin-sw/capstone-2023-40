@@ -1,5 +1,9 @@
 package com.thesurvey.api.service;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.List;
+
 import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
 import com.thesurvey.api.domain.User;
 import com.thesurvey.api.domain.UserCertification;
@@ -8,10 +12,6 @@ import com.thesurvey.api.dto.response.userCertification.UserCertificationListDto
 import com.thesurvey.api.repository.UserCertificationRepository;
 import com.thesurvey.api.service.mapper.UserCertificationMapper;
 import com.thesurvey.api.util.UserUtil;
-
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.List;
 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
@@ -75,7 +75,7 @@ public class UserCertificationService {
      * This method is a scheduled task that runs every day at midnight
      * (in the "Asia/Seoul" timezone) to delete expired user certifications from the database.
      */
-    @Scheduled(cron = "0 0 0 * * ?")
+    @Scheduled(cron = "0 0 0 * * ?", zone = "Asia/Seoul")
     public void deleteExpiredCertificates() {
         userCertificationRepository.deleteByExpirationDateLessThanEqual(
             LocalDateTime.now(ZoneId.of("Asia/Seoul")));
