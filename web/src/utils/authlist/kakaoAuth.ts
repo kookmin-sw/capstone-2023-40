@@ -12,7 +12,10 @@ import { setCompleteAuth, setSuccessAuth } from '../../types/surveyAuth';
  * users's KAKAO URL : http://thesurvey.kr/mypage/authentication
  */
 export const KAKAO_REST_API_KEY = `${process.env.REACT_APP_KAKAO_REST_API_KEY}`;
-export const KAKAO_REDIRECT_URI = `${process.env.REACT_APP_DEVELOP_KAKAO_REDIRECT_URL}`;
+export const KAKAO_REDIRECT_URI =
+  process.env.NODE_ENV === 'production'
+    ? `${process.env.REACT_APP_KAKAO_REDIRECT_URL}`
+    : `${process.env.REACT_APP_DEVELOP_KAKAO_REDIRECT_URL}`;
 export const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_REST_API_KEY}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code`;
 
 // 다른 로그인 환경에 영향을 끼치는 것을 방지하기 위한 kakao token값 초기화
