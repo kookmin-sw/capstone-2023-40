@@ -7,6 +7,7 @@ export const darkTheme: DefaultTheme = {
   border: '3px solid #F4F7FA',
   borderResultList: '0px solid black',
   themeToggle: '2px solid #FFFFFF',
+  iconInvert: '100%',
 
   colors: {
     default: '#FFFFFF',
@@ -18,8 +19,8 @@ export const darkTheme: DefaultTheme = {
     btnhover: '#6C768C',
     header: '#202123',
     opposite: '#808080',
-    background: '#808080',
-    inputBackground: '#f0f0f0',
+    background: '#2c2d2c',
+    inputBackground: '#2c2d2c',
     placeHolder: '#F4F7FA',
   },
 };

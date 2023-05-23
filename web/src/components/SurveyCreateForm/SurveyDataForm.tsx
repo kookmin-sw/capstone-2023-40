@@ -36,9 +36,13 @@ const TextInput = styled.input.attrs({ type: 'text', maxLength: 100 })`
   border: ${(props) => props.theme.border};
   border-radius: ${(props) => props.theme.borderRadius};
   font-weight: 900;
-  color: ${(props) => props.theme.colors.default};
+  color: ${(props) => props.theme.colors.text};
   background-color: ${(props) => props.theme.colors.inputBackground};
   cursor: text;
+
+  ::placeholder {
+    color: ${(props) => props.theme.colors.placeHolder};
+  }
 `;
 
 const SurveyTitleInput = styled(TextInput)`
@@ -108,6 +112,7 @@ const CheckBox = styled.input.attrs({ type: 'checkbox' })`
   width: 20px;
   height: 20px;
   border: ${(props) => props.theme.border};
+  border-color: ${(props) => props.theme.colors.default};
   border-radius: 0.35rem;
 
   &:checked {
@@ -171,8 +176,9 @@ export default function SurveyDataForm({
                     id={`certification${index}`}
                     checked={surveyData.certificationTypes?.includes(index)}
                     onChange={(e) => handleChangeCheck(e, index)}
+                    theme={theme}
                   />
-                  {Certification({ label: index, iconOption: false })}
+                  {Certification({ label: index, iconOption: false, theme })}
                 </CertificationLabel>
               </ListItem>
             );
@@ -202,7 +208,11 @@ export default function SurveyDataForm({
       </SurveyDateContainer>
 
       <ButtonContainer>
-        <PlusImage data-testid="addQuestion" onClick={() => handleClickButton('addQuestion', -1)} theme={theme} />
+        <PlusImage
+          data-testid="addQuestion"
+          onClick={() => handleClickButton('addQuestion', -1)}
+          invert={theme.iconInvert || '0%'}
+        />
       </ButtonContainer>
     </Container>
   );

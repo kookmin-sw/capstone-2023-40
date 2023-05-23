@@ -46,7 +46,7 @@ const Description = styled(TextLabel)`
   width: 80%;
   font-size: 15px;
   margin-bottom: 23px;
-  background-color: ${(props) => props.theme.colors.inputBackground};
+  background-color: ${(props) => props.theme.colors.container};
 
   @media screen and (max-width: 1050px) {
     width: 100%;

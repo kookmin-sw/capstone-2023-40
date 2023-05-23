@@ -1,5 +1,7 @@
+import { AnsweredQuestion } from '../types/request';
 import { QuestionType } from '../types/request/Question';
 import { SurveyCreateRequest } from '../types/request/Survey';
+import { QuestionBankResponse } from '../types/response/QuestionBank';
 import { ValidationErrorMessage, InputCheckResult } from '../types/userInputCheck';
 
 /**
@@ -187,4 +189,59 @@ export const validateSurveyData = (surveyData: SurveyCreateRequest): InputCheckR
     message: ValidationErrorMessage.OK,
     index: errorIndex,
   };
+};
+
+/**
+ * 한개의 질문에 대한 답변을 검증
+ * 1) 답변이 아직 'undefined'일 경우 질문의 'isRequired' 옵션에 따라 리턴
+ * 2) 필수로 응답할 필요 없는 질문의 경우 기본적으로 'true'
+ * 2-1) 'LONG_ANSWER'의 경우는 글자수가 10이 넘는지 확인
+ * 3) 필수 응답 질문의 경우 답변이 비어있으면 'false'
+ * 3-1) 'LONG_ANSWER'의 경우는 글자수가 10이 넘는지 확인
+ *
+ * @param {AnsweredQuestion} answer
+ * @param {QuestionBankResponse} question
+ * @returns {boolean}
+ */
+export const validateSurveyAnswer = (answer: AnsweredQuestion, question: QuestionBankResponse): boolean => {
+  if (typeof answer === 'undefined') {
+    return !question.isRequired;
+  }
+
+  let tmpQuestionType: number | string;
+  if (typeof answer.questionType === 'undefined') {
+    tmpQuestionType = -1;
+  } else if (typeof answer.questionType === 'string') {
+    tmpQuestionType = QuestionType[answer.questionType];
+  } else {
+    tmpQuestionType = answer.questionType;
+  }
+
+  // 필수로 응답해야 하는 질문이 아닌 경우
+  if (!answer.isRequired) {
+    if (tmpQuestionType === QuestionType.LONG_ANSWER) {
+      if (answer.longAnswer?.trim() !== '' && answer.longAnswer!.trim().length < 10) return false;
+    }
+    return true;
+  }
+
+  // 필수로 응답해야 하는 질문일 경우
+  switch (tmpQuestionType) {
+    case QuestionType.MULTIPLE_CHOICES:
+      if (answer.multipleChoices?.length === 0) return false;
+      break;
+    case QuestionType.SINGLE_CHOICE:
+      if (typeof answer.singleChoice === 'undefined') return false;
+      break;
+    case QuestionType.LONG_ANSWER:
+      if (answer.longAnswer!.trim().length < 10) return false;
+      break;
+    case QuestionType.SHORT_ANSWER:
+      if (answer.shortAnswer?.trim() === '') return false;
+      break;
+    default:
+      break;
+  }
+
+  return true;
 };

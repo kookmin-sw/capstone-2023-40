@@ -20,7 +20,7 @@ import SurveyDataForm from './SurveyDataForm';
 const Container = styled.div`
   width: 84vw;
   padding: 1vh 8vw 1vh 8vw;
-  background-color: ${(props) => props.theme.colors.container};
+  background-color: ${(props) => props.theme.colors.background};
 `;
 
 const ButtonContainer = styled.div`
@@ -35,7 +35,7 @@ const ItemContainer = styled.div`
   border-left: 16px solid ${(props) => props.theme.colors.primary};
   padding: 1.2vh 2vw 1.2vh 2vw;
   color: ${(props) => props.theme.colors.default};
-  background-color: ${(props) => props.theme.colors.background};
+  background-color: ${(props) => props.theme.colors.container};
 `;
 
 interface SurveyFormProps {

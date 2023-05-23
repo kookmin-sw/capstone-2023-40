@@ -16,7 +16,8 @@ const ChoiceLabel = styled.label`
   display: inline-flex;
   align-items: center;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 13px;
+  font-weight: 600;
   padding: 1.2vh 1vw 1.2vh 1vw;
   margin-left: 1.3vw;
   margin-bottom: 10px;

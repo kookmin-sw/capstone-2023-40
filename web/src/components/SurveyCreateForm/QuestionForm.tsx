@@ -41,9 +41,13 @@ const TextInput = styled.input.attrs({ type: 'text', maxLength: 100 })`
   border: ${(props) => props.theme.border};
   border-radius: ${(props) => props.theme.borderRadius};
   font-weight: 900;
-  color: ${(props) => props.theme.colors.default};
+  color: ${(props) => props.theme.colors.text};
   background-color: ${(props) => props.theme.colors.inputBackground};
   cursor: text;
+
+  ::placeholder {
+    color: ${(props) => props.theme.colors.placeHolder};
+  }
 `;
 
 const QuestionTitleInput = styled(TextInput).attrs({ type: 'text' })`
@@ -83,7 +87,7 @@ const AddOptionButton = styled.button`
   background-color: ${(props) => props.theme.colors.button};
   border: ${(props) => props.theme.border};
   border-radius: ${(props) => props.theme.borderRadius};
-  margin-top: 25px;
+  margin-top: 3px;
   cursor: pointer;
 
   &:hover {
@@ -182,14 +186,14 @@ export default function QuestionForm({
           <PlusImage
             data-testid="addQuestion"
             onClick={() => handleClickButton('addQuestion', questionId)}
-            theme={theme}
+            invert={theme.iconInvert || '0%'}
           />
         </ButtonWrapper>
         <ButtonWrapper flexJustify="flex-end">
           <TrashImage
             data-testid="deleteQuestion"
             onClick={() => handleClickButton('deleteQuestion', questionId)}
-            theme={theme}
+            invert={theme.iconInvert || '0%'}
           />
         </ButtonWrapper>
       </ButtonContainer>

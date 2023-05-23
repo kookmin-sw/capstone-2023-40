@@ -12,11 +12,14 @@ import { dateFormatUpToDate, getDDay } from '../../utils/dateFormat';
 import { removeEmptyAnswer } from '../../utils/removeEmptyAnswer';
 import { responseErrorHandle } from '../../utils/responseErrorHandle';
 import { scrollToRef } from '../../utils/scroll';
+import { validateSurveyAnswer } from '../../utils/validate';
 import RectangleButton from '../Button/RectangleButton';
 import { AlertModal, ConfirmModal, SurveyPageResultModal } from '../Modal';
 import QuestionForm from './QuestionForm';
 
-const Container = styled.div``;
+const Container = styled.div`
+  background-color: ${(props) => props.theme.colors.background};
+`;
 
 const QuestionContainer = styled.div`
   margin-top: 23px;
@@ -24,7 +27,7 @@ const QuestionContainer = styled.div`
   border-left: 16px solid ${(props) => props.theme.colors.primary};
   padding: 1.2vh 2vw 1.2vh 2vw;
   color: ${(props) => props.theme.colors.default};
-  background-color: ${(props) => props.theme.colors.background};
+  background-color: ${(props) => props.theme.colors.container};
 `;
 
 const HeadContainer = styled.div`
@@ -33,7 +36,6 @@ const HeadContainer = styled.div`
   flex-wrap: wrap;
   align-items: center;
   padding: 6vh 8vw 0vh 8vw;
-  background-color: ${(props) => props.theme.colors.container};
 `;
 
 const ButtonContainer = styled.div`
@@ -58,7 +60,6 @@ const EndDate = styled.label`
 const BodyContainer = styled.div`
   width: 84vw;
   padding: 1vh 8vw 1vh 8vw;
-  background-color: ${(props) => props.theme.colors.container};
 `;
 
 interface SurveyParticipateFormProps {
@@ -112,14 +113,19 @@ export default function SurveyParticipateForm({ surveyData, theme }: SurveyParti
     let answersVerification = true;
     if (typeof surveyData !== 'undefined') {
       for (let i = 0; i < surveyData.questions.length; i += 1) {
-        // TODO: response validation will be needed
-        if (typeof userAnswers[i] === 'undefined' && surveyData.questions[i].isRequired) {
+        if (validateSurveyAnswer(userAnswers[i], surveyData.questions[i])) {
+          turnOffUserAttention(i);
+        } else {
           turnOnUserAttention(i);
           answersVerification = false;
-          break;
-        } else {
-          turnOffUserAttention(i);
+          return answersVerification;
         }
+      }
+
+      if (removeEmptyAnswer(userAnswers).length === 0) {
+        answersVerification = false;
+        setWarnText('최소한 하나의 질문에 응답해야 합니다.');
+        setAlertModalOpen(true);
       }
     }
     return answersVerification;
@@ -140,7 +146,7 @@ export default function SurveyParticipateForm({ surveyData, theme }: SurveyParti
   }, [surveyData]);
 
   return (
-    <Container>
+    <Container theme={theme}>
       <HeadContainer theme={theme}>
         <Title theme={theme}>{surveyData?.title}</Title>
         <EndDate theme={theme}>

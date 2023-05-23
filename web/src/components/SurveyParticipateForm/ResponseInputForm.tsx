@@ -13,8 +13,12 @@ const TextInput = styled.textarea`
   border: ${(props) => props.theme.border};
   resize: none;
   font-weight: 100;
-  color: ${(props) => props.theme.colors.default};
-  background-color: ${(props) => props.theme.colors.container};
+  color: ${(props) => props.theme.colors.text};
+  background-color: ${(props) => props.theme.colors.inputBackground};
+
+  ::placeholder {
+    color: ${(props) => props.theme.colors.placeHolder};
+  }
 `;
 
 const LongAnswer = styled(TextInput)`
