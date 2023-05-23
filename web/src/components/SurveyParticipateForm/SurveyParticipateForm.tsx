@@ -118,8 +118,14 @@ export default function SurveyParticipateForm({ surveyData, theme }: SurveyParti
         } else {
           turnOnUserAttention(i);
           answersVerification = false;
-          break;
+          return answersVerification;
         }
+      }
+
+      if (removeEmptyAnswer(userAnswers).length === 0) {
+        answersVerification = false;
+        setWarnText('최소한 하나의 질문에 응답해야 합니다.');
+        setAlertModalOpen(true);
       }
     }
     return answersVerification;
