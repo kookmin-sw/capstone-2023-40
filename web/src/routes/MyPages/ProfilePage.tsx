@@ -213,7 +213,6 @@ export default function ProfilePage() {
 
   const navigateAuthListPage = () => {
     dispatch(setSubPageOpen(!isSubPageOpen));
-    navigate('../mypage/auth-list');
     axios
       .get<UserAuthListResponse>(requests.getUserAuthList)
       .then((getAuthListResponse) => {
@@ -229,7 +228,6 @@ export default function ProfilePage() {
   };
 
   const navigateSurveyListPage = async () => {
-    navigate('../mypage/survey-result/:id');
     axios
       .get<SurveyResultListResponse>(requests.getSurveyResultList)
       .then((res) => {
