@@ -33,19 +33,23 @@ const PageButton = styled(Button)`
   background-color: transparent;
 
   &:hover {
-    background-color: ${(props) => props.theme.colors.prhover};
+    background-color: ${(props) => props.theme.colors.btnhover};
   }
 `;
 
 const SelectedPageButton = styled(Button)`
-  background-color: ${(props) => props.theme.colors.primary};
+  background-color: ${(props) => props.theme.colors.btnhover};
+
+  &:hover {
+    background-color: ${(props) => props.theme.colors.button};
+  }
 `;
 
 const ArrowButton = styled(Button)`
   background-color: transparent;
 
   &:hover {
-    background-color: ${(props) => props.theme.colors.prhover};
+    background-color: ${(props) => props.theme.colors.btnhover};
   }
 `;
 

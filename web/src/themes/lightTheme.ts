@@ -11,8 +11,8 @@ export const lightTheme: DefaultTheme = {
 
   colors: {
     default: '#000000',
-    primary: '#FF8A00',
-    prhover: '#E07900',
+    primary: '#E07900',
+    prhover: '#FF8A00',
     container: '#FFFFFF',
     text: '#4E536A',
     button: '#F4F7FA',
