@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
-import { useDispatch } from 'react-redux';
 import styled, { DefaultTheme } from 'styled-components';
 
 import axios from '../../api/axios';
@@ -68,7 +67,6 @@ interface SurveyParticipateFormProps {
 }
 
 export default function SurveyParticipateForm({ surveyData, theme }: SurveyParticipateFormProps) {
-  const dispatch = useDispatch();
   const questionRefs = useRef<HTMLDivElement[]>([]);
   const [endedDate, setEndedDate] = useState<string>('');
   const [resultModalOpen, setResultModalOpen] = useState<boolean>(false);
@@ -93,7 +91,7 @@ export default function SurveyParticipateForm({ surveyData, theme }: SurveyParti
         setConfirmModalOpen(false);
       })
       .catch((error) => {
-        const errorMessages: string[] = responseErrorHandle(error, dispatch);
+        const errorMessages: string[] = responseErrorHandle(error);
         setWarnText(errorMessages[0]);
         setAlertModalOpen(true);
         setConfirmModalOpen(false);

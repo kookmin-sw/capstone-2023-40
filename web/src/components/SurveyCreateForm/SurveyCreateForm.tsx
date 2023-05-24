@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import { useDispatch } from 'react-redux';
 import styled, { DefaultTheme } from 'styled-components';
 
 import axios from '../../api/axios';
@@ -43,7 +42,6 @@ interface SurveyFormProps {
 }
 
 export default function SurveyCreateForm({ theme }: SurveyFormProps) {
-  const dispatch = useDispatch();
   const questionRefs = useRef<HTMLDivElement[]>([]);
   const [recentCreate, setRecentCreate] = useState<number>();
   const [certificationIsChecked, setCertificationIsChecked] = useState<boolean>(false);
@@ -71,7 +69,7 @@ export default function SurveyCreateForm({ theme }: SurveyFormProps) {
         setResultModalOpen(true);
       })
       .catch((error) => {
-        const errorMessages: string[] = responseErrorHandle(error, dispatch);
+        const errorMessages: string[] = responseErrorHandle(error);
         setWarnText(errorMessages[0]);
         setAlertModalOpen(true);
         setConfirmModalOpen(false);

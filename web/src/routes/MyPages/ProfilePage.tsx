@@ -212,7 +212,7 @@ export default function ProfilePage() {
   };
 
   const navigateAuthListPage = () => {
-    dispatch(setSubPageOpen(!isSubPageOpen));
+    dispatch(setSubPageOpen(false));
     axios
       .get<UserAuthListResponse>(requests.getUserAuthList)
       .then((getAuthListResponse) => {

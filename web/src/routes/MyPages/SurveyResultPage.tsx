@@ -168,10 +168,10 @@ export default function SurveyResultPage() {
     return <LoadingForm />;
   }
 
-  if (isError || data === undefined) {
+  if (isError || data === undefined || data.length === 0) {
     return (
       <ErrorPage
-        labelText="😥 앗! 아직 설문을 만들지 않았어요."
+        labelText="앗! 아직 설문을 만들지 않았어요."
         buttonText="설문 만들러 가기"
         navigateRoute="/survey/form"
         theme={theme}

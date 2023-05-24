@@ -28,6 +28,7 @@ const SubPageContainer = styled.div`
   overflow-y: auto;
   border: ${(props) => props.theme.borderResultList};
   border-radius: ${(props) => props.theme.borderRadius};
+
   & > * {
     margin-bottom: 10px;
   }
@@ -60,8 +61,8 @@ export default function Header({ theme }: HeaderProps) {
   const dispatch = useDispatch();
 
   const logoutClick = () => {
-    dispatch(setLoggedIn(!isLoggedIn));
-    dispatch(setSubPageOpen(!isSubPageOpen));
+    dispatch(setLoggedIn(false));
+    dispatch(setSubPageOpen(false));
     clearUserInformation(dispatch);
     navigate('../../../');
   };

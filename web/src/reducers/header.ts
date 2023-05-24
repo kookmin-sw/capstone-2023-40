@@ -20,9 +20,9 @@ const initialAction: HeaderAction = {
 export const headerReducer = (state: HeaderState = initialState, action: HeaderAction = initialAction): HeaderState => {
   switch (action.type) {
     case 'SET_LOGGED_IN':
-      return { ...state, isLoggedIn: !state.isLoggedIn };
+      return { ...state, isLoggedIn: action.payload };
     case 'SETSUBPAGE':
-      return { ...state, isSubPageOpen: !state.isSubPageOpen };
+      return { ...state, isSubPageOpen: action.payload };
     default:
       return state;
   }
