@@ -21,10 +21,10 @@ export const responseErrorHandle = (error: AxiosError, dispatch: Dispatch<Header
       }
       break;
     case 401:
-      if (labelText === '설문조사에 필요한 인증을 완료해주세요.') {
+      if (labelText === '설문조사에 필요한 인증을 하지 않았습니다.') {
         buttonText = '인증 하러 가기';
         navigateRoute = '/mypage/auth-list';
-      } else if (labelText === '권한이 없습니다') {
+      } else if (labelText === '권한이 없습니다.') {
         labelText = '로그인이 만료 되었어요.';
         buttonText = '로그인 하러 가기';
         navigateRoute = '/login';
