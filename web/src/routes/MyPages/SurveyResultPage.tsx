@@ -15,7 +15,7 @@ import Header from '../../components/Header';
 import LoadingForm from '../../components/LoadingForm';
 import SurveyResultBox from '../../components/SurveyResultBox';
 import { useTheme } from '../../hooks/useTheme';
-import { SurveyResultListResponse, SurveyResultResponse } from '../../types/response/Survey';
+import { SurveyResultData, SurveyResultListResponse, SurveyResultResponse } from '../../types/response/Survey';
 import { updateUserInformation } from '../../utils/UserUtils';
 
 const TwoArrow = styled(Icons.TWOARROW).attrs({
@@ -127,7 +127,7 @@ const FontText = styled.span`
 export default function SurveyResultPage() {
   const [theme, toggleTheme] = useTheme();
   const [isSurveyResultClicked, setIsSurveyResultClicked] = useState([false]);
-  const [surveyResult, setSurveyResult] = useState<SurveyResultResponse>();
+  const [isEmptySurveyResult, setIsEmptySurveyResult] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -135,7 +135,7 @@ export default function SurveyResultPage() {
     event.preventDefault();
   };
 
-  const handleClick = async (item: any, index: number) => {
+  const handleClick = async (item: SurveyResultListResponse, index: number) => {
     setIsSurveyResultClicked((state) => ({
       ...state,
       [index]: !state[index],
@@ -143,9 +143,10 @@ export default function SurveyResultPage() {
     axios
       .get<SurveyResultResponse>(`${requests.getSurveyResultData}${item.surveyId}`)
       .then((res) => {
-        if (res.status === 200) {
-          console.log(res.data);
-          setSurveyResult(res.data);
+        if (res.status === 200 && res.data.results !== undefined) {
+          const resultData: SurveyResultData[] = res.data.results;
+        } else {
+          setIsEmptySurveyResult(true);
         }
       })
       .catch((error) => {
@@ -174,6 +175,18 @@ export default function SurveyResultPage() {
         labelText="앗! 아직 설문을 만들지 않았어요."
         buttonText="설문 만들러 가기"
         navigateRoute="/survey/form"
+        theme={theme}
+        toggleTheme={toggleTheme}
+      />
+    );
+  }
+
+  if (isEmptySurveyResult) {
+    return (
+      <ErrorPage
+        labelText="😥 앗! 아직 설문결과가 없어요."
+        buttonText="뒤로 가기"
+        navigateRoute="../mypage/survey-result/:id"
         theme={theme}
         toggleTheme={toggleTheme}
       />

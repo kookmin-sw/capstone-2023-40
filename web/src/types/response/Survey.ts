@@ -38,10 +38,10 @@ export interface SurveyResultListResponse {
 export interface SurveyResultResponse {
   surveyId: string;
   surveyTitle: string;
-  results: Array<AnsweredQuestionResult>;
+  results: Array<SurveyResultData>;
 }
 
-export interface ChartData {
+export interface SurveyResultData {
   questionBankId: number;
   questionTitle: string;
   questionDescription: string;
