@@ -83,19 +83,19 @@ export default function Certification({ label, iconOption, theme }: Certificatio
   if (iconOption) {
     switch (tmpLabel) {
       case CertificationType.KAKAO:
-        return <Kakao theme={theme} key={label} />;
+        return <Kakao theme={theme} key={label} data-tooltip-id="kakao" />;
       case CertificationType.NAVER:
-        return <Naver theme={theme} key={label} />;
+        return <Naver theme={theme} key={label} data-tooltip-id="naver" />;
       case CertificationType.GOOGLE:
-        return <Google theme={theme} key={label} />;
+        return <Google theme={theme} key={label} data-tooltip-id="google" />;
       case CertificationType.WEBMAIL:
-        return <Webmail theme={theme} key={label} />;
+        return <Webmail theme={theme} key={label} data-tooltip-id="webmail" />;
       case CertificationType.DRIVER_LICENSE:
-        return <DriverLicense theme={theme} key={label} />;
+        return <DriverLicense theme={theme} key={label} data-tooltip-id="driver-license" />;
       case CertificationType.IDENTITY_CARD:
-        return <IdentityCard theme={theme} key={label} />;
+        return <IdentityCard theme={theme} key={label} data-tooltip-id="identification-card" />;
       default:
-        return <AuthNone theme={theme} key={label} />;
+        return <AuthNone theme={theme} key={label} data-tooltip-id="none" />;
     }
   }
   switch (tmpLabel) {
