@@ -116,7 +116,7 @@ const ReplacePagetext = styled.span`
 `;
 
 const PurchaseButton = styled.div`
-  margin: 2vw;
+  margin-left: 1vw;
   display: flex;
   padding: 1.3vh;
   border: none;
@@ -217,7 +217,6 @@ export default function ProfilePage() {
       .get<UserAuthListResponse>(requests.getUserAuthList)
       .then((getAuthListResponse) => {
         if (getAuthListResponse.status === 200) {
-          console.log('get UserAuthList Success!');
           initializeAuthList(getAuthListResponse.data, dispatch);
           navigate('../mypage/auth-list');
         }
