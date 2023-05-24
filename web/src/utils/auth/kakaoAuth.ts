@@ -3,14 +3,6 @@ import { useDispatch } from 'react-redux';
 
 import { setCompleteAuth, setSuccessAuth } from '../../types/surveyAuth';
 
-// FIXME: turn on KAKAO_REDIRECT_URL in thesurvey Service,
-/**
- * Auth Service with Kakao API Connecting
- * @KAKAO_REST_API_KEY : kakao developers에서 발급받은 Client ID
- * @KAKAO_REDIRECT_URL : kakao developers에서 설정한 사용가능 한 URI
- * develop's KAKAO URL : http://localhost:3000/mypage/authentication
- * users's KAKAO URL : http://thesurvey.kr/mypage/authentication
- */
 export const KAKAO_REST_API_KEY = `${process.env.REACT_APP_KAKAO_REST_API_KEY}`;
 export const KAKAO_REDIRECT_URI =
   process.env.NODE_ENV === 'production'
@@ -19,7 +11,7 @@ export const KAKAO_REDIRECT_URI =
 export const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_REST_API_KEY}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code`;
 
 // 다른 로그인 환경에 영향을 끼치는 것을 방지하기 위한 kakao token값 초기화
-export const unlinkKakao = async (kakaoToken: any) => {
+export const unlinkKakao = async (kakaoToken: string) => {
   const res = await axios({
     method: 'POST',
     url: `https://kapi.kakao.com/v1/user/unlink`,
@@ -34,7 +26,7 @@ export const unlinkKakao = async (kakaoToken: any) => {
  * 카카오 사용자 정보 조회를 위한 Function
  * @param kakaoToken : 카카오에서 받은 인자코드를 사용하여 받은 token값
  */
-export const getKakaoProfile = async (kakaoToken: any, username: string, dispatch = useDispatch()) => {
+export const getKakaoProfile = async (kakaoToken: string, username: string, dispatch = useDispatch()) => {
   try {
     const kakaoUser = await axios({
       method: 'GET',
@@ -43,7 +35,6 @@ export const getKakaoProfile = async (kakaoToken: any, username: string, dispatc
         Authorization: `Bearer ${kakaoToken}`,
       },
     });
-    console.log(window.location);
     const name = kakaoUser.data.properties.nickname;
     console.log('theSurvey username : ', username);
     console.log('kakaoUser name : ', name);
