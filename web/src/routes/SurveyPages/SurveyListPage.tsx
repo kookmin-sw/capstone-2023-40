@@ -73,7 +73,7 @@ export default function SurveyListPage() {
   if (data.surveys.length === 0) {
     return (
       <ErrorPage
-        labelText="앗! 아직 참여 가능한 설문이 없어요..."
+        labelText="앗! 아직 참여 가능한 설문이 없어요."
         buttonText="설문 만들러 가기"
         navigateRoute="/survey/form"
         theme={theme}
