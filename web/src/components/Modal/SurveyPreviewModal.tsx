@@ -6,7 +6,6 @@ import styled, { DefaultTheme } from 'styled-components';
 
 import { useOnClickOutside } from '../../hooks/useOnClickOutside';
 import { RootState } from '../../reducers';
-import { CertificationType } from '../../types/request';
 import { SurveyAbstractResponse } from '../../types/response/Survey';
 import { dateFormatUpToMinute, getDDay, getTimeRemaining } from '../../utils/dateFormat';
 import { validateStartDate } from '../../utils/validate';
@@ -37,6 +36,7 @@ const ModalContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+  overflow: auto;
 
   @media screen and (max-width: 960px) {
     padding: 3vh 3vw 5vh 3vw;
