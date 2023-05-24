@@ -87,7 +87,7 @@ export default function GifticonPurchaseModal({ setPurchaseModalOpen, theme }: G
   const gifticons: Gifticon[] = [
     {
       name: '배스킨라빈스 파인트 아이스크림',
-      price: 89,
+      price: 1,
       imgUrl:
         'https://www.biz-con.co.kr/upload/images/202208/400_20220817100052849_%ED%8C%8C%EC%9D%B8%ED%8A%B8-%EC%95%84%EC%9D%B4%EC%8A%A4%ED%81%AC%EB%A6%BC.jpg',
     },
@@ -132,16 +132,15 @@ export default function GifticonPurchaseModal({ setPurchaseModalOpen, theme }: G
         </HeadContainer>
 
         {gifticons.map((gifticon: Gifticon) => (
-          <div key={gifticon.name}>
-            <GifticonItem
-              name={gifticon.name}
-              price={gifticon.price}
-              imgUrl={gifticon.imgUrl}
-              handleClick={() => setPurchaseModalOpen(false)}
-              theme={theme}
-              disabled={userState.point < gifticon.price}
-            />
-          </div>
+          <GifticonItem
+            key={gifticon.name}
+            name={gifticon.name}
+            price={gifticon.price}
+            imgUrl={gifticon.imgUrl}
+            handleClick={() => setPurchaseModalOpen(false)}
+            theme={theme}
+            disabled={userState.point < gifticon.price}
+          />
         ))}
       </ModalContainer>
     </Container>
