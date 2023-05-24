@@ -114,7 +114,7 @@ export default function AuthenticationPage() {
         <AuthenticationContainer theme={theme}>
           <Form>
             <TextType theme={theme}>
-              {!surveyAuthState.checkSuccessAuth ? `사용자 인증에 실패했습니다` : `인증이 완료되었습니다!`}!
+              {!surveyAuthState.checkSuccessAuth ? `사용자 인증에 실패했어요.` : `인증을 완료했어요!`}!
             </TextType>
             <Button
               theme={theme}
@@ -136,7 +136,7 @@ export default function AuthenticationPage() {
             <circle cx="50" cy="50" r="50" />
           </LoadingImage>
           <TextType theme={theme}>
-            {!connectService ? `${checkAuthServiceTitle}에서 인증을 완료해주세요.` : `인증 진행중 입니다.`}
+            {!connectService ? `${checkAuthServiceTitle}에서 인증을 완료해주세요.` : `인증을 진행중이에요.`}
           </TextType>
           {!connectService && (
             <Button theme={theme} onClick={() => authConnect(checkAuthServiceTitle, setConnectService, dispatch)}>

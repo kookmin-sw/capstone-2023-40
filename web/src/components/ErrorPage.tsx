@@ -78,7 +78,7 @@ export default function ErrorPage({ labelText, buttonText, navigateRoute, theme,
     <Container theme={theme}>
       <Header theme={theme} toggleTheme={toggleTheme} />
       <ErrorContainer theme={theme}>
-        {labelText === '😥 생성하신 설문이 없습니다...' && (
+        {labelText === '😥 앗! 아직 설문을 만들지 않았어요.' && (
           <ErrorPageTitle style={{ marginBottom: '5vh' }} theme={theme}>
             <MypageText theme={theme} onClick={() => updateUserInformation(dispatch, navigate)}>
               마이페이지

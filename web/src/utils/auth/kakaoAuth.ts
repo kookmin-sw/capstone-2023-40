@@ -43,6 +43,7 @@ export const getKakaoProfile = async (kakaoToken: string, username: string, disp
       console.log('카카오 인증 완료!');
       dispatch(setSuccessAuth(true));
     } else {
+      // FIXME: handle logic for wrong username
       console.log('사용자가 다릅니다!');
     }
     unlinkKakao(kakaoToken);

@@ -37,7 +37,6 @@ export const getNaverProfile = async (naverToken: any, username: string, dispatc
     console.log('kakaoUser name : ', name);
 
     if (name === username) {
-      console.log('사용자가 같습니다!');
       dispatch(setSuccessAuth(true));
     }
     dispatch(setCompleteAuth(true));

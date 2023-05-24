@@ -117,7 +117,7 @@ describe('[SurveyFormPage Test]', () => {
     fireEvent.click(addQuestionButton);
 
     // 2) check label of question
-    const label = await screen.findByText('장문형 답변이 입력됩니다.');
+    const label = await screen.findByText('장문형 답변이 입력돼요.');
     expect(label).toBeInTheDocument();
   });
 
@@ -133,7 +133,7 @@ describe('[SurveyFormPage Test]', () => {
     fireEvent.change(questionSelector, { target: { value: QuestionType.SHORT_ANSWER } });
 
     // 3) check label of question
-    const label = await screen.findByText('단답형 답변이 입력됩니다.');
+    const label = await screen.findByText('단답형 답변이 입력돼요.');
     expect(label).toBeInTheDocument();
   });
 
@@ -238,7 +238,7 @@ describe('[SurveyFormPage Test]', () => {
     // initial startedDate and endedDate is empty
     // 1) check modal is open
     fireEvent.click(submitButton);
-    let emptyInputModal = await screen.findByText('모든 입력을 채워 주세요');
+    let emptyInputModal = await screen.findByText('모든 입력을 채워 주세요.');
     expect(emptyInputModal).toBeInTheDocument();
 
     // 2) close modal
@@ -255,7 +255,7 @@ describe('[SurveyFormPage Test]', () => {
 
     // 5) check modal is open
     fireEvent.click(submitButton);
-    emptyInputModal = await screen.findByText('모든 입력을 채워 주세요');
+    emptyInputModal = await screen.findByText('모든 입력을 채워 주세요.');
     expect(emptyInputModal).toBeInTheDocument();
 
     // 6) close modal
@@ -271,7 +271,7 @@ describe('[SurveyFormPage Test]', () => {
 
     // 9) check modal is open
     fireEvent.click(submitButton);
-    emptyInputModal = await screen.findByText('모든 입력을 채워 주세요');
+    emptyInputModal = await screen.findByText('모든 입력을 채워 주세요.');
     expect(emptyInputModal).toBeInTheDocument();
   });
 
@@ -301,7 +301,7 @@ describe('[SurveyFormPage Test]', () => {
 
     // 2) check modal is open
     fireEvent.click(submitButton);
-    const wrongDateModal = await screen.findByText('설문조사 시작일은 현재시간 이후여야 합니다');
+    const wrongDateModal = await screen.findByText('설문조사 시작일은 현재 시각 이후부터 가능해요.');
     expect(wrongDateModal).toBeInTheDocument();
   });
 
@@ -318,7 +318,7 @@ describe('[SurveyFormPage Test]', () => {
 
     // 2) check modal is open
     fireEvent.click(submitButton);
-    let wrongDateModal = await screen.findByText('설문조사 종료일이 시작일과 같거나 빠릅니다');
+    let wrongDateModal = await screen.findByText('설문조사 종료일이 시작일과 같거나 빨라요.');
     expect(wrongDateModal).toBeInTheDocument();
 
     // 3) put input on not enough endedDate
@@ -326,7 +326,7 @@ describe('[SurveyFormPage Test]', () => {
 
     // 4) check modal is open
     fireEvent.click(submitButton);
-    wrongDateModal = await screen.findByText('설문조사 종료일이 시작일과 같거나 빠릅니다');
+    wrongDateModal = await screen.findByText('설문조사 종료일이 시작일과 같거나 빨라요.');
     expect(wrongDateModal).toBeInTheDocument();
   });
 
@@ -343,7 +343,7 @@ describe('[SurveyFormPage Test]', () => {
 
     // 2) check modal is open
     fireEvent.click(submitButton);
-    const noQuestionModal = await screen.findByText('하나 이상의 질문을 추가해 주세요');
+    const noQuestionModal = await screen.findByText('하나 이상의 질문을 추가해 주세요.');
     expect(noQuestionModal).toBeInTheDocument();
   });
 
@@ -370,7 +370,7 @@ describe('[SurveyFormPage Test]', () => {
 
     // 4) check modal is open
     fireEvent.click(submitButton);
-    let emptyInputModal = await screen.findByText('모든 입력을 채워 주세요');
+    let emptyInputModal = await screen.findByText('모든 입력을 채워 주세요.');
     expect(emptyInputModal).toBeInTheDocument();
 
     // 5) close modal
@@ -386,7 +386,7 @@ describe('[SurveyFormPage Test]', () => {
 
     // 8) check modal is open
     fireEvent.click(submitButton);
-    emptyInputModal = await screen.findByText('모든 입력을 채워 주세요');
+    emptyInputModal = await screen.findByText('모든 입력을 채워 주세요.');
     expect(emptyInputModal).toBeInTheDocument();
   });
 
@@ -411,7 +411,7 @@ describe('[SurveyFormPage Test]', () => {
 
     // 4) check modal is open
     fireEvent.click(submitButton);
-    const emptyInputModal = await screen.findByText('객관식 문항을 추가해 주세요');
+    const emptyInputModal = await screen.findByText('객관식 문항을 추가해 주세요.');
     expect(emptyInputModal).toBeInTheDocument();
   });
 
@@ -444,7 +444,7 @@ describe('[SurveyFormPage Test]', () => {
 
     // 6) check modal is open
     fireEvent.click(submitButton);
-    const emptyInputModal = await screen.findByText('모든 입력을 채워 주세요');
+    const emptyInputModal = await screen.findByText('모든 입력을 채워 주세요.');
     expect(emptyInputModal).toBeInTheDocument();
   });
   // TODO: limit on number of questions and options

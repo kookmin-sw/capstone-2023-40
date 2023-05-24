@@ -118,7 +118,7 @@ export default function QuestionForm({
   handleToggleSwitch,
   theme,
 }: SubjectiveAnswerFormProps) {
-  const answerLabel = selected === QuestionType.LONG_ANSWER ? '장문형 답변이 입력됩니다.' : '단답형 답변이 입력됩니다.';
+  const answerLabel = selected === QuestionType.LONG_ANSWER ? '장문형 답변이 입력돼요.' : '단답형 답변이 입력돼요.';
   const toggleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     handleToggleSwitch(event, questionId);
   };

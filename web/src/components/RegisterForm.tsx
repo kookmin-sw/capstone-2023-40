@@ -173,7 +173,7 @@ export default function RegisterForm(props: RegisterFormProps) {
     } else {
       dispatch({ type: 'AUTH_EMAIL', payload: true });
       setTitleAlert('회원가입');
-      setTextAlert('해당 이메일에 인증요청을 보냈습니다.');
+      setTextAlert('이메일에 인증요청을 보냈어요.');
     }
     setIsAlertModal(true);
   };
@@ -199,14 +199,14 @@ export default function RegisterForm(props: RegisterFormProps) {
     }
 
     if (password !== confirmPassword) {
-      setTextAlert('비밀번호가 일치하지 않습니다.');
+      setTextAlert('비밀번호가 일치하지 않아요.');
       setIsAlertModal(true);
       return false;
     }
 
     dispatch({ type: 'CONFIRM_PASSWORD', payload: true });
     setTitleAlert('회원가입');
-    setTextAlert('비밀번호가 일치합니다!');
+    setTextAlert('비밀번호가 일치해요!');
     setIsAlertModal(true);
     return true;
   };
@@ -214,7 +214,7 @@ export default function RegisterForm(props: RegisterFormProps) {
   const checkUserInput = () => {
     setTitleAlert('회원가입 오류');
     if (!state.isEmailChecked || !state.isPasswordChecked) {
-      setTextAlert('이메일 또는 비밀번호를 다시 확인해주세요');
+      setTextAlert('이메일 또는 비밀번호를 다시 확인해주세요.');
       setIsAlertModal(true);
       return false;
     }
@@ -247,7 +247,7 @@ export default function RegisterForm(props: RegisterFormProps) {
     } else {
       dispatch({ type: 'AUTH_KEY', payload: true });
       setTitleAlert('회원가입 알림');
-      setTextAlert('해당 번호에 인증번호를 보냈습니다! (ex. 1234)');
+      setTextAlert('해당 번호에 인증번호를 보냈어요! (ex. 1234)');
     }
     setIsAlertModal(true);
   };
@@ -257,11 +257,11 @@ export default function RegisterForm(props: RegisterFormProps) {
     if (!state.key) {
       setTextAlert('먼저 인증번호를 보내주세요.');
     } else if (Number(state.key) !== testNumber) {
-      setTextAlert('인증번호가 일치하지 않습니다');
+      setTextAlert('인증번호가 일치하지 않아요.');
     } else {
       dispatch({ type: 'AUTH_KEY', payload: true });
       setTitleAlert('회원가입 알림');
-      setTextAlert('인증되었습니다!');
+      setTextAlert('인증번호 인증이 완료됐어요!');
     }
     setIsAlertModal(true);
   };
@@ -294,7 +294,7 @@ export default function RegisterForm(props: RegisterFormProps) {
 
     // FIXME: belows are not validated and synchronous
     setTitleAlert('회원가입');
-    setTextAlert('회원가입이 완료되었습니다.');
+    setTextAlert('회원가입을 완료했어요!');
     setIsAlertModal(true);
     navigate('../login');
   };
