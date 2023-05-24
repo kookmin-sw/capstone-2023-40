@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import styled, { DefaultTheme } from 'styled-components';
 
+import { setLoggedIn } from '../types/header';
 import { updateUserInformation } from '../utils/UserUtils';
 import RectangleButton from './Button/RectangleButton';
 import Header from './Header';
@@ -74,6 +75,13 @@ export default function ErrorPage({ labelText, buttonText, navigateRoute, theme,
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const handleClick = () => {
+    if (labelText === '로그인이 만료 되었어요.') {
+      dispatch(setLoggedIn(false));
+    }
+    navigate(`${navigateRoute}`);
+  };
+
   return (
     <Container theme={theme}>
       <Header theme={theme} toggleTheme={toggleTheme} />
@@ -95,7 +103,7 @@ export default function ErrorPage({ labelText, buttonText, navigateRoute, theme,
             width="250px"
             backgroundColor={theme.colors.primary}
             hoverColor={theme.colors.prhover}
-            handleClick={() => navigate(`${navigateRoute}`)}
+            handleClick={handleClick}
             theme={theme}
           />
         </Notification>
