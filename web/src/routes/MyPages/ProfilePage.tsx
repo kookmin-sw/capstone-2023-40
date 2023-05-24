@@ -81,8 +81,8 @@ const Input = styled.input`
   border-radius: 10px;
   font-size: 1.8vh;
   font-weight: 600;
-  color: #4e536a;
-  background-color: ${(props) => props.theme.colors.inputBackground};
+  color: ${(props) => props.theme.colors.default};
+  background-color: ${(props) => props.theme.colors.button};
   cursor: auto;
   text-overflow: ellipsis;
 `;

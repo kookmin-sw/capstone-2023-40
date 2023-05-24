@@ -21,7 +21,7 @@ const TextInput = styled.input.attrs({ type: 'text', maxLength: 100 })`
   border-radius: ${(props) => props.theme.borderRadius};
   font-weight: 900;
   color: ${(props) => props.theme.colors.text};
-  background-color: ${(props) => props.theme.colors.container};
+  background-color: ${(props) => props.theme.colors.background};
   cursor: text;
 `;
 

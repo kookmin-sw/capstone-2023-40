@@ -25,11 +25,11 @@ const ChoiceLabel = styled.label`
   border: ${(props) => props.theme.border};
   width: 72vw;
   color: ${(props) => props.theme.colors.default};
-  background-color: ${(props) => props.theme.colors.container};
+  background-color: ${(props) => props.theme.colors.background};
   transition: 200ms background ease;
 
   &:hover {
-    background-color: ${(props) => props.theme.colors.background};
+    background-color: ${(props) => props.theme.colors.button};
   }
 `;
 
