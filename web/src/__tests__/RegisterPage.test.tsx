@@ -152,7 +152,7 @@ describe('[RegisterPage Test]', () => {
     // ADD : Checking AlertModal is making with '회원가입 알림'
     fireEvent.change(confirmPassword(), { target: { value: 'Test1234!' } });
     fireEvent.click(confirmPasswordButton);
-    const samePassword = await screen.getByText('비밀번호가 일치합니다!');
+    const samePassword = screen.getByText('비밀번호가 일치해요!');
     expect(samePassword).toBeInTheDocument();
   });
 

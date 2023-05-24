@@ -54,7 +54,7 @@ export default function NotFound() {
   return (
     <Container theme={theme}>
       <Header theme={theme} toggleTheme={toggleTheme} />
-      <Title theme={theme}>🫣 요청하신 페이지를 찾을 수 없습니다.</Title>
+      <Title theme={theme}>🫣 요청하신 페이지가 존재하지 않아요.</Title>
       <Content theme={theme}>
         <Image src={NotFoundImage} alt="not-found-image" />
         <ButtonContainer>

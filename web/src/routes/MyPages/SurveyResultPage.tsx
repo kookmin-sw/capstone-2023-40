@@ -171,7 +171,7 @@ export default function SurveyResultPage() {
   if (isError || data === undefined) {
     return (
       <ErrorPage
-        labelText="😥 생성하신 설문이 없습니다..."
+        labelText="😥 앗! 아직 설문을 만들지 않았어요."
         buttonText="설문 만들러 가기"
         navigateRoute="/survey/form"
         theme={theme}

@@ -86,7 +86,7 @@ export default function SurveyCreateForm({ theme }: SurveyFormProps) {
 
   useEffect(() => {
     if (numOfContext > 1000) {
-      setWarnText(`질문 수와 옵션 수의 합이 1000개 이하여야 합니다. 현재 ${numOfContext}개`);
+      setWarnText(`질문과 옵션 수의 합이 1000개 이하여야 해요. (현재 ${numOfContext}개)`);
       setAlertModalOpen(true);
     }
   }, [numOfContext]);
@@ -105,22 +105,22 @@ export default function SurveyCreateForm({ theme }: SurveyFormProps) {
 
     switch (checkResult.message) {
       case ValidationErrorMessage.NO_QUESTION:
-        setWarnText('하나 이상의 질문을 추가해 주세요');
+        setWarnText('하나 이상의 질문을 추가해 주세요.');
         setAlertModalOpen(true);
         break;
       case ValidationErrorMessage.NO_OPTION:
         scrollToRef(questionRefs, checkResult.index);
-        setWarnText('객관식 문항을 추가해 주세요');
+        setWarnText('객관식 문항을 추가해 주세요.');
         setAlertModalOpen(true);
         break;
       case ValidationErrorMessage.EARLY_START:
         scrollToTop();
-        setWarnText('설문조사 시작일은 현재시간 이후여야 합니다');
+        setWarnText('설문조사 시작일은 현재 시각 이후부터 가능해요.');
         setAlertModalOpen(true);
         break;
       case ValidationErrorMessage.EARLY_END:
         scrollToTop();
-        setWarnText('설문조사 종료일이 시작일과 같거나 빠릅니다');
+        setWarnText('설문조사 종료일이 시작일과 같거나 빨라요.');
         setAlertModalOpen(true);
         break;
       case ValidationErrorMessage.EMPTY_INPUT:
@@ -129,7 +129,7 @@ export default function SurveyCreateForm({ theme }: SurveyFormProps) {
         } else {
           scrollToTop();
         }
-        setWarnText('모든 입력을 채워 주세요');
+        setWarnText('모든 입력을 채워 주세요.');
         setAlertModalOpen(true);
         break;
       default:
