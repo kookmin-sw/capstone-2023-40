@@ -15,6 +15,7 @@ import { UserUpdateRequest } from '../types/request';
 import HeaderModal from './Modal/HeaderModal';
 
 const HeaderContainer = styled.header<{ isTransitionEnabled: boolean }>`
+  z-index: 100;
   position: sticky;
   height: 70px;
   width: 100vw;
@@ -197,6 +198,7 @@ const CustomButton = styled.div`
   border-radius: ${(props) => props.theme.borderRadius};
   cursor: pointer;
   align-items: center;
+  transition: 200ms background ease;
 
   &:hover {
     background-color: ${(props) => props.theme.colors.prhover};

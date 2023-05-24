@@ -9,9 +9,10 @@ import { requests } from '../../api/request';
 import { Icons } from '../../assets/svg/index';
 import Header from '../../components/Header';
 import { AlertModal } from '../../components/Modal';
+import GifticonPurchaseModal from '../../components/Modal/GifticonPurchaseModal';
 import { useTheme } from '../../hooks/useTheme';
 import { RootState } from '../../reducers';
-import { setLoggedIn, setSubPageOpen } from '../../types/header';
+import { setSubPageOpen } from '../../types/header';
 import { SurveyResultListResponse } from '../../types/response/Survey';
 import { UserAuthListResponse } from '../../types/response/User';
 import { initializeAuthList } from '../../utils/authService';
@@ -29,6 +30,11 @@ const PencilImage = styled(Icons.PENCIL).attrs({
   border-radius: 14px;
   cursor: pointer;
   background-color: ${(props) => props.theme.colors.inputBackground};
+  transition: 200ms background ease;
+
+  &:hover {
+    background-color: ${(props) => props.theme.colors.btnhover};
+  }
 `;
 
 const ArrowImage = styled(Icons.ARROW).attrs({
@@ -42,9 +48,10 @@ const ArrowImage = styled(Icons.ARROW).attrs({
   padding: 1.5vh;
   border-radius: 30px;
   cursor: pointer;
+  transition: 200ms background ease;
 
   &:hover {
-    background-color: ${(props) => props.theme.colors.inputBackground};
+    background-color: ${(props) => props.theme.colors.btnhover};
   }
 `;
 
@@ -129,6 +136,7 @@ const PurchaseButton = styled.div`
   border-radius: ${(props) => props.theme.borderRadius};
   cursor: pointer;
   align-items: center;
+  transition: 200ms background ease;
 
   &:hover {
     background-color: ${(props) => props.theme.colors.prhover};
@@ -158,8 +166,8 @@ export default function ProfilePage() {
   const [alertTitle, setAlertTitle] = useState('');
   const [alertText, setAlertText] = useState('');
   const [showAlertModal, setShowAlertModal] = useState(false);
+  const [showPurchaseModal, setShowPurchaseModal] = useState<boolean>(false);
   const userState = useSelector((state: RootState) => state.userInformation);
-  const isSubPageOpen = useSelector((state: RootState) => state.header.isSubPageOpen);
   const dispatch = useDispatch();
 
   // Input Data list
@@ -331,7 +339,11 @@ export default function ProfilePage() {
                 maxLength={title === '전화번호' ? 13 : undefined}
                 style={{ width: `${(information.length + 1) * 15}px` }}
               />
-              {title === '포인트' ? <PurchaseButton theme={theme}>기프티콘 구매</PurchaseButton> : undefined}
+              {title === '포인트' ? (
+                <PurchaseButton onClick={() => setShowPurchaseModal(true)} theme={theme}>
+                  기프티콘 구매
+                </PurchaseButton>
+              ) : undefined}
               {!(title === '포인트' || title === '이메일' || title === '이름') ? (
                 <PencilImage
                   type="submit"
@@ -352,6 +364,8 @@ export default function ProfilePage() {
             <ArrowImage theme={theme} onClick={navigateSurveyListPage} />
           </ContainerBox>
         </Form>
+
+        {showPurchaseModal && <GifticonPurchaseModal setPurchaseModalOpen={setShowPurchaseModal} theme={theme} />}
       </MypageContainer>
     </Container>
   );
