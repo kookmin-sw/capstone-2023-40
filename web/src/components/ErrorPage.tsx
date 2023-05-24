@@ -95,7 +95,7 @@ export default function ErrorPage({ labelText, buttonText, navigateRoute, theme,
           </ErrorPageTitle>
         )}
         <Notification theme={theme}>
-          <Label theme={theme}>{`😥 ${labelText}`}</Label>
+          <Label theme={theme}>{`😥 ${labelText}..`}</Label>
           <br />
           <RectangleButton
             text={buttonText}

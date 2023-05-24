@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
-import { useDispatch } from 'react-redux';
 import styled, { DefaultTheme } from 'styled-components';
 
 import axios from '../../api/axios';

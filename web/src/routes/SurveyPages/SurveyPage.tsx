@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 
 import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
