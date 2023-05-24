@@ -86,7 +86,7 @@ export default function ErrorPage({ labelText, buttonText, navigateRoute, theme,
     <Container theme={theme}>
       <Header theme={theme} toggleTheme={toggleTheme} />
       <ErrorContainer theme={theme}>
-        {labelText === '😥 앗! 아직 설문을 만들지 않았어요.' && (
+        {labelText === '앗! 아직 설문을 만들지 않았어요.' && (
           <ErrorPageTitle style={{ marginBottom: '5vh' }} theme={theme}>
             <MypageText theme={theme} onClick={() => updateUserInformation(dispatch, navigate)}>
               마이페이지
@@ -95,7 +95,7 @@ export default function ErrorPage({ labelText, buttonText, navigateRoute, theme,
           </ErrorPageTitle>
         )}
         <Notification theme={theme}>
-          <Label theme={theme}>{labelText}</Label>
+          <Label theme={theme}>{`😥 ${labelText}`}</Label>
           <br />
           <RectangleButton
             text={buttonText}
