@@ -1,16 +1,11 @@
 import React, { useRef } from 'react';
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
 
-import axios from '../../api/axios';
-import { requests } from '../../api/request';
 import { useOnClickOutside } from '../../hooks/useOnClickOutside';
-import { RootState } from '../../reducers';
 import { setLoggedIn, setSubPageOpen } from '../../types/header';
-import { UserAuthListResponse } from '../../types/response/User';
-import { initializeAuthList } from '../../utils/authService';
 import { clearUserInformation, updateUserInformation } from '../../utils/UserUtils';
 
 const SubPageContainer = styled.div`
@@ -56,8 +51,6 @@ interface HeaderProps {
 
 export default function Header({ theme }: HeaderProps) {
   const navigate = useNavigate();
-  const isLoggedIn = useSelector((state: RootState) => state.header.isLoggedIn);
-  const isSubPageOpen = useSelector((state: RootState) => state.header.isSubPageOpen);
   const dispatch = useDispatch();
 
   const logoutClick = () => {
@@ -69,7 +62,7 @@ export default function Header({ theme }: HeaderProps) {
 
   const navigateMypage = async () => {
     updateUserInformation(dispatch, navigate);
-    dispatch(setSubPageOpen(!isSubPageOpen));
+    dispatch(setSubPageOpen(false));
   };
 
   const subPageRef = useRef<HTMLDivElement>(null);

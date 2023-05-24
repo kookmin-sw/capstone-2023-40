@@ -15,6 +15,7 @@ import { UserUpdateRequest } from '../types/request';
 import HeaderModal from './Modal/HeaderModal';
 
 const HeaderContainer = styled.header<{ isTransitionEnabled: boolean }>`
+  z-index: 100;
   position: sticky;
   height: 70px;
   width: 100vw;

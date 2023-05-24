@@ -159,7 +159,6 @@ export default function ProfilePage() {
   const [alertText, setAlertText] = useState('');
   const [showAlertModal, setShowAlertModal] = useState(false);
   const userState = useSelector((state: RootState) => state.userInformation);
-  const isSubPageOpen = useSelector((state: RootState) => state.header.isSubPageOpen);
   const dispatch = useDispatch();
 
   // Input Data list
