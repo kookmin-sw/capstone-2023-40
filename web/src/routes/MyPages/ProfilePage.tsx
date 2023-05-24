@@ -81,8 +81,8 @@ const Input = styled.input`
   border-radius: 10px;
   font-size: 1.8vh;
   font-weight: 600;
-  color: #4e536a;
-  background-color: ${(props) => props.theme.colors.inputBackground};
+  color: ${(props) => props.theme.colors.default};
+  background-color: ${(props) => props.theme.colors.button};
   cursor: auto;
   text-overflow: ellipsis;
 `;
@@ -116,7 +116,7 @@ const ReplacePagetext = styled.span`
 `;
 
 const PurchaseButton = styled.div`
-  margin: 2vw;
+  margin-left: 1vw;
   display: flex;
   padding: 1.3vh;
   border: none;
@@ -217,7 +217,6 @@ export default function ProfilePage() {
       .get<UserAuthListResponse>(requests.getUserAuthList)
       .then((getAuthListResponse) => {
         if (getAuthListResponse.status === 200) {
-          console.log('get UserAuthList Success!');
           initializeAuthList(getAuthListResponse.data, dispatch);
           navigate('../mypage/auth-list');
         }

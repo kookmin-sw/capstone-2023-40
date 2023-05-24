@@ -15,8 +15,7 @@ import {
   setAuthService,
   setSuccessAuth,
 } from '../types/surveyAuth';
-import { KAKAO_AUTH_URL, getKakaoUserData } from './authlist/kakaoAuth';
-import { NAVER_AUTH_URL, getNaverUserData } from './authlist/naverAuth';
+import { KAKAO_AUTH_URL, getKakaoUserData } from './auth/kakaoAuth';
 
 // 인증여부 초기화 - authlist api connect
 export const initializeAuthList = (resData: any, dispatch = useDispatch()) => {

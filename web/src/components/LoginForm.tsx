@@ -39,8 +39,8 @@ const Input = styled.input`
   margin-bottom: 10px;
   border: ${(props) => props.theme.border};
   border-radius: ${(props) => props.theme.borderRadius};
-  color: ${(props) => props.theme.colors.text};
-  background-color: ${(props) => props.theme.colors.container};
+  color: #4e536a;
+  background-color: ${(props) => props.theme.colors.inputBackground};
   font-size: 1.5vh;
   font-weight: 600;
   flex: 1;
@@ -117,7 +117,9 @@ export default function LoginForm({ theme }: LoginFormProps) {
     return true;
   };
 
-  const handleLogin = async () => {
+  const handleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
     if (!checkLoginInput()) {
       setAlertTitle('로그인 오류');
       setAlertText('아이디 또는 비밀번호를 확인해주세요.');
@@ -125,7 +127,7 @@ export default function LoginForm({ theme }: LoginFormProps) {
     }
 
     const loginRequestBody = { email, password };
-    axios
+    await axios
       .post<UserResponse>(requests.login, loginRequestBody)
       .then((res) => {
         if (res.status === 200) {
@@ -173,7 +175,7 @@ export default function LoginForm({ theme }: LoginFormProps) {
           theme={theme}
           placeholder="비밀번호를 입력하세요."
         />
-        <Button type="button" onClick={() => handleLogin()} theme={theme}>
+        <Button type="button" onClick={handleLogin} theme={theme}>
           로그인
         </Button>
         {showAlertModal && (

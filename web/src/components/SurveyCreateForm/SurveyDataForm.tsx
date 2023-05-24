@@ -37,7 +37,7 @@ const TextInput = styled.input.attrs({ type: 'text', maxLength: 100 })`
   border-radius: ${(props) => props.theme.borderRadius};
   font-weight: 900;
   color: ${(props) => props.theme.colors.text};
-  background-color: ${(props) => props.theme.colors.inputBackground};
+  background-color: ${(props) => props.theme.colors.background};
   cursor: text;
 
   ::placeholder {
@@ -189,7 +189,7 @@ export default function SurveyDataForm({
 
       <SurveyDateContainer>
         <GuideLabel htmlFor="startedDate" theme={theme}>
-          시작일 :{' '}
+          시작일 :&nbsp;
         </GuideLabel>
         <SurveyDateInput
           theme={theme}
@@ -198,7 +198,7 @@ export default function SurveyDataForm({
           value={`${surveyData?.startedDate}` || ''}
         />
         <GuideLabel htmlFor="endedDate" theme={theme}>
-          종료일 :{' '}
+          종료일 :&nbsp;
         </GuideLabel>
         <SurveyDateInput
           theme={theme}
