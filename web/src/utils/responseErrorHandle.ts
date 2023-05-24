@@ -1,9 +1,6 @@
 import { AxiosError } from 'axios';
-import { Dispatch } from 'redux';
 
-import { setLoggedIn, HeaderAction } from '../types/header';
-
-export const responseErrorHandle = (error: AxiosError, dispatch: Dispatch<HeaderAction>): string[] => {
+export const responseErrorHandle = (error: AxiosError): string[] => {
   const { response } = error as AxiosError;
 
   let labelText = typeof response?.data === 'string' ? response.data : '';
@@ -28,6 +25,9 @@ export const responseErrorHandle = (error: AxiosError, dispatch: Dispatch<Header
         labelText = '로그인이 만료 되었어요.';
         buttonText = '로그인 하러 가기';
         navigateRoute = '/login';
+      } else {
+        buttonText = '홈화면으로 돌아가기';
+        navigateRoute = '/';
       }
       break;
     case 403:

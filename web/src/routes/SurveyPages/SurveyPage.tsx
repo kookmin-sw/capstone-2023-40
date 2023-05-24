@@ -28,7 +28,6 @@ export default function SurveyPage() {
   const [errorLabel, setErrorLabel] = useState<string>('');
   const [errorButtonText, setErrorButtonText] = useState<string>('');
   const [errorNavigate, setErrorNavigate] = useState<string>('');
-  const dispatch = useDispatch();
 
   const { data, isLoading, isError, error } = useQuery<SurveyResponse>(['survey', id], fetchSurveyData, {
     cacheTime: 15 * 60 * 1000, // 15 minutes
@@ -39,9 +38,9 @@ export default function SurveyPage() {
 
   useEffect(() => {
     if (isError) {
-      const errorMessages: string[] = responseErrorHandle(error as AxiosError, dispatch);
+      const errorMessages: string[] = responseErrorHandle(error as AxiosError);
 
-      setErrorLabel(`😥 ${errorMessages[0]}..`);
+      setErrorLabel(`${errorMessages[0]}`);
       setErrorButtonText(errorMessages[1]);
       setErrorNavigate(errorMessages[2]);
     }

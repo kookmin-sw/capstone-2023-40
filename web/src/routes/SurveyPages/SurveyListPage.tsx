@@ -25,7 +25,6 @@ const Container = styled.div`
 const ListContainer = styled.div``;
 
 export default function SurveyListPage() {
-  const dispatch = useDispatch();
   const [theme, toggleTheme] = useTheme();
   const [page, setPage] = useState<number>(1);
   const [previewModalOpen, setPreviewModalOpen] = useState<boolean>(false);
@@ -43,9 +42,9 @@ export default function SurveyListPage() {
 
   useEffect(() => {
     if (isError) {
-      const errorMessages: string[] = responseErrorHandle(error as AxiosError, dispatch);
+      const errorMessages: string[] = responseErrorHandle(error as AxiosError);
 
-      setErrorLabel(`😥 ${errorMessages[0]}..`);
+      setErrorLabel(`${errorMessages[0]}`);
       setErrorButtonText(errorMessages[1]);
       setErrorNavigate(errorMessages[2]);
     }
