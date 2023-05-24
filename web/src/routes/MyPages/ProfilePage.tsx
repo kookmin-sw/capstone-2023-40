@@ -9,6 +9,7 @@ import { requests } from '../../api/request';
 import { Icons } from '../../assets/svg/index';
 import Header from '../../components/Header';
 import { AlertModal } from '../../components/Modal';
+import GifticonPurchaseModal from '../../components/Modal/GifticonPurchaseModal';
 import { useTheme } from '../../hooks/useTheme';
 import { RootState } from '../../reducers';
 import { setSubPageOpen } from '../../types/header';
@@ -165,6 +166,7 @@ export default function ProfilePage() {
   const [alertTitle, setAlertTitle] = useState('');
   const [alertText, setAlertText] = useState('');
   const [showAlertModal, setShowAlertModal] = useState(false);
+  const [showPurchaseModal, setShowPurchaseModal] = useState<boolean>(false);
   const userState = useSelector((state: RootState) => state.userInformation);
   const dispatch = useDispatch();
 
@@ -337,7 +339,11 @@ export default function ProfilePage() {
                 maxLength={title === '전화번호' ? 13 : undefined}
                 style={{ width: `${(information.length + 1) * 15}px` }}
               />
-              {title === '포인트' ? <PurchaseButton theme={theme}>기프티콘 구매</PurchaseButton> : undefined}
+              {title === '포인트' ? (
+                <PurchaseButton onClick={() => setShowPurchaseModal(true)} theme={theme}>
+                  기프티콘 구매
+                </PurchaseButton>
+              ) : undefined}
               {!(title === '포인트' || title === '이메일' || title === '이름') ? (
                 <PencilImage
                   type="submit"
@@ -358,6 +364,8 @@ export default function ProfilePage() {
             <ArrowImage theme={theme} onClick={navigateSurveyListPage} />
           </ContainerBox>
         </Form>
+
+        {showPurchaseModal && <GifticonPurchaseModal setPurchaseModalOpen={setShowPurchaseModal} theme={theme} />}
       </MypageContainer>
     </Container>
   );
