@@ -11,7 +11,7 @@ import Header from '../../components/Header';
 import { AlertModal } from '../../components/Modal';
 import { useTheme } from '../../hooks/useTheme';
 import { RootState } from '../../reducers';
-import { setLoggedIn, setSubPageOpen } from '../../types/header';
+import { setSubPageOpen } from '../../types/header';
 import { SurveyResultListResponse } from '../../types/response/Survey';
 import { UserAuthListResponse } from '../../types/response/User';
 import { initializeAuthList } from '../../utils/authService';
@@ -29,6 +29,11 @@ const PencilImage = styled(Icons.PENCIL).attrs({
   border-radius: 14px;
   cursor: pointer;
   background-color: ${(props) => props.theme.colors.inputBackground};
+  transition: 200ms background ease;
+
+  &:hover {
+    background-color: ${(props) => props.theme.colors.btnhover};
+  }
 `;
 
 const ArrowImage = styled(Icons.ARROW).attrs({
@@ -42,9 +47,10 @@ const ArrowImage = styled(Icons.ARROW).attrs({
   padding: 1.5vh;
   border-radius: 30px;
   cursor: pointer;
+  transition: 200ms background ease;
 
   &:hover {
-    background-color: ${(props) => props.theme.colors.inputBackground};
+    background-color: ${(props) => props.theme.colors.btnhover};
   }
 `;
 
@@ -129,6 +135,7 @@ const PurchaseButton = styled.div`
   border-radius: ${(props) => props.theme.borderRadius};
   cursor: pointer;
   align-items: center;
+  transition: 200ms background ease;
 
   &:hover {
     background-color: ${(props) => props.theme.colors.prhover};

@@ -198,6 +198,7 @@ const CustomButton = styled.div`
   border-radius: ${(props) => props.theme.borderRadius};
   cursor: pointer;
   align-items: center;
+  transition: 200ms background ease;
 
   &:hover {
     background-color: ${(props) => props.theme.colors.prhover};

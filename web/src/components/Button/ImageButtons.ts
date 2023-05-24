@@ -14,6 +14,7 @@ export const TrashImage = styled(Icons.TRASH).attrs({
   padding: 0.5vh;
   border-radius: 30px;
   cursor: pointer;
+  transition: 200ms background ease;
 
   &:hover {
     background-color: ${(props) => props.theme.colors.btnhover};
@@ -32,6 +33,7 @@ export const PlusImage = styled(Icons.PLUS).attrs({
   padding: 0.5vh;
   border-radius: 30px;
   cursor: pointer;
+  transition: 200ms background ease;
 
   &:hover {
     background-color: ${(props) => props.theme.colors.btnhover};
@@ -50,6 +52,7 @@ export const DeleteImage = styled(Icons.DELETE).attrs({
   padding: 0.5vh;
   border-radius: 30px;
   cursor: pointer;
+  transition: 200ms background ease;
 
   &:hover {
     background-color: ${(props) => props.theme.colors.btnhover};

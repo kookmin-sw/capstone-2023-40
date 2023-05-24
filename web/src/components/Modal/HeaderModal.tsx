@@ -39,6 +39,7 @@ const SubPageButton = styled.button`
   color: ${(props) => props.theme.colors.text};
   background-color: ${(props) => props.theme.colors.button};
   cursor: pointer;
+  transition: 200ms background ease;
 
   &:hover {
     background-color: ${(props) => props.theme.colors.btnhover};
