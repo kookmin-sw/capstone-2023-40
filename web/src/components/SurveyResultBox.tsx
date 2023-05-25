@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
 
 import { Icons } from '../assets/svg/index';
-import { ChartData } from '../types/response/Survey';
+import { SurveyResultData } from '../types/response/Survey';
 
 const ChartImage = styled(Icons.CHART)`
   margin-right: auto;

@@ -149,7 +149,7 @@ export default function SurveyPreviewModal({ surveyItem, setPreviewModalOpen, th
         setButtonText('설문 조사 참여하기');
       } else {
         setButtonText(
-          `${days > 0 ? `${days}일 ` : ''}${hours > 0 ? `${hours}시 ` : ''}${minutes > 0 ? `${minutes}분 ` : ''}${
+          `${days > 0 ? `${days}일 ` : ''}${hours > 0 ? `${hours}시간 ` : ''}${minutes > 0 ? `${minutes}분 ` : ''}${
             seconds > 0 ? `${seconds}초 ` : ''
           }이후 참여가능`
         );
