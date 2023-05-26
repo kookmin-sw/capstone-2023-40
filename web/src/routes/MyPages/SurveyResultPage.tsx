@@ -13,7 +13,7 @@ import { Icons } from '../../assets/svg/index';
 import ErrorPage from '../../components/ErrorPage';
 import Header from '../../components/Header';
 import LoadingForm from '../../components/LoadingForm';
-import SurveyResultBox from '../../components/SurveyResultBox';
+import SurveyResultBox, { addSurveyData } from '../../components/SurveyResultBox';
 import { useTheme } from '../../hooks/useTheme';
 import { SurveyResultData, SurveyResultListResponse, SurveyResultResponse } from '../../types/response/Survey';
 import { updateUserInformation } from '../../utils/UserUtils';
@@ -144,7 +144,7 @@ export default function SurveyResultPage() {
       .get<SurveyResultResponse>(`${requests.getSurveyResultData}${item.surveyId}`)
       .then((res) => {
         if (res.status === 200 && res.data.results !== undefined) {
-          const resultData: SurveyResultData[] = res.data.results;
+          addSurveyData(res.data.results);
         } else {
           setIsEmptySurveyResult(true);
         }
