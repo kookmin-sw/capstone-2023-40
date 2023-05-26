@@ -26,7 +26,7 @@
 <br/>   
 
 ## 프로젝트 소개
-<img width="424" alt="image" src="https://github.com/kookmin-sw/capstone-2023-40/assets/68771488/9a250cdf-b48f-4a20-9230-fb1c6207646d">
+<img width="100%" alt="image" src="https://github.com/kookmin-sw/capstone-2023-40/assets/68771488/9a250cdf-b48f-4a20-9230-fb1c6207646d">
 &nbsp;&nbsp;
 
 먼저, '**the survey**'는 설문조사를 생성하고 참여할 수 있는 플랫폼입니다. 해당 서비스는 B2C, C2C, B2B 등 <u>**다양한 형태의 사용자들이 서로 자유롭게 설문조사를 생성하고 참여**</u>할 수 있는 환경을 제공합니다.
