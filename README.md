@@ -42,7 +42,7 @@ TODO:
 ## 사용법
 
 - [소개 페이지 바로가기](https://kookmin-sw.github.io/capstone-2023-40/)
-- [the survey 이용하러 가기](https://capstone-2023-40-thesurvey.vercel.app)
+- [the survey 이용하러 가기](https://www.thesurvey.kr/)
 
 <br/>   
 
