@@ -22,9 +22,9 @@ describe('[MainPage Test]', () => {
       </Provider>
     );
 
-    const appTitle = screen.getByText('더 서베이');
+    const appTitles = screen.getAllByText('더 서베이');
 
-    expect(appTitle).toBeInTheDocument();
+    expect(appTitles.length).toBeGreaterThan(0);
   });
 
   /**
