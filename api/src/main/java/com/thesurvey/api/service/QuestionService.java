@@ -23,12 +23,10 @@ import com.thesurvey.api.service.mapper.QuestionMapper;
 import com.thesurvey.api.service.mapper.QuestionOptionMapper;
 import com.thesurvey.api.util.StringUtil;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@RequiredArgsConstructor
 public class QuestionService {
 
     private final QuestionBankRepository questionBankRepository;
@@ -44,6 +42,19 @@ public class QuestionService {
     private final QuestionOptionMapper questionOptionMapper;
 
     private final QuestionOptionRepository questionOptionRepository;
+
+    public QuestionService(QuestionBankRepository questionBankRepository,
+        QuestionBankMapper questionBankMapper, QuestionRepository questionRepository,
+        QuestionMapper questionMapper,
+        QuestionOptionService questionOptionService, QuestionOptionMapper questionOptionMapper, QuestionOptionRepository questionOptionRepository) {
+        this.questionBankRepository = questionBankRepository;
+        this.questionBankMapper = questionBankMapper;
+        this.questionRepository = questionRepository;
+        this.questionMapper = questionMapper;
+        this.questionOptionService = questionOptionService;
+        this.questionOptionMapper = questionOptionMapper;
+        this.questionOptionRepository = questionOptionRepository;
+    }
 
     @Transactional(readOnly = true)
     public List<QuestionBank> getAllQuestionBankBySurveyId(UUID surveyId) {

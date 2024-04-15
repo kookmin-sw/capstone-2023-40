@@ -1,5 +1,12 @@
 package com.thesurvey.api.service;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.HashSet;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 import com.thesurvey.api.domain.AnsweredQuestion;
 import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
 import com.thesurvey.api.domain.QuestionBank;
@@ -13,26 +20,22 @@ import com.thesurvey.api.exception.mapper.BadRequestExceptionMapper;
 import com.thesurvey.api.exception.mapper.ForbiddenRequestExceptionMapper;
 import com.thesurvey.api.exception.mapper.NotFoundExceptionMapper;
 import com.thesurvey.api.exception.mapper.UnauthorizedRequestExceptionMapper;
-import com.thesurvey.api.repository.*;
+import com.thesurvey.api.repository.AnsweredQuestionRepository;
+import com.thesurvey.api.repository.QuestionBankRepository;
+import com.thesurvey.api.repository.QuestionRepository;
+import com.thesurvey.api.repository.SurveyRepository;
+import com.thesurvey.api.repository.UserCertificationRepository;
 import com.thesurvey.api.service.converter.CertificationTypeConverter;
 import com.thesurvey.api.service.mapper.AnsweredQuestionMapper;
 import com.thesurvey.api.util.PointUtil;
 import com.thesurvey.api.util.StringUtil;
 import com.thesurvey.api.util.UserUtil;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.HashSet;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
 @Service
-@RequiredArgsConstructor
 public class AnsweredQuestionService {
 
     private final SurveyRepository surveyRepository;
@@ -54,6 +57,24 @@ public class AnsweredQuestionService {
     private final PointHistoryService pointHistoryService;
 
     private final PointUtil pointUtil;
+
+    public AnsweredQuestionService(SurveyRepository surveyRepository,
+        AnsweredQuestionRepository answeredQuestionRepository,
+        QuestionBankRepository questionBankRepository,
+        AnsweredQuestionMapper answeredQuestionMapper,
+        QuestionRepository questionRepository,
+        ParticipationService participationService, UserCertificationRepository userCertificationRepository, CertificationTypeConverter certificationTypeConverter, PointHistoryService pointHistoryService, PointUtil pointUtil) {
+        this.surveyRepository = surveyRepository;
+        this.answeredQuestionRepository = answeredQuestionRepository;
+        this.questionBankRepository = questionBankRepository;
+        this.answeredQuestionMapper = answeredQuestionMapper;
+        this.questionRepository = questionRepository;
+        this.participationService = participationService;
+        this.userCertificationRepository = userCertificationRepository;
+        this.certificationTypeConverter = certificationTypeConverter;
+        this.pointHistoryService = pointHistoryService;
+        this.pointUtil = pointUtil;
+    }
 
     @Transactional
     public List<AnsweredQuestion> getAnswerQuestionByQuestionBankId(Long questionBankId) {

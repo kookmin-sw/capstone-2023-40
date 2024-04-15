@@ -13,18 +13,22 @@ import com.thesurvey.api.repository.QuestionOptionRepository;
 import com.thesurvey.api.service.mapper.QuestionOptionMapper;
 import com.thesurvey.api.util.StringUtil;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@RequiredArgsConstructor
 public class QuestionOptionService {
 
     private final QuestionOptionMapper questionOptionMapper;
 
     private final QuestionOptionRepository questionOptionRepository;
 
+
+    public QuestionOptionService(QuestionOptionMapper questionOptionMapper,
+        QuestionOptionRepository questionOptionRepository) {
+        this.questionOptionMapper = questionOptionMapper;
+        this.questionOptionRepository = questionOptionRepository;
+    }
 
     @Transactional(readOnly = true)
     public String getOptionByQuestionOptionId(Long questionOptionId) {

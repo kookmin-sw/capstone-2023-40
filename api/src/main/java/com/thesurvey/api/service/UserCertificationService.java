@@ -1,5 +1,9 @@
 package com.thesurvey.api.service;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.List;
+
 import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
 import com.thesurvey.api.domain.User;
 import com.thesurvey.api.domain.UserCertification;
@@ -8,23 +12,24 @@ import com.thesurvey.api.dto.response.userCertification.UserCertificationListDto
 import com.thesurvey.api.repository.UserCertificationRepository;
 import com.thesurvey.api.service.mapper.UserCertificationMapper;
 import com.thesurvey.api.util.UserUtil;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.List;
-
 @Service
-@RequiredArgsConstructor
 public class UserCertificationService {
 
     private final UserCertificationRepository userCertificationRepository;
 
     private final UserCertificationMapper userCertificationMapper;
+
+    public UserCertificationService(UserCertificationRepository userCertificationRepository,
+        UserCertificationMapper userCertificationMapper) {
+        this.userCertificationRepository = userCertificationRepository;
+        this.userCertificationMapper = userCertificationMapper;
+    }
 
     @Transactional(readOnly = true)
     public UserCertificationListDto getUserCertifications(Authentication authentication) {

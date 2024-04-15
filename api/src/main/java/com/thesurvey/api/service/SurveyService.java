@@ -1,5 +1,12 @@
 package com.thesurvey.api.service;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 import com.thesurvey.api.domain.AnsweredQuestion;
 import com.thesurvey.api.domain.EnumTypeEntity.CertificationType;
 import com.thesurvey.api.domain.EnumTypeEntity.QuestionType;
@@ -27,22 +34,14 @@ import com.thesurvey.api.service.mapper.SurveyMapper;
 import com.thesurvey.api.util.PointUtil;
 import com.thesurvey.api.util.StringUtil;
 import com.thesurvey.api.util.UserUtil;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
 @Service
-@RequiredArgsConstructor
 public class SurveyService {
 
     private final SurveyRepository surveyRepository;
@@ -66,6 +65,23 @@ public class SurveyService {
     private final PointUtil pointUtil;
 
     private final AnsweredQuestionRepository answeredQuestionRepository;
+
+    public SurveyService(SurveyRepository surveyRepository, SurveyMapper surveyMapper,
+        QuestionService questionService,
+        QuestionOptionService questionOptionService, ParticipationService participationService,
+        AnsweredQuestionService answeredQuestionService, QuestionOptionMapper questionOptionMapper, QuestionBankMapper questionBankMapper, PointHistoryService pointHistoryService, PointUtil pointUtil, AnsweredQuestionRepository answeredQuestionRepository) {
+        this.surveyRepository = surveyRepository;
+        this.surveyMapper = surveyMapper;
+        this.questionService = questionService;
+        this.questionOptionService = questionOptionService;
+        this.participationService = participationService;
+        this.answeredQuestionService = answeredQuestionService;
+        this.questionOptionMapper = questionOptionMapper;
+        this.questionBankMapper = questionBankMapper;
+        this.pointHistoryService = pointHistoryService;
+        this.pointUtil = pointUtil;
+        this.answeredQuestionRepository = answeredQuestionRepository;
+    }
 
     @Transactional(readOnly = true)
     public SurveyListPageDto getAllSurvey(int page) {
